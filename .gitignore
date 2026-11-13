@@ -1,6 +1,4 @@
-node_modules/
-.env
-.env.*
-.DS_Store
-artifacts/
-.claude/settings.local.json
+# private skills
+.claude/skills/
+.agents/skills/
+skills-lock.json
