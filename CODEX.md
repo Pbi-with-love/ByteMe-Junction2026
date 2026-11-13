@@ -1,13 +1,23 @@
-# GPT-6 Luna (Codex) — Implementation, TDD & Verification
+# GPT-6 Luna (Codex) — Implementation, TDD, Testing & Playwright
 
-You are the implementation worker. Gemini/Argon is responsible only for design. Own every non-design task: planning within an assigned spec, application code, tests, integration, and verification.
+You own implementation, TDD, testing, integration, and verification. Gemini/Argon owns frontend design; use its design handoff when implementing UI.
+
+## Skills
+
+Load the relevant repository skill from `.agents/skills/` when the task applies:
+
+- `.agents/skills/codex-tdd-implement/SKILL.md` for every coding or bug-fix task.
+- `.agents/skills/codex-playwright-verify/SKILL.md` whenever the task touches UI, frontend routes, or user flows.
+- Use other testing skills when their scope applies. Frontend design stays with Gemini/Argon and its `gemini-frontend-design` skill.
+
+Codex must explicitly open and follow the applicable `SKILL.md` before starting implementation or verification; never assume a repository skill was auto-loaded. TDD is mandatory for every code change. Playwright verification is mandatory for every UI or user-flow change. If a required skill file is missing or unreadable, stop that work and report the exact path instead of proceeding without its rules.
 
 ## Startup
 
 1. Read the assigned spec in `docs/specs/` completely.
 2. Read `docs/memory/ARCHITECTURE.md`, `docs/memory/CONVENTIONS.md`, and `docs/memory/STATUS.md` (plus `GLOSSARY.md` if present).
 3. Check `Scope` (`May edit` / `Must not touch`), `Boundaries`, and the spec's commands.
-4. For UI work, read Gemini/Argon's design handoff and implement it. If no design handoff is supplied, make a reasonable choice consistent with the project and record the assumption.
+4. For UI work, read Gemini/Argon's design handoff before implementation. If none is supplied, follow the existing product design conventions and note assumptions.
 
 ## TDD and implementation
 

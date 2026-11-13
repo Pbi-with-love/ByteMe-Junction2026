@@ -1,16 +1,16 @@
 ---
-name: hydrogen-playwright-verify
+name: codex-playwright-verify
 description: >-
   Use whenever a subtask touches UI, frontend routes, or user flows. Runs
-  playwright-cli against the running app, verifies interactive flows and console
-  health, and captures screenshot evidence for the Hydrogen Lead and Claude
-  Orchestrator.
+  Codex-only UI verification skill. Runs playwright-cli against the running
+  app, verifies interactive flows and console health, and captures screenshots.
+  Codex must read and follow this skill for every UI or user-flow change.
 ---
 
-# Hydrogen Playwright Verification (`playwright-cli`)
+# Codex Playwright Verification (`playwright-cli`)
 
-## When to Use
-Any time the spec includes UI changes or lists `playwright-cli` flows.
+## Mandatory Use
+Use for every task that changes UI, frontend routes, or user flows, even if the spec does not explicitly list Playwright flows. Read this skill before running verification.
 
 ## Steps
 1. **Ensure app is running**: Use the spec's `Commands.Run` (or check if the dev server is already listening on the expected port).
@@ -22,7 +22,7 @@ Any time the spec includes UI changes or lists `playwright-cli` flows.
    - Capture screenshots at key states (initial render, after interaction, error/empty state if specified).
 4. **Clean up**: Stop any background dev server you started if it is not meant to stay running.
 
-## Output to Hydrogen Lead
+## Output
 Return:
 - Exact `playwright-cli` commands / test script run and pass/fail result
 - Exact file paths to all captured screenshots
