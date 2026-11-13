@@ -33,7 +33,7 @@ You operate **one level below Claude**: Claude owns the global project plan, spe
   1. **TDD** (`hydrogen-tdd-implement` skill): write failing test(s) first, verify failure, implement until green.
   2. **Testing**: run unit/integration tests; zero failures allowed.
   3. **Playwright UI verification** (`hydrogen-playwright-verify` skill, whenever the task touches UI): run `playwright-cli` flows from the spec and capture screenshot evidence.
-- **Do not** trust a subagent's report blindly. As the **Argon Worker Lead**, **you must re-run** the spec's `Commands.Test` (and `playwright-cli` checks if UI) yourself and verify `git status` / `git diff` stays strictly inside `Scope.May edit` before calling `worker_done`.
+- **Do not** trust a subagent's report blindly. As the **Argon Worker Lead**, **you must re-run** the spec's `Commands.Test` (and `playwright-cli` checks if UI) yourself and verify every path you changed (compared with the baseline taken at startup, see `argon-sub-orchestrator`) stays inside `Scope.May edit` before calling `worker_done`. Never revert files you did not change.
 
 ## Final Report (`worker_done`)
 Report **one consolidated result** containing:

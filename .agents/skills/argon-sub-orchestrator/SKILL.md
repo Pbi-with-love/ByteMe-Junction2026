@@ -13,6 +13,7 @@ description: >-
 Follow this workflow whenever you receive an Orca task spec from the Claude Orchestrator.
 
 ## 1. Load Shared Memory & Spec
+0. Before editing anything, save a baseline: `git status --porcelain > /tmp/argon-baseline-<spec-id>.txt`. Paths already dirty there belong to someone else.
 1. Read `docs/specs/NNN-<slug>.md`.
 2. Read `docs/memory/ARCHITECTURE.md`, `docs/memory/CONVENTIONS.md`, `docs/memory/STATUS.md`, and `docs/memory/GLOSSARY.md` (if present).
 3. Extract:
@@ -40,7 +41,7 @@ Every subagent prompt **must** include:
 
 ## 3. Argon Lead Verification Gate (Mandatory Before `worker_done`)
 Once all internal subagents finish:
-1. Check `git status` and `git diff --name-only` — confirm **no** files outside `Scope.May edit` were modified and no failing tests were deleted.
+1. Run `git status --porcelain` and ignore paths that were already in the baseline. Every remaining changed path must be inside `Scope.May edit`, and no tests may be deleted. If a path is outside scope but not yours (e.g. another worker in a shared checkout), list it under Open issues instead of reverting it.
 2. Re-run the full `Commands.Test` from the spec yourself. Confirm exit code `0` and record exact pass/fail counts.
 3. If the spec includes UI work, verify the `playwright-cli` flows and confirm screenshot files exist on disk.
 4. If any check fails, fix it (or send back to the responsible subagent) before reporting. Never report `worker_done` with failing tests unless the spec explicitly states failure is the deliverable.
