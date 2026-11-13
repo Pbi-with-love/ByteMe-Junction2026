@@ -21,7 +21,11 @@
 ## Open questions
 - ...
 
-## Approach (TDD)
+## Design (UI specs only; omit otherwise)
+Brief for Argon: users, screens/components, mood/references, constraints (stack, a11y).
+Argon May edit: `docs/design/NNN-<slug>.md` only (the handoff). Codex implements from it; Codex May edit excludes `docs/design/`.
+
+## Approach (TDD, Codex)
 1. Write failing test(s) for the criteria above.
 2. Implement until green.
 3. UI work: verify with `playwright-cli` (list the flows to check).

@@ -23,5 +23,6 @@ Steps:
 1. Read `docs/memory/ARCHITECTURE.md`, `CONVENTIONS.md`, `STATUS.md` and `docs/specs/TEMPLATE.md`.
 2. Pick the next number NNN in `docs/specs/` and write `docs/specs/NNN-<slug>.md` from the template.
 3. The spec must be self-contained: goal, testable acceptance criteria, files the worker may and must not edit, TDD steps, exact test/run commands, playwright flows for UI, and the evidence required in `worker_done` (one consolidated report, with per-subtask evidence if the worker splits the work).
+3b. Workers: Argon (Antigravity) = design only, Codex = code/TDD/tests/playwright. For UI work fill the `## Design` brief; for non-UI work delete that section. `May edit` lists are for Codex.
 4. Keep tasks small enough for one worker; if the request is large, write several specs and state their dependencies and which can run in parallel (separate files only).
 5. Reply with the spec path(s) and a 3-line summary. Flag unknowns as questions instead of guessing.
