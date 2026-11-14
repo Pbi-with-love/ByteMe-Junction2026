@@ -88,7 +88,7 @@ export default function Compare({ client, levelId, onBack }: Props) {
           return <td key={entries[index]![0]} data-best={winners.includes(index) ? 'true' : undefined} data-incident={incident ? 'true' : undefined}>
             {winners.includes(index) && <span aria-hidden="true" className="compare-check">✓ </span>}
             {field === 'heartsLeft' && <span className="compare-heart-value">{result.heartsLeft}{Array.from({ length: Math.max(0, result.heartsLeft) }, (_, heart) => <PixelSprite key={heart} name="heart_full" />)}</span>}
-            {field === 'stars' && <span className="compare-star-value" data-zero={result.stars === 0 ? 'true' : undefined}><Stars stars={result.stars} /></span>}
+            {field === 'stars' && <span className="compare-star-value" data-zero={result.stars === 0 ? 'true' : undefined}><Stars stars={result.stars} animate={false} /></span>}
             {incident && <PixelSprite name="stop" />}
             {field !== 'heartsLeft' && field !== 'stars' && <span className={value === 'Not reported' || value === 'Nothing ordered' || value === 'None' ? 'compare-muted' : undefined}>{value}</span>}
           </td>;

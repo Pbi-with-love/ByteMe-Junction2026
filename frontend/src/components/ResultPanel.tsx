@@ -43,10 +43,10 @@ function PixelGrid({ rows, className = '' }: { rows: string[]; className?: strin
   </svg>;
 }
 
-export function Stars({ stars }: { stars: number }) {
+export function Stars({ stars, animate = true }: { stars: number; animate?: boolean }) {
   const reducedMotion = useReducedMotion();
   return <div className="result-stars" role="img" aria-label={`${stars} of 3 stars`}>
-    {[0, 1, 2].map((index) => <motion.span key={index} data-star={index < stars ? 'on' : 'off'} initial={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: .5 }} animate={{ opacity: 1, scale: 1 }} transition={reducedMotion ? { duration: .12 } : { duration: .25, delay: .16 + index * .1 }}><PixelGrid rows={index < stars ? ON : OFF} className="result-star" /></motion.span>)}
+    {[0, 1, 2].map((index) => <motion.span key={index} data-star={index < stars ? 'on' : 'off'} initial={animate ? (reducedMotion ? { opacity: 0 } : { opacity: 0, scale: .5 }) : false} animate={{ opacity: 1, scale: 1 }} transition={!animate ? { duration: 0 } : reducedMotion ? { duration: .12 } : { duration: .25, delay: .16 + index * .1 }}><PixelGrid rows={index < stars ? ON : OFF} className="result-star" /></motion.span>)}
   </div>;
 }
 

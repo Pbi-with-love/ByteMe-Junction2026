@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it, vi } from 'vitest';
 import type { GatewayClient } from '../api/gateway';
 import type { Compare as CompareData } from '../api/schemas';
@@ -13,6 +14,21 @@ function clientWith(compare: Awaited<ReturnType<GatewayClient['compare']>>): Gat
 }
 
 describe('Compare', () => {
+  it('shows live compare stars immediately for the backend fixture values', async () => {
+    const fixture = JSON.parse(readFileSync('../tests/fixtures/live/level1-balanced.json', 'utf8')) as { compare: CompareData };
+    const client = clientWith(fixture.compare);
+    render(<Compare client={client} levelId="level1" onBack={() => {}} />);
+
+    const table = await screen.findByRole('table');
+    const starsRow = within(table).getByRole('row', { name: /^Stars/ });
+    const cells = within(starsRow).getAllByRole('cell');
+    expect(Object.values(fixture.compare.presets).map(({ stars }) => stars)).toEqual([1, 3, 1]);
+    for (const cell of cells) {
+      expect(within(cell).getByRole('img')).toBeVisible();
+      expect(cell.querySelector('.result-stars > span')).not.toHaveStyle({ opacity: '0' });
+    }
+  });
+
   it('loads compare on a fresh replay client without starting a level', async () => {
     const client = new ReplayGatewayClient();
     render(<Compare client={client} levelId="level1" onBack={() => {}} />);
