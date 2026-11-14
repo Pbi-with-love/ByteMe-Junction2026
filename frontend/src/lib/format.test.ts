@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatAllergen, formatDate, formatDateTime, formatEuroLimit, formatMoney, formatQuantity, formatTime } from './format';
+import { formatAllergen, formatDate, formatDateTime, formatEuroLimit, formatMoney, formatPresetLabel, formatQuantity, formatTime } from './format';
 
 describe('Finnish formatters', () => {
   it('formats integer-cent money and quantities', () => {
@@ -24,4 +24,8 @@ describe('Finnish formatters', () => {
     expect(formatDateTime('2026-11-16T06:00:00+02:00')).toBe('Mon 16 Nov, 06:00');
     expect(formatDate('2026-11-16')).toBe('Mon 16 Nov');
   });
+});
+
+it('formats preset keys as human labels', () => {
+  expect(formatPresetLabel('allergen_off')).toBe('Allergen off');
 });

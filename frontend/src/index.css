@@ -370,3 +370,37 @@ button:focus-visible, select:focus-visible, input:focus-visible {
 @media (max-width: 1439px) { .valio-columns { grid-template-columns: 1fr; } .valio-scroll { max-height: 34vh; } }
 @media (max-width: 760px) { .valio-tiers { grid-template-columns: 1fr; } .valio-header { align-items: flex-start; flex-direction: column; } }
 @media (prefers-reduced-motion: reduce) { .valio-screen, .valio-header button { animation: none; transition: none; } }
+
+/* 007 compare */
+@media (min-width: 1440px) and (min-height: 900px) { :root { --px: 6px; } }
+.compare-page { min-height: 100vh; display: flex; flex-direction: column; gap: calc(3 * var(--px)); padding: calc(5 * var(--px)) calc(6 * var(--px)); background-color: #EEF4FA; background-image: linear-gradient(45deg,#F8FAFC 25%,transparent 25%),linear-gradient(-45deg,#F8FAFC 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#F8FAFC 75%),linear-gradient(-45deg,transparent 75%,#F8FAFC 75%); background-size: calc(16 * var(--px)) calc(16 * var(--px)); }
+.compare-heading { width: min(100%, calc(290 * var(--px))); margin: 0 auto; }
+.compare-heading h1 { margin: 0; font-size: calc(6 * var(--px)); line-height: 1.3; }
+.compare-heading p { margin: calc(2 * var(--px)) 0 0; color: #475569; font-size: calc(4 * var(--px)); line-height: 1.3; }
+.compare-heading strong { color: #0B1B33; }
+.compare-frame { width: min(100%, calc(290 * var(--px))); margin: 0 auto; overflow: auto; border: calc(1 * var(--px)) solid #0B1B33; background: white; box-shadow: inset calc(.5 * var(--px)) calc(.5 * var(--px)) 0 white, inset calc(-.5 * var(--px)) calc(-.5 * var(--px)) 0 #CBD5E1, var(--shadow-pixel); }
+.compare-frame table { width: 100%; table-layout: fixed; border-collapse: collapse; text-align: left; font-size: calc(4 * var(--px)); }
+.compare-frame th, .compare-frame td { padding: calc(1.5 * var(--px)) calc(2 * var(--px)); border-bottom: calc(.5 * var(--px)) solid #D6E3F0; line-height: 1.2; overflow-wrap: anywhere; }
+.compare-frame thead th { vertical-align: bottom; background: #D6E3F0; border-bottom-color: #0B1B33; font-size: calc(5 * var(--px)); }
+.compare-frame thead th:first-child { width: 26%; color: #475569; font-size: calc(4 * var(--px)); }
+.compare-frame tbody tr:nth-child(even) { background: #F8FAFC; }
+.compare-frame tbody th { font-weight: 700; }
+.compare-frame td[data-best="true"] { border-left: calc(1 * var(--px)) solid #0052B4; background: #E0F2FE; font-weight: 700; }
+.compare-frame th[data-best="true"] { border-top: calc(1.5 * var(--px)) solid #0052B4; background: #E0F2FE; }
+.compare-frame th[data-incident="true"], .compare-frame td[data-incident="true"] { border-top-color: #B91C1C; background-color: #FEE2E2; color: #B91C1C; }
+.compare-tag { display: block; width: fit-content; margin-bottom: calc(1 * var(--px)); padding: calc(.5 * var(--px)) calc(1 * var(--px)); border: calc(.5 * var(--px)) solid currentColor; font-size: calc(4 * var(--px)); line-height: 1.1; }
+.compare-best { background: #0052B4; color: white; }
+.compare-incident { background: #B91C1C; color: white; }
+.compare-muted { color: #475569; font-weight: 400; }
+.compare-check { color: #0052B4; font-weight: 700; }
+.compare-heart-value, .compare-star-value { display: inline-flex; align-items: center; gap: calc(.5 * var(--px)); }
+.compare-heart-value svg { width: calc(4 * var(--px)); height: calc(4 * var(--px)); flex: none; }
+.compare-star-value { flex-wrap: wrap; }
+.compare-star-value[data-zero="true"] { color: #B91C1C; font-weight: 700; }
+.compare-star-value .result-stars { display: inline-flex; }
+.compare-star-value .result-star { width: calc(4 * var(--px)); height: calc(4 * var(--px)); }
+.compare-state, .compare-error { width: min(100%, calc(180 * var(--px))); margin: auto; padding: calc(4 * var(--px)); border: calc(1 * var(--px)) solid #0B1B33; background: white; box-shadow: var(--shadow-pixel); font-size: calc(4 * var(--px)); }
+.compare-error { border: calc(1 * var(--px)) solid #881337; border-left-width: calc(2 * var(--px)); background: #FDF2F5; color: #881337; }
+.compare-page footer { width: min(100%, calc(290 * var(--px))); margin: 0 auto; }
+@media (max-width: 700px) { .compare-page { padding: calc(3 * var(--px)); } .compare-frame table { min-width: 720px; } }
+/* 007 compare end */
