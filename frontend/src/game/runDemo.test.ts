@@ -11,14 +11,14 @@ describe('runDemo', () => {
     const clicked: string[] = [];
     const button = (name: string, parent: HTMLElement = root) => { const el = document.createElement('button'); el.textContent = name; el.onclick = () => clicked.push(name); parent.append(el); return el; };
     button('Start level', article);
-    for (const name of ['Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent']) button(name);
+    for (const name of ['Go to the kitchen', 'Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent']) button(name);
     const controller = new AbortController();
     const promise = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: ['approved'] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', beatMs: 10, resultHoldMs: 20, waitMs: 100 });
     await vi.advanceTimersByTimeAsync(100);
     button('Approve'); button('See result'); button('Compare presets');
     await vi.advanceTimersByTimeAsync(1000);
     expect(await promise).toBe('done');
-    expect(clicked).toEqual(['Start level', 'Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent', 'Approve', 'See result', 'Compare presets']);
+    expect(clicked).toEqual(['Start level', 'Go to the kitchen', 'Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent', 'Approve', 'See result', 'Compare presets']);
     root.remove();
   });
   it('stops on a visible error panel without clicking further', async () => {

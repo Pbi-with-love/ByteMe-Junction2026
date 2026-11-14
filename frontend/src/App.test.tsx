@@ -29,8 +29,9 @@ function makeClient(discovery: () => Promise<Discovery>): GatewayClient {
 describe('level shell', () => {
   it('keeps static headings aligned with mock levels and loads the provider', async () => {
     LEVELS.forEach((level, index) => {
-      expect(level).toEqual({ levelId: LEVEL_MOCKS[index].start.level.levelId, title: LEVEL_MOCKS[index].start.level.title });
+      expect(level.levelId).toBe(LEVEL_MOCKS[index].start.level.levelId);
     });
+    expect(LEVELS[2].title).toBe('Allergy Emergency');
     render(<App client={makeClient(async () => ({ provider: 'Mock Gateway' } as Discovery))} />);
     await screen.findByText('Mock Gateway');
     expect(screen.getAllByRole('article')).toHaveLength(3);
@@ -47,6 +48,15 @@ describe('level shell', () => {
     expect(screen.getAllByRole('article')).toHaveLength(3);
   });
 
+  it('returns from the briefing to the level list', async () => {
+    render(<App client={new ReplayGatewayClient()} />);
+    fireEvent.click((await screen.findAllByRole('button', { name: 'Start level' }))[0]!);
+    expect(await screen.findByRole('heading', { name: 'The situation' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Back to levels' }));
+    expect(await screen.findByRole('heading', { name: 'Agent Kitchen' })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: 'Start level' })).toHaveLength(3);
+  });
+
   it('shows level-specific loading copy while startLevel is pending', async () => {
     const client = makeClient(async () => discoveryData.response as Discovery);
     client.presets = async () => ({ balanced: Object.values(LEVEL_MOCKS[0].presets)[0]!.mandate });
@@ -57,6 +67,7 @@ describe('level shell', () => {
     fireEvent.click((await screen.findAllByRole('button', { name: 'Start level' }))[0]);
     expect(await screen.findByRole('status')).toHaveTextContent('Starting the level…');
     finish(LEVEL_MOCKS[0].start);
+    fireEvent.click(await screen.findByRole('button', { name: 'Go to the kitchen' }));
     await waitFor(() => expect(screen.getByRole('region', { name: 'Kitchen' })).toBeInTheDocument());
   });
 
@@ -75,15 +86,17 @@ describe('level shell', () => {
     vi.unstubAllGlobals();
   });
 
-  it('keeps the title heading and opens a kitchen after preset and level start', async () => {
+  it('shows a briefing after a level pick and continues into the kitchen', async () => {
     const client = makeClient(async () => discoveryData.response as Discovery);
     client.presets = vi.fn(async () => ({ balanced: Object.values(LEVEL_MOCKS[0].presets)[1].mandate }));
     client.startLevel = async () => ({ sessionId: 'session-1', level: LEVEL_MOCKS[0].start.level, clock: LEVEL_MOCKS[0].start.clock, hearts: 3, tokens: LEVEL_MOCKS[0].start.tokens });
     render(<App client={client} />);
     expect(await screen.findByRole('heading', { name: 'Agent Kitchen' })).toBeTruthy();
     fireEvent.click((await screen.findAllByRole('button', { name: 'Start level' }))[0]);
-    await waitFor(() => expect(screen.getByRole('region', { name: 'Kitchen' })).toBeTruthy());
+    expect(await screen.findByRole('heading', { name: 'The situation' })).toBeInTheDocument();
     expect(client.presets).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole('button', { name: 'Go to the kitchen' }));
+    await waitFor(() => expect(screen.getByRole('region', { name: 'Kitchen' })).toBeTruthy());
     fireEvent.click(screen.getByRole('button', { name: 'Manager Desk' }));
     fireEvent.click(await screen.findByRole('button', { name: 'Write the mandate' }));
     const clipboard = await screen.findByRole('dialog', { name: 'Valtakirja' });
@@ -102,6 +115,7 @@ describe('level shell', () => {
     render(<App client={client}/>);
     fireEvent.click((await screen.findAllByRole('button',{name:'Start level'}))[0]!);
     await waitFor(()=>expect(client.startLevel).toHaveBeenCalledTimes(1));
+    fireEvent.click(await screen.findByRole('button', { name: 'Go to the kitchen' }));
     fireEvent.click(await screen.findByRole('button',{name:'Manager Desk'}));
     fireEvent.click(await screen.findByRole('button',{name:'Write the mandate'}));
     fireEvent.click(await screen.findByRole('button',{name:'Balanced'}));
@@ -113,6 +127,8 @@ describe('level shell', () => {
     fireEvent.click(await screen.findByRole('button',{name:'Play again'}));
     await waitFor(()=>expect(client.startLevel).toHaveBeenCalledTimes(2));
     expect(client.startLevel).toHaveBeenLastCalledWith('level1','balanced');
+    expect(await screen.findByRole('region', { name: 'Kitchen' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'The situation' })).not.toBeInTheDocument();
   });
 
   async function openFirstResult(client: ReplayGatewayClient) {
@@ -127,6 +143,7 @@ describe('level shell', () => {
     render(<App client={fastClient} />);
     fireEvent.click((await screen.findAllByRole('button', { name: 'Start level' }))[0]!);
     await waitFor(() => expect(replay).toHaveBeenCalled());
+    fireEvent.click(await screen.findByRole('button', { name: 'Go to the kitchen' }));
     fireEvent.click(await screen.findByRole('button', { name: 'Manager Desk' }));
     fireEvent.click(await screen.findByRole('button', { name: 'Write the mandate' }));
     fireEvent.click(await screen.findByRole('button', { name: 'Loose' }));

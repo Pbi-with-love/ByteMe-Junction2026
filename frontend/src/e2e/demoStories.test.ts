@@ -10,6 +10,7 @@ import level2 from '../../mocks/level2.json';
 import level3 from '../../mocks/level3.json';
 import { decisionKey } from '../api/replay';
 import { optionDisclosure } from '../game/disclosure';
+import { LEVELS } from '../game/levels';
 import type { AgentStep } from '../api/schemas';
 // These story assertions intentionally read raw mock-only metadata omitted by runtime Zod schemas.
 const levels = [level1, level2, level3] as unknown as Array<{ start: { level: { levelId: string; title: string }; hearts: number }; presets: Record<string, any>; compare: any }>;
@@ -60,10 +61,11 @@ describe('recorded demo stories', () => {
     for (const mock of levels) for (const [presetKey, preset] of Object.entries(mock.presets) as [string, any][]) {
       const levelId = mock.start.level.levelId;
       stage = `${levelId}/${presetKey}: selecting level`;
-      const title = mock.start.level.title;
+      const title = LEVELS.find((level) => level.levelId === levelId)!.title;
       const article = () => screen.queryAllByRole('article').find((item) => item.querySelector('h2')?.textContent === title);
       await advanceUntil(() => Boolean(article()?.querySelector('button')));
       fireEvent.click(article()!.querySelector('button')!);
+      await clickWhenReady('Go to the kitchen');
       await clickWhenReady('Manager Desk');
       await clickWhenReady('Write the mandate');
       await clickWhenReady(formatPresetLabel(presetKey));

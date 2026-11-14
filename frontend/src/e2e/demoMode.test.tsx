@@ -42,6 +42,7 @@ async function playDemoByHand() {
   const title = level1.start.level.title;
   const article = screen.getAllByRole('article').find((item) => item.querySelector('h2')?.textContent === title)!;
   fireEvent.click(article.querySelector('button')!);
+  await clickWhenReady('Go to the kitchen');
   await clickWhenReady('Manager Desk');
   await clickWhenReady('Write the mandate');
   await clickWhenReady('Balanced');

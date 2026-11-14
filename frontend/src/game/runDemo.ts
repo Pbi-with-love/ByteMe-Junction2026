@@ -30,7 +30,7 @@ export async function runDemo(opts: Options): Promise<'done' | 'aborted' | 'stuc
   }
   try {
     if (!await click(() => [...root.querySelectorAll<HTMLElement>('article')].find((a) => a.querySelector('h2')?.textContent?.trim() === opts.levelTitle)?.querySelector('button') ?? null)) return stop() ?? 'stuck';
-    for (const action of ['Manager Desk', 'Write the mandate', opts.presetLabel(script.presetKey), 'Sign mandate', 'Order Terminal', 'Send to agent']) {
+    for (const action of ['Go to the kitchen', 'Manager Desk', 'Write the mandate', opts.presetLabel(script.presetKey), 'Sign mandate', 'Order Terminal', 'Send to agent']) {
       if (!await click(() => target(root, action))) return stop() ?? 'stuck';
     }
     for (const decision of script.decisions as DemoDecision[]) {

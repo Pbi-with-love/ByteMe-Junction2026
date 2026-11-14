@@ -3,6 +3,7 @@ import type { GatewayClient } from './api/gateway';
 import type { Discovery, GameStart, Mandate } from './api/schemas';
 import { LEVELS } from './game/levels';
 import KitchenScreen from './screens/KitchenScreen';
+import Brief from './screens/Brief';
 import ValioView from './screens/ValioView';
 import Compare from './screens/Compare';
 import { fitScale } from './world/scale';
@@ -11,7 +12,7 @@ import { runDemo } from './game/runDemo';
 import { formatPresetLabel } from './lib/format';
 import AgentWorking from './components/AgentWorking';
 
-type Screen = 'levels' | 'kitchen' | 'valio' | 'compare';
+type Screen = 'levels' | 'brief' | 'kitchen' | 'valio' | 'compare';
 export default function App({ client }: { client: GatewayClient }) {
   const [provider, setProvider] = useState('');
   const [discovery, setDiscovery] = useState<Discovery | null>(null);
@@ -37,14 +38,15 @@ export default function App({ client }: { client: GatewayClient }) {
     window.addEventListener('resize', resize);
     return () => window.removeEventListener('resize', resize);
   }, []);
-  async function startLevel(levelId: string, presetKey?: string) {
+  async function startLevel(levelId: string, presetKey?: string, showBrief = true) {
     setLoading(true); setError('');
     try {
       const values = await client.presets(levelId);
       const key = presetKey ?? Object.keys(values)[0];
       if (!key) throw new Error('No presets available for this level.');
       const game = await client.startLevel(levelId, key);
-      setPresets(values); setStart(game); setRunId((id) => id + 1); setScreen('kitchen');
+      const title = LEVELS.find((level) => level.levelId === levelId)?.title ?? game.level.title;
+      setPresets(values); setStart({ ...game, level: { ...game.level, title } }); setRunId((id) => id + 1); setScreen(showBrief ? 'brief' : 'kitchen');
     } catch (reason) { setError(reason instanceof Error ? reason.message : String(reason)); }
     finally { setLoading(false); }
   }
@@ -63,10 +65,13 @@ export default function App({ client }: { client: GatewayClient }) {
   if (!provider) return <main className="title-screen" style={pixelStyle}><section className="title-card title-state">Connecting…</section></main>;
   if (error && !loading) return <main className="title-screen" style={pixelStyle}><section className="title-card title-state"><div className="pixel-alert" role="alert"><svg className="alert-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 22 21H2L12 3Z" /><path d="M12 9v5m0 3h.01" /></svg> <strong>Error:</strong> {error}</div><button className="button button-ghost" onClick={() => { demoAbort.current?.abort(); demoAbort.current = null; setError(''); setScreen('levels'); }}>Back to levels</button></section></main>;
   if (loading) return <main className="title-screen" style={pixelStyle}><section className="title-card title-state"><AgentWorking message="Starting the level…" />{error && <p role="alert">{error}</p>}<button className="button button-ghost" onClick={() => { demoAbort.current?.abort(); demoAbort.current = null; setError(''); setScreen('levels'); }}>Back to levels</button></section></main>;
+  if (screen === 'brief' && start) return <main className="title-screen" style={pixelStyle}>
+    <Brief level={start.level} onBack={() => { setStart(null); setScreen('levels'); }} onContinue={() => setScreen('kitchen')} />
+  </main>;
   if ((screen === 'kitchen' || screen === 'valio') && start && discovery) return <>
     <div hidden={screen === 'valio'}>
       <KitchenScreen key={runId} client={client} start={start} presets={presets} discovery={discovery}
-        onPlayAgain={() => { demoAbort.current?.abort(); demoAbort.current = null; void startLevel(start.level.levelId); }}
+        onPlayAgain={() => { demoAbort.current?.abort(); demoAbort.current = null; void startLevel(start.level.levelId, undefined, false); }}
         onValioView={() => setScreen('valio')}
         onCompare={() => openCompare(start.level.levelId)}
         onExit={() => { demoAbort.current?.abort(); demoAbort.current = null; setError(''); setScreen('levels'); setStart(null); }} />

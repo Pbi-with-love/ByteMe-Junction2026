@@ -327,11 +327,21 @@ button:focus-visible, select:focus-visible, input:focus-visible {
 .signature-badge { display: inline-block; margin: calc(1 * var(--px)) 0 0; padding: calc(.5 * var(--px)); border: calc(.5 * var(--px)) solid #94A3B8; color: #475569; font-size: calc(4 * var(--px)); }
 
 /* Standalone Brief component remains pixel-styled for its component contract. */
-.brief-page { padding: calc(3 * var(--px)); }
-.brief-card { padding: calc(2 * var(--px)); border: calc(.5 * var(--px)) solid #94A3B8; background: #FFFFFF; }
-.brief-card header { display: flex; align-items: center; justify-content: space-between; gap: calc(2 * var(--px)); }
-.brief-card h1 { margin: 0; font-size: calc(5 * var(--px)); }
+.brief-page { width: min(100%, 1120px); }
+.brief-page > .button { margin-bottom: calc(2 * var(--px)); }
+.brief-card { padding: calc(4 * var(--px)); border: calc(.5 * var(--px)) solid #0B1B33; background: #FFFFFF; box-shadow: var(--shadow-pixel); }
+.brief-card header { display: flex; align-items: center; justify-content: space-between; gap: calc(3 * var(--px)); padding-bottom: calc(2 * var(--px)); border-bottom: calc(.5 * var(--px)) dashed #94A3B8; }
+.brief-card h1 { min-width: 0; margin: 0; font-size: calc(5 * var(--px)); line-height: 1.35; overflow-wrap: anywhere; }
+.brief-story { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: calc(3 * var(--px)); margin: calc(3 * var(--px)) 0; }
+.brief-story section { min-width: 0; padding: calc(2 * var(--px)); border: calc(.5 * var(--px)) solid #94A3B8; background: #F8FAFC; }
+.brief-story h2 { margin: 0 0 calc(1.5 * var(--px)); font-size: calc(3.5 * var(--px)); line-height: 1.5; }
+.brief-story p { margin: 0; font-size: calc(4 * var(--px)); line-height: 1.45; overflow-wrap: anywhere; }
+.brief-card .brief-copy { font-size: calc(4 * var(--px)); }
 .brief-card footer { display: flex; justify-content: flex-end; margin-top: calc(2 * var(--px)); }
+@media (max-width: 800px) {
+  .brief-story { grid-template-columns: 1fr; }
+  .brief-card header { align-items: flex-start; flex-direction: column; }
+}
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
 @media (max-width: 700px) {
