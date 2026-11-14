@@ -126,6 +126,13 @@ class EventLog:
         ).fetchall()
         return [self._row_to_event(row) for row in rows]
 
+    def list_customer(self, customer_id: str, *, since: int = 0, limit: int = 100) -> list[dict[str, Any]]:
+        rows = self._connection.execute(
+            "SELECT * FROM events WHERE customer_id = ? AND seq > ? ORDER BY seq LIMIT ?",
+            (customer_id, since, limit),
+        ).fetchall()
+        return [self._row_to_event(row) for row in rows]
+
     def verify(self) -> dict[str, Any]:
         rows = self._connection.execute("SELECT * FROM events ORDER BY seq").fetchall()
         previous_hash = ""

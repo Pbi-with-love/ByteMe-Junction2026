@@ -132,6 +132,13 @@ class OrderStore:
         ).fetchone()
         return int(row["count"])
 
+    def for_quote(self, quote_id: str, customer_id: str) -> dict[str, Any] | None:
+        row = self._connection.execute(
+            "SELECT response FROM orders WHERE quote_id = ? AND customer_id = ? LIMIT 1",
+            (quote_id, customer_id),
+        ).fetchone()
+        return json.loads(row["response"]) if row else None
+
     def update(
         self,
         order_id: str,

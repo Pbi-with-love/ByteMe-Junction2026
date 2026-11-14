@@ -153,13 +153,24 @@ def require_auth(request: Request, *, roles: set[str] | None = None) -> Principa
         )
     if roles and principal.role not in roles:
         raise HTTPException(
-            status_code=403,
+            status_code=401,
             detail={
-                "code": "MANDATE_INVALID",
+                "code": "UNAUTHENTICATED",
                 "message": "This token does not have permission for the operation.",
             },
         )
     return principal
+
+
+def enforce_customer_boundary(request: Request, principal: Principal, body: dict[str, object]) -> None:
+    supplied = body.get("customerId")
+    if "customerId" in body and supplied != principal.customer_id:
+        request.app.state.event_log.append(
+            actor="gateway", event_type="DATA_BOUNDARY_BLOCKED", request_id=request_id(request),
+            customer_id=principal.customer_id, agent_id=principal.agent_id,
+            light="RED", reasons=["DATA_BOUNDARY"], summary="Request rejected for customer boundary.",
+        )
+        raise HTTPException(status_code=403, detail={"code": "DATA_BOUNDARY", "message": "customerId does not match the authenticated customer."})
 
 
 async def request_json(request: Request) -> dict[str, object]:
@@ -280,7 +291,10 @@ def _policy_plan(
         lines.append(
             {
                 **line,
-                "product": _planner_product(products[line["productId"]], []),
+                "product": {
+                    **_planner_product(products[line["productId"]], []),
+                    "salesBlock": _planner_product(products[line["productId"]], []).get("salesBlock") is True or line.get("salesBlock") is True,
+                },
             }
         )
     return {**plan, "lines": lines}
@@ -326,6 +340,15 @@ def _expire_approval_order(
             response_updates={"status": "EXPIRED"},
         )
     return request.app.state.order_store.get(str(approval["orderId"]), customer_id)
+
+
+def _log_approval_expired(request: Request, approval: dict[str, object], customer_id: str) -> None:
+    if request.app.state.approval_store.claim_expired_log(str(approval["approvalId"]), customer_id):
+        request.app.state.event_log.append(
+            actor="gateway", event_type="APPROVAL_EXPIRED", request_id=request_id(request),
+            customer_id=customer_id, summary=f"Approval {approval['approvalId']} expired.",
+            refs={"approvalId": str(approval["approvalId"]), "orderId": str(approval["orderId"])},
+        )
 
 
 def _reject_approval(
@@ -423,7 +446,12 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
 
 @app.get("/.well-known/agent-commerce.json")
 async def discovery(request: Request) -> JSONResponse:
-    return stub_response(request, "Discovery")
+    return {"provider": "Valio Aimo (mock)", "protocolVersion": "1.0-draft", "baseUrl": str(request.base_url).rstrip("/") + "/v1",
+            "capabilities": ["search", "quote", "order", "mandate", "approval", "audit_log"],
+            "mandate": {"schemaUrl": str(request.base_url).rstrip("/") + "/v1/schemas/mandate.json", "substitutionLevels": ["none", "same_category", "any"], "lateDeliveryLevels": ["none", "one_day"]},
+            "signing": {"alg": "Ed25519", "keys": [{"keyId": "valio-aimo-2026-11", "publicKey": signer.public_key if signer else ""}], "canonicalization": "JSON, sorted keys, no whitespace"},
+            "policy": {"lights": ["GREEN", "BLUE", "YELLOW", "RED"], "reasonCodesUrl": str(request.base_url).rstrip("/") + "/v1/schemas/reason-codes.json"},
+            "dataDisclosure": {"public": ["catalog", "labels", "certificates", "categoryCarbon"], "customerScoped": ["netPrices", "quotes", "orders", "auditLog"], "neverExposed": ["purchasePrices", "margins", "otherCustomers", "supplierContracts"]}}
 
 
 @app.post("/v1/auth/tokens")
@@ -452,14 +480,6 @@ async def create_token(request: Request) -> JSONResponse:
         customer_id=customer_id if isinstance(customer_id, str) else None,
         agent_id=agent_id if isinstance(agent_id, str) else None,
     )
-    request.app.state.event_log.append(
-        actor="gateway",
-        event_type="TOKEN_ISSUED",
-        request_id=request_id(request),
-        customer_id=customer_id if isinstance(customer_id, str) else None,
-        agent_id=agent_id if isinstance(agent_id, str) else None,
-        summary=f"{role} token issued.",
-    )
     return JSONResponse(status_code=201, content={"token": token})
 
 
@@ -467,6 +487,7 @@ async def create_token(request: Request) -> JSONResponse:
 async def create_mandate(request: Request) -> JSONResponse:
     principal = require_auth(request, roles={"human"})
     body = await request_json(request)
+    enforce_customer_boundary(request, principal, body)
     try:
         mandate = request.app.state.auth_store.create_mandate(
             principal=principal,
@@ -491,7 +512,7 @@ async def create_mandate(request: Request) -> JSONResponse:
 
 @app.get("/v1/mandates/{mandate_id}")
 async def get_mandate(mandate_id: str, request: Request) -> JSONResponse:
-    principal = require_auth(request)
+    principal = require_auth(request, roles={"human", "agent"})
     if principal.customer_id is None:
         raise HTTPException(
             status_code=404,
@@ -538,6 +559,7 @@ async def revoke_mandate(mandate_id: str, request: Request) -> JSONResponse:
 async def search(request: Request) -> JSONResponse:
     principal = require_auth(request, roles={"agent"})
     body = await request_json(request)
+    enforce_customer_boundary(request, principal, body)
     mandate_id = body.get("mandateId")
     if not isinstance(mandate_id, str) or principal.customer_id is None:
         raise HTTPException(
@@ -608,6 +630,7 @@ async def create_quote(request: Request) -> JSONResponse:
             },
         )
     body = await request_json(request)
+    enforce_customer_boundary(request, principal, body)
     mandate_id = body.get("mandateId")
     need = body.get("need")
     if not isinstance(mandate_id, str) or not isinstance(need, dict):
@@ -657,7 +680,7 @@ async def create_quote(request: Request) -> JSONResponse:
                 "message": "need quantity or deadline is invalid.",
             },
         ) from exc
-    candidate_ids = body.get("candidateProductIds")
+    candidate_ids = need.get("candidateProductIds", body.get("candidateProductIds"))
     if candidate_ids is not None and (
         not isinstance(candidate_ids, list)
         or not all(isinstance(value, str) for value in candidate_ids)
@@ -761,7 +784,10 @@ async def create_quote(request: Request) -> JSONResponse:
         "need": need,
         "plans": planned["plans"],
         "excludedProducts": planned["excludedProducts"],
-        "evidence": [],
+        "evidence": [
+            {"source": "valio:/api/price", "requestId": request_id(request), "at": datetime.now().astimezone().isoformat()},
+            {"source": "valio:/api/availability", "requestId": request_id(request), "at": datetime.now().astimezone().isoformat()},
+        ],
         "scenarioOverlay": False,
     }
     quote = quote_store.create(
@@ -784,7 +810,7 @@ async def create_quote(request: Request) -> JSONResponse:
 
 @app.get("/v1/quotes/{quote_id}")
 async def get_quote(quote_id: str, request: Request) -> JSONResponse:
-    principal = require_auth(request)
+    principal = require_auth(request, roles={"agent"})
     if principal.customer_id is None or request.app.state.quote_store is None:
         raise HTTPException(
             status_code=404,
@@ -821,6 +847,7 @@ async def create_order(request: Request) -> JSONResponse:
             },
         )
     body = await request_json(request)
+    enforce_customer_boundary(request, principal, body)
     quote_id = body.get("quoteId")
     plan_id = body.get("planId")
     if not isinstance(quote_id, str) or not isinstance(plan_id, str):
@@ -845,6 +872,9 @@ async def create_order(request: Request) -> JSONResponse:
     if existing is not None:
         response_status, response = existing
         return JSONResponse(status_code=response_status, content=response)
+
+    if request.app.state.order_store.for_quote(quote_id, principal.customer_id or ""):
+        raise HTTPException(status_code=409, detail={"code": "INVALID_STATE", "message": "Quote already has an order."})
 
     quote_store = request.app.state.quote_store
     if quote_store is None or principal.customer_id is None:
@@ -875,12 +905,10 @@ async def create_order(request: Request) -> JSONResponse:
             detail={"code": "POLICY_BLOCKED", "message": "Quote signature is invalid."},
         )
     if quote.get("status") == "EXPIRED":
-        _log_order_outcome(
-            request,
-            principal,
-            quote_id,
-            plan_id,
-            PolicyResult("RED", ("QUOTE_EXPIRED",)),
+        request.app.state.event_log.append(
+            actor="gateway", event_type="QUOTE_EXPIRED", request_id=request_id(request),
+            customer_id=principal.customer_id, agent_id=principal.agent_id,
+            summary=f"Quote {quote_id} expired.", refs={"quoteId": quote_id},
         )
         raise HTTPException(
             status_code=409,
@@ -892,12 +920,13 @@ async def create_order(request: Request) -> JSONResponse:
             principal.customer_id,
         )
     except MandateError as exc:
+        reason = exc.code if exc.code in {"MANDATE_INVALID", "MANDATE_EXPIRED"} else "MANDATE_INVALID"
         _log_order_outcome(
             request,
             principal,
             quote_id,
             plan_id,
-            PolicyResult("RED", (exc.code,)),
+            PolicyResult("RED", (reason,)),
         )
         status = 404 if exc.code == "NOT_FOUND" else 403
         raise HTTPException(
@@ -1007,7 +1036,7 @@ async def create_order(request: Request) -> JSONResponse:
         hearts_left = _consume_approval_heart(request, principal.customer_id)
         approval_reasons = list(policy_result.reasons)
         approval_status = "OPEN"
-        if hearts_left == 0:
+        if hearts_left is not None and request.app.state.approval_store.count(principal.customer_id) >= 3:
             approval_status = "EXPIRED"
             approval_reasons.append("ATTENTION_EXHAUSTED")
         approval = request.app.state.approval_store.create(
@@ -1069,7 +1098,7 @@ async def create_order(request: Request) -> JSONResponse:
 
 @app.get("/v1/orders/{order_id}")
 async def get_order(order_id: str, request: Request) -> JSONResponse:
-    principal = require_auth(request)
+    principal = require_auth(request, roles={"agent"})
     if principal.customer_id is None:
         raise HTTPException(
             status_code=404,
@@ -1088,6 +1117,7 @@ async def get_order(order_id: str, request: Request) -> JSONResponse:
             now=datetime.now().astimezone(),
         )
         if approval and approval["status"] == "EXPIRED":
+            _log_approval_expired(request, approval, principal.customer_id)
             request.app.state.order_store.update(
                 order_id,
                 principal.customer_id,
@@ -1118,19 +1148,7 @@ async def get_approval(approval_id: str, request: Request) -> JSONResponse:
         )
     order = _expire_approval_order(request, approval, principal.customer_id)
     if approval["status"] == "EXPIRED":
-        request.app.state.event_log.append(
-            actor="gateway",
-            event_type="APPROVAL_EXPIRED",
-            request_id=request_id(request),
-            customer_id=principal.customer_id,
-            summary=f"Approval {approval_id} expired.",
-            refs={
-                "approvalId": approval_id,
-                "orderId": str(approval["orderId"]),
-            },
-            reasons=["APPROVAL_EXPIRED"],
-            light="RED",
-        )
+        _log_approval_expired(request, approval, principal.customer_id)
     return {**approval, "order": order}
 
 
@@ -1213,6 +1231,47 @@ async def decide_approval(approval_id: str, request: Request) -> JSONResponse:
             detail={"code": exc.code, "message": str(exc)},
         ) from exc
     now = datetime.now().astimezone()
+    valio = getattr(request.app.state, "valio_client", None)
+    price_call = getattr(valio, "price", None)
+    availability_call = getattr(valio, "availability", None)
+    if decision != "rejected" and (not callable(price_call) or not callable(availability_call)):
+        raise HTTPException(status_code=502, detail={"code": "UPSTREAM_ERROR", "message": "Approval recheck client is unavailable."})
+    if decision != "rejected" and callable(price_call) and callable(availability_call):
+        product_ids = [str(line.get("productId")) for line in plan.get("lines", [])]
+        requested_date = datetime.fromisoformat(str(plan.get("deadline"))).date().isoformat()
+        try:
+            fresh_prices = _response_rows(await price_call(customer=principal.customer_id, requested_date=requested_date, products=product_ids))
+            fresh_availability = _response_rows(await availability_call(customer=principal.customer_id, requested_date=requested_date, products=product_ids))
+        except (ValioUpstreamError, QuoteError, ValueError) as exc:
+            raise HTTPException(status_code=502, detail={"code": "UPSTREAM_ERROR", "message": str(exc)}) from exc
+        price_by_id = {str(row.get("productId")): row for row in fresh_prices}
+        availability_by_id = {str(row.get("productId")): row for row in fresh_availability}
+        fresh_lines = []
+        for line in plan.get("lines", []):
+            product_id = str(line.get("productId"))
+            price_row = price_by_id.get(product_id, {})
+            availability_row = availability_by_id.get(product_id, {})
+            if price_row.get("error") is True or price_row.get("netPriceFound") is False or not price_row:
+                raise HTTPException(status_code=502, detail={"code": "UPSTREAM_ERROR", "message": "Price unavailable during approval recheck."})
+            schedule = availability_row.get("scheduleLines", [])
+            schedule = schedule if isinstance(schedule, list) else []
+            sales_quantity_data = line.get("salesQuantity")
+            sales_quantity = sales_quantity_data.get("amount", 0) if isinstance(sales_quantity_data, dict) else None
+            usable = [row for row in schedule if isinstance(row, dict) and row.get("salesBlock") is not True]
+            selected_schedule = next((row for row in usable if sales_quantity is None or row.get("availableAmount", 0) >= sales_quantity), None)
+            blocked = availability_row.get("salesBlock") is True or selected_schedule is None
+            refreshed_line = {**line, "salesBlock": blocked}
+            if selected_schedule and isinstance(selected_schedule.get("availableDate"), str):
+                refreshed_line["availableDate"] = selected_schedule["availableDate"]
+            pricing = price_row.get("priceWithTax")
+            price_value = pricing.get("value") if isinstance(pricing, dict) else None
+            if sales_quantity is not None and isinstance(price_value, (int, float)) and not isinstance(price_value, bool):
+                unit_cents = int(Decimal(str(price_value)) * 100)
+                refreshed_line["unitPrice"] = {"cents": unit_cents, "currency": "EUR"}
+                refreshed_line["lineTotal"] = {"cents": unit_cents * int(sales_quantity), "currency": "EUR"}
+            fresh_lines.append(refreshed_line)
+        refreshed_total = sum(line.get("lineTotal", {}).get("cents", 0) for line in fresh_lines)
+        plan = {**plan, "lines": fresh_lines, "total": {"cents": refreshed_total, "currency": "EUR"}}
     result = _recheck_order_plan(
         request,
         plan,
@@ -1220,14 +1279,9 @@ async def decide_approval(approval_id: str, request: Request) -> JSONResponse:
         now=now,
         exclude_order_id=str(order["orderId"]),
     )
-    original_reasons = set(approval["reasons"])
-    if decision != "rejected" and (
-        result.light == "RED" or (
-        decision == "alternative"
-        and result.light == "YELLOW"
-        and set(result.reasons) != original_reasons
-        )
-    ):
+    if decision != "rejected" and result.light == "RED":
+        _reject_approval(request, approval, principal.customer_id, "POLICY_BLOCKED")
+        request.app.state.event_log.append(actor="human", event_type="POLICY_BLOCKED", request_id=request_id(request), customer_id=principal.customer_id, light="RED", reasons=list(result.reasons), summary=f"Approval {approval_id} blocked by current policy.", refs={"approvalId": approval_id, "orderId": str(order["orderId"])})
         raise HTTPException(
             status_code=403,
             detail={
@@ -1330,9 +1384,15 @@ async def add_approval_explanation(approval_id: str, request: Request) -> JSONRe
 @app.get("/v1/log")
 async def get_log(
     request: Request,
+    view: str | None = None,
     since: int = 0,
     limit: int = 100,
 ) -> dict[str, object]:
+    principal = require_auth(request)
+    if view not in {"buyer", "valio"}:
+        raise HTTPException(status_code=400, detail={"code": "VALIDATION_ERROR", "message": "view must be buyer or valio."})
+    if (view == "buyer" and principal.role not in {"human", "agent"}) or (view == "valio" and principal.role != "operator"):
+        raise HTTPException(status_code=401, detail={"code": "UNAUTHENTICATED", "message": "Token role is not allowed for this log view."})
     if since < 0 or limit < 1 or limit > 1000:
         raise HTTPException(
             status_code=400,
@@ -1341,7 +1401,13 @@ async def get_log(
                 "message": "since must be non-negative and limit must be between 1 and 1000.",
             },
         )
-    return {"events": request.app.state.event_log.list(since=since, limit=limit)}
+    if view == "buyer":
+        events = request.app.state.event_log.list_customer(principal.customer_id or "", since=since, limit=limit)
+    else:
+        events = request.app.state.event_log.list(since=since, limit=limit)
+        for event in events:
+            event["disclosure"] = {"returnedToAgent": ["catalog", "labels", "certificates", "categoryCarbon", "netPrice", "availability", "closingTime"], "withheld": ["purchasePrice", "margin", "otherCustomers", "supplierContracts"]}
+    return {"events": events}
 
 
 @app.get("/v1/log/verify")

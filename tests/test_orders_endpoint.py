@@ -36,7 +36,11 @@ class _Data:
 
 
 class _Client:
-    pass
+    async def price(self, *, products, **_):
+        return {"products": [{"productId": product, "priceWithTax": {"value": 6.0}, "netPriceFound": True} for product in products]}
+
+    async def availability(self, *, products, **_):
+        return {"products": [{"productId": product, "scheduleLines": [{"availableAmount": 1000}]} for product in products]}
 
 
 def _environment(
@@ -61,6 +65,7 @@ def _environment(
         principal=human,
         request_data={
             "agentId": "agent-1",
+            "issuedBy": {"name": "Test Buyer", "role": "Kitchen manager"},
             "limits": {"perOrderEur": limit, "perWeekEur": week_limit},
             "substitution": "none",
             "lateDelivery": "none",
@@ -109,6 +114,7 @@ def _environment(
     app.state.approval_store = approvals
     app.state.event_log = log
     app.state.valio_data = _Data(sales_block=sales_block)
+    app.state.valio_client = _Client()
     return agent_token, mandate, quote, auth, quotes, orders, approvals, log
 
 
@@ -139,6 +145,13 @@ def test_limit_controls_pending_vs_ordered_and_idempotency(tmp_path):
         assert replay.status_code == 202
         assert replay.json() == response.json()
         assert orders.count("customer-1") == 1
+        second_key = TestClient(app).post(
+            "/v1/orders",
+            headers={"Authorization": f"Bearer {agent}", "Idempotency-Key": "new-key"},
+            json=request,
+        )
+        assert second_key.status_code == 409
+        assert second_key.json()["error"]["code"] == "INVALID_STATE"
         conflict = TestClient(app).post(
             "/v1/orders",
             headers={"Authorization": f"Bearer {agent}", "Idempotency-Key": "key-1"},
@@ -183,6 +196,46 @@ def test_red_plan_creates_no_order(tmp_path):
         assert response.status_code == 403
         assert response.json()["error"]["code"] == "POLICY_BLOCKED"
         assert orders.count("customer-1") == 0
+    finally:
+        _close((auth, quotes, orders, approvals, log))
+
+
+def test_customer_boundary_blocks_order_and_logs_event(tmp_path):
+    agent, _, quote, auth, quotes, orders, approvals, log = _environment(tmp_path, limit=1000)
+    try:
+        response = TestClient(app).post(
+            "/v1/orders",
+            headers={"Authorization": f"Bearer {agent}", "Idempotency-Key": "boundary"},
+            json={"customerId": "someone-else", "quoteId": quote["quoteId"], "planId": "pln_1"},
+        )
+        assert response.status_code == 403
+        assert response.json()["error"]["code"] == "DATA_BOUNDARY"
+        assert log.list()[-1]["type"] == "DATA_BOUNDARY_BLOCKED"
+        assert orders.count("customer-1") == 0
+        null_customer = TestClient(app).post(
+            "/v1/orders",
+            headers={"Authorization": f"Bearer {agent}", "Idempotency-Key": "boundary-null"},
+            json={"customerId": None, "quoteId": quote["quoteId"], "planId": "pln_1"},
+        )
+        assert null_customer.status_code == 403
+    finally:
+        _close((auth, quotes, orders, approvals, log))
+
+
+def test_customer_boundary_blocks_mandate_search_and_quote_bodies(tmp_path):
+    agent, _, _, auth, quotes, orders, approvals, log = _environment(tmp_path, limit=1000)
+    human = auth.issue_token(role="human", customer_id="customer-1")
+    client = TestClient(app)
+    cases = [("/v1/mandates", human), ("/v1/search", agent), ("/v1/quotes", agent)]
+    try:
+        for path, token in cases:
+            response = client.post(
+                path, headers={"Authorization": f"Bearer {token}"}, json={"customerId": "customer-2"},
+            )
+            assert response.status_code == 403
+            assert response.json()["error"]["code"] == "DATA_BOUNDARY"
+            assert log.list()[-1]["type"] == "DATA_BOUNDARY_BLOCKED"
+        assert sum(event["type"] == "DATA_BOUNDARY_BLOCKED" for event in log.list()) == 3
     finally:
         _close((auth, quotes, orders, approvals, log))
 

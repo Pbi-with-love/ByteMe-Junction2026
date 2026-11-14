@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import secrets
 import sqlite3
 from dataclasses import dataclass
@@ -108,9 +109,32 @@ class AuthStore:
     ) -> dict[str, Any]:
         if self._signer is None:
             raise RuntimeError("Mandate signing is not configured.")
+        if request_data.get("substitution") not in {"none", "same_category", "any"}:
+            raise ValueError("substitution is invalid.")
+        if request_data.get("lateDelivery") not in {"none", "one_day"}:
+            raise ValueError("lateDelivery is invalid.")
+        priorities = request_data.get("priorities")
+        if not isinstance(priorities, list) or len(priorities) != 3 or not all(isinstance(item, str) for item in priorities) or set(priorities) != {"on_time", "price", "sustainability"}:
+            raise ValueError("priorities must be a permutation of on_time, price, sustainability.")
+        limits = request_data.get("limits")
+        if not isinstance(limits, dict) or any(
+            not isinstance(limits.get(key), (int, float)) or isinstance(limits.get(key), bool) or not math.isfinite(limits[key]) or limits[key] < 0
+            for key in ("perOrderEur", "perWeekEur")
+        ):
+            raise ValueError("limits must include non-negative perOrderEur and perWeekEur.")
         valid_until = request_data.get("validUntil")
         if not isinstance(valid_until, str):
             raise ValueError("validUntil is required.")
+        try:
+            datetime.fromisoformat(valid_until)
+        except ValueError as exc:
+            raise ValueError("validUntil must be an ISO 8601 datetime.") from exc
+        issued_by = request_data.get("issuedBy")
+        if not isinstance(issued_by, dict) or not isinstance(issued_by.get("name"), str) or not isinstance(request_data.get("agentId"), str):
+            raise ValueError("agentId and issuedBy.name are required.")
+        hard = request_data.get("hardConstraints")
+        if not isinstance(hard, dict) or not all(isinstance(hard.get(k, []), list) and all(isinstance(v, str) for v in hard.get(k, [])) for k in ("excludeAllergens", "requireLabels")):
+            raise ValueError("hardConstraints must contain string lists.")
         mandate_id = f"mdt_{uuid4().hex}"
         document = {
             **request_data,
@@ -119,6 +143,10 @@ class AuthStore:
             "issuedAt": datetime.now().astimezone().isoformat(),
             "status": "ACTIVE",
         }
+        document["summaryText"] = (
+            f"{issued_by['name']} authorises {request_data['agentId']} to order up to "
+            f"€{limits['perOrderEur']} per order and €{limits['perWeekEur']} per week."
+        )
         signature = self._signer.sign(document)
         self._connection.execute(
             """

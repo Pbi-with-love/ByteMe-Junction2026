@@ -87,6 +87,7 @@ def _configure(tmp_path):
         principal=human_principal,
         request_data={
             "agentId": "agent-1",
+            "issuedBy": {"name": "Test Buyer", "role": "Kitchen manager"},
             "limits": {"perOrderEur": 500, "perWeekEur": 3000},
             "substitution": "same_category",
             "lateDelivery": "none",
@@ -122,8 +123,8 @@ def test_quote_endpoint_runs_auth_data_planner_signing_storage_and_log(tmp_path)
                     "description": "milk",
                     "quantity": {"amount": 100, "unit": "l"},
                     "deadline": "2026-11-16T06:00:00+02:00",
+                    "candidateProductIds": ["milk-1"],
                 },
-                "candidateProductIds": ["milk-1"],
             },
         )
 
@@ -131,6 +132,8 @@ def test_quote_endpoint_runs_auth_data_planner_signing_storage_and_log(tmp_path)
         quote = response.json()
         assert quote["status"] == "QUOTED"
         assert quote["plans"][0]["total"]["cents"] == 2500
+        assert [entry["source"] for entry in quote["evidence"]] == ["valio:/api/price", "valio:/api/availability"]
+        assert all(entry["requestId"] for entry in quote["evidence"])
         assert quotes.get(quote["quoteId"], "customer-1") is not None
         assert log.list(since=0, limit=100)[-1]["type"] == "QUOTE_CREATED"
     finally:

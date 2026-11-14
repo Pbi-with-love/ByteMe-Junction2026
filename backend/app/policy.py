@@ -10,7 +10,7 @@ from typing import Any
 
 LIGHT_ORDER = {"GREEN": 0, "BLUE": 1, "YELLOW": 2, "RED": 3}
 VERIFIED_ALLERGEN_CODES = {"peanut": "AP"}
-VERIFIED_SOURCE_ALLERGEN_CODES = frozenset({"AP"})
+CATALOG_ALLERGEN_CODES = frozenset({"AE", "AM", "AW", "AN", "AP", "AF", "AY", "BC", "BO", "CM", "CY", "EG", "FG", "LC", "MO", "MU", "PN", "SC", "SO", "SS", "ST", "SU", "TA", "UW"})
 
 
 @dataclass(frozen=True)
@@ -27,19 +27,13 @@ def check_product(product: dict[str, Any], mandate: dict[str, Any]) -> PolicyRes
     excluded_values = set(
         mandate.get("hardConstraints", {}).get("excludeAllergens", [])
     )
-    excluded_allergens = {
-        VERIFIED_ALLERGEN_CODES.get(value, value)
-        for value in excluded_values
-        if isinstance(value, str)
-    }
+    excluded_allergens = {VERIFIED_ALLERGEN_CODES.get(value, value) for value in excluded_values if isinstance(value, str)}
     if excluded_allergens:
         allergen_data = product.get("allergens")
         verified = product.get("allergenDataVerified") is True
         unknown_mapping = any(
-            value not in VERIFIED_ALLERGEN_CODES
-            and value not in VERIFIED_SOURCE_ALLERGEN_CODES
-            for value in excluded_values
-            if isinstance(value, str)
+            value not in VERIFIED_ALLERGEN_CODES and value not in CATALOG_ALLERGEN_CODES
+            for value in excluded_values if isinstance(value, str)
         )
         if unknown_mapping or not verified or not isinstance(allergen_data, list):
             reasons.append("ALLERGEN_EXCLUDED")

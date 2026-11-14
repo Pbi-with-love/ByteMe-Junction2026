@@ -51,3 +51,12 @@ async def test_upstream_http_failure_is_explicit() -> None:
             await client.ping()
     finally:
         await client.close()
+
+
+@pytest.mark.anyio
+async def test_default_upstream_timeout_is_five_seconds() -> None:
+    client = ValioClient(Settings("https://valio.test", "secret"))
+    try:
+        assert client._client.timeout.read == 5.0
+    finally:
+        await client.close()

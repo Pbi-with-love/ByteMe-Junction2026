@@ -35,6 +35,10 @@ class DocumentSigner:
     def key_id(self) -> str:
         return "valio-aimo-2026-11"
 
+    @property
+    def public_key(self) -> str:
+        return base64.b64encode(self._key.verify_key.encode()).decode("ascii")
+
     def sign(self, document: dict[str, Any]) -> dict[str, str]:
         value = base64.b64encode(self._key.sign(canonical_bytes(document)).signature)
         return {"alg": "Ed25519", "keyId": self.key_id, "value": value.decode("ascii")}
