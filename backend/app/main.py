@@ -13,6 +13,8 @@ from backend.app.config import Settings
 from backend.app.valio_client import ValioClient
 from backend.app.valio_data import ValioDataCache
 from backend.app.eventlog import EventLog
+from backend.app.auth import AuthStore, Principal
+from backend.app.signing import DocumentSigner
 
 
 REQUEST_ID_HEADER = "X-Request-Id"
@@ -106,7 +108,60 @@ app = FastAPI(
     lifespan=lifespan,
 )
 app.add_middleware(RequestIdMiddleware)
-app.state.event_log = EventLog(Settings.from_env().valio_cache_directory / "gateway.sqlite3")
+settings = Settings.from_env()
+signer = DocumentSigner(settings.quote_signing_key) if settings.quote_signing_key else None
+database_path = settings.valio_cache_directory / "gateway.sqlite3"
+app.state.event_log = EventLog(database_path)
+app.state.auth_store = AuthStore(database_path, signer)
+
+
+def require_auth(request: Request, *, roles: set[str] | None = None) -> Principal:
+    authorization = request.headers.get("Authorization", "")
+    scheme, _, token = authorization.partition(" ")
+    principal = (
+        request.app.state.auth_store.authenticate(token)
+        if scheme.lower() == "bearer"
+        else None
+    )
+    if principal is None:
+        raise HTTPException(
+            status_code=401,
+            detail={
+                "code": "UNAUTHENTICATED",
+                "message": "A valid bearer token is required.",
+            },
+        )
+    if roles and principal.role not in roles:
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "code": "MANDATE_INVALID",
+                "message": "This token does not have permission for the operation.",
+            },
+        )
+    return principal
+
+
+async def request_json(request: Request) -> dict[str, object]:
+    try:
+        value = await request.json()
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "code": "VALIDATION_ERROR",
+                "message": "Request body must be valid JSON.",
+            },
+        ) from exc
+    if not isinstance(value, dict):
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "code": "VALIDATION_ERROR",
+                "message": "Request body must be a JSON object.",
+            },
+        )
+    return value
 
 
 @app.exception_handler(HTTPException)
@@ -144,26 +199,115 @@ async def discovery(request: Request) -> JSONResponse:
 
 @app.post("/v1/auth/tokens")
 async def create_token(request: Request) -> JSONResponse:
-    return stub_response(request, "Token creation")
+    body = await request_json(request)
+    role = body.get("role")
+    customer_id = body.get("customerId")
+    agent_id = body.get("agentId")
+    if role not in {"human", "agent", "operator"}:
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "VALIDATION_ERROR", "message": "role is invalid."},
+        )
+    if role != "operator" and not isinstance(customer_id, str):
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "VALIDATION_ERROR", "message": "customerId is required."},
+        )
+    if role == "agent" and not isinstance(agent_id, str):
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "VALIDATION_ERROR", "message": "agentId is required."},
+        )
+    token = request.app.state.auth_store.issue_token(
+        role=role,
+        customer_id=customer_id if isinstance(customer_id, str) else None,
+        agent_id=agent_id if isinstance(agent_id, str) else None,
+    )
+    request.app.state.event_log.append(
+        actor="gateway",
+        event_type="TOKEN_ISSUED",
+        request_id=request_id(request),
+        customer_id=customer_id if isinstance(customer_id, str) else None,
+        agent_id=agent_id if isinstance(agent_id, str) else None,
+        summary=f"{role} token issued.",
+    )
+    return JSONResponse(status_code=201, content={"token": token})
 
 
 @app.post("/v1/mandates")
 async def create_mandate(request: Request) -> JSONResponse:
-    return stub_response(request, "Mandate creation")
+    principal = require_auth(request, roles={"human"})
+    body = await request_json(request)
+    try:
+        mandate = request.app.state.auth_store.create_mandate(
+            principal=principal,
+            request_data=body,
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "VALIDATION_ERROR", "message": str(exc)},
+        ) from exc
+    request.app.state.event_log.append(
+        actor="human",
+        event_type="MANDATE_SIGNED",
+        request_id=request_id(request),
+        customer_id=principal.customer_id,
+        agent_id=body.get("agentId") if isinstance(body.get("agentId"), str) else None,
+        summary=f"Mandate {mandate['mandateId']} signed.",
+        refs={"mandateId": mandate["mandateId"]},
+    )
+    return JSONResponse(status_code=201, content=mandate)
 
 
 @app.get("/v1/mandates/{mandate_id}")
 async def get_mandate(mandate_id: str, request: Request) -> JSONResponse:
-    return stub_response(request, "Mandate retrieval")
+    principal = require_auth(request)
+    if principal.customer_id is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Mandate not found."},
+        )
+    mandate = request.app.state.auth_store.get_mandate(mandate_id, principal.customer_id)
+    if mandate is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Mandate not found."},
+        )
+    return mandate
 
 
 @app.post("/v1/mandates/{mandate_id}/revoke")
 async def revoke_mandate(mandate_id: str, request: Request) -> JSONResponse:
-    return stub_response(request, "Mandate revocation")
+    principal = require_auth(request, roles={"human"})
+    if principal.customer_id is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Mandate not found."},
+        )
+    mandate = request.app.state.auth_store.revoke_mandate(
+        mandate_id,
+        principal.customer_id,
+    )
+    if mandate is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Mandate not found."},
+        )
+    request.app.state.event_log.append(
+        actor="human",
+        event_type="MANDATE_REVOKED",
+        request_id=request_id(request),
+        customer_id=principal.customer_id,
+        summary=f"Mandate {mandate_id} revoked.",
+        refs={"mandateId": mandate_id},
+    )
+    return mandate
 
 
 @app.post("/v1/search")
 async def search(request: Request) -> JSONResponse:
+    require_auth(request, roles={"agent"})
     return stub_response(request, "Search")
 
 

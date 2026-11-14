@@ -40,6 +40,7 @@ def load_env() -> dict:
 ENV = load_env()
 BASE = ENV.get("VALIO_API_BASE_URL", "").rstrip("/").removesuffix("/api")
 KEY = ENV.get("VALIO_API_KEY", "")
+QUOTE_SIGNING_KEY = ENV.get("QUOTE_SIGNING_KEY", "")
 auth_i = 0
 
 
