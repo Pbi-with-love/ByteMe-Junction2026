@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { GatewayClient } from '../api/gateway';
 import type { Discovery, GameStart, Mandate } from '../api/schemas';
 import GameWorld from '../components/GameWorld';
 import PixelPanel from '../components/PixelPanel';
+import ActivityLog from '../components/ActivityLog';
+import GameClock from '../components/GameClock';
+import { toTimelineEntries, type TimelineEntry } from '../game/timeline';
+import { useGameClock } from '../game/useGameClock';
 import { formatDateTime } from '../lib/format';
 import MandateScreen from './MandateScreen';
 import { runAgent } from '../world/runAgent';
@@ -16,20 +20,26 @@ export default function KitchenScreen({ client, start, presets, discovery, onExi
   const [running, setRunning] = useState(false);
   const [error, setError] = useState('');
   const [world, setWorld] = useState<WorldController | null>(null);
+  const [entries, setEntries] = useState<TimelineEntry[]>([]);
+  const clock = useGameClock(start.clock);
   const abort = useRef<AbortController | null>(null);
   useEffect(() => () => abort.current?.abort(), []);
   const hint = running ? 'The agent is working.' : signed ? 'Click the Order Terminal to send the request.' : 'Click the Manager Desk to read the brief and sign the mandate.';
   function closePanel() { const prior = panel; setPanel('closed'); requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`button[aria-label="${prior === 'terminal' ? 'Order Terminal' : 'Manager Desk'}"]`)?.focus()); }
   function station(id: StationId) { if (id === 'desk') setPanel('brief'); if (id === 'terminal' && signed && !running) setPanel('terminal'); }
+  const onMark = useCallback((stepIndex: number, kind: 'search' | 'quote' | 'order', step: Parameters<typeof toTimelineEntries>[0]) => {
+    const entry = toTimelineEntries(step, stepIndex).find(item => item.kind === kind);
+    if (entry) { setEntries(current => [...current, entry]); clock.raiseTo(entry.at); }
+  }, [clock.raiseTo]);
   async function send() {
     if (!world || running) return;
-    setPanel('closed'); setRunning(true);
+    setPanel('closed'); setRunning(true); clock.start();
     const controller = new AbortController(); abort.current = controller;
-    try { const result = await runAgent({ client, sessionId: start.sessionId, world, signal: controller.signal }); if (result === 'finished') { setRunning(false); setPanel('done'); } }
-    catch (reason) { setError(reason instanceof Error ? reason.message : String(reason)); setPanel('error'); }
+    try { const result = await runAgent({ client, sessionId: start.sessionId, world, signal: controller.signal, onMark }); if (result === 'finished') { clock.stop(); setRunning(false); setPanel('done'); } }
+    catch (reason) { clock.stop(); setRunning(false); setError(reason instanceof Error ? reason.message : String(reason)); setPanel('error'); }
   }
-  return <GameWorld panelOpen={panel !== 'closed'} stations={[{ id: 'desk' }, { id: 'terminal', disabledReason: !signed ? 'Sign the mandate at the Manager Desk first.' : running ? 'The agent is working.' : undefined }]} onStation={station} onReady={setWorld} onExit={onExit}>
-    <header className="kitchen-hud"><div><h1>{start.level.title}</h1><span>{start.level.customer.name}</span></div><p role="status">{hint}</p><button className="button button-ghost" onClick={onExit}>Back to levels</button></header>
+  useEffect(() => () => clock.stop(), [clock.stop]);
+  return <GameWorld panelOpen={panel !== 'closed'} stations={[{ id: 'desk' }, { id: 'terminal', disabledReason: !signed ? 'Sign the mandate at the Manager Desk first.' : running ? 'The agent is working.' : undefined }]} onStation={station} onReady={setWorld} onExit={onExit} hud={<header className="kitchen-hud"><div><h1>{start.level.title}</h1><span>{start.level.customer.name}</span></div><p role="status">{hint}</p><GameClock time={clock.time} running={clock.running} /><button className="button button-ghost" onClick={onExit}>Back to levels</button></header>} side={<ActivityLog entries={entries} />}>
     <PixelPanel variant="clipboard" title={panel === 'mandate' ? 'Valtakirja' : 'Brief'} hidden={panel !== 'brief' && panel !== 'mandate'} onClose={closePanel}>
       <div className="clipboard-paper">
         <section className="clipboard-brief" hidden={panel !== 'brief'}>

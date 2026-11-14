@@ -4,8 +4,8 @@ import type { WorldController } from '../world/controller';
 import { stationRect, STATIONS, type StationId, type Point } from '../world/map';
 import { fitScale, LOGICAL_H, LOGICAL_W } from '../world/scale';
 
-type GameWorldProps={stations:{id:StationId;disabledReason?:string}[];onStation(id:StationId):void;onReady(controller:WorldController):void;onExit():void;panelOpen?:boolean;children?:ReactNode};
-export default function GameWorld({stations,onStation,onReady,onExit,panelOpen=false,children}:GameWorldProps){
+type GameWorldProps={stations:{id:StationId;disabledReason?:string}[];onStation(id:StationId):void;onReady(controller:WorldController):void;onExit():void;panelOpen?:boolean;children?:ReactNode;hud?:ReactNode;side?:ReactNode};
+export default function GameWorld({stations,onStation,onReady,onExit,panelOpen=false,children,hud,side}:GameWorldProps){
  const host=useRef<HTMLDivElement>(null), onReadyRef=useRef(onReady), worldRef=useRef<PixiWorld|null>(null), mounted=useRef(true), [scale,setScale]=useState(()=>fitScale(window.innerWidth,window.innerHeight)),[status,setStatus]=useState<'loading'|'ready'|'error'>('loading'),[error,setError]=useState(''),[speech,setSpeech]=useState<string|null>(null),[robot,setRobot]=useState<Point>({x:160,y:90}),[robotStation,setRobotStation]=useState<string>('')
  useEffect(()=>{onReadyRef.current=onReady;},[onReady]);
  useEffect(()=>{const resize=()=>setScale(fitScale(window.innerWidth,window.innerHeight));window.addEventListener('resize',resize);return()=>window.removeEventListener('resize',resize);},[]);
@@ -19,7 +19,9 @@ export default function GameWorld({stations,onStation,onReady,onExit,panelOpen=f
      <div ref={host} className="pixi-host" style={{width:LOGICAL_W,height:LOGICAL_H,transform:`scale(${scale})`,transformOrigin:'top left'}} />
      <div className="world-overlay" style={{width:LOGICAL_W*scale,height:LOGICAL_H*scale}}>
        {stations.map(({id,disabledReason})=>{const r=stationRect(id);return <button key={id} className="station-hotspot" aria-label={STATIONS[id].label} aria-disabled={disabledReason?'true':undefined} aria-describedby={disabledReason?`${id}-disabled`:undefined} onMouseEnter={()=>worldRef.current?.highlight(id)} onMouseLeave={()=>worldRef.current?.highlight(null)} onFocus={()=>worldRef.current?.highlight(id)} onBlur={()=>worldRef.current?.highlight(null)} onClick={()=>{if(!disabledReason)onStation(id);}} style={{left:r.x*scale,top:r.y*scale,width:r.w*scale,height:r.h*scale}}><span className="station-label">{STATIONS[id].label}</span>{disabledReason&&<span id={`${id}-disabled`} className="sr-only">{disabledReason}</span>}</button>;})}
-       <div className="world-children">{children}</div>
+       <div className="world-overlay-hud" data-area="hud">{hud}</div>
+       <div className="world-children" data-area="center">{children}</div>
+       <div className="world-overlay-side" data-area="side">{side}</div>
        {speech&&<div role="status" className="speech-bubble" style={{left:`clamp(calc(8 * var(--px)), ${robot.x*scale}px, calc(312 * var(--px)))`,top:(robot.y-12)*scale}}>{speech}</div>}
      </div>
    </div>

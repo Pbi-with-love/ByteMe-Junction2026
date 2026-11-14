@@ -12,6 +12,13 @@
   font-weight: 400;
   font-display: swap;
 }
+@font-face {
+  font-family: "Pixel Accents";
+  src: url("/fonts/PressStart2P-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+002C, U+002E, U+003A, U+20AC;
+}
 
 @theme {
   --px: 4px;
@@ -35,13 +42,23 @@
   --color-error-ink: #881337;
   --color-light-green: #15803D;
   --color-light-green-bg: #DCFCE7;
+  --color-light-green-border: #86EFAC;
   --color-light-blue: #0369A1;
   --color-light-blue-bg: #E0F2FE;
+  --color-light-blue-border: #7DD3FC;
   --color-light-yellow: #A16207;
   --color-light-yellow-bg: #FEF9C3;
+  --color-light-yellow-border: #FDE047;
   --color-light-red: #B91C1C;
   --color-light-red-bg: #FEE2E2;
-  --font-sans: "Pixelify Sans", system-ui, sans-serif;
+  --color-light-red-border: #FCA5A5;
+  --color-code-bg: #0B1B33;
+  --color-code-ink: #E2E8F0;
+  --color-tag-overlay-bg: #EEF2FF;
+  --color-tag-overlay-ink: #3730A3;
+  --color-floor-alt: #F8FAFC;
+  --color-steel-light: #CBD5E1;
+  --font-sans: "Pixel Accents", "Pixelify Sans", system-ui, sans-serif;
   --font-display: "Press Start 2P", monospace;
   --font-mono: "Pixelify Sans", ui-monospace, monospace;
   --text-title: calc(6 * var(--px));
@@ -52,7 +69,7 @@
 }
 
 :root {
-  font-family: "Pixelify Sans", system-ui, sans-serif;
+  font-family: "Pixel Accents", "Pixelify Sans", system-ui, sans-serif;
   color: #0B1B33;
   background: #EEF4FA;
   font-synthesis: none;
@@ -144,12 +161,63 @@ button:focus-visible, select:focus-visible, input:focus-visible {
 .game-world[data-panel-open="true"] .station-label { visibility: hidden; }
 .station-hotspot:focus-visible { outline: 0; box-shadow: 0 0 0 calc(.5 * var(--px)) #FFFFFF, 0 0 0 calc(1.25 * var(--px)) #0052B4; }
 .station-hotspot[aria-disabled="true"] { cursor: not-allowed; }
-.world-children { position: absolute; z-index: 4; inset: calc(14 * var(--px)) 0 0; display: grid; place-items: center; pointer-events: none; }
+.world-children { position: absolute; z-index: 6; inset: calc(14 * var(--px)) 0 0; display: grid; place-items: center; pointer-events: none; }
 .world-children > * { pointer-events: auto; }
-.kitchen-hud { position: absolute; z-index: 5; top: calc(-14 * var(--px)); left: 0; right: 0; display: flex; height: calc(14 * var(--px)); align-items: center; justify-content: space-between; gap: calc(2 * var(--px)); padding: 0 calc(2 * var(--px)); border-bottom: calc(.5 * var(--px)) solid #0B1B33; background: rgba(255,255,255,.94); font-size: calc(4 * var(--px)); pointer-events: auto; }
+.world-overlay-hud { position: absolute; z-index: 5; inset: 0 0 auto; height: calc(14 * var(--px)); pointer-events: none; }
+.world-overlay-hud > *, .world-overlay-side > * { pointer-events: auto; }
+.world-overlay-side { position: absolute; z-index: 4; left: calc(224 * var(--px)); top: calc(14 * var(--px)); right: 0; bottom: 0; pointer-events: none; }
+.kitchen-hud { position: absolute; inset: 0; display: flex; align-items: center; gap: calc(2.5 * var(--px)); padding: 0 calc(3 * var(--px)); border-bottom: calc(.75 * var(--px)) solid #0B1B33; background: rgba(255,255,255,.94); font-size: calc(4 * var(--px)); pointer-events: auto; }
+.kitchen-hud > div:first-child { flex: none; }
+.kitchen-hud [role="status"] { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kitchen-hud .button { margin-left: auto; flex: none; }
 .kitchen-hud h1 { margin: 0; font-size: calc(4 * var(--px)); line-height: 1.2; }
 .kitchen-hud p { margin: 0; }
 .kitchen-hud > div { display: flex; align-items: center; gap: calc(2 * var(--px)); }
+.activity-dock { position: absolute; right: calc(2 * var(--px)); bottom: calc(2 * var(--px)); width: calc(94 * var(--px)); height: calc(62 * var(--px)); display: flex; flex-direction: column; overflow: hidden; border: calc(1 * var(--px)) solid #0B1B33; background: #FFFFFF; box-shadow: inset calc(.5 * var(--px)) calc(.5 * var(--px)) 0 #FFFFFF, inset calc(-.5 * var(--px)) calc(-.5 * var(--px)) 0 #CBD5E1, var(--shadow-pixel); font-size: calc(4 * var(--px)); }
+.activity-dock-header { flex: none; display: flex; justify-content: space-between; padding: calc(1.5 * var(--px)) calc(2 * var(--px)); border-bottom: calc(.75 * var(--px)) solid #0B1B33; background: #1E3A5F; color: #FFFFFF; }
+.activity-dock-header h2 { margin: 0; font: calc(4 * var(--px)) "Press Start 2P", monospace; }
+.activity-log { flex: 1; overflow: auto; padding: calc(2 * var(--px)); display: flex; flex-direction: column; gap: calc(2 * var(--px)); background: #EEF4FA; }
+.activity-empty { margin: 0; color: var(--color-ink-muted); }
+.activity-entry { flex: none; border: calc(.5 * var(--px)) solid #94A3B8; border-left: calc(1.5 * var(--px)) solid #0B1B33; background: #FFFFFF; box-shadow: inset calc(-.5 * var(--px)) calc(-.5 * var(--px)) 0 #D6E3F0; overflow-wrap: anywhere; }
+.activity-entry.is-error { border-left-color: var(--color-error-ink); }
+.activity-entry-toggle { width: 100%; min-height: calc(10 * var(--px)); padding: calc(1.5 * var(--px)) calc(2 * var(--px)); display: grid; gap: calc(1 * var(--px)); text-align: left; border: 0; background: #FFFFFF; color: #0B1B33; font: calc(4 * var(--px)) "Pixel Accents", "Pixelify Sans", sans-serif; cursor: pointer; }
+.activity-entry-toggle:hover { background: #EEF4FA; }
+.activity-entry-toggle:focus-visible { outline: 0; box-shadow: var(--shadow-focus); }
+.entry-meta { display: flex; align-items: center; flex-wrap: wrap; gap: calc(1 * var(--px)); color: var(--color-ink-muted); }
+.entry-title { color: #0B1B33; }
+.entry-chevron { margin-left: auto; }
+.reason-chip, .scenario-tag, .order-pending, .order-blocked, .order-error { display: inline-block; padding: calc(.5 * var(--px)); background: #D6E3F0; color: #0B1B33; }
+.scenario-tag { background: var(--color-tag-overlay-bg); color: var(--color-tag-overlay-ink); }
+.order-error { background: var(--color-error-surface); color: var(--color-error-ink); }
+.activity-detail { display: grid; gap: calc(2 * var(--px)); padding: calc(2 * var(--px)); border-top: calc(.5 * var(--px)) solid #94A3B8; background: var(--color-floor-alt); }
+.activity-detail h3 { margin: 0 0 calc(1 * var(--px)); }
+.activity-detail pre { max-height: calc(36 * var(--px)); overflow: auto; padding: calc(1.5 * var(--px)); background: var(--color-code-bg); color: var(--color-code-ink); font-size: calc(4 * var(--px)); }
+.plan-list { display: grid; gap: calc(1.5 * var(--px)); }
+.plan-card { display: grid; gap: calc(1 * var(--px)); padding: calc(1.5 * var(--px)); border: calc(.5 * var(--px)) solid #94A3B8; background: #FFFFFF; }
+.plan-card > header { display: flex; justify-content: space-between; }
+.plan-card.is-recommended { border: calc(1 * var(--px)) solid #0052B4; }
+.plan-card p, .plan-card ul { margin: 0; padding-left: calc(2 * var(--px)); }
+.excluded-list { display: grid; gap: calc(1 * var(--px)); padding: calc(1 * var(--px)); }
+.excluded-list > div { display: grid; gap: calc(.5 * var(--px)); overflow-wrap: anywhere; }
+.light-badge { display: inline-flex; align-items: center; gap: calc(1 * var(--px)); padding: calc(.5 * var(--px)) calc(1.5 * var(--px)); border: calc(.5 * var(--px)) solid; font-size: calc(4 * var(--px)); font-weight: 700; line-height: 1.2; }
+.light-badge svg { width: calc(3.5 * var(--px)); height: calc(3.5 * var(--px)); flex: none; }
+.light-green { color: var(--color-light-green); background: var(--color-light-green-bg); border-color: var(--color-light-green-border); }
+.light-blue { color: var(--color-light-blue); background: var(--color-light-blue-bg); border-color: var(--color-light-blue-border); }
+.light-yellow { color: var(--color-light-yellow); background: var(--color-light-yellow-bg); border-color: var(--color-light-yellow-border); }
+.light-red { color: var(--color-light-red); background: var(--color-light-red-bg); border-color: var(--color-light-red-border); }
+.game-clock { display: inline-flex; align-items: center; gap: calc(1.5 * var(--px)); min-height: calc(9 * var(--px)); padding: calc(1 * var(--px)) calc(2.5 * var(--px)); border: calc(.5 * var(--px)) solid #0B1B33; background: #FFFFFF; box-shadow: inset calc(.5 * var(--px)) calc(.5 * var(--px)) 0 #CBD5E1, calc(.5 * var(--px)) calc(.5 * var(--px)) 0 #0B1B33; }
+.game-clock-digits { font: calc(5 * var(--px)) "Press Start 2P", monospace; line-height: 1; font-variant-numeric: tabular-nums; }
+.clock-led { width: calc(2 * var(--px)); height: calc(2 * var(--px)); background: var(--color-ink-muted); }
+.clock-led.is-running { background: #0052B4; }
+@keyframes timeline-entry-reveal { from { opacity: 0; transform: translateY(calc(1.5 * var(--px))); } to { opacity: 1; transform: translateY(0); } }
+@keyframes clock-pulse { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: no-preference) {
+  .activity-entry { animation: timeline-entry-reveal 200ms steps(4, end) both; }
+  .entry-chevron { transition: transform 150ms; }
+  .activity-entry-toggle[aria-expanded="true"] .entry-chevron { transform: rotate(180deg); }
+  .clock-led.is-running { animation: clock-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+}
+@media (prefers-reduced-motion: reduce) { .activity-entry, .entry-chevron, .clock-led.is-running { animation: none; transition: none; } }
 .speech-bubble { position: absolute; z-index: 3; transform: translate(-50%,-100%); max-width: calc(140 * var(--px)); padding: calc(2 * var(--px)) calc(3 * var(--px)); border: calc(1 * var(--px)) solid #0B1B33; background: #FFFFFF; color: #0B1B33; box-shadow: calc(2 * var(--px)) calc(2 * var(--px)) #0B1B33; font-size: calc(4 * var(--px)); line-height: 1.25; pointer-events: none; }
 .world-loading, .world-error { position: absolute; z-index: 5; padding: calc(4 * var(--px)); border: calc(1 * var(--px)) solid #0B1B33; background: #FFFFFF; box-shadow: var(--shadow-pixel); font-size: calc(4 * var(--px)); }
 
@@ -199,12 +267,12 @@ button:focus-visible, select:focus-visible, input:focus-visible {
 .allergen-line input { width: calc(5 * var(--px)); height: calc(5 * var(--px)); flex: none; accent-color: #0052B4; }
 .signature-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: calc(2 * var(--px)); padding-top: calc(2 * var(--px)); border-top: calc(.5 * var(--px)) solid #94A3B8; font-size: calc(4 * var(--px)); }
 .signature-row .button { min-height: calc(10 * var(--px)); }
-.stamp { display: grid; gap: calc(.5 * var(--px)); padding: calc(1 * var(--px)); border: calc(1 * var(--px)) double #0052B4; color: #0052B4; font: 700 calc(4 * var(--px)) "Pixelify Sans", sans-serif; letter-spacing: .04em; transform: rotate(-3deg); }
+.stamp { display: grid; gap: calc(.5 * var(--px)); padding: calc(1 * var(--px)); border: calc(1 * var(--px)) double #0052B4; color: #0052B4; font: 700 calc(4 * var(--px)) "Pixel Accents", "Pixelify Sans", sans-serif; letter-spacing: .04em; transform: rotate(-3deg); }
 .stamp span { text-align: center; font-size: calc(4 * var(--px)); }
 .signed-panel { margin-top: calc(2 * var(--px)); padding-top: calc(2 * var(--px)); border-top: calc(.5 * var(--px)) dashed #94A3B8; }
 .signed-panel h2 { margin: 0 0 calc(1 * var(--px)); font-size: calc(4 * var(--px)); }
 .signed-panel blockquote { margin: 0; padding: calc(1 * var(--px)); border-left: calc(1 * var(--px)) solid #0052B4; background: #E0F2FE; line-height: 1.4; }
-.signed-meta { display: flex; flex-wrap: wrap; gap: calc(2 * var(--px)); margin-top: calc(1 * var(--px)); font: calc(4 * var(--px)) "Pixelify Sans", sans-serif; }
+.signed-meta { display: flex; flex-wrap: wrap; gap: calc(2 * var(--px)); margin-top: calc(1 * var(--px)); font: calc(4 * var(--px)) "Pixel Accents", "Pixelify Sans", sans-serif; }
 .signature-badge { display: inline-block; margin: calc(1 * var(--px)) 0 0; padding: calc(.5 * var(--px)); border: calc(.5 * var(--px)) solid #94A3B8; color: #475569; font-size: calc(4 * var(--px)); }
 
 /* Standalone Brief component remains pixel-styled for its component contract. */
