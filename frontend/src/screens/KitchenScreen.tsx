@@ -19,9 +19,10 @@ import ResultPanel from '../components/ResultPanel';
 import type { GameResult } from '../api/schemas';
 import type { WorldController } from '../world/controller';
 import type { StationId } from '../world/map';
+import { formatEuroLimit, formatMoney } from '../lib/format';
 
-type Props = { client: GatewayClient; start: GameStart; presets: Record<string, Mandate>; discovery: Discovery; onExit: () => void; onPlayAgain?:()=>void; onValioView?:()=>void; onCompare?:()=>void; holdMs?:(milliseconds:number)=>Promise<void> };
-export default function KitchenScreen({ client, start, presets, discovery, onExit, onPlayAgain,onValioView,onCompare,holdMs }: Props) {
+type Props = { client: GatewayClient; start: GameStart; presets: Record<string, Mandate>; discovery: Discovery; onExit: () => void; onPlayAgain?:()=>void; onValioView?:()=>void; onCompare?:()=>void; holdMs?:(milliseconds:number)=>Promise<void>; onDemoData?:(values:Record<string,string>)=>void };
+export default function KitchenScreen({ client, start, presets, discovery, onExit, onPlayAgain,onValioView,onCompare,holdMs,onDemoData }: Props) {
   const [panel, setPanel] = useState<'closed' | 'brief' | 'mandate' | 'terminal' | 'done' | 'error' | 'phone' | 'result'>('closed');
   const [signed, setSigned] = useState<Mandate | null>(null);
   const [running, setRunning] = useState(false);
@@ -45,11 +46,12 @@ export default function KitchenScreen({ client, start, presets, discovery, onExi
   function station(id: StationId) { if (id === 'desk') setPanel('brief'); if (id === 'terminal' && signed && !running) setPanel('terminal'); }
   const onMark = useCallback((stepIndex: number, kind: 'search' | 'quote' | 'order', step: Parameters<typeof toTimelineEntries>[0]) => {
     if(step.approvalEvent)setHearts(step.approvalEvent.heartsLeft);
+    onDemoData?.({ [`activity_${kind}`]: 'true' });
     const entry = toTimelineEntries(step, stepIndex).find(item => item.kind === kind);
     if (entry) { setEntries(current => [...current, entry]); clock.raiseTo(entry.at); }
-  }, [clock.raiseTo]);
+  }, [clock.raiseTo,onDemoData]);
   const onSettled=useCallback((value:Approval|ApprovalDecision)=>{const id=value.approvalId;if(settledIds.current.has(id))return;settledIds.current.add(id);world?.ring(false);setActiveApproval(value);setPanel('phone');const resolve=settleWaiters.current.get(id);void (async()=>{if(world)await playCommands(world,directDecision(value),{signal:abort.current?.signal,holdMs});resolve?.(value);settleWaiters.current.delete(id);})();},[world,holdMs]);
-  const onApprovalNeeded=useCallback((approval:Approval,step:import('../api/schemas').AgentStep)=>new Promise<void>(resolve=>{setActiveApproval(approval);setApprovalStep(step);setPhoneHidden(false);setPanel('phone');settledIds.current.delete(approval.approvalId);settleWaiters.current.set(approval.approvalId,()=>{resolve();});world?.ring(approval.status==='OPEN');}),[world]);
+  const onApprovalNeeded=useCallback((approval:Approval,step:import('../api/schemas').AgentStep)=>new Promise<void>(resolve=>{const plan=step.quote.plans.find(({recommended})=>recommended)??step.quote.plans[0];if(plan)onDemoData?.({planTotal:formatMoney(plan.total),approvalDeadline:approval.deadline});setActiveApproval(approval);setApprovalStep(step);setPhoneHidden(false);setPanel('phone');settledIds.current.delete(approval.approvalId);settleWaiters.current.set(approval.approvalId,()=>{resolve();});world?.ring(approval.status==='OPEN');}),[world,onDemoData]);
   async function send() {
     if (!world || running) return;
     setPanel('closed'); setRunning(true); setActivity('idle'); clock.start();
@@ -69,14 +71,14 @@ export default function KitchenScreen({ client, start, presets, discovery, onExi
           <div className="schedule"><p><span>Deliver by</span><strong>{formatDateTime(start.level.deadline)}</strong></p><p><span>Order cut-off</span><strong>{formatDateTime(start.level.closingTime)}</strong></p></div>
           <button className="button button-primary" onClick={() => setPanel('mandate')}>Write the mandate</button>
         </section>
-      <MandateScreen client={client} sessionId={start.sessionId} presets={presets} discovery={discovery} level={start.level} onBack={closePanel} hidden={panel !== 'mandate'} onSigned={(mandate) => { setSigned(mandate); world?.burst('stamp'); }} />
+      <MandateScreen client={client} sessionId={start.sessionId} presets={presets} discovery={discovery} level={start.level} onBack={closePanel} hidden={panel !== 'mandate'} onSigned={(mandate) => { setSigned(mandate); onDemoData?.({ perOrderLimit: formatEuroLimit(mandate.limits.perOrderEur) }); world?.burst('stamp'); }} />
       </div>
     </PixelPanel>
     <PixelPanel variant="terminal" title="Request" hidden={panel !== 'terminal'} onClose={closePanel}>
       <p>“{start.level.brief}”</p><p>{start.level.customer.name}</p><p><strong>Deliver by</strong> {formatDateTime(start.level.deadline)}</p><button className="button button-primary" disabled={running} aria-busy={running} onClick={() => void send()}>{running ? 'Sending…' : 'Send to agent'}</button>
     </PixelPanel>
     <PixelPanel variant="notice" title="The agent is done." hidden={panel !== 'done'}><button className="button button-primary" onClick={()=>setPanel('result')}>See result</button><button className="button button-ghost" onClick={onExit}>Back to levels</button></PixelPanel>
-    {panel==='result'&&<ResultPanel client={client} sessionId={start.sessionId} startHearts={start.hearts} onLoaded={(result:GameResult)=>{if(result.incident)world?.setRobotState('RED');}} onPlayAgain={onPlayAgain??onExit} onValioView={onValioView} onCompare={onCompare}/>}
+    {panel==='result'&&<ResultPanel client={client} sessionId={start.sessionId} startHearts={start.hearts} onLoaded={(result:GameResult)=>{onDemoData?.({stars:String(result.stars),kitchen:`${result.kitchen}%`,safety:`${result.safety}%`,heartsLeft:String(result.heartsLeft)});if(result.incident)world?.setRobotState('RED');}} onPlayAgain={onPlayAgain??onExit} onValioView={onValioView} onCompare={onCompare}/>}
     <PixelPanel variant="alert" title="Gateway error" hidden={panel !== 'error'}><p>{error}</p><button className="button button-primary" onClick={onExit}>Back to levels</button></PixelPanel>
   </GameWorld>;
 }

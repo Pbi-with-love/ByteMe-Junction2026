@@ -41,7 +41,7 @@ describe('recorded demo stories', () => {
   it('plays every preset through the UI and checks its recorded result and comparison', async () => {
     vi.useFakeTimers();
     let stage = 'starting';
-    const advanceUntil = async (predicate: () => boolean, limit = 180_000) => {
+    const advanceUntil = async (predicate: () => boolean, limit = 600_000) => {
       for (let elapsed = 0; elapsed < limit; elapsed += 250) {
         if (predicate()) return;
         await act(async () => { await vi.advanceTimersByTimeAsync(250); });

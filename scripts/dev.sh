@@ -4,6 +4,14 @@ set -Eeuo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BACKEND_PORT="${BACKEND_PORT:-8000}"
 FRONTEND_PORT="${FRONTEND_PORT:-5173}"
+DEMO_MODE=false
+
+for arg in "$@"; do
+  case "$arg" in
+    --demo) DEMO_MODE=true ;;
+    *) printf 'Error: unknown option: %s\nUsage: %s [--demo]\n' "$arg" "${BASH_SOURCE[0]}" >&2; exit 2 ;;
+  esac
+done
 
 fail() {
   printf 'Error: %s\n' "$*" >&2
@@ -99,7 +107,18 @@ stop_children() {
 trap stop_children INT TERM EXIT
 
 printf 'Logs: %s\n' "$LOG_DIR"
-(cd "$ROOT_DIR" && "$ROOT_DIR/.venv/bin/uvicorn" backend.app.main:app --host 127.0.0.1 --port "$BACKEND_PORT") >"$BACKEND_LOG" 2>&1 &
+if [[ "$DEMO_MODE" == true ]]; then
+  printf 'Demo mode is on: backend approval window is 60 seconds.\n'
+fi
+run_backend() {
+  cd "$ROOT_DIR"
+  if [[ "$DEMO_MODE" == true ]]; then
+    APPROVAL_TIMEOUT_SECONDS=60 "$ROOT_DIR/.venv/bin/uvicorn" backend.app.main:app --host 127.0.0.1 --port "$BACKEND_PORT"
+  else
+    "$ROOT_DIR/.venv/bin/uvicorn" backend.app.main:app --host 127.0.0.1 --port "$BACKEND_PORT"
+  fi
+}
+run_backend >"$BACKEND_LOG" 2>&1 &
 BACKEND_PID=$!
 (cd "$ROOT_DIR/frontend" && VITE_GATEWAY_URL="http://127.0.0.1:$BACKEND_PORT" ./node_modules/.bin/vite --host 127.0.0.1 --port "$FRONTEND_PORT" --strictPort) >"$FRONTEND_LOG" 2>&1 &
 FRONTEND_PID=$!

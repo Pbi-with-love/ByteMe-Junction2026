@@ -515,3 +515,17 @@ button:focus-visible, select:focus-visible, input:focus-visible {
 .agent-working svg { width: calc(12 * var(--px)); height: calc(12 * var(--px)); flex: none; }
 .agent-working span { display: grid; gap: calc(1 * var(--px)); }
 .agent-working small { font-size: .85em; }
+
+.demo-mode-badge { position: fixed; z-index: 1200; top: calc(2 * var(--px)); right: calc(2 * var(--px)); padding: calc(.7 * var(--px)) calc(1.5 * var(--px)); color: #fff; background: #0B1B33; border: 2px solid #FACC15; box-shadow: var(--shadow-pixel); font: var(--text-body) / 1 var(--font-mono); letter-spacing: .12em; }
+.demo-narrator { position: fixed; z-index: 1199; right: calc(3 * var(--px)); bottom: calc(3 * var(--px)); width: min(540px, calc(100vw - 6 * var(--px))); padding: calc(3 * var(--px)); color: #fff; background: #0B1B33; border: calc(1 * var(--px)) solid #FACC15; box-shadow: 0 0 0 3px #0B1B33, var(--shadow-pixel); font-size: clamp(18px, 2vw, 26px); }
+.demo-narrator h2 { margin: calc(.5 * var(--px)) 0 calc(1.5 * var(--px)); font: var(--text-heading) / 1.2 var(--font-display); }
+.demo-counter { margin: 0; color: #FACC15; font: var(--text-body) / 1.2 var(--font-mono); }
+.demo-copy { margin: 0; line-height: 1.45; }
+.demo-speed-control { display: flex; align-items: center; gap: calc(1 * var(--px)); margin-top: calc(1.5 * var(--px)); color: #CBD5E1; font: var(--text-body) / 1.2 var(--font-mono); }
+.demo-speed-control select { min-height: 38px; padding: calc(.5 * var(--px)) calc(1 * var(--px)); color: #0B1B33; background: #fff; border: 2px solid #FACC15; font: var(--text-body) / 1.2 var(--font-display); }
+.demo-controls { display: flex; flex-wrap: wrap; gap: calc(1 * var(--px)); margin-top: calc(2 * var(--px)); }
+.demo-controls button { min-height: 44px; padding: calc(.75 * var(--px)) calc(1.5 * var(--px)); color: #0B1B33; background: #FACC15; border: 2px solid #fff; font: var(--text-body) / 1.2 var(--font-display); cursor: pointer; }
+.demo-controls button:disabled { color: #CBD5E1; background: #334155; cursor: not-allowed; }
+.demo-spotlight { position: relative; z-index: 1198 !important; outline: 5px solid #FACC15 !important; outline-offset: 5px; box-shadow: 0 0 0 10px #0B1B33, 0 0 22px 14px #FACC15 !important; }
+@media (max-width: 700px) { .demo-narrator { left: calc(2 * var(--px)); right: calc(2 * var(--px)); bottom: calc(2 * var(--px)); width: auto; } }
+@media (prefers-reduced-motion: reduce) { .demo-spotlight { transition: none !important; animation: none !important; } }

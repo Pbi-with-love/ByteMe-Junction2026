@@ -9,7 +9,7 @@ import PixelSprite from '../components/PixelSprite';
 import { Stars } from '../components/ResultPanel';
 import AgentWorking from '../components/AgentWorking';
 
-type Props = { client: GatewayClient; levelId: string; onBack: () => void };
+type Props = { client: GatewayClient; levelId: string; onBack: () => void; onLoaded?:(data:CompareData)=>void };
 const ROWS = [
   { label: 'Approvals asked', field: 'approvalsAsked', better: 'lower' },
   { label: 'Hearts used', field: 'heartsUsed', better: 'lower' },
@@ -53,18 +53,18 @@ function rowWinners(results: GameResult[], field: typeof ROWS[number]['field'], 
   return [];
 }
 
-export default function Compare({ client, levelId, onBack }: Props) {
+export default function Compare({ client, levelId, onBack,onLoaded }: Props) {
   const [data, setData] = useState<CompareData | null>(null);
   const [error, setError] = useState('');
   useEffect(() => {
     let active = true;
     setData(null);
     setError('');
-    client.compare(levelId).then((response) => { if (active) setData(response); }).catch((reason: unknown) => {
+    client.compare(levelId).then((response) => { if (active) { setData(response); onLoaded?.(response); } }).catch((reason: unknown) => {
       if (active) setError(reason instanceof GatewayError ? reason.message : reason instanceof Error ? reason.message : String(reason));
     });
     return () => { active = false; };
-  }, [client, levelId]);
+  }, [client, levelId, onLoaded]);
 
   const entries = data ? Object.entries(data.presets) : [];
   const results = entries.map(([, result]) => result);

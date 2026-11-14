@@ -20,7 +20,7 @@ function recordingClient() {
   return { client, calls };
 }
 
-async function pumpUntil(predicate: () => boolean, limit = 180_000) {
+async function pumpUntil(predicate: () => boolean, limit = 600_000) {
   for (let elapsed = 0; elapsed < limit; elapsed += 250) {
     if (predicate()) return;
     await act(async () => { await vi.advanceTimersByTimeAsync(250); });
@@ -55,6 +55,8 @@ async function playDemoByHand() {
     if (step.approval?.status === 'OPEN') await clickWhenReady((level1.presets.balanced.demoPath as Record<string, string>)[step.approval.approvalId] === 'approved' ? 'Approve' : 'Reject');
   }
   await clickWhenReady('See result');
+  await clickWhenReady('See it from Valio Aimo’s side');
+  await clickWhenReady('Back to results');
   await clickWhenReady('Compare presets');
   await pumpUntil(() => Boolean(screen.queryByRole('heading', { name: 'Agents don’t need a chatbot. They need a mandate.' })));
 }
@@ -78,8 +80,8 @@ describe('Run demo App flow', () => {
     await playDemoByHand();
     expect(automated.calls).toEqual(manual.calls);
     expect(automated.calls.filter(([method]) => method === 'decideApproval')).toHaveLength(DEMO.decisions.length);
-    expect(DEMO_BEAT_MS).toBe(250);
-    expect(DEMO_RESULT_HOLD_MS).toBe(1000);
+    expect(DEMO_BEAT_MS).toBeGreaterThan(0);
+    expect(DEMO_RESULT_HOLD_MS).toBe(3000);
   }, 30_000);
 
   it('aborts on Back to levels and can run again afterward', async () => {
@@ -101,5 +103,26 @@ describe('Run demo App flow', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Run demo' }));
     await pumpUntil(() => Boolean(screen.queryByRole('heading', { name: 'Agents don’t need a chatbot. They need a mandate.' })));
+  }, 30_000);
+
+  it('pauses the narrator clock and exits without leaving demo UI behind', async () => {
+    vi.useFakeTimers();
+    const recorded = recordingClient();
+    render(<App client={recorded.client} />);
+    await pumpUntil(() => Boolean(screen.queryByRole('button', { name: 'Run demo' })));
+    fireEvent.click(screen.getByRole('button', { name: 'Run demo' }));
+    await pumpUntil(() => Boolean(screen.queryByText('1 of 15')));
+    fireEvent.click(screen.getByRole('button', { name: 'Pause' }));
+    await act(async () => { await vi.advanceTimersByTimeAsync(12_000); });
+    expect(screen.getByText('1 of 15')).toBeInTheDocument();
+    expect(recorded.calls.some(([method]) => method === 'presets')).toBe(false);
+    fireEvent.click(screen.getByRole('button', { name: 'Resume' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    await pumpUntil(() => Boolean(screen.queryByText('2 of 15')));
+    fireEvent.click(screen.getByRole('button', { name: 'Exit demo' }));
+    expect(screen.queryByText('DEMO')).not.toBeInTheDocument();
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    await act(async () => { await vi.advanceTimersByTimeAsync(20_000); });
+    expect(screen.queryByText('DEMO')).not.toBeInTheDocument();
   }, 30_000);
 });

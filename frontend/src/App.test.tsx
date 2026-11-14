@@ -35,6 +35,8 @@ describe('level shell', () => {
     render(<App client={makeClient(async () => ({ provider: 'Mock Gateway' } as Discovery))} />);
     await screen.findByText('Mock Gateway');
     expect(screen.getAllByRole('article')).toHaveLength(3);
+    expect(screen.queryByText('DEMO')).not.toBeInTheDocument();
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
 
   it('shows start errors without the brief and returns to levels on Back to levels', async () => {
