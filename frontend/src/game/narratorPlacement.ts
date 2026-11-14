@@ -5,7 +5,7 @@ const GAP = 24;
 const ALWAYS = '[aria-label="Game clock"], .hearts-meter, .approval-card, .activity-dock, .compare-frame table';
 // The card must also keep clear of whatever it is explaining (mandate form, result, receipt, Valio view).
 export function narratorBlockers(step: number, root: ParentNode = document): Element[] {
-  const subject = step >= 4 && step <= 7 ? '.pixel-panel:not([hidden])' : step === 11 || step === 12 ? '.pixel-panel:not([hidden])' : step === 13 ? '.valio-screen' : '';
+  const subject = step >= 4 && step <= 7 ? '.pixel-panel:not([hidden])' : step === 11 || step === 12 ? '.pixel-panel:not([hidden])' : step === 13 ? '.valio-boundary, .valio-columns > .valio-section' : '';
   return [...root.querySelectorAll(subject ? `${ALWAYS}, ${subject}` : ALWAYS)];
 }
 

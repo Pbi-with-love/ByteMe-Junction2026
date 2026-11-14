@@ -59,10 +59,10 @@ describe('narrator placement', () => {
   });
 
   it('adds the thing a card explains to its protected rects', () => {
-    document.body.innerHTML = '<section class="pixel-panel"></section><section class="pixel-panel" hidden></section><div class="valio-screen"></div><div class="hearts-meter"></div>';
+    document.body.innerHTML = '<section class="pixel-panel"></section><section class="pixel-panel" hidden></section><div class="valio-columns"><section class="valio-section"></section></div><section class="valio-boundary"></section><div class="hearts-meter"></div>';
     expect(narratorBlockers(5)).toHaveLength(2);
     expect(narratorBlockers(12)).toHaveLength(2);
-    expect(narratorBlockers(13).map((node) => node.className)).toEqual(['valio-screen', 'hearts-meter']);
+    expect(narratorBlockers(13).map((node) => node.className)).toEqual(['valio-section', 'valio-boundary', 'hearts-meter']);
     expect(narratorBlockers(2)).toHaveLength(1);
     document.body.innerHTML = '';
   });

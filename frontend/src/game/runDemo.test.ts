@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { runDemo } from './runDemo';
-import { DEMO_AGENT_LOG_HOLD_MS, DEMO_APPROVAL_MARGIN_MS, DEMO_BEAT_MS, DEMO_MIN_READ_MS, DEMO_POLL_MS, DEMO_SCREEN_HOLD_MS, DEMO_SPOTLIGHT_MS, DEMO_VALIO_EXTRA_HOLD_MS, DEMO_SPEED_FACTORS, DEMO_WORD_MS } from './demo';
+import { DEMO_AGENT_LOG_HOLD_MS, DEMO_APPROVAL_MARGIN_MS, DEMO_BEAT_MS, DEMO_MIN_READ_MS, DEMO_POLL_MS, DEMO_SCREEN_HOLD_MS, DEMO_SPOTLIGHT_MS, DEMO_VALIO_BOARD_TOTAL_MS, DEMO_SPEED_FACTORS, DEMO_WORD_MS } from './demo';
 import { computeApprovalHoldMs } from './runDemo';
 
 describe('runDemo', () => {
@@ -41,7 +41,7 @@ describe('runDemo', () => {
     for (const name of ['Go to the kitchen', 'Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent', 'Approve', 'See result', 'See it from Valio Aimo’s side', 'Back to results', 'Compare presets']) button(name);
     let approvalAt = 0; let firstSpotlightAt = 0;
     const controller = new AbortController();
-    const promise = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: ['approved'] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', beatMs: 10, waitMs: 100, values: () => ({ stars: '3', compareLoaded: 'true', activity_search: 'true', activity_quote: 'true', activity_order: 'true', approvalDeadline: new Date(Date.now() + 20_000).toISOString(), approvalCreatedAt: new Date().toISOString(), approvalShownAt: String(Date.now()) }), spotlight: (element) => { if (element.textContent === 'Start level') firstSpotlightAt = Date.now(); element.classList.add('demo-spotlight'); }, present: (card, step, holdMs) => {
+    const promise = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: ['approved'] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', beatMs: 10, waitMs: 100, values: () => ({ stars: '3', compareLoaded: 'true', valioLoaded: 'true', activity_search: 'true', activity_quote: 'true', activity_order: 'true', approvalDeadline: new Date(Date.now() + 20_000).toISOString(), approvalCreatedAt: new Date().toISOString(), approvalShownAt: String(Date.now()) }), spotlight: (element) => { if (element.textContent === 'Start level') firstSpotlightAt = Date.now(); element.classList.add('demo-spotlight'); }, present: (card, step, holdMs) => {
       if (step === 5) { expect(clickedAt.has('Balanced'), 'Balanced is clicked before its card').toBe(true); expect(clickedAt.has('Sign mandate')).toBe(false); }
       if (step === 9) { approvalAt = Date.now(); expect(card.pauseDisabled).toBe(true); expect(holdMs).toBeGreaterThan(14_000); expect(holdMs).toBeLessThanOrEqual(20_000 - DEMO_APPROVAL_MARGIN_MS); return new Promise<void>((resolve) => setTimeout(resolve, holdMs)); }
       return Promise.resolve();
@@ -71,7 +71,7 @@ describe('runDemo', () => {
     const names = ['Go to the kitchen', 'Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent', 'See result', 'See it from Valio Aimo’s side', 'Back to results', 'Compare presets'];
     const addButton = (name: string, parent: HTMLElement = root) => { const button = document.createElement('button'); button.textContent = name; button.addEventListener('click', () => button.setAttribute('aria-pressed', 'true')); parent.append(button); return button; };
     addButton('Start level', article); names.forEach((name) => addButton(name));
-    const values: Record<string, string | undefined> = { stars: '3', compareLoaded: 'true', approvalDeadline: new Date(Date.now() + 20_000).toISOString(), approvalCreatedAt: new Date().toISOString(), approvalShownAt: String(Date.now()) };
+    const values: Record<string, string | undefined> = { stars: '3', compareLoaded: 'true', valioLoaded: 'true', approvalDeadline: new Date(Date.now() + 20_000).toISOString(), approvalCreatedAt: new Date().toISOString(), approvalShownAt: String(Date.now()) };
     const presented: number[] = []; let workingGate: Promise<void> | undefined;
     const controller = new AbortController();
     const promise = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: ['approved'] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', values: () => values, present: (_card, step, holdMs, waitUntil) => {
@@ -134,14 +134,15 @@ describe('runDemo', () => {
     vi.useFakeTimers(); vi.setSystemTime(new Date('2026-11-14T18:00:00+02:00'));
     const root = document.createElement('div'); document.body.append(root);
     const article = document.createElement('article'), heading = document.createElement('h2'); heading.textContent = 'Level One'; article.append(heading); root.append(article);
-    const addButton = (name: string, parent: HTMLElement = root) => { const b = document.createElement('button'); b.textContent = name; b.addEventListener('click', () => b.setAttribute('aria-pressed', 'true')); parent.append(b); return b; };
+    const clickedAt = new Map<string, number>();
+    const addButton = (name: string, parent: HTMLElement = root) => { const b = document.createElement('button'); b.textContent = name; b.addEventListener('click', () => clickedAt.set(name, Date.now())); b.addEventListener('click', () => b.setAttribute('aria-pressed', 'true')); parent.append(b); return b; };
     addButton('Start level', article);
     for (const name of ['Go to the kitchen', 'Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent', 'See result', 'See it from Valio Aimo’s side', 'Back to results', 'Compare presets']) addButton(name);
     let deadline = Number.NaN, shownReal = Number.NaN;
     const created = Date.parse('2026-11-14T10:00:00+02:00');
     const holds = new Map<number, number>(); const shownAt = new Map<number, number>(); let pauseDisabled: boolean | undefined;
     const controller = new AbortController();
-    const promise = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: ['approved'] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', speedFactor: () => factor, beatMs: 10, values: () => ({ stars: '3', compareLoaded: 'true', approvalDeadline: Number.isNaN(deadline) ? undefined : new Date(deadline).toISOString(), approvalCreatedAt: new Date(created).toISOString(), approvalShownAt: Number.isNaN(shownReal) ? undefined : String(shownReal) }), present: (card, step, holdMs, waitUntil) => {
+    const promise = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: ['approved'] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', speedFactor: () => factor, beatMs: 10, values: () => ({ stars: '3', compareLoaded: 'true', valioLoaded: 'true', approvalDeadline: Number.isNaN(deadline) ? undefined : new Date(deadline).toISOString(), approvalCreatedAt: new Date(created).toISOString(), approvalShownAt: Number.isNaN(shownReal) ? undefined : String(shownReal) }), present: (card, step, holdMs, waitUntil) => {
       holds.set(step, holdMs); shownAt.set(step, Date.now());
       if (step === 9) pauseDisabled = card.pauseDisabled;
       if (step === 8) { setTimeout(() => { deadline = created + seconds * 1000; shownReal = Date.now(); addButton('Approve'); }, 1000); return waitUntil ?? Promise.resolve(); } // approval opens while step 8 still holds
@@ -154,10 +155,11 @@ describe('runDemo', () => {
     expect(holds.get(9)).toBe(16_200); // full reading time at Slow (27 words), never scaled; fits both windows
     expect(holds.get(9)).toBeLessThanOrEqual(seconds * 1000 - (shownAt.get(9)! - shownReal) - DEMO_APPROVAL_MARGIN_MS);
     expect(pauseDisabled).toBe(seconds < 30);
-    // Step 13 (Valio view) is 5 s longer than the plain reading time, unscaled; step 12 (same kind of card) is unchanged.
+    // Step 13 (Valio view) keeps its normal reading time, is shown only after the Valio click (board loaded), then the board is held (scaled, 5 s floor) before the Compare click.
     const words13 = (await import('./demoScript')).demoCardText(12, {}).split(/\s+/).filter(Boolean).length;
-    expect(DEMO_VALIO_EXTRA_HOLD_MS).toBe(5000);
-    expect(holds.get(13)).toBe(Math.max(DEMO_MIN_READ_MS, words13 * DEMO_WORD_MS) * factor + 5000);
+    expect(holds.get(13)).toBe(Math.max(DEMO_MIN_READ_MS, words13 * DEMO_WORD_MS) * factor);
+    expect(clickedAt.get('See it from Valio Aimo’s side')!).toBeLessThanOrEqual(shownAt.get(13)!);
+    expect(clickedAt.get('Compare presets')! - shownAt.get(13)!).toBeGreaterThanOrEqual(DEMO_VALIO_BOARD_TOTAL_MS); // board visible >= 15 s at every speed
     expect(holds.get(12)).toBe(Math.max(DEMO_MIN_READ_MS, (await import('./demoScript')).demoCardText(11, {}).split(/\s+/).filter(Boolean).length * DEMO_WORD_MS) * factor);
     root.remove();
   });

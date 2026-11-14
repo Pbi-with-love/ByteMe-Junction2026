@@ -133,8 +133,8 @@ export default function App({ client }: { client: GatewayClient }) {
     }
     demoCurrentFactor.current = nextFactor;
   }, [scheduleDemoAdvance]);
-  const onValioLoaded = useCallback(() => setValioReady(true), []);
-  useEffect(() => { if (screen !== 'valio') setValioReady(false); }, [screen]);
+  const onValioLoaded = useCallback(() => { demoValues.current.valioLoaded = 'true'; setValioReady(true); }, []);
+  useEffect(() => { if (screen !== 'valio') { setValioReady(false); delete demoValues.current.valioLoaded; } }, [screen]);
   const onCompareLoaded = useCallback((data: import('./api/schemas').Compare) => {
     const strictApprovals = data.presets.strict?.approvalsAsked;
     if (strictApprovals !== undefined) demoValues.current.strictApprovals = String(strictApprovals);

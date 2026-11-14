@@ -13,7 +13,7 @@ export const narratorCopy: DemoCard[] = [
   { title: 'You approve', text: 'You approve. The decision is logged and the order is placed at the fixed price Valio Aimo quoted.' },
   { title: 'The result', text: '{stars} of 3 stars. Kitchen {kitchen}: the milk arrived on time. Safety {safety}: no hard rule was broken; {heartsLeft} hearts left.' },
   { title: 'Receipt and log', text: 'The receipt explains itself, and the log is a hash chain: anyone can verify that nothing was changed afterwards. This is the proof that both sides kept their promises.' },
-  { title: 'Valio Aimo’s view', text: 'Seen from Valio Aimo’s side: what the agent was given and what was withheld. Purchase prices, margins and other customers’ data are never exposed.' },
+  { title: 'Valio Aimo’s view', text: 'This board is Valio Aimo’s side of the agent’s calls. The table “Returned to agent vs withheld” lists what the agent was given and what was held back. Under “Data boundary”, purchase prices, margins and other customers’ data sit in “Never exposed”.' },
   { title: 'Compare mandates', text: 'Same level, three mandates. Strict asks {strictApprovals} times and leaves the kitchen short, Loose never asks and quietly accepts a late delivery, Balanced finds the balance. The mandate is the guardrail.' },
   { title: 'The mandate is the guardrail', text: 'That is Agent Kitchen. Agents don’t need a chatbot. They need a mandate.', automatic: false },
 ];
