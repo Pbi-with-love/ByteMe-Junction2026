@@ -20,6 +20,7 @@ docs/specs
 AGENTS.md
 CODEX.md
 GEMINI.md
+CLAUDE.md
 
 # keep the template, ignore downloaded Valio data
 !.env.example
