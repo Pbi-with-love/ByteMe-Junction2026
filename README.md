@@ -9,6 +9,56 @@ We built the **Valio Aimo Trust Gateway**: an open, documented interface through
 
 To make the guardrails easy to *see and feel*, we put a small game on top: **Agent Kitchen**. You play the kitchen manager, decide how much authority to give a robot buyer, and watch what the gateway allows, flags or blocks. **The game is only the demo layer. The gateway is the answer to the challenge.**
 
+## From the kitchen scene to the Trust Gateway
+
+The kitchen is the story judges can see. Every important game action is backed by
+the same gateway operation that an external purchasing agent would call.
+
+```mermaid
+flowchart LR
+  subgraph GAME["Agent Kitchen: what the player sees"]
+    M["Kitchen manager<br/>sets the mandate"]
+    R["Robot receives<br/>the kitchen request"]
+    P["Plan cards and<br/>approval phone"]
+    T["Timeline and<br/>receipt"]
+  end
+  subgraph GW["Valio Aimo Trust Gateway: what is real"]
+    S["Search catalog"]
+    Q["Check price +<br/>availability"]
+    C["Build and rank<br/>delivery plans"]
+    G["Policy gate<br/>GREEN · BLUE · YELLOW · RED"]
+    O["Order or request<br/>human approval"]
+    L["Hash-chained<br/>audit log"]
+  end
+  M --> R
+  R --> S
+  S --> Q
+  Q --> C
+  C --> G
+  G --> O
+  O --> L
+  L --> T
+```
+
+| Game scene | What it demonstrates in the challenge |
+|---|---|
+| The manager sets budget, allergen and substitution rules | A signed, customer-scoped mandate |
+| The robot searches for ingredients and compares plans | Catalog, customer price, availability and deterministic planning |
+| The phone asks for a decision | Human approval when the agent exceeds its authority |
+| The gateway blocks an unsafe option | Fail-closed policy enforcement; RED cannot be approved |
+| The timeline and receipt explain the result | Hash-chained auditability and an explicit data boundary |
+
+The three levels are concrete policy scenarios, not separate game logic:
+
+- **Level 1 — The Weekly Order:** partial availability, split plans, budget limits
+  and approval.
+- **Level 2 — The Stock-out:** substitution rules and mandate boundaries.
+- **Level 3 — Allergy Emergency:** allergen exclusion and an unapprovable RED decision.
+
+The game makes the gateway visible; it does not replace it. The same API, policy
+engine, quote lifecycle, approval flow and audit log serve the game and any
+external buyer agent.
+
 ---
 
 ## 1. The 60-second tour (for judges)
