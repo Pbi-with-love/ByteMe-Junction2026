@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { runDemo } from './runDemo';
-import { DEMO_AGENT_LOG_HOLD_MS, DEMO_APPROVAL_MARGIN_MS, DEMO_BEAT_MS, DEMO_MIN_READ_MS, DEMO_POLL_MS, DEMO_SCREEN_HOLD_MS, DEMO_SPOTLIGHT_MS, DEMO_SPEED_FACTORS, DEMO_WORD_MS } from './demo';
+import { DEMO_AGENT_LOG_HOLD_MS, DEMO_APPROVAL_MARGIN_MS, DEMO_BEAT_MS, DEMO_MIN_READ_MS, DEMO_POLL_MS, DEMO_SCREEN_HOLD_MS, DEMO_SPOTLIGHT_MS, DEMO_VALIO_EXTRA_HOLD_MS, DEMO_SPEED_FACTORS, DEMO_WORD_MS } from './demo';
 import { computeApprovalHoldMs } from './runDemo';
 
 describe('runDemo', () => {
@@ -154,6 +154,11 @@ describe('runDemo', () => {
     expect(holds.get(9)).toBe(16_200); // full reading time at Slow (27 words), never scaled; fits both windows
     expect(holds.get(9)).toBeLessThanOrEqual(seconds * 1000 - (shownAt.get(9)! - shownReal) - DEMO_APPROVAL_MARGIN_MS);
     expect(pauseDisabled).toBe(seconds < 30);
+    // Step 13 (Valio view) is 5 s longer than the plain reading time, unscaled; step 12 (same kind of card) is unchanged.
+    const words13 = (await import('./demoScript')).demoCardText(12, {}).split(/\s+/).filter(Boolean).length;
+    expect(DEMO_VALIO_EXTRA_HOLD_MS).toBe(5000);
+    expect(holds.get(13)).toBe(Math.max(DEMO_MIN_READ_MS, words13 * DEMO_WORD_MS) * factor + 5000);
+    expect(holds.get(12)).toBe(Math.max(DEMO_MIN_READ_MS, (await import('./demoScript')).demoCardText(11, {}).split(/\s+/).filter(Boolean).length * DEMO_WORD_MS) * factor);
     root.remove();
   });
 });

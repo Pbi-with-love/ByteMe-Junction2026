@@ -22,4 +22,5 @@ export const DEMO_APPROVAL_PAUSE_THRESHOLD_MS = 30_000;
 export const DEMO_AGENT_LOG_HOLD_MS = 4000;
 export const DEMO_SCREEN_HOLD_MS = 3000;
 export const DEMO_RESULT_HOLD_MS = DEMO_SCREEN_HOLD_MS;
+export const DEMO_VALIO_EXTRA_HOLD_MS = 5000; // added to the Valio view card (step 13) at every speed, never scaled
 export const DEMO_WAIT_MS = 60_000;

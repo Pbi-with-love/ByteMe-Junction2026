@@ -1,4 +1,4 @@
-import { DEMO_APPROVAL_MARGIN_MS, DEMO_APPROVAL_PAUSE_THRESHOLD_MS, DEMO_AGENT_LOG_HOLD_MS, DEMO_BEAT_MS, DEMO_MIN_READ_MS, DEMO_POLL_MS, DEMO_RESULT_HOLD_MS, DEMO_SCREEN_HOLD_MS, DEMO_SPOTLIGHT_MS, DEMO_WAIT_MS, DEMO_WORD_MS, type DemoDecision, type DemoScript } from './demo';
+import { DEMO_APPROVAL_MARGIN_MS, DEMO_APPROVAL_PAUSE_THRESHOLD_MS, DEMO_AGENT_LOG_HOLD_MS, DEMO_BEAT_MS, DEMO_MIN_READ_MS, DEMO_POLL_MS, DEMO_RESULT_HOLD_MS, DEMO_SCREEN_HOLD_MS, DEMO_SPOTLIGHT_MS, DEMO_VALIO_EXTRA_HOLD_MS, DEMO_WAIT_MS, DEMO_WORD_MS, type DemoDecision, type DemoScript } from './demo';
 import type { DemoCard } from './demoScript';
 
 type Options = { root: ParentNode; script: DemoScript; signal: AbortSignal; levelTitle: string; presetLabel(key: string): string; speedFactor?: () => number; beatMs?: number; resultHoldMs?: number; waitMs?: number; sleep?: (ms: number) => Promise<void>; present?: (card: DemoCard, step: number, holdMs: number, waitUntil?: Promise<void>) => Promise<void>; spotlight?: (element: HTMLElement) => void; values?: () => Record<string, string | undefined>; isTrusted?: (event: Event) => boolean };
@@ -6,6 +6,7 @@ type Options = { root: ParentNode; script: DemoScript; signal: AbortSignal; leve
 export function computeApprovalHoldMs(remainingMs: number, wantedReadingMs: number): number {
   return Math.max(0, Math.min(wantedReadingMs, remainingMs - DEMO_APPROVAL_MARGIN_MS));
 }
+const VALIO_CARD_INDEX = 12; // step 13 in demoScript.narratorCopy
 const DEFAULT_APPROVAL_WINDOW_MS = 20_000;
 function approvalRemainingMs(v: Record<string, string | undefined>): number {
   const deadline = Date.parse(v.approvalDeadline ?? ''), created = Date.parse(v.approvalCreatedAt ?? ''), shown = Number(v.approvalShownAt);
@@ -72,7 +73,7 @@ export async function runDemo(opts: Options): Promise<'done' | 'aborted' | 'stuc
       const slowReadingTime = Math.max(DEMO_MIN_READ_MS, words * DEMO_WORD_MS);
       const wanted = slowReadingTime * factor();
       const remaining = approvalRemainingMs(opts.values?.() ?? {});
-      const hold = card.pauseDisabled ? (Number.isFinite(remaining) ? computeApprovalHoldMs(remaining, slowReadingTime) : 0) : (holdOverride ?? wanted);
+      const hold = card.pauseDisabled ? (Number.isFinite(remaining) ? computeApprovalHoldMs(remaining, slowReadingTime) : 0) : (holdOverride ?? wanted) + (index === VALIO_CARD_INDEX ? DEMO_VALIO_EXTRA_HOLD_MS : 0);
       const pauseDisabled = card.pauseDisabled && Number.isFinite(remaining) && remaining < DEMO_APPROVAL_PAUSE_THRESHOLD_MS;
       await opts.present!({ ...card, text, ...(card.pauseDisabled ? { pauseDisabled } : {}) }, index + 1, hold, waitUntil);
     };
