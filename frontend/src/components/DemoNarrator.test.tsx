@@ -24,4 +24,13 @@ describe('DemoNarrator', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Exit demo' }));
     expect(onReplay).toHaveBeenCalledOnce(); expect(onExit).toHaveBeenCalledOnce();
   });
+  it('Space advances Next without activating a focused page button', () => {
+    const onNext = vi.fn(), pageClick = vi.fn();
+    const page = document.createElement('button'); page.onclick = pageClick; document.body.append(page); page.focus();
+    render(<DemoNarrator step={2} total={15} title="t" text="x" paused={false} speed="slow" onPause={vi.fn()} onSpeedChange={vi.fn()} onNext={onNext} onExit={vi.fn()} />);
+    expect(fireEvent.keyDown(page, { key: ' ' })).toBe(false);
+    expect(fireEvent.keyUp(page, { key: ' ' })).toBe(false);
+    expect(onNext).toHaveBeenCalledOnce(); expect(pageClick).not.toHaveBeenCalled();
+    page.remove();
+  });
 });

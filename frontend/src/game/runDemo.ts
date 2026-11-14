@@ -1,7 +1,7 @@
 import { DEMO_APPROVAL_MARGIN_MS, DEMO_AGENT_LOG_HOLD_MS, DEMO_BEAT_MS, DEMO_MIN_READ_MS, DEMO_POLL_MS, DEMO_RESULT_HOLD_MS, DEMO_SCREEN_HOLD_MS, DEMO_SPOTLIGHT_MS, DEMO_WAIT_MS, DEMO_WORD_MS, type DemoDecision, type DemoScript } from './demo';
 import type { DemoCard } from './demoScript';
 
-type Options = { root: ParentNode; script: DemoScript; signal: AbortSignal; levelTitle: string; presetLabel(key: string): string; speedFactor?: () => number; beatMs?: number; resultHoldMs?: number; waitMs?: number; sleep?: (ms: number) => Promise<void>; present?: (card: DemoCard, step: number, holdMs: number, waitUntil?: Promise<void>) => Promise<void>; spotlight?: (element: HTMLElement) => void; values?: () => Record<string, string | undefined> };
+type Options = { root: ParentNode; script: DemoScript; signal: AbortSignal; levelTitle: string; presetLabel(key: string): string; speedFactor?: () => number; beatMs?: number; resultHoldMs?: number; waitMs?: number; sleep?: (ms: number) => Promise<void>; present?: (card: DemoCard, step: number, holdMs: number, waitUntil?: Promise<void>) => Promise<void>; spotlight?: (element: HTMLElement) => void; values?: () => Record<string, string | undefined>; isTrusted?: (event: Event) => boolean };
 export function computeApprovalHoldMs(deadlineMs: number, wantedReadingMs: number, nowMs = Date.now()): number {
   return Math.max(0, Math.min(wantedReadingMs, deadlineMs - nowMs - DEMO_APPROVAL_MARGIN_MS));
 }
@@ -10,6 +10,7 @@ const defaultSleep = (ms: number, signal: AbortSignal) => new Promise<void>((res
   const timer = setTimeout(resolve, ms);
   signal.addEventListener('abort', () => { clearTimeout(timer); reject(new DOMException('Aborted', 'AbortError')); }, { once: true });
 });
+const INTERACTIVE = 'button, a, input, select, textarea, summary, [role="button"], [role="link"]';
 function visible(el: HTMLElement) { return !el.closest('[hidden]') && !el.hasAttribute('disabled') && el.getAttribute('aria-disabled') !== 'true'; }
 function label(el: HTMLElement) { return (el.getAttribute('aria-label') ?? el.textContent ?? '').trim(); }
 function target(root: ParentNode, exact: string, selector = 'button'): HTMLElement | null {
@@ -49,7 +50,9 @@ export async function runDemo(opts: Options): Promise<'done' | 'aborted' | 'stuc
     return !stop();
   }
   if (opts.present) {
-    const detectUserClick = (event: Event) => { if (!allowScriptClick && !(event.target instanceof Element && event.target.closest('.demo-narrator'))) userInterrupted = true; };
+    const trusted = opts.isTrusted ?? ((event: Event) => event.isTrusted);
+    // Only a real user click on an interactive control counts; background/text clicks and script clicks never stop the demo.
+    const detectUserClick = (event: Event) => { const t = event.target; if (!allowScriptClick && trusted(event) && t instanceof Element && t.closest(INTERACTIVE) && !t.closest('.demo-narrator, .demo-mode-badge')) userInterrupted = true; };
     root.addEventListener('click', detectUserClick, true);
     const cards = (await import('./demoScript')).narratorCopy;
     const show = async (index: number, holdOverride?: number, waitUntil?: Promise<void>) => {

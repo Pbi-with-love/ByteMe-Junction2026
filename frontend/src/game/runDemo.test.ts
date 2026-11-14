@@ -98,14 +98,26 @@ describe('runDemo', () => {
     expect(outcome).toBe('done');
     root.remove();
   });
-  it('stops when a player clicks a game control during narration', async () => {
+  const interruptionRun = (onPresent: (root: HTMLElement, manual: HTMLElement) => void, trusted = true) => {
     const root = document.createElement('div'); document.body.append(root);
     const article = document.createElement('article'), heading = document.createElement('h2'); heading.textContent = 'Level One'; article.append(heading); root.append(article);
     const manual = document.createElement('button'); manual.textContent = 'Go to the kitchen'; root.append(manual);
-    const controller = new AbortController();
-    const result = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: [] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', waitMs: 50, present: () => new Promise<void>((resolve) => window.setTimeout(() => { manual.click(); resolve(); }, 1)) });
+    const copy = document.createElement('p'); copy.textContent = 'briefing text'; root.append(copy);
+    const controller = new AbortController(); let step = 0;
+    const result = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: [] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', waitMs: 50, isTrusted: () => trusted, present: () => new Promise<void>((resolve) => window.setTimeout(() => { if (step++ === 0) onPresent(root, manual); resolve(); }, 1)) });
+    return { root, result, copy };
+  };
+  it('stops when a player clicks a game control during narration', async () => {
+    const { root, result } = interruptionRun((_root, manual) => manual.click());
     await expect(result).resolves.toBe('interrupted');
     root.remove();
+  });
+  it('ignores clicks on background and text, and untrusted clicks on controls', async () => {
+    for (const act of [(root: HTMLElement) => root.click(), (root: HTMLElement) => root.querySelector('p')!.click(), (_root: HTMLElement, manual: HTMLElement) => manual.click()]) {
+      const { root, result } = interruptionRun(act, act.length === 2 ? false : true);
+      await expect(result).resolves.not.toBe('interrupted');
+      root.remove();
+    }
   });
   it('does not present another card after Exit aborts the current wait', async () => {
     const root = document.createElement('div'); document.body.append(root);
