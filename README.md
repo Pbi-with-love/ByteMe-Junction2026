@@ -475,7 +475,8 @@ A lightweight grid-based movement system is sufficient. Avoid unnecessary physic
 - Approval cards may contain a trap option (late or allergen visible on the card);
   approving a trap the card disclosed costs Safety or Kitchen points.
 - Demo mode: one button runs Level 1 Balanced end to end, then opens the compare screen.
-- API paths: API_CONTRACT.md (v1.1) is authoritative; §6.1 is a summary.
+- API paths: API_CONTRACT.md (v1, unchanged) is authoritative; §6.1 is a summary.
+  Behaviour v1 leaves open is in docs/design/GATEWAY_RULES.md.
 
 ---
 
