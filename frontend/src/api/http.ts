@@ -1,6 +1,7 @@
-import { CompareSchema, DiscoverySchema, ErrorEnvelopeSchema, GameResultSchema, GameStartSchema } from './schemas';
+import { CompareSchema, DiscoverySchema, ErrorEnvelopeSchema, GameResultSchema, GameStartSchema, MandateSchema } from './schemas';
 import { GatewayError, type GatewayClient } from './gateway';
-import type { AgentStep, Compare, Discovery, GameResult, GameStart } from './schemas';
+import type { AgentStep, Compare, Discovery, GameResult, GameStart, Mandate } from './schemas';
+import type { MandateDraft } from './gateway';
 import type { ZodType } from 'zod';
 
 export class HttpGatewayClient implements GatewayClient {
@@ -53,6 +54,12 @@ export class HttpGatewayClient implements GatewayClient {
     });
     this.token = start.tokens.human;
     return start;
+  }
+
+  async presets(_levelId: string): Promise<Record<string, Mandate>> { throw new GatewayError('NOT_IMPLEMENTED'); }
+
+  signMandate(_sessionId: string, draft: MandateDraft): Promise<Mandate> {
+    return this.request('/v1/mandates', MandateSchema, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(draft) });
   }
 
   async nextStep(_sessionId: string): Promise<AgentStep | null> {

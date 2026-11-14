@@ -4,6 +4,8 @@ import level1 from '../../mocks/level1.json';
 import level2 from '../../mocks/level2.json';
 import level3 from '../../mocks/level3.json';
 import { GatewayError } from './gateway';
+import type { Mandate } from './schemas';
+import { controlsOf, toDraft } from './mandate';
 import { ReplayGatewayClient } from './replay';
 
 const mocks = [level1, level2, level3];
@@ -26,6 +28,32 @@ describe('ReplayGatewayClient', () => {
       }
       expect(await client.compare(mock.start.level.levelId)).toEqual(mock.compare);
     }
+  });
+
+
+  it('lists recorded mandates and signs every recorded preset by its four controls', async () => {
+    const client = new ReplayGatewayClient();
+    for (const mock of mocks) {
+      const levelId = mock.start.level.levelId;
+      const listed = await client.presets(levelId);
+      expect(Object.keys(listed)).toEqual(Object.keys(mock.presets));
+      expect(listed).toEqual(Object.fromEntries(Object.entries(mock.presets).map(([key, recording]) => [key, recording.mandate])));
+      for (const [key, recording] of Object.entries(mock.presets)) {
+        const start = await client.startLevel(levelId, Object.keys(mock.presets)[0]);
+        expect(await client.signMandate(start.sessionId, toDraft(recording.mandate, controlsOf(recording.mandate)))).toEqual(recording.mandate);
+        expect(await client.nextStep(start.sessionId)).toEqual(recording.steps[0] ?? null);
+      }
+    }
+  });
+
+  it('rejects unknown levels, sessions, and unmatched control combinations', async () => {
+    const client = new ReplayGatewayClient();
+    await expect(client.presets('unknown')).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
+    await expect(client.signMandate('unknown', {} as never)).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
+    const start = await client.startLevel(level1.start.level.levelId, Object.keys(level1.presets)[0]);
+    const base = Object.values(level1.presets)[0].mandate as Mandate;
+    const draft = toDraft(base, { ...controlsOf(base), perOrderEur: Number.MAX_SAFE_INTEGER });
+    await expect(client.signMandate(start.sessionId, draft)).rejects.toMatchObject({ code: 'NO_RECORDING', httpStatus: 404, message: 'Replay has no recorded mandate for these values. Pick a preset, or use a live gateway.' });
   });
 
   it('rejects unknown levels, presets, and sessions with NOT_FOUND', async () => {

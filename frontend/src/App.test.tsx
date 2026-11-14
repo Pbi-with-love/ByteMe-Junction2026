@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import App from './App';
 import { LEVELS, LEVEL_MOCKS } from './game/levels';
 import type { GatewayClient } from './api/gateway';
@@ -12,6 +12,8 @@ function makeClient(discovery: () => Promise<Discovery>): GatewayClient {
     nextStep: async () => null,
     getResult: async () => { throw new Error('unused'); },
     compare: async () => { throw new Error('unused'); },
+    presets: async () => ({}),
+    signMandate: async () => { throw new Error('unused'); },
   };
 }
 
@@ -22,6 +24,17 @@ describe('level shell', () => {
     });
     render(<App client={makeClient(async () => ({ provider: 'Mock Gateway' } as Discovery))} />);
     await screen.findByText('Mock Gateway');
+    expect(screen.getAllByRole('article')).toHaveLength(3);
+  });
+
+  it('shows start errors without the brief and returns to levels on Back to levels', async () => {
+    const client = makeClient(async () => ({ provider: 'Mock Gateway' } as Discovery));
+    client.presets = async () => { throw new Error('presets offline'); };
+    render(<App client={client} />);
+    fireEvent.click(await screen.findAllByRole('button', { name: 'Start level' }).then((buttons) => buttons[0]));
+    expect(await screen.findByRole('alert')).toHaveTextContent('presets offline');
+    expect(screen.queryByRole('article')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Back to levels' }));
     expect(screen.getAllByRole('article')).toHaveLength(3);
   });
 

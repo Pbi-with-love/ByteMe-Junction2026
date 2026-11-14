@@ -1,4 +1,6 @@
-import type { AgentStep, Compare, Discovery, GameResult, GameStart } from './schemas';
+import type { AgentStep, Compare, Discovery, GameResult, GameStart, Mandate } from './schemas';
+
+export type MandateDraft = Omit<Mandate, 'mandateId' | 'customerId' | 'issuedAt' | 'status' | 'signature' | 'summaryText'>;
 import { HttpGatewayClient } from './http';
 import { ReplayGatewayClient } from './replay';
 
@@ -8,6 +10,8 @@ export interface GatewayClient {
   nextStep(sessionId: string): Promise<AgentStep | null>;
   getResult(sessionId: string): Promise<GameResult>;
   compare(levelId: string): Promise<Compare>;
+  presets(levelId: string): Promise<Record<string, Mandate>>;
+  signMandate(sessionId: string, draft: MandateDraft): Promise<Mandate>;
 }
 
 export class GatewayError extends Error {

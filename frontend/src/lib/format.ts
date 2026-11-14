@@ -41,3 +41,12 @@ export function formatDate(input: string): string {
 export function formatDateTime(input: string): string {
   return `${formatDate(input)}, ${formatTime(input)}`;
 }
+
+export function formatAllergen(code: string): string {
+  const names: Record<string, string> = { AE: 'egg', AM: 'milk', AW: 'wheat', AP: 'peanut' };
+  return names[code] ? `${names[code]} (${code})` : code;
+}
+
+export function formatEuroLimit(eur: number): string {
+  return formatMoney({ cents: Math.round(eur * 100), currency: 'EUR' });
+}

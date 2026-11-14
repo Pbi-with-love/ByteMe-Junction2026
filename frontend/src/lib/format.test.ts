@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatDateTime, formatMoney, formatQuantity, formatTime } from './format';
+import { formatAllergen, formatDate, formatDateTime, formatEuroLimit, formatMoney, formatQuantity, formatTime } from './format';
 
 describe('Finnish formatters', () => {
   it('formats integer-cent money and quantities', () => {
@@ -7,6 +7,15 @@ describe('Finnish formatters', () => {
     expect(formatMoney({ cents: -50, currency: 'EUR' })).toBe('-€0,50');
     expect(formatQuantity({ amount: 1000, unit: 'l' })).toBe('1 000 l');
     expect(formatQuantity({ amount: 2.5, unit: 'kg' })).toBe('2,5 kg');
+  });
+
+  it('formats euro mandate limits and known allergen codes', () => {
+    expect(formatEuroLimit(500)).toBe('€500,00');
+    expect(formatAllergen('AE')).toBe('egg (AE)');
+    expect(formatAllergen('AM')).toBe('milk (AM)');
+    expect(formatAllergen('AW')).toBe('wheat (AW)');
+    expect(formatAllergen('AP')).toBe('peanut (AP)');
+    expect(formatAllergen('XX')).toBe('XX');
   });
 
   it('uses Helsinki date and time parts', () => {

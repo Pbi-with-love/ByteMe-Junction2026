@@ -2,7 +2,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import discovery from '../../mocks/discovery.json';
 import level1 from '../../mocks/level1.json';
 import { GatewayError } from './gateway';
+import type { Mandate } from './schemas';
 import { HttpGatewayClient } from './http';
+import { controlsOf, toDraft } from './mandate';
 
 function response(body: unknown, status = 200): Response {
   return {
@@ -41,6 +43,22 @@ describe('HttpGatewayClient', () => {
     expect(fetchMock.mock.calls[3][0]).toBe(`http://gw.test/v1/game/levels/${level1.start.level.levelId}/compare`);
     expect(fetchMock.mock.calls[2][1]?.headers).toMatchObject({ Authorization: `Bearer ${level1.start.tokens.human}` });
     expect(fetchMock.mock.calls[3][1]?.headers).toMatchObject({ Authorization: `Bearer ${level1.start.tokens.human}` });
+  });
+
+
+  it('posts only the mandate draft with the human bearer token and rejects presets without fetch', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(response(level1.start)).mockResolvedValueOnce(response(Object.values(level1.presets)[0].mandate, 201));
+    vi.stubGlobal('fetch', fetchMock);
+    const client = new HttpGatewayClient('http://gw.test');
+    await client.startLevel(level1.start.level.levelId, Object.keys(level1.presets)[0]);
+    const mandate = Object.values(level1.presets)[0].mandate as Mandate;
+    const draft = toDraft(mandate, controlsOf(mandate));
+    await client.signMandate(level1.start.sessionId, draft);
+    expect(fetchMock.mock.calls[1][0]).toBe('http://gw.test/v1/mandates');
+    expect(fetchMock.mock.calls[1][1]).toMatchObject({ method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${level1.start.tokens.human}` }, body: JSON.stringify(draft) });
+    const count = fetchMock.mock.calls.length;
+    await expect(client.presets(level1.start.level.levelId)).rejects.toMatchObject({ code: 'NOT_IMPLEMENTED' });
+    expect(fetchMock).toHaveBeenCalledTimes(count);
   });
 
   it('maps error envelopes, bare HTTP errors, network failures, and invalid responses', async () => {
