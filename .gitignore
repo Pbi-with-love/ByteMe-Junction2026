@@ -1,4 +1,24 @@
+node_modules/
+.env
+.env.*
+.DS_Store
+artifacts/
+.claude/settings.local.json
+
 # private skills
 .claude/skills/
 .agents/skills/
 skills-lock.json
+
+# agent setup (local only, never merged to main)
+.claude/
+.agents/
+.mcp.json
+AGENTS.md
+CLAUDE.md
+CODEX.md
+GEMINI.md
+
+# keep the template, ignore downloaded Valio data
+!.env.example
+data/

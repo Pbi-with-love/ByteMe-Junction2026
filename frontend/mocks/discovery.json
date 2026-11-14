@@ -1,0 +1,67 @@
+{
+  "_note": "FAKE mock data shaped by docs/design/API_CONTRACT.md v1. Not real Valio data; replace once docs/data-notes.md exists.",
+  "response": {
+    "provider": "Valio Aimo (mock)",
+    "protocolVersion": "1.0-draft",
+    "baseUrl": "http://localhost:8000/v1",
+    "capabilities": [
+      "search",
+      "quote",
+      "order",
+      "mandate",
+      "approval",
+      "audit_log"
+    ],
+    "mandate": {
+      "schemaUrl": "http://localhost:8000/v1/schemas/mandate.json",
+      "substitutionLevels": [
+        "none",
+        "same_category",
+        "any"
+      ],
+      "lateDeliveryLevels": [
+        "none",
+        "one_day"
+      ]
+    },
+    "signing": {
+      "alg": "Ed25519",
+      "keys": [
+        {
+          "keyId": "valio-aimo-2026-11",
+          "publicKey": "bW9jay1wdWJsaWMta2V5"
+        }
+      ],
+      "canonicalization": "JSON, sorted keys, no whitespace"
+    },
+    "policy": {
+      "lights": [
+        "GREEN",
+        "BLUE",
+        "YELLOW",
+        "RED"
+      ],
+      "reasonCodesUrl": "http://localhost:8000/v1/schemas/reason-codes.json"
+    },
+    "dataDisclosure": {
+      "public": [
+        "catalog",
+        "labels",
+        "certificates",
+        "categoryCarbon"
+      ],
+      "customerScoped": [
+        "netPrices",
+        "quotes",
+        "orders",
+        "auditLog"
+      ],
+      "neverExposed": [
+        "purchasePrices",
+        "margins",
+        "otherCustomers",
+        "supplierContracts"
+      ]
+    }
+  }
+}

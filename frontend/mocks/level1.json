@@ -1,0 +1,1572 @@
+{
+  "_note": "FAKE mock data shaped by docs/design/API_CONTRACT.md v1. Not real Valio data; replace once docs/data-notes.md exists.",
+  "start": {
+    "sessionId": "ses_level1",
+    "level": {
+      "levelId": "level1",
+      "title": "The Weekly Order",
+      "customer": {
+        "customerId": "123",
+        "name": "Hotel Aurora (fictional)",
+        "type": "hotel"
+      },
+      "brief": "1 000 l lactose-free milk by Monday 06:00.",
+      "deadline": "2026-11-16T06:00:00+02:00",
+      "closingTime": "2026-11-14T14:00:00+02:00"
+    },
+    "clock": {
+      "start": "10:00",
+      "end": "14:00",
+      "realSecondsPerGameMinute": 0.25
+    },
+    "hearts": 3,
+    "tokens": {
+      "human": "mock-human-token",
+      "agent": "mock-agent-token"
+    }
+  },
+  "presets": {
+    "strict": {
+      "mandate": {
+        "mandateId": "mdt_l1_strict",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "issuedBy": {
+          "name": "Anna Virtanen",
+          "role": "Kitchen manager"
+        },
+        "limits": {
+          "perOrderEur": 200,
+          "perWeekEur": 3000
+        },
+        "substitution": "none",
+        "lateDelivery": "none",
+        "hardConstraints": {
+          "excludeAllergens": [
+            "peanut"
+          ],
+          "requireLabels": []
+        },
+        "priorities": [
+          "on_time",
+          "price",
+          "sustainability"
+        ],
+        "validUntil": "2026-12-31T23:59:59+02:00",
+        "issuedAt": "2026-11-14T10:01:00+02:00",
+        "status": "ACTIVE",
+        "signature": {
+          "alg": "Ed25519",
+          "keyId": "valio-aimo-2026-11",
+          "value": "bW9jay1zaWduYXR1cmU="
+        },
+        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €200 per order, with no substitutes and no late deliveries, never products containing peanut."
+      },
+      "steps": [
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "460013",
+                "name": "Lactose-free milk drink 1.5% 10 l bag-in-box (mock)",
+                "brand": "Valio",
+                "category": "milk",
+                "salesUnit": "BIB",
+                "packSize": {
+                  "amount": 10,
+                  "unit": "l"
+                },
+                "labels": [
+                  "lactose_free"
+                ],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "milk",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.4
+                  }
+                },
+                "deliveryReliability": 0.97,
+                "excluded": null
+              },
+              {
+                "productId": "460063",
+                "name": "Nordlakt premium lactose-free milk 10 l (mock)",
+                "brand": "Nordlakt",
+                "category": "milk",
+                "salesUnit": "BIB",
+                "packSize": {
+                  "amount": 10,
+                  "unit": "l"
+                },
+                "labels": [
+                  "lactose_free"
+                ],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "milk",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.4
+                  }
+                },
+                "deliveryReliability": 0.91,
+                "excluded": null
+              },
+              {
+                "productId": "460056",
+                "name": "Pohjola Farm lactose-free milk 10 l (mock)",
+                "brand": "Pohjola Farm",
+                "category": "milk",
+                "salesUnit": "BIB",
+                "packSize": {
+                  "amount": 10,
+                  "unit": "l"
+                },
+                "labels": [
+                  "lactose_free"
+                ],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "milk",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.4
+                  }
+                },
+                "deliveryReliability": 0.62,
+                "excluded": null
+              }
+            ],
+            "total": 3
+          },
+          "quote": {
+            "quoteId": "qt_l1_strict",
+            "customerId": "123",
+            "mandateId": "mdt_l1_strict",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:05:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Lactose-free milk for the hotel",
+              "quantity": {
+                "amount": 1000,
+                "unit": "l"
+              },
+              "deadline": "2026-11-16T06:00:00+02:00",
+              "candidateProductIds": [
+                "460013",
+                "460063",
+                "460056"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_a",
+                "lines": [
+                  {
+                    "productId": "460013",
+                    "quantity": {
+                      "amount": 700,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 70,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1290,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 129,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 90300,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": false
+                  },
+                  {
+                    "productId": "460063",
+                    "quantity": {
+                      "amount": 300,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 30,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 2500,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 250,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 75000,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 165300,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 1000,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "SUBSTITUTION_NOT_ALLOWED",
+                    "SPLIT_ORDER"
+                  ]
+                },
+                "summary": "700 l Valio + 300 l Nordlakt, all Monday, €1 653,00",
+                "score": {
+                  "total": 0.734,
+                  "onTime": 1.0,
+                  "price": 0.78,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              },
+              {
+                "planId": "pln_b",
+                "lines": [
+                  {
+                    "productId": "460013",
+                    "quantity": {
+                      "amount": 700,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 70,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1290,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 129,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 90300,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": false
+                  },
+                  {
+                    "productId": "460013",
+                    "quantity": {
+                      "amount": 300,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 30,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1290,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 129,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 38700,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-17",
+                    "isSubstitute": false
+                  }
+                ],
+                "total": {
+                  "cents": 129000,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 700,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "LATE_DELIVERY",
+                    "SPLIT_ORDER"
+                  ]
+                },
+                "summary": "1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00",
+                "score": {
+                  "total": 0.65,
+                  "onTime": 0.7,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "better",
+                "recommended": false
+              },
+              {
+                "planId": "pln_c",
+                "lines": [
+                  {
+                    "productId": "460056",
+                    "quantity": {
+                      "amount": 1000,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 100,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1950,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 195,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 195000,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 195000,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 1000,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "SUBSTITUTION_NOT_ALLOWED"
+                  ]
+                },
+                "summary": "1 000 l Pohjola Farm, Monday (delivery reliability 62 %), €1 950,00",
+                "score": {
+                  "total": 0.499,
+                  "onTime": 1.0,
+                  "price": 0.662,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.2
+                },
+                "tier": "good",
+                "recommended": false
+              }
+            ],
+            "excludedProducts": [],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l1_strict_p",
+                "at": "2026-11-14T10:05:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l1_strict_a",
+                "at": "2026-11-14T10:05:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 202,
+            "body": {
+              "orderId": "ord_l1_strict",
+              "status": "PENDING_APPROVAL",
+              "approvalId": "apr_l1_strict",
+              "reasons": [
+                "OVER_ORDER_LIMIT",
+                "SUBSTITUTION_NOT_ALLOWED"
+              ]
+            }
+          },
+          "approval": {
+            "approvalId": "apr_l1_strict",
+            "orderId": "ord_l1_strict",
+            "quoteId": "qt_l1_strict",
+            "status": "OPEN",
+            "reasons": [
+              "OVER_ORDER_LIMIT",
+              "SUBSTITUTION_NOT_ALLOWED"
+            ],
+            "reasonText": "Total €1 653,00 is above your €200,00 per-order limit.",
+            "options": [
+              {
+                "planId": "pln_a",
+                "tier": "best",
+                "recommended": true,
+                "summary": "700 l Valio + 300 l Nordlakt, all Monday, €1 653,00"
+              },
+              {
+                "planId": "pln_b",
+                "tier": "better",
+                "recommended": false,
+                "summary": "1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00"
+              },
+              {
+                "planId": "pln_c",
+                "tier": "good",
+                "recommended": false,
+                "summary": "1 000 l Pohjola Farm, Monday (delivery reliability 62 %), €1 950,00"
+              }
+            ],
+            "agentExplanation": "Only 700 l of Valio milk can arrive by Monday. Topping up with 300 l of Nordlakt keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "createdAt": "2026-11-14T10:06:00+02:00"
+          }
+        }
+      ],
+      "result": {
+        "kitchen": 70,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 0,
+        "stars": 1,
+        "incident": null,
+        "receiptText": "Every plan broke your mandate (over €200, a substitute or a late delivery), so your agent had to ask you 4 times. After 3 hearts the last request expired and 300 l was never ordered.",
+        "logHeadHash": "sha256:fa49dc4829754d99",
+        "approvalsAsked": 4
+      }
+    },
+    "balanced": {
+      "mandate": {
+        "mandateId": "mdt_l1_balanced",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "issuedBy": {
+          "name": "Anna Virtanen",
+          "role": "Kitchen manager"
+        },
+        "limits": {
+          "perOrderEur": 500,
+          "perWeekEur": 3000
+        },
+        "substitution": "same_category",
+        "lateDelivery": "none",
+        "hardConstraints": {
+          "excludeAllergens": [
+            "peanut"
+          ],
+          "requireLabels": []
+        },
+        "priorities": [
+          "on_time",
+          "price",
+          "sustainability"
+        ],
+        "validUntil": "2026-12-31T23:59:59+02:00",
+        "issuedAt": "2026-11-14T10:01:00+02:00",
+        "status": "ACTIVE",
+        "signature": {
+          "alg": "Ed25519",
+          "keyId": "valio-aimo-2026-11",
+          "value": "bW9jay1zaWduYXR1cmU="
+        },
+        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing peanut."
+      },
+      "steps": [
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "460013",
+                "name": "Lactose-free milk drink 1.5% 10 l bag-in-box (mock)",
+                "brand": "Valio",
+                "category": "milk",
+                "salesUnit": "BIB",
+                "packSize": {
+                  "amount": 10,
+                  "unit": "l"
+                },
+                "labels": [
+                  "lactose_free"
+                ],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "milk",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.4
+                  }
+                },
+                "deliveryReliability": 0.97,
+                "excluded": null
+              },
+              {
+                "productId": "460063",
+                "name": "Nordlakt premium lactose-free milk 10 l (mock)",
+                "brand": "Nordlakt",
+                "category": "milk",
+                "salesUnit": "BIB",
+                "packSize": {
+                  "amount": 10,
+                  "unit": "l"
+                },
+                "labels": [
+                  "lactose_free"
+                ],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "milk",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.4
+                  }
+                },
+                "deliveryReliability": 0.91,
+                "excluded": null
+              },
+              {
+                "productId": "460056",
+                "name": "Pohjola Farm lactose-free milk 10 l (mock)",
+                "brand": "Pohjola Farm",
+                "category": "milk",
+                "salesUnit": "BIB",
+                "packSize": {
+                  "amount": 10,
+                  "unit": "l"
+                },
+                "labels": [
+                  "lactose_free"
+                ],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "milk",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.4
+                  }
+                },
+                "deliveryReliability": 0.62,
+                "excluded": null
+              }
+            ],
+            "total": 3
+          },
+          "quote": {
+            "quoteId": "qt_l1_balanced",
+            "customerId": "123",
+            "mandateId": "mdt_l1_balanced",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:05:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Lactose-free milk for the hotel",
+              "quantity": {
+                "amount": 1000,
+                "unit": "l"
+              },
+              "deadline": "2026-11-16T06:00:00+02:00",
+              "candidateProductIds": [
+                "460013",
+                "460063",
+                "460056"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_a",
+                "lines": [
+                  {
+                    "productId": "460013",
+                    "quantity": {
+                      "amount": 700,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 70,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1290,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 129,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 90300,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": false
+                  },
+                  {
+                    "productId": "460063",
+                    "quantity": {
+                      "amount": 300,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 30,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 2500,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 250,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 75000,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 165300,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 1000,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "SPLIT_ORDER",
+                    "SUBSTITUTION_ALLOWED"
+                  ]
+                },
+                "summary": "700 l Valio + 300 l Nordlakt, all Monday, €1 653,00",
+                "score": {
+                  "total": 0.734,
+                  "onTime": 1.0,
+                  "price": 0.78,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              },
+              {
+                "planId": "pln_b",
+                "lines": [
+                  {
+                    "productId": "460013",
+                    "quantity": {
+                      "amount": 700,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 70,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1290,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 129,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 90300,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": false
+                  },
+                  {
+                    "productId": "460013",
+                    "quantity": {
+                      "amount": 300,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 30,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1290,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 129,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 38700,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-17",
+                    "isSubstitute": false
+                  }
+                ],
+                "total": {
+                  "cents": 129000,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 700,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "LATE_DELIVERY",
+                    "SPLIT_ORDER"
+                  ]
+                },
+                "summary": "1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00",
+                "score": {
+                  "total": 0.65,
+                  "onTime": 0.7,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "better",
+                "recommended": false
+              },
+              {
+                "planId": "pln_c",
+                "lines": [
+                  {
+                    "productId": "460056",
+                    "quantity": {
+                      "amount": 1000,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 100,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1950,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 195,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 195000,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 195000,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 1000,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "SUBSTITUTION_ALLOWED"
+                  ]
+                },
+                "summary": "1 000 l Pohjola Farm, Monday (delivery reliability 62 %), €1 950,00",
+                "score": {
+                  "total": 0.499,
+                  "onTime": 1.0,
+                  "price": 0.662,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.2
+                },
+                "tier": "good",
+                "recommended": false
+              }
+            ],
+            "excludedProducts": [],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l1_balanced_p",
+                "at": "2026-11-14T10:05:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l1_balanced_a",
+                "at": "2026-11-14T10:05:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 202,
+            "body": {
+              "orderId": "ord_l1_balanced",
+              "status": "PENDING_APPROVAL",
+              "approvalId": "apr_l1_balanced",
+              "reasons": [
+                "OVER_ORDER_LIMIT"
+              ]
+            }
+          },
+          "approval": {
+            "approvalId": "apr_l1_balanced",
+            "orderId": "ord_l1_balanced",
+            "quoteId": "qt_l1_balanced",
+            "status": "OPEN",
+            "reasons": [
+              "OVER_ORDER_LIMIT"
+            ],
+            "reasonText": "Total €1 653,00 is above your €500,00 per-order limit.",
+            "options": [
+              {
+                "planId": "pln_a",
+                "tier": "best",
+                "recommended": true,
+                "summary": "700 l Valio + 300 l Nordlakt, all Monday, €1 653,00"
+              },
+              {
+                "planId": "pln_b",
+                "tier": "better",
+                "recommended": false,
+                "summary": "1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00"
+              },
+              {
+                "planId": "pln_c",
+                "tier": "good",
+                "recommended": false,
+                "summary": "1 000 l Pohjola Farm, Monday (delivery reliability 62 %), €1 950,00"
+              }
+            ],
+            "agentExplanation": "Only 700 l of Valio milk can arrive by Monday. Topping up with 300 l of Nordlakt keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "createdAt": "2026-11-14T10:06:00+02:00"
+          }
+        }
+      ],
+      "result": {
+        "kitchen": 100,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 2,
+        "stars": 3,
+        "incident": null,
+        "receiptText": "Your agent bought 700 l of Valio and 300 l of Nordlakt, all arriving Monday. You approved once because the total €1 653,00 was above your €500 limit.",
+        "logHeadHash": "sha256:921d6959b5c93b6b",
+        "approvalsAsked": 1
+      },
+      "log": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Level 1 loaded (no overlay needed).",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:10f640e1199d1aeb"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Anna Virtanen signed mandate mdt_l1_balanced.",
+          "refs": {
+            "mandateId": "mdt_l1_balanced"
+          },
+          "prevHash": "sha256:10f640e1199d1aeb",
+          "hash": "sha256:d806998aa4e0e898"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:03:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_003",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched “lactose-free milk”: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:d806998aa4e0e898",
+          "hash": "sha256:335cd333965c83c0"
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_004",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SPLIT_ORDER",
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Quote qt_l1_balanced: 3 plans, best €1 653,00.",
+          "refs": {
+            "quoteId": "qt_l1_balanced"
+          },
+          "prevHash": "sha256:335cd333965c83c0",
+          "hash": "sha256:434e1e19df6d9cb6"
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_005",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT"
+          ],
+          "summary": "Order ord_l1_balanced needs approval: total above €500 limit.",
+          "refs": {
+            "quoteId": "qt_l1_balanced",
+            "orderId": "ord_l1_balanced",
+            "approvalId": "apr_l1_balanced"
+          },
+          "prevHash": "sha256:434e1e19df6d9cb6",
+          "hash": "sha256:b41f6b11f8552bdf"
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l1_balanced"
+          },
+          "prevHash": "sha256:b41f6b11f8552bdf",
+          "hash": "sha256:c6072d0826de3d4f"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_a.",
+          "refs": {
+            "approvalId": "apr_l1_balanced"
+          },
+          "prevHash": "sha256:c6072d0826de3d4f",
+          "hash": "sha256:2e17e66e0ef1eac7"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l1_balanced ORDERED → CONFIRMED.",
+          "refs": {
+            "orderId": "ord_l1_balanced"
+          },
+          "prevHash": "sha256:2e17e66e0ef1eac7",
+          "hash": "sha256:802ec1cd4a618ec6"
+        }
+      ]
+    },
+    "loose": {
+      "mandate": {
+        "mandateId": "mdt_l1_loose",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "issuedBy": {
+          "name": "Anna Virtanen",
+          "role": "Kitchen manager"
+        },
+        "limits": {
+          "perOrderEur": 2000,
+          "perWeekEur": 3000
+        },
+        "substitution": "any",
+        "lateDelivery": "one_day",
+        "hardConstraints": {
+          "excludeAllergens": [
+            "peanut"
+          ],
+          "requireLabels": []
+        },
+        "priorities": [
+          "price",
+          "on_time",
+          "sustainability"
+        ],
+        "validUntil": "2026-12-31T23:59:59+02:00",
+        "issuedAt": "2026-11-14T10:01:00+02:00",
+        "status": "ACTIVE",
+        "signature": {
+          "alg": "Ed25519",
+          "keyId": "valio-aimo-2026-11",
+          "value": "bW9jay1zaWduYXR1cmU="
+        },
+        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €2000 per order, with any substitute and deliveries up to one day late, never products containing peanut."
+      },
+      "steps": [
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "460013",
+                "name": "Lactose-free milk drink 1.5% 10 l bag-in-box (mock)",
+                "brand": "Valio",
+                "category": "milk",
+                "salesUnit": "BIB",
+                "packSize": {
+                  "amount": 10,
+                  "unit": "l"
+                },
+                "labels": [
+                  "lactose_free"
+                ],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "milk",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.4
+                  }
+                },
+                "deliveryReliability": 0.97,
+                "excluded": null
+              },
+              {
+                "productId": "460063",
+                "name": "Nordlakt premium lactose-free milk 10 l (mock)",
+                "brand": "Nordlakt",
+                "category": "milk",
+                "salesUnit": "BIB",
+                "packSize": {
+                  "amount": 10,
+                  "unit": "l"
+                },
+                "labels": [
+                  "lactose_free"
+                ],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "milk",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.4
+                  }
+                },
+                "deliveryReliability": 0.91,
+                "excluded": null
+              },
+              {
+                "productId": "460056",
+                "name": "Pohjola Farm lactose-free milk 10 l (mock)",
+                "brand": "Pohjola Farm",
+                "category": "milk",
+                "salesUnit": "BIB",
+                "packSize": {
+                  "amount": 10,
+                  "unit": "l"
+                },
+                "labels": [
+                  "lactose_free"
+                ],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "milk",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.4
+                  }
+                },
+                "deliveryReliability": 0.62,
+                "excluded": null
+              }
+            ],
+            "total": 3
+          },
+          "quote": {
+            "quoteId": "qt_l1_loose",
+            "customerId": "123",
+            "mandateId": "mdt_l1_loose",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:05:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Lactose-free milk for the hotel",
+              "quantity": {
+                "amount": 1000,
+                "unit": "l"
+              },
+              "deadline": "2026-11-16T06:00:00+02:00",
+              "candidateProductIds": [
+                "460013",
+                "460063",
+                "460056"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_b",
+                "lines": [
+                  {
+                    "productId": "460013",
+                    "quantity": {
+                      "amount": 700,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 70,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1290,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 129,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 90300,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": false
+                  },
+                  {
+                    "productId": "460013",
+                    "quantity": {
+                      "amount": 300,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 30,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1290,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 129,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 38700,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-17",
+                    "isSubstitute": false
+                  }
+                ],
+                "total": {
+                  "cents": 129000,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 700,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "BLUE",
+                  "reasons": [
+                    "SPLIT_ORDER"
+                  ]
+                },
+                "summary": "1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00",
+                "score": {
+                  "total": 0.71,
+                  "onTime": 0.7,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              },
+              {
+                "planId": "pln_a",
+                "lines": [
+                  {
+                    "productId": "460013",
+                    "quantity": {
+                      "amount": 700,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 70,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1290,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 129,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 90300,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": false
+                  },
+                  {
+                    "productId": "460063",
+                    "quantity": {
+                      "amount": 300,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 30,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 2500,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 250,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 75000,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 165300,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 1000,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "BLUE",
+                  "reasons": [
+                    "SPLIT_ORDER",
+                    "SUBSTITUTION_ALLOWED"
+                  ]
+                },
+                "summary": "700 l Valio + 300 l Nordlakt, all Monday, €1 653,00",
+                "score": {
+                  "total": 0.69,
+                  "onTime": 1.0,
+                  "price": 0.78,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "better",
+                "recommended": false
+              },
+              {
+                "planId": "pln_c",
+                "lines": [
+                  {
+                    "productId": "460056",
+                    "quantity": {
+                      "amount": 1000,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 100,
+                      "unit": "BIB"
+                    },
+                    "unitPrice": {
+                      "cents": 1950,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 195,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 195000,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 195000,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 1000,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "BLUE",
+                  "reasons": [
+                    "SUBSTITUTION_ALLOWED"
+                  ]
+                },
+                "summary": "1 000 l Pohjola Farm, Monday (delivery reliability 62 %), €1 950,00",
+                "score": {
+                  "total": 0.431,
+                  "onTime": 1.0,
+                  "price": 0.662,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.2
+                },
+                "tier": "good",
+                "recommended": false
+              }
+            ],
+            "excludedProducts": [],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l1_loose_p",
+                "at": "2026-11-14T10:05:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l1_loose_a",
+                "at": "2026-11-14T10:05:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 201,
+            "body": {
+              "orderId": "ord_l1_loose",
+              "quoteId": "qt_l1_loose",
+              "planId": "pln_b",
+              "status": "ORDERED",
+              "lines": [
+                {
+                  "productId": "460013",
+                  "quantity": {
+                    "amount": 700,
+                    "unit": "l"
+                  },
+                  "salesQuantity": {
+                    "amount": 70,
+                    "unit": "BIB"
+                  },
+                  "unitPrice": {
+                    "cents": 1290,
+                    "currency": "EUR"
+                  },
+                  "comparisonPrice": {
+                    "cents": 129,
+                    "currency": "EUR",
+                    "per": "l"
+                  },
+                  "lineTotal": {
+                    "cents": 90300,
+                    "currency": "EUR"
+                  },
+                  "availableDate": "2026-11-16",
+                  "isSubstitute": false
+                },
+                {
+                  "productId": "460013",
+                  "quantity": {
+                    "amount": 300,
+                    "unit": "l"
+                  },
+                  "salesQuantity": {
+                    "amount": 30,
+                    "unit": "BIB"
+                  },
+                  "unitPrice": {
+                    "cents": 1290,
+                    "currency": "EUR"
+                  },
+                  "comparisonPrice": {
+                    "cents": 129,
+                    "currency": "EUR",
+                    "per": "l"
+                  },
+                  "lineTotal": {
+                    "cents": 38700,
+                    "currency": "EUR"
+                  },
+                  "availableDate": "2026-11-17",
+                  "isSubstitute": false
+                }
+              ],
+              "total": {
+                "cents": 129000,
+                "currency": "EUR"
+              },
+              "createdAt": "2026-11-14T10:06:00+02:00"
+            }
+          },
+          "approval": null
+        }
+      ],
+      "result": {
+        "kitchen": 70,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 3,
+        "stars": 1,
+        "incident": null,
+        "receiptText": "Your agent did exactly what your mandate allowed: it picked the cheapest plan, 1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00. One day late was allowed, so it never asked you. Monday breakfast was 300 l short.",
+        "logHeadHash": "sha256:196be6fce08f6201",
+        "approvalsAsked": 0
+      }
+    }
+  },
+  "compare": {
+    "levelId": "level1",
+    "presets": {
+      "strict": {
+        "kitchen": 70,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 0,
+        "stars": 1,
+        "incident": null,
+        "receiptText": "Every plan broke your mandate (over €200, a substitute or a late delivery), so your agent had to ask you 4 times. After 3 hearts the last request expired and 300 l was never ordered.",
+        "logHeadHash": "sha256:fa49dc4829754d99",
+        "approvalsAsked": 4
+      },
+      "balanced": {
+        "kitchen": 100,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 2,
+        "stars": 3,
+        "incident": null,
+        "receiptText": "Your agent bought 700 l of Valio and 300 l of Nordlakt, all arriving Monday. You approved once because the total €1 653,00 was above your €500 limit.",
+        "logHeadHash": "sha256:921d6959b5c93b6b",
+        "approvalsAsked": 1
+      },
+      "loose": {
+        "kitchen": 70,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 3,
+        "stars": 1,
+        "incident": null,
+        "receiptText": "Your agent did exactly what your mandate allowed: it picked the cheapest plan, 1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00. One day late was allowed, so it never asked you. Monday breakfast was 300 l short.",
+        "logHeadHash": "sha256:196be6fce08f6201",
+        "approvalsAsked": 0
+      }
+    }
+  }
+}
