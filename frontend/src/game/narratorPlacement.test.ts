@@ -59,10 +59,10 @@ describe('narrator placement', () => {
   });
 
   it('adds the thing a card explains to its protected rects', () => {
-    document.body.innerHTML = '<section class="pixel-panel"></section><section class="pixel-panel" hidden></section><div class="valio-columns"><section class="valio-section"></section></div><section class="valio-boundary"></section><div class="hearts-meter"></div>';
+    document.body.innerHTML = '<section class="pixel-panel"></section><section class="pixel-panel" hidden></section><header class="valio-header"></header><div class="valio-columns"><section class="valio-section"></section></div><section class="valio-boundary"></section><div class="hearts-meter"></div>';
     expect(narratorBlockers(5)).toHaveLength(2);
     expect(narratorBlockers(12)).toHaveLength(2);
-    expect(narratorBlockers(13).map((node) => node.className)).toEqual(['valio-section', 'valio-boundary', 'hearts-meter']);
+    expect(narratorBlockers(13).map((node) => node.className)).toEqual(['valio-header', 'valio-section', 'valio-boundary', 'hearts-meter']);
     expect(narratorBlockers(2)).toHaveLength(1);
     document.body.innerHTML = '';
   });
@@ -74,5 +74,41 @@ describe('narrator placement', () => {
     panel.getBoundingClientRect = () => rect({ left: 366, top: 130, width: 1190, height: 900 });
     expect(placeNarrator(narrator, 11, [panel], { width: 1920, height: 1080 })).toBe(true);
     expect(intersects(narrator.getBoundingClientRect(), panel.getBoundingClientRect())).toBe(false);
+  });
+
+  const cardOf = () => {
+    const narrator = document.createElement('aside');
+    narrator.getBoundingClientRect = () => {
+      const wide = narrator.classList.contains('is-wide');
+      const width = Number.parseFloat(narrator.style.width) || 540;
+      return rect({ left: Number.parseFloat(narrator.style.left) || 0, top: Number.parseFloat(narrator.style.top) || 0, width, height: wide ? 200 : 400 });
+    };
+    return narrator;
+  };
+  const boardAt = (width: number) => {
+    const k = width / 2576;
+    const box = (left: number, top: number, w: number, h: number) => { const node = document.createElement('div'); const r = rect({ left: left * k, top: top * k, width: w * k, height: h * k }); node.getBoundingClientRect = () => r; return node; };
+    return [box(0, 0, 2576, 95), box(12, 115, 2564, 285), box(12, 410, 983, 195), box(12, 610, 983, 210), box(12, 825, 983, 225), box(1005, 410, 1571, 475)]
+  };
+
+  it.each([{ width: 2576, height: 1252 }, { width: 1920, height: 1080 }, { width: 1280, height: 720 }])('docks step 13 bottom-right in the wide layout clear of every board section at $width×$height', ({ width, height }) => {
+    const narrator = cardOf();
+    const blockers = boardAt(width);
+    expect(placeNarrator(narrator, 13, blockers, { width, height })).toBe(true);
+    const placed = narrator.getBoundingClientRect();
+    expect(narrator).toHaveClass('is-wide');
+    expect(placed.right).toBe(width - 24);
+    expect(placed.bottom).toBe(height - 24);
+    blockers.forEach((node) => expect(intersects(placed, node.getBoundingClientRect())).toBe(false));
+  });
+
+  it('falls back to the least-overlap candidate when nothing is free', () => {
+    const narrator = cardOf();
+    const big = document.createElement('div');
+    big.getBoundingClientRect = () => rect({ left: 0, top: 0, width: 1920, height: 1000 });
+    expect(placeNarrator(narrator, 13, [big], { width: 1920, height: 1080 })).toBe(false);
+    const placed = narrator.getBoundingClientRect();
+    expect(placed.bottom).toBe(1056);
+    expect(placed.top).toBe(856);
   });
 });
