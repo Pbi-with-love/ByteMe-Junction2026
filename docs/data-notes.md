@@ -43,6 +43,12 @@ certification-like values exist under `packagingMarkedLabel`, including
 `EU_ECO_LABEL`, `RAINFOREST_ALLIANCE`, and `UTZ_CERTIFIED`; the gateway must preserve
 the source classification rather than treating every label as a certificate.
 
+Allergen values use source codes and a `unit` such as `CONTAINS`, `MAY_CONTAIN`, or
+`UNDECLARED`. The code `AP` is verified as peanut: product `460428` is named
+“Taffel Pähkinä salted peanuts 300g” and has `AP: CONTAINS`. The policy maps the
+mandate value `peanut` to `AP`; any other unmapped human allergen name is treated as
+unknown and produces `RED` rather than being guessed.
+
 ## Price response
 
 `POST /api/price` returns a customer-scoped object with `customerId`, `currency`,

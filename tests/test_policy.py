@@ -111,6 +111,34 @@ def test_unknown_allergen_data_is_red_when_exclusions_exist() -> None:
     assert result.reasons == ("ALLERGEN_EXCLUDED",)
 
 
+def test_verified_peanut_code_is_red_for_peanut_mandate() -> None:
+    product = {
+        "salesBlock": False,
+        "allergens": ["AP"],
+        "allergenDataVerified": True,
+    }
+
+    result = check_product(
+        product,
+        mandate(hardConstraints={"excludeAllergens": ["peanut"], "requireLabels": []}),
+    )
+
+    assert result.light == "RED"
+    assert result.reasons == ("ALLERGEN_EXCLUDED",)
+
+
+def test_unknown_allergen_name_is_red() -> None:
+    result = check_product(
+        {"allergens": [], "allergenDataVerified": True},
+        mandate(
+            hardConstraints={"excludeAllergens": ["unverified-allergen"], "requireLabels": []}
+        ),
+    )
+
+    assert result.light == "RED"
+    assert result.reasons == ("ALLERGEN_EXCLUDED",)
+
+
 def test_mandate_problems_are_checked_first() -> None:
     result = check_plan(plan(), {"status": "REVOKED"}, now=NOW)
 

@@ -12,6 +12,7 @@ from backend.app.valio_client import ValioClient
 
 
 DOWNLOADS = ("products", "delivery-reliability", "carbon-footprint")
+ALLERGEN_RISK_UNITS = frozenset({"CONTAINS", "MAY_CONTAIN", "UNDECLARED"})
 
 
 def parse_rows(raw: bytes) -> list[dict[str, Any]]:
@@ -37,6 +38,43 @@ def parse_rows(raw: bytes) -> list[dict[str, Any]]:
     if not isinstance(value, list) or not all(isinstance(row, dict) for row in value):
         raise ValueError("JSON download does not contain object rows.")
     return value
+
+
+def extract_allergen_data(product: dict[str, Any]) -> dict[str, Any]:
+    """Normalize verified allergen classifications from a catalog product."""
+    classifications = product.get("synkkaData", {}).get("classifications", [])
+    allergen = next(
+        (item for item in classifications if item.get("name") == "allergen"),
+        None,
+    )
+    non_allergen = next(
+        (item for item in classifications if item.get("name") == "nonAllergen"),
+        None,
+    )
+    allergen_values = allergen.get("values") if isinstance(allergen, dict) else None
+    non_allergen_values = (
+        non_allergen.get("values") if isinstance(non_allergen, dict) else None
+    )
+    verified = (
+        isinstance(allergen_values, list)
+        and isinstance(non_allergen_values, list)
+        and bool(allergen_values or non_allergen_values)
+    )
+    risk_codes = [
+        value.get("id")
+        for value in allergen_values or []
+        if value.get("unit") in ALLERGEN_RISK_UNITS and isinstance(value.get("id"), str)
+    ]
+    free_codes = [
+        value.get("id")
+        for value in non_allergen_values or []
+        if value.get("unit") == "FREE_FROM" and isinstance(value.get("id"), str)
+    ]
+    return {
+        "allergens": risk_codes,
+        "nonAllergens": free_codes,
+        "allergenDataVerified": verified,
+    }
 
 
 class ValioDataCache:
