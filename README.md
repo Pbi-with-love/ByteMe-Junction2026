@@ -88,7 +88,8 @@ The agent runner is deliberately a **separate caller** of the gateway, so we can
 "swap our agent for any hotel's own agent; the gateway stays the same."
 
 ### Stack (keep it light)
-- Frontend: React + TypeScript + Vite + Tailwind + Framer Motion. **No Phaser, no 3D.**
+- Frontend: React + TypeScript + Vite + Tailwind + Motion + PixiJS v8 (top-down pixel-art game
+  world, see §10.6). **No Phaser, no 3D.**
 - Backend: FastAPI (Python) by default. Express is acceptable if the team prefers Node;
   decide once, do not mix.
 - Storage: SQLite (or JSON files for the very first prototype).
@@ -266,13 +267,15 @@ The whole game is one tension: tight mandate → many approvals → out of heart
 orders. Loose mandate → no approvals → costly or unsafe choices. Find the balance.
 
 ### 7.2 Level loop (60-120 seconds)
-1. **Brief**: mission card (customer, need, deadline, cut-off).
-2. **Mandate**: player sets 4 controls (per-order limit 200/500/2000 €, substitution,
-   late delivery, allergen rule) and presses **Sign**. Stamp animation.
-3. **Run**: game clock runs from 10:00 to `closingTime` (default 1 real second = 4 game
-   minutes). Agent acts; timeline shows each step with its light. YELLOW → phone vibrates,
-   approval card with **20 s real-time countdown**, options best/better/good,
-   actions Approve / Choose other / Reject.
+1. **Brief**: mission card (customer, need, deadline, cut-off), shown in the kitchen.
+2. **Mandate**: player clicks the **Manager Desk**, sets 4 controls (per-order limit
+   200/500/2000 €, substitution, late delivery, allergen rule) and presses **Sign**.
+   Stamp animation.
+3. **Run**: player clicks the **Order Terminal**. Game clock runs from 10:00 to
+   `closingTime` (default 1 real second = 4 game minutes). The robot walks between
+   stations; the activity log shows each step with its light. YELLOW → robot stops, the
+   Phone Station rings, approval card overlay with **20 s real-time countdown**, options
+   best/better/good, actions Approve / Choose other / Reject. The kitchen stays visible.
 4. **Result**: scores, stars, receipt that explains itself, button **"See it from Valio
    Aimo's side"**.
 
@@ -360,31 +363,99 @@ whenever gateway logic changes.
 
 ---
 
-## 10. UI
+## 10. UI & GAME WORLD
 
-### Visual level
-- **Level A (must have)**: card-based UI: mandate document, agent timeline, phone approval
-  card, result board, receipt, Valio view.
-- **Level B (nice to have)**: static 2D kitchen illustration with a small robot agent that
-  moves between fixed points (storage, terminal, delivery door) with speech bubbles.
-- No free movement, no tile maps, no physics.
+### 10.1 Game direction
 
-### Screens
-1. **Mandate (Valtakirja)**: looks like a real signed document; editable bold values;
-   "Sign" stamps it.
-2. **Agent timeline**: chat input left, step timeline right, each step clickable for raw data
-   and the rule applied.
-3. **Phone**: CSS phone frame, vibrate animation, approval card with countdown.
-4. **Result + receipt**: score bars, stars, narrative receipt, log hash badge.
-5. **Valio view**: active agents, mandates, blocked attempts, "returned vs withheld" table.
-6. **Replay comparison**: three columns Strict / Balanced / Loose.
+Agent Kitchen is a **2D top-down kitchen simulation game**, not a dashboard with decorative animations.
 
-### Style
-- Valio-like blue/white base, flat illustrations, no copyrighted characters or logos we
-  do not own.
-- The four light colours are used identically everywhere.
-- Robot emotes: calm (green), info (blue), scratching head (yellow), raised palm (red).
-- Must work on a projector: large type, high contrast.
+The kitchen is the primary game environment. The player is the kitchen manager, while a small autonomous robot represents the external AI purchasing agent.
+
+The robot moves around the kitchen, interacts with stations, executes purchasing tasks, encounters policy decisions, and completes deliveries.
+
+The game world visualises what happens inside the Trust Gateway. All meaningful actions must still call the real gateway.
+
+### 10.2 Visual world
+
+A single 2D kitchen environment contains interactive stations:
+
+- Manager Desk: configure and sign the mandate.
+- Order Terminal: receive purchasing requests.
+- Storage / Refrigerator: represent product inventory and availability.
+- Phone Station: display human approval requests.
+- Delivery Entrance: represent completed or failed deliveries.
+
+Use a top-down or slightly angled 2D perspective.
+
+### 10.3 Robot agent
+
+The robot is the visual representation of the autonomous buyer agent.
+
+It must support:
+
+- Walking between kitchen stations.
+- Idle, walking, working and waiting animations.
+- Picking up or carrying ingredient boxes as visual feedback.
+- Stopping when human approval is required.
+- Displaying different emotional states based on gateway decisions.
+
+Robot states:
+
+- GREEN: calm, continues autonomously.
+- BLUE: informative, continues with a notification.
+- YELLOW: uncertain, stops and requests human approval.
+- RED: blocked by the gateway, cannot proceed.
+
+Robot movement and animations are presentation only. The gateway remains the source of truth for every decision.
+
+### 10.4 Gameplay interaction
+
+The player interacts with the kitchen through contextual UI:
+
+- Click the manager desk to configure the mandate.
+- Click the order terminal to submit a purchasing request.
+- Observe the robot autonomously executing the task.
+- Receive approval notifications when the gateway returns YELLOW.
+- Inspect blocked actions when the gateway returns RED.
+- Observe the robot completing delivery when an order is confirmed.
+
+Approval cards and notifications should appear as in-game overlays rather than replacing the entire game environment.
+
+### 10.5 Supporting interfaces
+
+The following interfaces complement the game world:
+
+1. Mandate document: signed authority and policy configuration.
+2. Agent activity log: chronological gateway events.
+3. Approval notification: human-in-the-loop decisions.
+4. Result and receipt: scores, order details and hash verification.
+5. Valio view: gateway activity, blocked attempts and data boundaries.
+6. Replay comparison: Strict / Balanced / Loose mandate outcomes.
+
+### 10.6 Technical constraints
+
+- React + TypeScript + Vite.
+- Use **PixiJS (v8)** for the 2D game world (user decision: PixiJS instead of Phaser).
+- Use React for menus, mandate configuration, notifications and supporting interfaces
+  (HTML overlays on top of the canvas, styled as in-game objects).
+- PixiJS handles rendering, sprites, animation and movement; simple grid-based walkability
+  (blocked tiles) stands in for collision.
+- The game world communicates with the backend through the API client (`GatewayClient`).
+- No business rules, policy limits or secrets inside PixiJS or React.
+- No Phaser, no 3D.
+
+A lightweight grid-based movement system is sufficient. Avoid unnecessary physics or complex simulation systems.
+
+### 10.7 Visual direction
+
+- 2D pixel art or polished cartoon-style illustrations (decided: pixel art).
+- Top-down kitchen environment.
+- Valio-inspired blue and white palette without using unauthorised logos.
+- Clear and readable sprites suitable for projector demonstrations.
+- Smooth robot movement and expressive animations.
+- The game world should remain visible during approvals and notifications.
+- Assets: our own pixel art or CC0/OFL-licensed packs only; record source and licence of every asset.
+- The four light colours are used identically everywhere. Must work on a projector: large type, high contrast.
 
 ---
 
@@ -393,11 +464,11 @@ whenever gateway logic changes.
 1. Inspect data → `docs/data-notes.md`.
 2. Gateway: valio client, search, quote, policy engine with tests, orders, log.
 3. Agent runner calling the gateway for Level 1.
-4. Frontend Level A screens wired to Level 1.
+4. Frontend game world (§10) + overlays wired to Level 1.
 5. Replay mode + recording for Level 1.
 6. Levels 2 and 3.
 7. Replay comparison screen, Valio view.
-8. Level B visuals, discovery file polish.
+8. Game polish (animations, particles, sound), discovery file polish.
 9. Stretch levels.
 
 At any point the newest stable build must be demoable.
