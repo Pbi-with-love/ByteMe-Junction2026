@@ -3,14 +3,47 @@ import discovery from '../../mocks/discovery.json';
 import level1 from '../../mocks/level1.json';
 import level2 from '../../mocks/level2.json';
 import level3 from '../../mocks/level3.json';
-import { GatewayError } from './gateway';
-import type { Mandate } from './schemas';
+import { createGatewayClient, GatewayError } from './gateway';
+import type { LevelMock, Mandate } from './schemas';
 import { controlsOf, toDraft } from './mandate';
 import { ReplayGatewayClient } from './replay';
 
-const mocks = [level1, level2, level3];
+const mocks = [level1, level2, level3] as unknown as LevelMock[];
 
 describe('ReplayGatewayClient', () => {
+  it('returns each recording’s log and verification with exclusive since and limit', async () => {
+    const client = new ReplayGatewayClient();
+    for (const mock of mocks) for (const [preset, recording] of Object.entries(mock.presets)) {
+      const start = await client.startLevel(mock.start.level.levelId, preset);
+      expect(await client.getLog('buyer')).toEqual({ events: recording.log });
+      expect(await client.verifyLog()).toEqual(recording.verify);
+      expect(await client.getLog('buyer', { since: recording.log![0]!.seq, limit: 1 })).toEqual({ events: recording.log!.slice(1, 2) });
+    }
+  });
+
+  it('checks every mock preset log integrity and serves the configured tamper demonstration', async () => {
+    for (const mock of mocks) for (const [preset, recording] of Object.entries(mock.presets)) {
+      if (!recording.log || !recording.verify) continue;
+      expect(recording.verify).toMatchObject({ valid: true, events: recording.log.length, headHash: recording.log.at(-1)?.hash });
+      if (recording.verify.valid) expect(recording.verify.headHash).toBe(recording.result.logHeadHash);
+    }
+    const client = createGatewayClient({ VITE_GATEWAY_MODE: 'replay', VITE_REPLAY_TAMPER: '1' }) as ReplayGatewayClient;
+    const mock = mocks.find((item) => item.tamperedDemo)!;
+    const start = await client.startLevel(mock.start.level.levelId, mock.tamperedDemo!.preset);
+    expect(await client.getLog('buyer')).toEqual({ events: mock.tamperedDemo!.log });
+    expect(await client.verifyLog()).toEqual(mock.tamperedDemo!.verify);
+    expect(await client.getLog('buyer', { since: 1, limit: 1 })).toEqual({ events: mock.tamperedDemo!.log.filter((event) => event.seq > 1).slice(0, 1) });
+  });
+
+  it('returns NOT_FOUND before a session, for absent log data, and for Valio view', async () => {
+    const client = new ReplayGatewayClient();
+    await expect(client.getLog('buyer')).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
+    await expect(client.verifyLog()).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
+    await expect(client.getLog('valio')).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
+    const start = await client.startLevel('level1', 'balanced');
+    await expect(client.getLog('valio')).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
+    expect(start.sessionId).toBeTruthy();
+  });
   it('looks up starts, steps, results, comparisons, and discovery directly from mocks', async () => {
     const client = new ReplayGatewayClient();
     expect(await client.discovery()).toEqual(discovery.response);

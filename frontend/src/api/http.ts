@@ -1,4 +1,4 @@
-import { CompareSchema, DiscoverySchema, ErrorEnvelopeSchema, GameResultSchema, GameStartSchema, MandateSchema } from './schemas';
+import { CompareSchema, DiscoverySchema, ErrorEnvelopeSchema, GameResultSchema, GameStartSchema, LogResponseSchema, LogVerifySchema, MandateSchema } from './schemas';
 import { GatewayError, type GatewayClient } from './gateway';
 import type { AgentStep, Compare, Discovery, GameResult, GameStart, Mandate } from './schemas';
 import type { MandateDraft } from './gateway';
@@ -68,6 +68,17 @@ export class HttpGatewayClient implements GatewayClient {
 
   getResult(sessionId: string): Promise<GameResult> {
     return this.request(`/v1/game/sessions/${encodeURIComponent(sessionId)}/result`, GameResultSchema);
+  }
+
+  getLog(view: 'buyer' | 'valio', opts: { since?: number; limit?: number } = {}) {
+    const query = new URLSearchParams({ view });
+    if (opts.since !== undefined) query.set('since', String(opts.since));
+    if (opts.limit !== undefined) query.set('limit', String(opts.limit));
+    return this.request(`/v1/log?${query.toString()}`, LogResponseSchema);
+  }
+
+  verifyLog() {
+    return this.request('/v1/log/verify', LogVerifySchema);
   }
 
   compare(levelId: string): Promise<Compare> {

@@ -15,6 +15,19 @@ function response(body: unknown, status = 200): Response {
 }
 
 describe('HttpGatewayClient', () => {
+  it('gets buyer logs and verifies the current human session', async () => {
+    const log = { events: level1.presets.balanced.log };
+    const verify = level1.presets.balanced.verify;
+    const fetchMock = vi.fn().mockResolvedValueOnce(response(level1.start)).mockResolvedValueOnce(response(log)).mockResolvedValueOnce(response(verify));
+    vi.stubGlobal('fetch', fetchMock);
+    const client = new HttpGatewayClient('http://gw.test');
+    await client.startLevel(level1.start.level.levelId, 'balanced');
+    expect(await client.getLog('buyer', { since: 3, limit: 10 })).toEqual(log);
+    expect(fetchMock.mock.calls[1]![0]).toBe('http://gw.test/v1/log?view=buyer&since=3&limit=10');
+    expect(fetchMock.mock.calls[1]![1]?.headers).toMatchObject({ Authorization: `Bearer ${level1.start.tokens.human}` });
+    expect(await client.verifyLog()).toEqual(verify);
+    expect(fetchMock.mock.calls[2]![0]).toBe('http://gw.test/v1/log/verify');
+  });
   afterEach(() => vi.unstubAllGlobals());
 
   it('uses discovery and start URLs, request method, body, and token behavior', async () => {

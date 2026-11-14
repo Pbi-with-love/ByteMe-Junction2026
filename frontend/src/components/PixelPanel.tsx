@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
-type Props={variant:'clipboard'|'terminal'|'notice'|'alert';title:string;onClose?:()=>void;hidden?:boolean;children?:ReactNode};
+type Props={variant:'clipboard'|'terminal'|'notice'|'alert'|'incident';title:string;onClose?:()=>void;hidden?:boolean;children?:ReactNode};
 export default function PixelPanel({variant,title,onClose,hidden=false,children}:Props){
  const heading=useRef<HTMLHeadingElement>(null);
  const titleId=useId();
