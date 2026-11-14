@@ -2,8 +2,16 @@ import { DEMO_APPROVAL_MARGIN_MS, DEMO_APPROVAL_PAUSE_THRESHOLD_MS, DEMO_AGENT_L
 import type { DemoCard } from './demoScript';
 
 type Options = { root: ParentNode; script: DemoScript; signal: AbortSignal; levelTitle: string; presetLabel(key: string): string; speedFactor?: () => number; beatMs?: number; resultHoldMs?: number; waitMs?: number; sleep?: (ms: number) => Promise<void>; present?: (card: DemoCard, step: number, holdMs: number, waitUntil?: Promise<void>) => Promise<void>; spotlight?: (element: HTMLElement) => void; values?: () => Record<string, string | undefined>; isTrusted?: (event: Event) => boolean };
-export function computeApprovalHoldMs(deadlineMs: number, wantedReadingMs: number, nowMs = Date.now()): number {
-  return Math.max(0, Math.min(wantedReadingMs, deadlineMs - nowMs - DEMO_APPROVAL_MARGIN_MS));
+// remainingMs is measured in the gateway's own time base; gateway timestamps are never compared with Date.now().
+export function computeApprovalHoldMs(remainingMs: number, wantedReadingMs: number): number {
+  return Math.max(0, Math.min(wantedReadingMs, remainingMs - DEMO_APPROVAL_MARGIN_MS));
+}
+const DEFAULT_APPROVAL_WINDOW_MS = 20_000;
+function approvalRemainingMs(v: Record<string, string | undefined>): number {
+  const deadline = Date.parse(v.approvalDeadline ?? ''), created = Date.parse(v.approvalCreatedAt ?? ''), shown = Number(v.approvalShownAt);
+  if (!Number.isFinite(deadline)) return Number.NaN;
+  const window = Number.isFinite(created) ? deadline - created : DEFAULT_APPROVAL_WINDOW_MS;
+  return window - (Number.isFinite(shown) ? Date.now() - shown : 0);
 }
 const defaultSleep = (ms: number, signal: AbortSignal) => new Promise<void>((resolve, reject) => {
   if (signal.aborted) { reject(new DOMException('Aborted', 'AbortError')); return; }
@@ -63,9 +71,9 @@ export async function runDemo(opts: Options): Promise<'done' | 'aborted' | 'stuc
       const words = text.split(/\s+/).filter(Boolean).length;
       const slowReadingTime = Math.max(DEMO_MIN_READ_MS, words * DEMO_WORD_MS);
       const wanted = slowReadingTime * factor();
-      const deadline = Date.parse(opts.values?.().approvalDeadline ?? '');
-      const hold = card.pauseDisabled ? (Number.isFinite(deadline) ? computeApprovalHoldMs(deadline, slowReadingTime) : 0) : (holdOverride ?? wanted);
-      const pauseDisabled = card.pauseDisabled && Number.isFinite(deadline) && deadline - Date.now() < DEMO_APPROVAL_PAUSE_THRESHOLD_MS;
+      const remaining = approvalRemainingMs(opts.values?.() ?? {});
+      const hold = card.pauseDisabled ? (Number.isFinite(remaining) ? computeApprovalHoldMs(remaining, slowReadingTime) : 0) : (holdOverride ?? wanted);
+      const pauseDisabled = card.pauseDisabled && Number.isFinite(remaining) && remaining < DEMO_APPROVAL_PAUSE_THRESHOLD_MS;
       await opts.present!({ ...card, text, ...(card.pauseDisabled ? { pauseDisabled } : {}) }, index + 1, hold, waitUntil);
     };
     async function narratedClick(index: number, get: () => HTMLElement | null, approval = false) {
