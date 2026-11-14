@@ -9,8 +9,8 @@ export function narratorBlockers(step: number, root: ParentNode = document): Ele
   return [...root.querySelectorAll(subject ? `${ALWAYS}, ${subject}` : ALWAYS)];
 }
 
-const WIDTHS = [540, 420, 360, 320];
-const WIDE_WIDTHS = [1000, 800, 700, 600];
+const WIDTHS = [390, 310, 270, 250];
+const WIDE_WIDTHS = [760, 600, 520, 450];
 
 type Layout = { wide: boolean; width: number };
 type Where = 'bottom-right' | 'bottom-left' | 'right' | 'left' | 'below' | 'top-right' | 'top-left';
