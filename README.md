@@ -457,6 +457,23 @@ A lightweight grid-based movement system is sufficient. Avoid unnecessary physic
 - Assets: our own pixel art or CC0/OFL-licensed packs only; record source and licence of every asset.
 - The four light colours are used identically everywhere. Must work on a projector: large type, high contrast.
 
+### 10.8 Art and scope guardrails
+- Art kit first: a dedicated spec defines tile size (16×16, scaled with nearest-neighbour),
+  palette (hex), kitchen grid with the 5 station positions, robot frames, and how the four
+  lights are shown. Sprites are drawn with Pixi Graphics or come from a CC0 pack (record
+  source + licence). Argon's handoff for any world spec must contain these numbers.
+- Vertical slice first: robot tweens between fixed station points; state shown as an
+  emote above the head plus a bob. Grid pathfinding and frame animations are polish.
+- The frontend mock gateway only replays JSON produced by frontend/mocks/generate.py.
+  It never computes policy, ranking or scores.
+- Manager Desk has 5 controls: per-order limit, substitution, late delivery,
+  priority (on time / lowest price), allergen rule.
+- Order Terminal sends the level's predefined request; it may be shown as natural text.
+- Approval cards may contain a trap option (late or allergen visible on the card);
+  approving a trap the card disclosed costs Safety or Kitchen points.
+- Demo mode: one button runs Level 1 Balanced end to end, then opens the compare screen.
+- API paths: API_CONTRACT.md (v1.1) is authoritative; §6.1 is a summary.
+
 ---
 
 ## 11. Build priorities (in order)
