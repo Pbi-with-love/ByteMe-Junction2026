@@ -111,7 +111,8 @@ export type GameStart = z.infer<typeof GameStartSchema>;
 export const GameResultSchema = z.object({
   kitchen: z.number(), wallet: z.number(), safety: z.number(), heartsLeft: z.number(), stars: z.number(),
   incident: z.object({ type: text, productId: text.optional(), reason: text }).nullable(), receiptText: text,
-  logHeadHash: text, approvalsAsked: z.number().optional(),
+  logHeadHash: text, approvalsAsked: z.number().optional(), totalCost: MoneySchema.nullable().optional(),
+  heartsUsed: z.number().int().nonnegative().optional(),
 });
 export type GameResult = z.infer<typeof GameResultSchema>;
 export const CompareSchema = z.object({
@@ -125,6 +126,7 @@ export const ErrorEnvelopeSchema = z.object({
 export type ErrorEnvelope = z.infer<typeof ErrorEnvelopeSchema>;
 export const AgentStepSchema = z.object({
   search: SearchResponseSchema, quote: QuoteSchema, order: RecordedOrderSchema, approval: ApprovalSchema.nullable(),
+  approvalEvent: z.object({ approvalId: text, deadline: dateTime, heartsLeft: z.number().int() }).optional(),
 });
 export type AgentStep = z.infer<typeof AgentStepSchema>;
 export const LevelMockSchema = z.object({

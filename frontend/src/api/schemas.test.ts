@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   DiscoverySchema,
+  AgentStepSchema,
+  GameResultSchema,
   LevelMockSchema,
   LightSchema,
   MoneySchema,
@@ -30,6 +32,33 @@ describe('gateway schemas', () => {
     expect(MoneySchema.safeParse({ cents: 12.5, currency: 'EUR' }).success).toBe(false);
     expect(MoneySchema.safeParse({ cents: 12, currency: 'USD' }).success).toBe(false);
     expect(ReasonCodeSchema.safeParse('UNKNOWN_REASON').success).toBe(false);
+  });
+
+  it('parses an optional approval event on an agent step', () => {
+    const level1 = mocks['../../mocks/level1.json'] as { presets: Record<string, { steps: unknown[] }> };
+    const step = level1.presets.strict.steps[0] as Record<string, unknown>;
+    expect(AgentStepSchema.parse(step)).toHaveProperty('approvalEvent', {
+      approvalId: 'apr_l1_strict_1', deadline: '2026-11-14T10:06:20+02:00', heartsLeft: 2,
+    });
+    const { approvalEvent: _approvalEvent, ...withoutEvent } = step;
+    expect(AgentStepSchema.parse(withoutEvent)).not.toHaveProperty('approvalEvent');
+    expect(AgentStepSchema.safeParse({ ...step, approvalEvent: { approvalId: 3, deadline: 'soon', heartsLeft: '2' } }).success)
+      .toBe(false);
+  });
+
+  it('parses optional result cost and non-negative hearts used', () => {
+    const level1 = mocks['../../mocks/level1.json'] as { presets: Record<string, { result: Record<string, unknown> }> };
+    const result = level1.presets.strict.result;
+    expect(GameResultSchema.parse(result)).toMatchObject({
+      totalCost: { cents: 90300, currency: 'EUR' }, heartsUsed: 3,
+    });
+    expect(GameResultSchema.parse({ ...result, totalCost: null, heartsUsed: 0 })).toMatchObject({
+      totalCost: null, heartsUsed: 0,
+    });
+    expect(GameResultSchema.safeParse({ ...result, heartsUsed: -1 }).success).toBe(false);
+    const { totalCost: _totalCost, heartsUsed: _heartsUsed, ...legacyResult } = result;
+    expect(GameResultSchema.parse(legacyResult)).not.toHaveProperty('totalCost');
+    expect(GameResultSchema.parse(legacyResult)).not.toHaveProperty('heartsUsed');
   });
 
   it('rejects invalid plan lights and quotes without quoteId', () => {
