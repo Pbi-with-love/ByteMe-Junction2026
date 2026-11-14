@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import re
 import copy
 from typing import Any, Awaitable, Callable
 from uuid import uuid4
@@ -105,12 +106,12 @@ async def _place(request: Any, search: dict[str, Any], need: dict[str, Any], quo
         if on_activity:
             result = on_activity("explaining")
             if hasattr(result, "__await__"): await result
-        explanation = explain(need=need, plans=quote.get("plans", []), recommended_plan_id=plan_id, approval_reasons=order.get("reasons", []), per_order_limit=None, non_valio_brands=[])
+        explanation = explain(need=need, plans=quote.get("plans", []), recommended_plan_id=plan_id, approval_reasons=order.get("reasons", []), per_order_limit=None, non_valio_brands=_non_valio_brands(_recommended(quote), need))
         if hasattr(explanation, "__await__"): explanation = await explanation
         if on_activity:
             result = on_activity("idle")
             if hasattr(result, "__await__"): await result
-        await request("POST", f"/v1/approvals/{order['approvalId']}/explanation", json={"explanation": explanation})
+        await request("POST", f"/v1/approvals/{order['approvalId']}/explanation", json={"text": explanation})
     reported = on_step({"search": search, "quote": quote, "order": {"httpStatus": response.status_code, "body": order}})
     if hasattr(reported, "__await__"): await reported
     final_status = order.get("status")
@@ -122,6 +123,22 @@ async def _place(request: Any, search: dict[str, Any], need: dict[str, Any], quo
             final_status = status.json().get("status")
             if final_status != "PENDING_APPROVAL": break
     return final_status
+
+
+def _non_valio_brands(plan: dict[str, Any], need: dict[str, Any]) -> list[str]:
+    summary = str(plan.get("summary") or plan.get("summaryText") or "")
+    if "valio" in summary.casefold():
+        return []
+    brand = plan.get("brand") or plan.get("brandName")
+    if not brand and summary:
+        unit = str(need.get("quantity", {}).get("unit") or "")
+        quantity_and_unit = re.match(rf"^\s*[\d,. ]+\s+{re.escape(unit)}\s+(.+)$", summary, re.IGNORECASE) if unit else None
+        product_name = quantity_and_unit.group(1) if quantity_and_unit else summary
+        brand = product_name.split(maxsplit=1)[0].rstrip(",")
+    if not brand:
+        return ["non-Valio brand"] if summary else []
+    brand = str(brand).strip()
+    return [] if not brand or "valio" in brand.casefold() else [brand]
 
 
 async def _top_up(request: Any, search: dict[str, Any], mandate_id: str, need: dict[str, Any],

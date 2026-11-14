@@ -47,6 +47,7 @@ export type Need = z.infer<typeof NeedSchema>;
 export const PlanLineSchema = z.object({
   productId: text, quantity: QuantitySchema, salesQuantity: QuantitySchema.optional(), unitPrice: MoneySchema,
   comparisonPrice: ComparisonPriceSchema.optional(), lineTotal: MoneySchema, availableDate: date, isSubstitute: z.boolean(),
+  allergens: z.array(text).optional(), mayContain: z.array(text).optional(),
 });
 export type PlanLine = z.infer<typeof PlanLineSchema>;
 const ScoreSchema = z.object({ total: z.number(), onTime: z.number(), price: z.number(), sustainability: z.number(), reliabilityPenalty: z.number() });

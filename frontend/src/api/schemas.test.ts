@@ -9,6 +9,7 @@ import {
   LightSchema,
   MoneySchema,
   PlanSchema,
+  PlanLineSchema,
   QuoteSchema,
   ReasonCodeSchema,
   LogResponseSchema,
@@ -21,6 +22,16 @@ const mocks = import.meta.glob('../../mocks/*.json', {
 }) as Record<string, unknown>;
 
 describe('gateway schemas', () => {
+  it('preserves allergen disclosures carried on game quote lines', () => {
+    const line = PlanLineSchema.parse({
+      productId: '462635', quantity: { amount: 1, unit: 'l' },
+      unitPrice: { cents: 100, currency: 'EUR' }, lineTotal: { cents: 100, currency: 'EUR' },
+      availableDate: '2026-11-19', isSubstitute: true, allergens: ['AE'], mayContain: ['AE'],
+    });
+    expect(line.allergens).toEqual(['AE']);
+    expect(line.mayContain).toEqual(['AE']);
+  });
+
   it('validates gateway approval states and decision response fields',()=>{
     const raw=(mocks['../../mocks/level1.json'] as {presets:Record<string,{decisions:Record<string,{approved:{body:unknown}}>} >}).presets.balanced.decisions.apr_l1_balanced.approved.body;
     expect(ApprovalDecisionSchema.parse(raw)).toHaveProperty('orderStatus','CONFIRMED');

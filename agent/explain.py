@@ -8,7 +8,7 @@ import os
 import re
 from typing import Any
 
-_SYSTEM = "Use only facts and numbers from the supplied decision record. If the recommended plan uses a non-Valio brand, say so plainly. Write 2-3 short sentences."
+_SYSTEM = "Use only facts and numbers from the supplied decision record. If nonValioBrands is non-empty, explicitly say the recommended plan uses a non-Valio brand and name the brand. Write 2-3 short sentences."
 
 
 def llm_settings() -> dict[str, str | None]:
@@ -37,7 +37,11 @@ async def explain_order(*, need: dict[str, Any], plans: list[dict[str, Any]], re
     settings = llm_settings()
     api_key = settings["api_key"] if api_key is None else api_key
     model = model or str(settings["model"])
-    fallback = template_explanation(need=need, plans=plans, recommended_plan_id=recommended_plan_id, approval_reasons=approval_reasons)
+    non_valio_brands = non_valio_brands or []
+    fallback = _ensure_non_valio_disclosure(
+        template_explanation(need=need, plans=plans, recommended_plan_id=recommended_plan_id, approval_reasons=approval_reasons),
+        non_valio_brands,
+    )
     if not api_key:
         return fallback
     record = decision_record(need=need, plans=plans, recommended_plan_id=recommended_plan_id, approval_reasons=approval_reasons, per_order_limit=per_order_limit, non_valio_brands=non_valio_brands or [])
@@ -51,9 +55,17 @@ async def explain_order(*, need: dict[str, Any], plans: list[dict[str, Any]], re
         allowed_numbers = set(_numbers(json.dumps(record, ensure_ascii=False) + " " + fallback))
         if not text or any(number not in allowed_numbers for number in _numbers(text)):
             return fallback
-        return text
+        return _ensure_non_valio_disclosure(text, non_valio_brands)
     except Exception:
         return fallback
+
+
+def _ensure_non_valio_disclosure(text: str, brands: list[str]) -> str:
+    missing = [brand for brand in brands if brand.casefold() not in text.casefold()]
+    if not brands or ("non-valio" in text.casefold() and not missing):
+        return text
+    names = ", ".join(brands)
+    return f"{text.rstrip()} The recommended plan uses non-Valio brand {names}."
 
 
 def _get(value: Any, key: str, default: Any = None) -> Any:

@@ -44,6 +44,7 @@ def test_compare_ignores_live_explanation_delay(tmp_path, monkeypatch):
 
 
 def test_level1_balanced_asgi_run_finishes_with_verified_log(tmp_path, monkeypatch):
+    monkeypatch.delenv('ANTHROPIC_API_KEY', raising=False)
     monkeypatch.setenv('VALIO_MODE', 'replay')
     app = create_app(tmp_path / 'integration.sqlite3')
     with TestClient(app) as client:
@@ -74,4 +75,64 @@ def test_level1_balanced_asgi_run_finishes_with_verified_log(tmp_path, monkeypat
         assert verified['valid'] is True
         assert verified['headHash'] == result['logHeadHash']
         event_types = {event['type'] for event in app.state.event_log.list()}
-        assert event_types <= {'MANDATE_SIGNED', 'SEARCH', 'QUOTE_CREATED', 'ORDER_PENDING_APPROVAL', 'ORDER_CREATED', 'APPROVAL_SHOWN', 'APPROVAL_DECIDED', 'SCENARIO_OVERLAY'}
+        assert event_types <= {'MANDATE_SIGNED', 'SEARCH', 'QUOTE_CREATED', 'ORDER_PENDING_APPROVAL', 'ORDER_CREATED', 'APPROVAL_SHOWN', 'APPROVAL_DECIDED', 'SCENARIO_OVERLAY', 'AGENT_NOTE'}
+
+
+def test_level3_approval_step_carries_allergen_disclosure_even_when_search_is_empty(tmp_path, monkeypatch):
+    monkeypatch.delenv('ANTHROPIC_API_KEY', raising=False)
+    monkeypatch.setenv('VALIO_MODE', 'replay')
+    app = create_app(tmp_path / 'level3-disclosure.sqlite3')
+    with TestClient(app) as client:
+        presets = client.get('/v1/game/levels/level3/presets').json()
+        start = client.post('/v1/game/levels/level3/start', json={'preset': 'allergen_off', 'mode': 'replay'}).json()
+        human = {'Authorization': f"Bearer {start['tokens']['human']}"}
+        mandate = {k: v for k, v in presets['allergen_off'].items() if k in {'agentId', 'issuedBy', 'limits', 'substitution', 'lateDelivery', 'hardConstraints', 'priorities', 'validUntil'}}
+        assert client.post('/v1/mandates', headers=human, json=mandate).status_code == 201
+        assert client.post(f"/v1/game/sessions/{start['sessionId']}/run").status_code == 202
+        deadline = time.monotonic() + 10
+        handled = set()
+        while time.monotonic() < deadline:
+            session = client.get(f"/v1/game/sessions/{start['sessionId']}").json()
+            for step in session['steps']:
+                approval = step.get('approval')
+                if approval and approval['status'] == 'OPEN' and approval['approvalId'] not in handled:
+                    handled.add(approval['approvalId'])
+                    client.post(f"/v1/approvals/{approval['approvalId']}", headers=human, json={'decision': 'approved'})
+            if session['status'] in {'FINISHED', 'FAILED'}:
+                break
+            time.sleep(.01)
+        egg_lines = [line for step in session['steps'] for plan in step.get('quote', {}).get('plans', []) for line in plan.get('lines', []) if line.get('productId') == '462635']
+        assert egg_lines and any('AE' in line.get('allergens', []) for line in egg_lines)
+
+
+def test_live_game_session_uses_llm_explainer_while_headless_compare_stays_template(tmp_path, monkeypatch):
+    import backend.app.main as game_main
+    monkeypatch.delenv('ANTHROPIC_API_KEY', raising=False)
+    monkeypatch.setenv('VALIO_MODE', 'replay')
+    calls = []
+    async def live_explainer(**kwargs):
+        calls.append(kwargs)
+        return 'Live explainer test sentence.'
+    monkeypatch.setattr(game_main, 'explain_order', live_explainer, raising=False)
+    app = create_app(tmp_path / 'live-explainer.sqlite3')
+    with TestClient(app) as client:
+        presets = client.get('/v1/game/levels/level1/presets').json()
+        start = client.post('/v1/game/levels/level1/start', json={'preset': 'balanced', 'mode': 'replay'}).json()
+        human = {'Authorization': f"Bearer {start['tokens']['human']}"}
+        mandate = {k: v for k, v in presets['balanced'].items() if k in {'agentId', 'issuedBy', 'limits', 'substitution', 'lateDelivery', 'hardConstraints', 'priorities', 'validUntil'}}
+        assert client.post('/v1/mandates', headers=human, json=mandate).status_code == 201
+        assert client.post(f"/v1/game/sessions/{start['sessionId']}/run").status_code == 202
+        deadline = time.monotonic() + 10
+        handled = set()
+        while time.monotonic() < deadline:
+            session = client.get(f"/v1/game/sessions/{start['sessionId']}").json()
+            for step in session['steps']:
+                approval = step.get('approval')
+                if approval and approval['status'] == 'OPEN' and approval['approvalId'] not in handled:
+                    handled.add(approval['approvalId'])
+                    client.post(f"/v1/approvals/{approval['approvalId']}", headers=human, json={'decision': 'approved'})
+            if session['status'] in {'FINISHED', 'FAILED'}:
+                break
+            time.sleep(.01)
+        assert session['status'] == 'FINISHED', session.get('error')
+        assert len(calls) == 1

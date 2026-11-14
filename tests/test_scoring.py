@@ -33,10 +33,10 @@ def test_safety_allergen_sets_incident_and_zero_stars():
 
 
 def test_star_threshold_edges_no_orders_and_receipt_template():
-    result = score_session(orders=[], needs=[{"quantity": {"amount": 2, "unit": "kg"}, "deadline": "2026-11-16"}], hidden_requirements={}, approvals=[{"status": "APPROVED", "chosenPlanId": "p1", "productName": "Milk", "total": {"cents": 1234}}], hearts_left=1)
+    result = score_session(orders=[], needs=[{"quantity": {"amount": 2, "unit": "kg"}, "deadline": "2026-11-16"}], hidden_requirements={}, approvals=[{"status": "APPROVED", "chosenPlanId": "p1", "productName": "Milk", "total": {"cents": 1234}, "agentExplanation": "The recommended plan is Milk for the order."}], hearts_left=1)
     assert (result["kitchen"], result["wallet"], result["safety"], result["stars"]) == (0, 100, 100, 1)
     assert result["totalCost"] is None
-    assert result["receiptText"] == "Chose plan p1. 2 kg did not arrive on time."
+    assert result["receiptText"] == "Chose plan p1. Agent explanation: The recommended plan is Milk for the order. 2 kg did not arrive on time."
 
 
 def test_three_stars_requires_each_condition():

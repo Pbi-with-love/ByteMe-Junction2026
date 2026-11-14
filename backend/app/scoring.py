@@ -72,6 +72,9 @@ def receipt_text(approvals: list[dict[str, Any]], needs: list[dict[str, Any]], t
             sentences.append(f"Chose plan {approval['chosenPlanId']} for {product}.")
         else:
             sentences.append(f"Approved {product}.")
+        explanation = approval.get("agentExplanation")
+        if isinstance(explanation, str) and explanation.strip():
+            sentences.append(f"Agent explanation: {explanation.strip()}")
     total_need = sum(_amount(need.get("quantity")) for need in needs)
     if timely < total_need:
         unit = next((need.get("quantity", {}).get("unit", "units") for need in needs if need.get("quantity")), "units")

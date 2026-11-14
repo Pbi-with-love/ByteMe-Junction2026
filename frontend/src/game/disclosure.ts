@@ -13,6 +13,7 @@ export function optionDisclosure(planId: string, step: AgentStep): { lateLines: 
  const lateLines = plan.lines.filter(line => line.availableDate > deadlineDate);
  const allergens: string[] = [];
  for (const line of plan.lines) {
+  for (const allergen of [...(line.allergens ?? []), ...(line.mayContain ?? [])]) if (!allergens.includes(allergen)) allergens.push(allergen);
   const row = step.search.results.find(result => result.productId === line.productId);
   if (!row || !('allergens' in row) || !row.allergens) continue;
   for (const allergen of row.allergens) if (!allergens.includes(allergen)) allergens.push(allergen);

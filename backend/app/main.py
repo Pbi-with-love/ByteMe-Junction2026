@@ -36,7 +36,7 @@ from backend.app.order_store import IdempotencyConflict, OrderStore
 from backend.app.approval_store import ApprovalStore
 from backend.app.game import GameSession, HeartsProvider, new_session_id
 from agent.runner import run_agent
-from agent.explain import template_explainer, template_explanation
+from agent.explain import explain_order, template_explainer, template_explanation
 from backend.app.policy import PolicyResult, check_plan
 
 
@@ -1576,6 +1576,18 @@ async def run_session(session_id: str, request: Request) -> JSONResponse:
             async with httpx.AsyncClient(transport=transport, base_url="http://gateway") as client:
                 async def record(step):
                     value = {**step, "approval": None, "approvalEvent": None}
+                    catalog_rows = state.valio_data.load("products") if hasattr(state, "valio_data") else []
+                    catalog = {str(product.get("id")): product for product in catalog_rows}
+                    quote = value.get("quote") or {}
+                    plans = []
+                    for plan in quote.get("plans", []):
+                        lines = []
+                        for line in plan.get("lines", []):
+                            product = catalog.get(str(line.get("productId")), {})
+                            allergens = extract_allergen_data(product).get("allergens", []) if product else []
+                            lines.append({**line, "allergens": allergens, "mayContain": allergens})
+                        plans.append({**plan, "lines": lines})
+                    value["quote"] = {**quote, "plans": plans}
                     approval_id = step["order"]["body"].get("approvalId")
                     if approval_id:
                         approval = state.approval_store.get(str(approval_id), session.scenario["customer"]["customerId"], now=state.clock())
@@ -1586,7 +1598,7 @@ async def run_session(session_id: str, request: Request) -> JSONResponse:
                     session.activity = "idle"
                 async def activity(value):
                     session.activity = value
-                explain = _headless_explainer if state.headless else template_explainer
+                explain = _headless_explainer if state.headless else explain_order
                 await run_agent(client, agent_token=session.agent_token, mandate_id=str(row["mandate_id"]), needs=session.scenario["needs"], explain=explain, on_step=record, poll_interval=0.05, on_activity=activity)
             session.status = "FINISHED"
             session.activity = "idle"

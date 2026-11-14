@@ -29,6 +29,15 @@ describe('Compare', () => {
     }
   });
 
+  it('highlights cost only among presets tied for best kitchen completion', async () => {
+    const fixture = JSON.parse(readFileSync('../tests/fixtures/live/level1-balanced.json', 'utf8')) as { compare: CompareData };
+    render(<Compare client={clientWith(fixture.compare)} levelId="level1" onBack={() => {}} />);
+
+    const table = await screen.findByRole('table');
+    const costCells = within(within(table).getByRole('row', { name: /^Cost/ })).getAllByRole('cell');
+    expect(costCells.map((cell) => cell.dataset.best === 'true')).toEqual([false, true, false]);
+  });
+
   it('loads compare on a fresh replay client without starting a level', async () => {
     const client = new ReplayGatewayClient();
     render(<Compare client={client} levelId="level1" onBack={() => {}} />);

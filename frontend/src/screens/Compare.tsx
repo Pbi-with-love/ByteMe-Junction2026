@@ -37,8 +37,17 @@ function shownValue(result: GameResult, field: typeof ROWS[number]['field']): st
 }
 
 function rowWinners(results: GameResult[], field: typeof ROWS[number]['field'], better: 'higher' | 'lower') {
-  if (field === 'approvalsAsked' || field === 'heartsUsed' || field === 'totalCost' || field === 'kitchen' || field === 'wallet' || field === 'safety' || field === 'heartsLeft') {
-    const values = results.map((result) => field === 'totalCost' ? result.totalCost?.cents : result[field]);
+  if (field === 'totalCost') {
+    const bestKitchen = Math.max(...results.map(({ kitchen }) => kitchen));
+    const eligible = results.flatMap((result, index) => result.kitchen === bestKitchen ? [{ result, index }] : []);
+    const winners = bestIndexes(eligible.map(({ result }) => result.totalCost?.cents), better);
+    if (winners.length > 0) return winners.map((index) => eligible[index]!.index);
+    return eligible.length === 1 && eligible[0]!.result.totalCost !== null && eligible[0]!.result.totalCost !== undefined
+      ? [eligible[0]!.index]
+      : [];
+  }
+  if (field === 'approvalsAsked' || field === 'heartsUsed' || field === 'kitchen' || field === 'wallet' || field === 'safety' || field === 'heartsLeft') {
+    const values = results.map((result) => result[field]);
     return bestIndexes(values, better);
   }
   return [];
