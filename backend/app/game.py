@@ -32,6 +32,9 @@ class GameSession:
     mandate_id_before: set[str] = field(default_factory=set)
     status: str = "READY"
     activity: str = "idle"
+    explain_source: str | None = None
+    explain_fallback_reason: str | None = None
+    explain_elapsed_ms: int | None = None
     steps: list[dict[str, Any]] = field(default_factory=list)
     error: str | None = None
     task: Any = None

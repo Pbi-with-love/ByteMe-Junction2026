@@ -78,3 +78,50 @@ def test_template_explainer_honors_test_delay(monkeypatch):
         return await template_explainer(need={"description": "milk"}, plans=[], recommended_plan_id=None)
     result = anyio.run(run)
     assert "recommended plan" in result
+
+
+def test_numbers_normalize_decimal_and_thousands_separators():
+    from agent.explain import _numbers
+    assert _numbers("€805.00 and €1 308,00") == ["80500", "130800"]
+    assert _numbers("€805,00") == _numbers("€805.00") == _numbers("80500")
+
+
+def test_explanation_outcome_reports_each_fallback_reason(caplog, monkeypatch):
+    import logging
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "")
+    plan = {"planId": "pln_1", "summary": "Valio milk", "total": {"cents": 1000}, "policy": {"reasons": []}}
+    kwargs = dict(need={"description": "milk"}, plans=[plan], recommended_plan_id="pln_1", approval_reasons=[], per_order_limit=500)
+    cases = [
+        ("no_key", "", None),
+        ("timeout", "key", FakeClient(error=TimeoutError())),
+        ("api_error", "key", FakeClient(error=RuntimeError("api"))),
+        ("refusal", "key", FakeClient({"stop_reason": "refusal", "content": []})),
+        ("max_tokens", "key", FakeClient({"stop_reason": "max_tokens", "content": []})),
+        ("invalid_number", "key", FakeClient({"stop_reason": "end_turn", "content": [{"type": "text", "text": "It costs €999.99."}]})),
+        ("missing_brand", "key", FakeClient({"stop_reason": "end_turn", "content": [{"type": "text", "text": "A cheaper choice is available."}]})),
+    ]
+    async def run():
+        for reason, key, client in cases:
+            outcomes = []
+            await explain_order(**kwargs, api_key=key, client=client, non_valio_brands=["GelatoLAB"] if reason == "missing_brand" else [], on_outcome=outcomes.append)
+            assert outcomes[-1]["source"] == "template"
+            assert outcomes[-1]["reason"] == reason
+    with caplog.at_level(logging.INFO, logger="agent.explain"):
+        anyio.run(run)
+    assert {record.msg for record in caplog.records} == {"explanation outcome"}
+    assert [record.explain_outcome["reason"] for record in caplog.records] == [case[0] for case in cases]
+    assert all(record.explain_outcome["outcome"] == "fallback" for record in caplog.records)
+    assert all(isinstance(record.explain_outcome["elapsed_ms"], int) for record in caplog.records)
+
+def test_explanation_prompt_and_successful_outcome_are_manager_friendly():
+    from agent.explain import _SYSTEM
+    assert "kitchen manager" in _SYSTEM.lower()
+    assert "Never mention internal ids" in _SYSTEM
+    async def run():
+        outcomes = []
+        client = FakeClient({"stop_reason": "end_turn", "content": [{"type": "text", "text": "The order is over your per-order limit, so it needs approval. Your mandate does not allow substitutions."}]})
+        await explain_order(need={"description": "milk"}, plans=[{"planId": "pln_1", "summary": "Valio milk", "total": {"cents": 10}}], recommended_plan_id="pln_1", approval_reasons=[], per_order_limit=500, api_key="key", client=client, on_outcome=outcomes.append)
+        assert outcomes[-1]["source"] == "claude"
+        assert outcomes[-1]["reason"] is None
+        assert outcomes[-1]["elapsedMs"] >= 0
+    anyio.run(run)

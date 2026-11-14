@@ -11,7 +11,9 @@ from uuid import uuid4
 async def run_agent(http: Any, *, agent_token: str, mandate_id: str,
                     needs: list[dict[str, Any]], explain: Callable[..., Any],
                     on_step: Callable[[dict[str, Any]], Any], poll_interval: float,
-                    on_activity: Callable[[str], Any] | None = None) -> None:
+                    on_activity: Callable[[str], Any] | None = None,
+                    on_explain_outcome: Callable[[dict[str, Any]], Any] | None = None,
+                    per_order_limit: Any = None) -> None:
     headers = {"Authorization": f"Bearer {agent_token}"}
 
     async def request(method: str, path: str, **kwargs: Any) -> Any:
@@ -47,12 +49,12 @@ async def run_agent(http: Any, *, agent_token: str, mandate_id: str,
             subneed = copy.deepcopy(need)
             subneed["quantity"]["amount"] = split_qty
             subneed["candidateProductIds"] = [str(primary)]
-            await _place(request, search, subneed, _quote(request, mandate_id, subneed), explain, on_step, on_activity, poll_interval)
+            await _place(request, search, subneed, _quote(request, mandate_id, subneed), explain, on_step, on_activity, poll_interval, on_explain_outcome, per_order_limit)
             remainder = copy.deepcopy(need)
             remainder["quantity"]["amount"] = quantity - split_qty
-            await _top_up(request, search, mandate_id, remainder, original_candidates, explain, on_step, on_activity, poll_interval)
+            await _top_up(request, search, mandate_id, remainder, original_candidates, explain, on_step, on_activity, poll_interval, on_explain_outcome, per_order_limit)
         else:
-            await _place(request, search, need, _resolved(quote), explain, on_step, on_activity, poll_interval)
+            await _place(request, search, need, _resolved(quote), explain, on_step, on_activity, poll_interval, on_explain_outcome, per_order_limit)
 
 
 def _error_code(response: Any) -> str | None:
@@ -88,7 +90,9 @@ async def _quote(request: Any, mandate_id: str, need: dict[str, Any]) -> dict[st
 
 async def _place(request: Any, search: dict[str, Any], need: dict[str, Any], quote_awaitable: Any,
                  explain: Callable[..., Any], on_step: Callable[[dict[str, Any]], Any],
-                 on_activity: Callable[[str], Any] | None, poll_interval: float) -> str | None:
+                 on_activity: Callable[[str], Any] | None, poll_interval: float,
+                 on_explain_outcome: Callable[[dict[str, Any]], Any] | None = None,
+                 per_order_limit: Any = None) -> str | None:
     quote = await quote_awaitable
     if not quote.get("plans"): return None
     plan_id = _recommended(quote).get("planId")
@@ -106,7 +110,7 @@ async def _place(request: Any, search: dict[str, Any], need: dict[str, Any], quo
         if on_activity:
             result = on_activity("explaining")
             if hasattr(result, "__await__"): await result
-        explanation = explain(need=need, plans=quote.get("plans", []), recommended_plan_id=plan_id, approval_reasons=order.get("reasons", []), per_order_limit=None, non_valio_brands=_non_valio_brands(_recommended(quote), need))
+        explanation = explain(need=need, plans=quote.get("plans", []), recommended_plan_id=plan_id, approval_reasons=order.get("reasons", []), per_order_limit=per_order_limit, non_valio_brands=_non_valio_brands(_recommended(quote), need), on_outcome=on_explain_outcome)
         if hasattr(explanation, "__await__"): explanation = await explanation
         if on_activity:
             result = on_activity("idle")
@@ -143,7 +147,9 @@ def _non_valio_brands(plan: dict[str, Any], need: dict[str, Any]) -> list[str]:
 
 async def _top_up(request: Any, search: dict[str, Any], mandate_id: str, need: dict[str, Any],
                   candidates: list[str], explain: Callable[..., Any], on_step: Callable[[dict[str, Any]], Any],
-                  on_activity: Callable[[str], Any] | None, poll_interval: float) -> None:
+                  on_activity: Callable[[str], Any] | None, poll_interval: float,
+                  on_explain_outcome: Callable[[dict[str, Any]], Any] | None = None,
+                  per_order_limit: Any = None) -> None:
     remaining = list(candidates)
     while remaining:
         top_need = copy.deepcopy(need)
@@ -151,7 +157,7 @@ async def _top_up(request: Any, search: dict[str, Any], mandate_id: str, need: d
         quote = await _quote(request, mandate_id, top_need)
         if not quote.get("plans"): return
         plan = _recommended(quote)
-        status = await _place(request, search, top_need, _resolved(quote), explain, on_step, on_activity, poll_interval)
+        status = await _place(request, search, top_need, _resolved(quote), explain, on_step, on_activity, poll_interval, on_explain_outcome, per_order_limit)
         if status != "REJECTED": return
         substituted = {str(line.get("productId")) for line in plan.get("lines", []) if str(line.get("productId")) != str(need.get("primaryProductId"))}
         rejected_products = substituted or {str(line.get("productId")) for line in plan.get("lines", [])}

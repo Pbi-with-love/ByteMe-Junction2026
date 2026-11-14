@@ -1598,8 +1598,14 @@ async def run_session(session_id: str, request: Request) -> JSONResponse:
                     session.activity = "idle"
                 async def activity(value):
                     session.activity = value
+                def explain_outcome(value):
+                    session.explain_source = value["source"]
+                    session.explain_fallback_reason = value["reason"]
+                    session.explain_elapsed_ms = value["elapsedMs"]
                 explain = _headless_explainer if state.headless else explain_order
-                await run_agent(client, agent_token=session.agent_token, mandate_id=str(row["mandate_id"]), needs=session.scenario["needs"], explain=explain, on_step=record, poll_interval=0.05, on_activity=activity)
+                mandate = state.auth_store.get_mandate(str(row["mandate_id"]), session.scenario["customer"]["customerId"])
+                per_order_limit = (mandate or {}).get("limits", {}).get("perOrderEur")
+                await run_agent(client, agent_token=session.agent_token, mandate_id=str(row["mandate_id"]), needs=session.scenario["needs"], explain=explain, on_step=record, poll_interval=0.05, on_activity=activity, on_explain_outcome=explain_outcome, per_order_limit=per_order_limit)
             session.status = "FINISHED"
             session.activity = "idle"
         except Exception as exc:
@@ -1621,6 +1627,10 @@ async def get_session(session_id: str, request: Request) -> JSONResponse:
     minute = start_hour * 60 + start_minute + game_minutes
     orders = [step["order"]["body"].get("orderId") for step in session.steps]
     payload = {"sessionId": session_id, "status": session.status, "hearts": session.hearts.remaining if session.hearts else 3, "gameTime": f"{minute // 60:02d}:{minute % 60:02d}", "orders": orders, "steps": session.steps, "activity": session.activity}
+    if session.explain_source is not None:
+        payload["explainSource"] = session.explain_source
+        payload["explainFallbackReason"] = session.explain_fallback_reason
+        payload["explainElapsedMs"] = session.explain_elapsed_ms
     if session.error:
         payload["error"] = session.error
     return payload

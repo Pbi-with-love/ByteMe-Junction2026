@@ -49,8 +49,9 @@ def test_runner_reports_explaining_activity_while_explainer_is_in_flight():
                 return "why"
             async def set_activity(value): activity.append(value)
             activity = []
-            await run_agent(client, agent_token="t", mandate_id="m", needs=[{"description":"milk", "quantity":{"amount":1,"unit":"l"}}], explain=explain, on_step=lambda _: None, poll_interval=0, on_activity=set_activity)
+            await run_agent(client, agent_token="t", mandate_id="m", needs=[{"description":"milk", "quantity":{"amount":1,"unit":"l"}}], explain=explain, on_step=lambda _: None, poll_interval=0, on_activity=set_activity, per_order_limit=500)
     import asyncio
     anyio.run(scenario)
     assert explanations == [{"text": "why"}]
     assert explanation_inputs[0]["non_valio_brands"] == ["GelatoLAB-Espoo"]
+    assert explanation_inputs[0]["per_order_limit"] == 500

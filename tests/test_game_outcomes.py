@@ -112,6 +112,7 @@ def test_live_game_session_uses_llm_explainer_while_headless_compare_stays_templ
     calls = []
     async def live_explainer(**kwargs):
         calls.append(kwargs)
+        kwargs['on_outcome']({'source': 'claude', 'reason': None, 'elapsedMs': 17})
         return 'Live explainer test sentence.'
     monkeypatch.setattr(game_main, 'explain_order', live_explainer, raising=False)
     app = create_app(tmp_path / 'live-explainer.sqlite3')
@@ -136,3 +137,6 @@ def test_live_game_session_uses_llm_explainer_while_headless_compare_stays_templ
             time.sleep(.01)
         assert session['status'] == 'FINISHED', session.get('error')
         assert len(calls) == 1
+        assert session['explainSource'] == 'claude'
+        assert session['explainFallbackReason'] is None
+        assert session['explainElapsedMs'] == 17
