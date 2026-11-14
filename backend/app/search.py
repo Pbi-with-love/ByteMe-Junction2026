@@ -54,6 +54,7 @@ class CatalogSearch:
             for product in products
             if not product.get("deleted")
         ]
+        self._vocabulary = {word for _, text in self._index for word in WORDS.findall(text)}
 
     @classmethod
     def from_cache(cls, directory: Path) -> CatalogSearch:
@@ -77,7 +78,12 @@ class CatalogSearch:
         if not isinstance(filters, dict):
             raise SearchValidationError("filters must be an object.")
 
-        query_words = WORDS.findall(query.lower())
+        # Need descriptions carry filler ("for the hotel", "order", "120"): keep only words that
+        # name something in the catalog, so a natural-language need still finds its product.
+        all_words = WORDS.findall(query.lower())
+        query_words = [
+            word for word in all_words if word in self._vocabulary and len(word) > 1 and not word.isdigit()
+        ] or all_words
         category = filters.get("category")
         if category is not None and not isinstance(category, str):
             raise SearchValidationError("filters.category must be a category code string.")

@@ -149,3 +149,22 @@ def _recursive_keys(value):
     if isinstance(value, list):
         return set().union(*(_recursive_keys(item) for item in value))
     return set()
+
+
+@pytest.mark.parametrize(
+    "query,product_id",
+    [
+        ("Lactose-free semi-skimmed milk for the hotel", "464306"),
+        ("Standing order: 120 l lactose-free milk, Wednesday delivery", "464306"),
+        ("Pistachio ice cream for school dessert (usual product unavailable)", "468855"),
+        ("lactose free   milk", "464306"),
+    ],
+)
+def test_need_descriptions_with_filler_words_find_the_product(query: str, product_id: str) -> None:
+    import json
+    from pathlib import Path
+
+    products = json.loads(Path("backend/fixtures/valio/catalog/products.json").read_text(encoding="utf-8"))
+    result = CatalogSearch(products, {}, {}).search(query=query, filters={}, limit=20, mandate={})
+    assert result["total"] > 0
+    assert product_id in [item["productId"] for item in result["results"]]
