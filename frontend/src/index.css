@@ -17,7 +17,11 @@
   src: url("/fonts/PressStart2P-Regular.ttf") format("truetype");
   font-weight: 400;
   font-display: swap;
-  unicode-range: U+0030-0039, U+002C, U+002E, U+003A, U+20AC;
+  size-adjust: 75%;
+  ascent-override: 100%;
+  descent-override: 0%;
+  line-gap-override: 0%;
+  unicode-range: U+0030-0039, U+002C, U+002E, U+003A, U+20AC, U+00A0;
 }
 
 @theme {
@@ -399,6 +403,7 @@ button:focus-visible, select:focus-visible, input:focus-visible {
 .compare-star-value[data-zero="true"] { color: #B91C1C; font-weight: 700; }
 .compare-star-value .result-stars { display: inline-flex; }
 .compare-star-value .result-star { width: calc(4 * var(--px)); height: calc(4 * var(--px)); }
+.compare-star-value .result-stars > span { transform: none !important; }
 .compare-state, .compare-error { width: min(100%, calc(180 * var(--px))); margin: auto; padding: calc(4 * var(--px)); border: calc(1 * var(--px)) solid #0B1B33; background: white; box-shadow: var(--shadow-pixel); font-size: calc(4 * var(--px)); }
 .compare-error { border: calc(1 * var(--px)) solid #881337; border-left-width: calc(2 * var(--px)); background: #FDF2F5; color: #881337; }
 .compare-page footer { width: min(100%, calc(290 * var(--px))); margin: 0 auto; }
