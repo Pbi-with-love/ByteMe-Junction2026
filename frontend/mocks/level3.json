@@ -44,7 +44,7 @@
           "perOrderEur": 500,
           "perWeekEur": 3000
         },
-        "substitution": "same_category",
+        "substitution": "none",
         "lateDelivery": "none",
         "hardConstraints": {
           "excludeAllergens": [
@@ -65,7 +65,7 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing egg (AE)."
+        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with no substitutes and no late deliveries, never products containing egg (AE)."
       },
       "steps": [
         {
@@ -215,9 +215,9 @@
                   "unit": "pcs"
                 },
                 "policy": {
-                  "light": "BLUE",
+                  "light": "YELLOW",
                   "reasons": [
-                    "SUBSTITUTION_ALLOWED"
+                    "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
                 "summary": "300 oat buns (egg-free), Thursday, €330,00",
@@ -264,67 +264,156 @@
             }
           },
           "order": {
-            "httpStatus": 201,
+            "httpStatus": 202,
             "body": {
               "orderId": "ord_l3_allergen_on",
-              "quoteId": "qt_l3_allergen_on",
-              "planId": "pln_safe",
-              "status": "ORDERED",
-              "lines": [
-                {
-                  "productId": "990002",
-                  "quantity": {
-                    "amount": 300,
-                    "unit": "pcs"
-                  },
-                  "salesQuantity": {
-                    "amount": 300,
-                    "unit": "ST"
-                  },
-                  "unitPrice": {
-                    "cents": 110,
-                    "currency": "EUR"
-                  },
-                  "comparisonPrice": {
-                    "cents": 110,
-                    "currency": "EUR",
-                    "per": "pcs"
-                  },
-                  "lineTotal": {
-                    "cents": 33000,
-                    "currency": "EUR"
-                  },
-                  "availableDate": "2026-11-19",
-                  "isSubstitute": true
-                }
-              ],
-              "total": {
-                "cents": 33000,
-                "currency": "EUR"
-              },
-              "createdAt": "2026-11-14T10:06:00+02:00"
+              "status": "PENDING_APPROVAL",
+              "approvalId": "apr_l3_allergen_on",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ]
             }
           },
-          "approval": null
+          "approval": {
+            "approvalId": "apr_l3_allergen_on",
+            "orderId": "ord_l3_allergen_on",
+            "quoteId": "qt_l3_allergen_on",
+            "status": "OPEN",
+            "reasons": [
+              "SUBSTITUTION_NOT_ALLOWED"
+            ],
+            "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+            "options": [
+              {
+                "planId": "pln_safe",
+                "tier": "best",
+                "recommended": true,
+                "summary": "300 oat buns (egg-free), Thursday, €330,00"
+              }
+            ],
+            "agentExplanation": "The usual bun is blocked this week. The gateway blocked the shrove bun, so oat buns at €1,10 each are the only option.",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "createdAt": "2026-11-14T10:06:00+02:00"
+          },
+          "approvalEvent": {
+            "approvalId": "apr_l3_allergen_on",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "heartsLeft": 2
+          }
         }
       ],
       "result": {
         "kitchen": 100,
         "wallet": 100,
         "safety": 100,
-        "heartsLeft": 3,
+        "heartsLeft": 2,
         "stars": 3,
         "incident": null,
-        "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent bought 300 egg-free oat buns instead.",
-        "logHeadHash": "sha256:85bc3360469ba320",
-        "approvalsAsked": 0,
+        "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent asked to buy 300 egg-free oat buns instead, and you approved.",
+        "logHeadHash": "sha256:e800baad621a75d5",
+        "approvalsAsked": 1,
         "totalCost": {
           "cents": 33000,
           "currency": "EUR"
         },
-        "heartsUsed": 0
+        "heartsUsed": 1
       },
-      "decisions": {},
+      "decisions": {
+        "apr_l3_allergen_on": {
+          "approved": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_on",
+              "orderId": "ord_l3_allergen_on",
+              "quoteId": "qt_l3_allergen_on",
+              "status": "APPROVED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_safe",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                }
+              ],
+              "agentExplanation": "The usual bun is blocked this week. The gateway blocked the shrove bun, so oat buns at €1,10 each are the only option.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "approved",
+              "orderStatus": "CONFIRMED"
+            }
+          },
+          "rejected": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_on",
+              "orderId": "ord_l3_allergen_on",
+              "quoteId": "qt_l3_allergen_on",
+              "status": "REJECTED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_safe",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                }
+              ],
+              "agentExplanation": "The usual bun is blocked this week. The gateway blocked the shrove bun, so oat buns at €1,10 each are the only option.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "rejected",
+              "orderStatus": "REJECTED"
+            }
+          },
+          "alternative": {},
+          "expired": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_on",
+              "orderId": "ord_l3_allergen_on",
+              "quoteId": "qt_l3_allergen_on",
+              "status": "EXPIRED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_safe",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                }
+              ],
+              "agentExplanation": "The usual bun is blocked this week. The gateway blocked the shrove bun, so oat buns at €1,10 each are the only option.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "expired",
+              "orderStatus": "EXPIRED"
+            }
+          },
+          "conflict": {
+            "httpStatus": 409,
+            "body": {
+              "error": {
+                "code": "INVALID_STATE",
+                "message": "Approval apr_l3_allergen_on is already closed.",
+                "requestId": "req_apr_l3_allergen_on_409",
+                "details": {
+                  "approvalId": "apr_l3_allergen_on"
+                }
+              }
+            }
+          }
+        }
+      },
       "log": [
         {
           "seq": 1,
@@ -388,37 +477,96 @@
           "customerId": "789",
           "agentId": "kitchenbuyer-koivu-school",
           "requestId": "req_004",
-          "light": "BLUE",
+          "light": "YELLOW",
           "reasons": [
-            "SUBSTITUTION_ALLOWED"
+            "SUBSTITUTION_NOT_ALLOWED"
           ],
           "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
           "refs": {
             "quoteId": "qt_l3_allergen_on"
           },
           "prevHash": "sha256:f46074c41e56a687",
-          "hash": "sha256:a2e55d8d5c7390a8"
+          "hash": "sha256:5f7ce6f17fe111e0"
         },
         {
           "seq": 5,
           "eventId": "evt_5",
           "at": "2026-11-14T10:06:00+02:00",
           "actor": "gateway",
-          "type": "ORDER_CREATED",
+          "type": "ORDER_PENDING_APPROVAL",
           "customerId": "789",
           "agentId": "kitchenbuyer-koivu-school",
           "requestId": "req_005",
-          "light": "BLUE",
+          "light": "YELLOW",
           "reasons": [
-            "SUBSTITUTION_ALLOWED"
+            "SUBSTITUTION_NOT_ALLOWED"
           ],
+          "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on",
+            "orderId": "ord_l3_allergen_on",
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:5f7ce6f17fe111e0",
+          "hash": "sha256:8ca3a3c7cc696d5f"
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:8ca3a3c7cc696d5f",
+          "hash": "sha256:e266a588f76dbf00"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_safe.",
+          "refs": {
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:e266a588f76dbf00",
+          "hash": "sha256:0d05fa0e43612c18"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
           "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (990002).",
           "refs": {
             "quoteId": "qt_l3_allergen_on",
-            "orderId": "ord_l3_allergen_on"
+            "orderId": "ord_l3_allergen_on",
+            "approvalId": "apr_l3_allergen_on"
           },
-          "prevHash": "sha256:a2e55d8d5c7390a8",
-          "hash": "sha256:85bc3360469ba320"
+          "prevHash": "sha256:0d05fa0e43612c18",
+          "hash": "sha256:e800baad621a75d5"
         }
       ],
       "valioLog": [
@@ -495,16 +643,16 @@
           "customerId": "789",
           "agentId": "kitchenbuyer-koivu-school",
           "requestId": "req_004",
-          "light": "BLUE",
+          "light": "YELLOW",
           "reasons": [
-            "SUBSTITUTION_ALLOWED"
+            "SUBSTITUTION_NOT_ALLOWED"
           ],
           "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
           "refs": {
             "quoteId": "qt_l3_allergen_on"
           },
           "prevHash": "sha256:f46074c41e56a687",
-          "hash": "sha256:a2e55d8d5c7390a8",
+          "hash": "sha256:5f7ce6f17fe111e0",
           "disclosure": {
             "returnedToAgent": [
               "netPrices",
@@ -524,21 +672,86 @@
           "eventId": "evt_5",
           "at": "2026-11-14T10:06:00+02:00",
           "actor": "gateway",
-          "type": "ORDER_CREATED",
+          "type": "ORDER_PENDING_APPROVAL",
           "customerId": "789",
           "agentId": "kitchenbuyer-koivu-school",
           "requestId": "req_005",
-          "light": "BLUE",
+          "light": "YELLOW",
           "reasons": [
-            "SUBSTITUTION_ALLOWED"
+            "SUBSTITUTION_NOT_ALLOWED"
           ],
+          "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on",
+            "orderId": "ord_l3_allergen_on",
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:5f7ce6f17fe111e0",
+          "hash": "sha256:8ca3a3c7cc696d5f",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:8ca3a3c7cc696d5f",
+          "hash": "sha256:e266a588f76dbf00"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_safe.",
+          "refs": {
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:e266a588f76dbf00",
+          "hash": "sha256:0d05fa0e43612c18"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
           "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (990002).",
           "refs": {
             "quoteId": "qt_l3_allergen_on",
-            "orderId": "ord_l3_allergen_on"
+            "orderId": "ord_l3_allergen_on",
+            "approvalId": "apr_l3_allergen_on"
           },
-          "prevHash": "sha256:a2e55d8d5c7390a8",
-          "hash": "sha256:85bc3360469ba320",
+          "prevHash": "sha256:0d05fa0e43612c18",
+          "hash": "sha256:e800baad621a75d5",
           "disclosure": {
             "returnedToAgent": [
               "orders"
@@ -549,9 +762,1032 @@
       ],
       "verify": {
         "valid": true,
-        "events": 5,
-        "headHash": "sha256:85bc3360469ba320"
-      }
+        "events": 8,
+        "headHash": "sha256:e800baad621a75d5"
+      },
+      "demoPath": {
+        "apr_l3_allergen_on": "approved"
+      },
+      "outcomes": {
+        "approved": {
+          "result": {
+            "kitchen": 100,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 3,
+            "incident": null,
+            "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent asked to buy 300 egg-free oat buns instead, and you approved.",
+            "logHeadHash": "sha256:e800baad621a75d5",
+            "approvalsAsked": 1,
+            "totalCost": {
+              "cents": 33000,
+              "currency": "EUR"
+            },
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:4f385f2b305ef633"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "refs": {},
+              "prevHash": "sha256:4f385f2b305ef633",
+              "hash": "sha256:f46074c41e56a687"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:f46074c41e56a687",
+              "hash": "sha256:5f7ce6f17fe111e0"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:5f7ce6f17fe111e0",
+              "hash": "sha256:8ca3a3c7cc696d5f"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:8ca3a3c7cc696d5f",
+              "hash": "sha256:e266a588f76dbf00"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_safe.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e266a588f76dbf00",
+              "hash": "sha256:0d05fa0e43612c18"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (990002).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:0d05fa0e43612c18",
+              "hash": "sha256:e800baad621a75d5"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:4f385f2b305ef633"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "refs": {},
+              "prevHash": "sha256:4f385f2b305ef633",
+              "hash": "sha256:f46074c41e56a687",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:f46074c41e56a687",
+              "hash": "sha256:5f7ce6f17fe111e0",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:5f7ce6f17fe111e0",
+              "hash": "sha256:8ca3a3c7cc696d5f",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:8ca3a3c7cc696d5f",
+              "hash": "sha256:e266a588f76dbf00"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_safe.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e266a588f76dbf00",
+              "hash": "sha256:0d05fa0e43612c18"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (990002).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:0d05fa0e43612c18",
+              "hash": "sha256:e800baad621a75d5",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 8,
+            "headHash": "sha256:e800baad621a75d5"
+          }
+        },
+        "rejected": {
+          "result": {
+            "kitchen": 0,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "You rejected a request; nothing was ordered for it. 300 pcs did not arrive on time.",
+            "logHeadHash": "sha256:4ea941dbd4a26b51",
+            "approvalsAsked": 1,
+            "totalCost": null,
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:4f385f2b305ef633"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "refs": {},
+              "prevHash": "sha256:4f385f2b305ef633",
+              "hash": "sha256:f46074c41e56a687"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:f46074c41e56a687",
+              "hash": "sha256:5f7ce6f17fe111e0"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:5f7ce6f17fe111e0",
+              "hash": "sha256:8ca3a3c7cc696d5f"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:8ca3a3c7cc696d5f",
+              "hash": "sha256:e266a588f76dbf00"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l3_allergen_on REJECTED.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e266a588f76dbf00",
+              "hash": "sha256:4ea941dbd4a26b51"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:4f385f2b305ef633"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "refs": {},
+              "prevHash": "sha256:4f385f2b305ef633",
+              "hash": "sha256:f46074c41e56a687",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:f46074c41e56a687",
+              "hash": "sha256:5f7ce6f17fe111e0",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:5f7ce6f17fe111e0",
+              "hash": "sha256:8ca3a3c7cc696d5f",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:8ca3a3c7cc696d5f",
+              "hash": "sha256:e266a588f76dbf00"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l3_allergen_on REJECTED.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e266a588f76dbf00",
+              "hash": "sha256:4ea941dbd4a26b51"
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 7,
+            "headHash": "sha256:4ea941dbd4a26b51"
+          }
+        },
+        "expired": {
+          "result": {
+            "kitchen": 0,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "A request expired before you answered; nothing was ordered for it. 300 pcs did not arrive on time.",
+            "logHeadHash": "sha256:a4469ea5bbea4457",
+            "approvalsAsked": 1,
+            "totalCost": null,
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:4f385f2b305ef633"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "refs": {},
+              "prevHash": "sha256:4f385f2b305ef633",
+              "hash": "sha256:f46074c41e56a687"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:f46074c41e56a687",
+              "hash": "sha256:5f7ce6f17fe111e0"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:5f7ce6f17fe111e0",
+              "hash": "sha256:8ca3a3c7cc696d5f"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:8ca3a3c7cc696d5f",
+              "hash": "sha256:e266a588f76dbf00"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l3_allergen_on expired: no answer in time. Order ord_l3_allergen_on EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e266a588f76dbf00",
+              "hash": "sha256:a4469ea5bbea4457"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:4f385f2b305ef633"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "refs": {},
+              "prevHash": "sha256:4f385f2b305ef633",
+              "hash": "sha256:f46074c41e56a687",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:f46074c41e56a687",
+              "hash": "sha256:5f7ce6f17fe111e0",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:5f7ce6f17fe111e0",
+              "hash": "sha256:8ca3a3c7cc696d5f",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:8ca3a3c7cc696d5f",
+              "hash": "sha256:e266a588f76dbf00"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l3_allergen_on expired: no answer in time. Order ord_l3_allergen_on EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e266a588f76dbf00",
+              "hash": "sha256:a4469ea5bbea4457"
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 7,
+            "headHash": "sha256:a4469ea5bbea4457"
+          }
+        }
+      },
+      "traps": {}
     },
     "allergen_off": {
       "mandate": {
@@ -566,7 +1802,7 @@
           "perOrderEur": 500,
           "perWeekEur": 3000
         },
-        "substitution": "same_category",
+        "substitution": "none",
         "lateDelivery": "none",
         "hardConstraints": {
           "excludeAllergens": [],
@@ -585,7 +1821,7 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with substitutes in the same category and no late deliveries."
+        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with no substitutes and no late deliveries."
       },
       "steps": [
         {
@@ -732,9 +1968,9 @@
                   "unit": "pcs"
                 },
                 "policy": {
-                  "light": "BLUE",
+                  "light": "YELLOW",
                   "reasons": [
-                    "SUBSTITUTION_ALLOWED"
+                    "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
                 "summary": "300 shrove buns, Thursday, €240,00",
@@ -787,9 +2023,9 @@
                   "unit": "pcs"
                 },
                 "policy": {
-                  "light": "BLUE",
+                  "light": "YELLOW",
                   "reasons": [
-                    "SUBSTITUTION_ALLOWED"
+                    "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
                 "summary": "300 oat buns (egg-free), Thursday, €330,00",
@@ -831,71 +2067,217 @@
             }
           },
           "order": {
-            "httpStatus": 201,
+            "httpStatus": 202,
             "body": {
               "orderId": "ord_l3_allergen_off",
-              "quoteId": "qt_l3_allergen_off",
-              "planId": "pln_nut",
-              "status": "ORDERED",
-              "lines": [
-                {
-                  "productId": "463989",
-                  "quantity": {
-                    "amount": 300,
-                    "unit": "pcs"
-                  },
-                  "salesQuantity": {
-                    "amount": 300,
-                    "unit": "ST"
-                  },
-                  "unitPrice": {
-                    "cents": 80,
-                    "currency": "EUR"
-                  },
-                  "comparisonPrice": {
-                    "cents": 80,
-                    "currency": "EUR",
-                    "per": "pcs"
-                  },
-                  "lineTotal": {
-                    "cents": 24000,
-                    "currency": "EUR"
-                  },
-                  "availableDate": "2026-11-19",
-                  "isSubstitute": true
-                }
-              ],
-              "total": {
-                "cents": 24000,
-                "currency": "EUR"
-              },
-              "createdAt": "2026-11-14T10:06:00+02:00"
+              "status": "PENDING_APPROVAL",
+              "approvalId": "apr_l3_allergen_off",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ]
             }
           },
-          "approval": null
+          "approval": {
+            "approvalId": "apr_l3_allergen_off",
+            "orderId": "ord_l3_allergen_off",
+            "quoteId": "qt_l3_allergen_off",
+            "status": "OPEN",
+            "reasons": [
+              "SUBSTITUTION_NOT_ALLOWED"
+            ],
+            "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+            "options": [
+              {
+                "planId": "pln_nut",
+                "tier": "best",
+                "recommended": true,
+                "summary": "300 shrove buns, Thursday, €240,00"
+              },
+              {
+                "planId": "pln_safe",
+                "tier": "better",
+                "recommended": false,
+                "summary": "300 oat buns (egg-free), Thursday, €330,00"
+              }
+            ],
+            "agentExplanation": "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "createdAt": "2026-11-14T10:06:00+02:00"
+          },
+          "approvalEvent": {
+            "approvalId": "apr_l3_allergen_off",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "heartsLeft": 2
+          }
         }
       ],
       "result": {
         "kitchen": 100,
         "wallet": 100,
         "safety": 0,
-        "heartsLeft": 3,
+        "heartsLeft": 2,
         "stars": 0,
         "incident": {
           "type": "SAFETY",
           "productId": "463989",
           "reason": "Contains egg (AE)"
         },
-        "receiptText": "Your agent bought 300 shrove buns because they were cheapest. They contain egg, and nothing stopped it: the allergen rule was off.",
-        "logHeadHash": "sha256:57c4350da1db8256",
-        "approvalsAsked": 0,
+        "receiptText": "Your agent asked to buy 300 shrove buns because they were cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
+        "logHeadHash": "sha256:9221e93710749fe5",
+        "approvalsAsked": 1,
         "totalCost": {
           "cents": 24000,
           "currency": "EUR"
         },
-        "heartsUsed": 0
+        "heartsUsed": 1
       },
-      "decisions": {},
+      "decisions": {
+        "apr_l3_allergen_off": {
+          "approved": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_off",
+              "orderId": "ord_l3_allergen_off",
+              "quoteId": "qt_l3_allergen_off",
+              "status": "APPROVED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_nut",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 shrove buns, Thursday, €240,00"
+                },
+                {
+                  "planId": "pln_safe",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                }
+              ],
+              "agentExplanation": "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "approved",
+              "orderStatus": "CONFIRMED"
+            }
+          },
+          "rejected": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_off",
+              "orderId": "ord_l3_allergen_off",
+              "quoteId": "qt_l3_allergen_off",
+              "status": "REJECTED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_nut",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 shrove buns, Thursday, €240,00"
+                },
+                {
+                  "planId": "pln_safe",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                }
+              ],
+              "agentExplanation": "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "rejected",
+              "orderStatus": "REJECTED"
+            }
+          },
+          "alternative": {
+            "pln_safe": {
+              "httpStatus": 200,
+              "body": {
+                "approvalId": "apr_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "quoteId": "qt_l3_allergen_off",
+                "status": "APPROVED",
+                "reasons": [
+                  "SUBSTITUTION_NOT_ALLOWED"
+                ],
+                "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+                "options": [
+                  {
+                    "planId": "pln_nut",
+                    "tier": "best",
+                    "recommended": true,
+                    "summary": "300 shrove buns, Thursday, €240,00"
+                  },
+                  {
+                    "planId": "pln_safe",
+                    "tier": "better",
+                    "recommended": false,
+                    "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                  }
+                ],
+                "agentExplanation": "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.",
+                "deadline": "2026-11-14T10:06:20+02:00",
+                "createdAt": "2026-11-14T10:06:00+02:00",
+                "decision": "alternative:pln_safe",
+                "orderStatus": "CONFIRMED"
+              }
+            }
+          },
+          "expired": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_off",
+              "orderId": "ord_l3_allergen_off",
+              "quoteId": "qt_l3_allergen_off",
+              "status": "EXPIRED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_nut",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 shrove buns, Thursday, €240,00"
+                },
+                {
+                  "planId": "pln_safe",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                }
+              ],
+              "agentExplanation": "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "expired",
+              "orderStatus": "EXPIRED"
+            }
+          },
+          "conflict": {
+            "httpStatus": 409,
+            "body": {
+              "error": {
+                "code": "INVALID_STATE",
+                "message": "Approval apr_l3_allergen_off is already closed.",
+                "requestId": "req_apr_l3_allergen_off_409",
+                "details": {
+                  "approvalId": "apr_l3_allergen_off"
+                }
+              }
+            }
+          }
+        }
+      },
       "log": [
         {
           "seq": 1,
@@ -958,37 +2340,96 @@
           "customerId": "789",
           "agentId": "kitchenbuyer-koivu-school",
           "requestId": "req_004",
-          "light": "BLUE",
+          "light": "YELLOW",
           "reasons": [
-            "SUBSTITUTION_ALLOWED"
+            "SUBSTITUTION_NOT_ALLOWED"
           ],
           "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
           "refs": {
             "quoteId": "qt_l3_allergen_off"
           },
           "prevHash": "sha256:94f2d28a6a920ea4",
-          "hash": "sha256:6e8edcaf63540acd"
+          "hash": "sha256:8d3b5aed3daad9d9"
         },
         {
           "seq": 5,
           "eventId": "evt_5",
           "at": "2026-11-14T10:06:00+02:00",
           "actor": "gateway",
-          "type": "ORDER_CREATED",
+          "type": "ORDER_PENDING_APPROVAL",
           "customerId": "789",
           "agentId": "kitchenbuyer-koivu-school",
           "requestId": "req_005",
-          "light": "BLUE",
+          "light": "YELLOW",
           "reasons": [
-            "SUBSTITUTION_ALLOWED"
+            "SUBSTITUTION_NOT_ALLOWED"
           ],
+          "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off",
+            "orderId": "ord_l3_allergen_off",
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:8d3b5aed3daad9d9",
+          "hash": "sha256:89a7d24dff894358"
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:89a7d24dff894358",
+          "hash": "sha256:0fca6962e17be2d9"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_nut.",
+          "refs": {
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:0fca6962e17be2d9",
+          "hash": "sha256:953f8dcd635556f3"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
           "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (463989).",
           "refs": {
             "quoteId": "qt_l3_allergen_off",
-            "orderId": "ord_l3_allergen_off"
+            "orderId": "ord_l3_allergen_off",
+            "approvalId": "apr_l3_allergen_off"
           },
-          "prevHash": "sha256:6e8edcaf63540acd",
-          "hash": "sha256:57c4350da1db8256"
+          "prevHash": "sha256:953f8dcd635556f3",
+          "hash": "sha256:9221e93710749fe5"
         }
       ],
       "valioLog": [
@@ -1064,16 +2505,16 @@
           "customerId": "789",
           "agentId": "kitchenbuyer-koivu-school",
           "requestId": "req_004",
-          "light": "BLUE",
+          "light": "YELLOW",
           "reasons": [
-            "SUBSTITUTION_ALLOWED"
+            "SUBSTITUTION_NOT_ALLOWED"
           ],
           "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
           "refs": {
             "quoteId": "qt_l3_allergen_off"
           },
           "prevHash": "sha256:94f2d28a6a920ea4",
-          "hash": "sha256:6e8edcaf63540acd",
+          "hash": "sha256:8d3b5aed3daad9d9",
           "disclosure": {
             "returnedToAgent": [
               "netPrices",
@@ -1093,21 +2534,86 @@
           "eventId": "evt_5",
           "at": "2026-11-14T10:06:00+02:00",
           "actor": "gateway",
-          "type": "ORDER_CREATED",
+          "type": "ORDER_PENDING_APPROVAL",
           "customerId": "789",
           "agentId": "kitchenbuyer-koivu-school",
           "requestId": "req_005",
-          "light": "BLUE",
+          "light": "YELLOW",
           "reasons": [
-            "SUBSTITUTION_ALLOWED"
+            "SUBSTITUTION_NOT_ALLOWED"
           ],
+          "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off",
+            "orderId": "ord_l3_allergen_off",
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:8d3b5aed3daad9d9",
+          "hash": "sha256:89a7d24dff894358",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:89a7d24dff894358",
+          "hash": "sha256:0fca6962e17be2d9"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_nut.",
+          "refs": {
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:0fca6962e17be2d9",
+          "hash": "sha256:953f8dcd635556f3"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
           "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (463989).",
           "refs": {
             "quoteId": "qt_l3_allergen_off",
-            "orderId": "ord_l3_allergen_off"
+            "orderId": "ord_l3_allergen_off",
+            "approvalId": "apr_l3_allergen_off"
           },
-          "prevHash": "sha256:6e8edcaf63540acd",
-          "hash": "sha256:57c4350da1db8256",
+          "prevHash": "sha256:953f8dcd635556f3",
+          "hash": "sha256:9221e93710749fe5",
           "disclosure": {
             "returnedToAgent": [
               "orders"
@@ -1118,8 +2624,1400 @@
       ],
       "verify": {
         "valid": true,
-        "events": 5,
-        "headHash": "sha256:57c4350da1db8256"
+        "events": 8,
+        "headHash": "sha256:9221e93710749fe5"
+      },
+      "demoPath": {
+        "apr_l3_allergen_off": "approved"
+      },
+      "outcomes": {
+        "approved": {
+          "result": {
+            "kitchen": 100,
+            "wallet": 100,
+            "safety": 0,
+            "heartsLeft": 2,
+            "stars": 0,
+            "incident": {
+              "type": "SAFETY",
+              "productId": "463989",
+              "reason": "Contains egg (AE)"
+            },
+            "receiptText": "Your agent asked to buy 300 shrove buns because they were cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
+            "logHeadHash": "sha256:9221e93710749fe5",
+            "approvalsAsked": 1,
+            "totalCost": {
+              "cents": 24000,
+              "currency": "EUR"
+            },
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:c0f8057fd564ff0b"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "refs": {},
+              "prevHash": "sha256:c0f8057fd564ff0b",
+              "hash": "sha256:94f2d28a6a920ea4"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:94f2d28a6a920ea4",
+              "hash": "sha256:8d3b5aed3daad9d9"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:8d3b5aed3daad9d9",
+              "hash": "sha256:89a7d24dff894358"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:89a7d24dff894358",
+              "hash": "sha256:0fca6962e17be2d9"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_nut.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:0fca6962e17be2d9",
+              "hash": "sha256:953f8dcd635556f3"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (463989).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:953f8dcd635556f3",
+              "hash": "sha256:9221e93710749fe5"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:c0f8057fd564ff0b"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "refs": {},
+              "prevHash": "sha256:c0f8057fd564ff0b",
+              "hash": "sha256:94f2d28a6a920ea4",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:94f2d28a6a920ea4",
+              "hash": "sha256:8d3b5aed3daad9d9",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:8d3b5aed3daad9d9",
+              "hash": "sha256:89a7d24dff894358",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:89a7d24dff894358",
+              "hash": "sha256:0fca6962e17be2d9"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_nut.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:0fca6962e17be2d9",
+              "hash": "sha256:953f8dcd635556f3"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (463989).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:953f8dcd635556f3",
+              "hash": "sha256:9221e93710749fe5",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 8,
+            "headHash": "sha256:9221e93710749fe5"
+          }
+        },
+        "rejected": {
+          "result": {
+            "kitchen": 0,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "You rejected a request; nothing was ordered for it. 300 pcs did not arrive on time.",
+            "logHeadHash": "sha256:2d2698eef830f559",
+            "approvalsAsked": 1,
+            "totalCost": null,
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:c0f8057fd564ff0b"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "refs": {},
+              "prevHash": "sha256:c0f8057fd564ff0b",
+              "hash": "sha256:94f2d28a6a920ea4"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:94f2d28a6a920ea4",
+              "hash": "sha256:8d3b5aed3daad9d9"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:8d3b5aed3daad9d9",
+              "hash": "sha256:89a7d24dff894358"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:89a7d24dff894358",
+              "hash": "sha256:0fca6962e17be2d9"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l3_allergen_off REJECTED.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:0fca6962e17be2d9",
+              "hash": "sha256:2d2698eef830f559"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:c0f8057fd564ff0b"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "refs": {},
+              "prevHash": "sha256:c0f8057fd564ff0b",
+              "hash": "sha256:94f2d28a6a920ea4",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:94f2d28a6a920ea4",
+              "hash": "sha256:8d3b5aed3daad9d9",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:8d3b5aed3daad9d9",
+              "hash": "sha256:89a7d24dff894358",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:89a7d24dff894358",
+              "hash": "sha256:0fca6962e17be2d9"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l3_allergen_off REJECTED.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:0fca6962e17be2d9",
+              "hash": "sha256:2d2698eef830f559"
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 7,
+            "headHash": "sha256:2d2698eef830f559"
+          }
+        },
+        "expired": {
+          "result": {
+            "kitchen": 0,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "A request expired before you answered; nothing was ordered for it. 300 pcs did not arrive on time.",
+            "logHeadHash": "sha256:a150aa91fd44036e",
+            "approvalsAsked": 1,
+            "totalCost": null,
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:c0f8057fd564ff0b"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "refs": {},
+              "prevHash": "sha256:c0f8057fd564ff0b",
+              "hash": "sha256:94f2d28a6a920ea4"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:94f2d28a6a920ea4",
+              "hash": "sha256:8d3b5aed3daad9d9"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:8d3b5aed3daad9d9",
+              "hash": "sha256:89a7d24dff894358"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:89a7d24dff894358",
+              "hash": "sha256:0fca6962e17be2d9"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l3_allergen_off expired: no answer in time. Order ord_l3_allergen_off EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:0fca6962e17be2d9",
+              "hash": "sha256:a150aa91fd44036e"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:c0f8057fd564ff0b"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "refs": {},
+              "prevHash": "sha256:c0f8057fd564ff0b",
+              "hash": "sha256:94f2d28a6a920ea4",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:94f2d28a6a920ea4",
+              "hash": "sha256:8d3b5aed3daad9d9",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:8d3b5aed3daad9d9",
+              "hash": "sha256:89a7d24dff894358",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:89a7d24dff894358",
+              "hash": "sha256:0fca6962e17be2d9"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l3_allergen_off expired: no answer in time. Order ord_l3_allergen_off EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:0fca6962e17be2d9",
+              "hash": "sha256:a150aa91fd44036e"
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 7,
+            "headHash": "sha256:a150aa91fd44036e"
+          }
+        },
+        "alternative:pln_safe": {
+          "result": {
+            "kitchen": 100,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 3,
+            "incident": null,
+            "receiptText": "You chose 300 oat buns (egg-free), Thursday, €330,00.",
+            "logHeadHash": "sha256:a09586866381bac0",
+            "approvalsAsked": 1,
+            "totalCost": {
+              "cents": 33000,
+              "currency": "EUR"
+            },
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:c0f8057fd564ff0b"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "refs": {},
+              "prevHash": "sha256:c0f8057fd564ff0b",
+              "hash": "sha256:94f2d28a6a920ea4"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:94f2d28a6a920ea4",
+              "hash": "sha256:8d3b5aed3daad9d9"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:8d3b5aed3daad9d9",
+              "hash": "sha256:89a7d24dff894358"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:89a7d24dff894358",
+              "hash": "sha256:0fca6962e17be2d9"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager chose plan pln_safe.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:0fca6962e17be2d9",
+              "hash": "sha256:bafd9cc317485021"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_safe (990002).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:bafd9cc317485021",
+              "hash": "sha256:a09586866381bac0"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:b93fc76c2b33e638"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:b93fc76c2b33e638",
+              "hash": "sha256:c0f8057fd564ff0b"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "refs": {},
+              "prevHash": "sha256:c0f8057fd564ff0b",
+              "hash": "sha256:94f2d28a6a920ea4",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:94f2d28a6a920ea4",
+              "hash": "sha256:8d3b5aed3daad9d9",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:8d3b5aed3daad9d9",
+              "hash": "sha256:89a7d24dff894358",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:89a7d24dff894358",
+              "hash": "sha256:0fca6962e17be2d9"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager chose plan pln_safe.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:0fca6962e17be2d9",
+              "hash": "sha256:bafd9cc317485021"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_safe (990002).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:bafd9cc317485021",
+              "hash": "sha256:a09586866381bac0",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 8,
+            "headHash": "sha256:a09586866381bac0"
+          }
+        }
+      },
+      "traps": {
+        "apr_l3_allergen_off": {
+          "pln_nut": "allergen"
+        }
       }
     }
   },
@@ -1130,37 +4028,37 @@
         "kitchen": 100,
         "wallet": 100,
         "safety": 100,
-        "heartsLeft": 3,
+        "heartsLeft": 2,
         "stars": 3,
         "incident": null,
-        "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent bought 300 egg-free oat buns instead.",
-        "logHeadHash": "sha256:85bc3360469ba320",
-        "approvalsAsked": 0,
+        "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent asked to buy 300 egg-free oat buns instead, and you approved.",
+        "logHeadHash": "sha256:e800baad621a75d5",
+        "approvalsAsked": 1,
         "totalCost": {
           "cents": 33000,
           "currency": "EUR"
         },
-        "heartsUsed": 0
+        "heartsUsed": 1
       },
       "allergen_off": {
         "kitchen": 100,
         "wallet": 100,
         "safety": 0,
-        "heartsLeft": 3,
+        "heartsLeft": 2,
         "stars": 0,
         "incident": {
           "type": "SAFETY",
           "productId": "463989",
           "reason": "Contains egg (AE)"
         },
-        "receiptText": "Your agent bought 300 shrove buns because they were cheapest. They contain egg, and nothing stopped it: the allergen rule was off.",
-        "logHeadHash": "sha256:57c4350da1db8256",
-        "approvalsAsked": 0,
+        "receiptText": "Your agent asked to buy 300 shrove buns because they were cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
+        "logHeadHash": "sha256:9221e93710749fe5",
+        "approvalsAsked": 1,
         "totalCost": {
           "cents": 24000,
           "currency": "EUR"
         },
-        "heartsUsed": 0
+        "heartsUsed": 1
       }
     }
   }

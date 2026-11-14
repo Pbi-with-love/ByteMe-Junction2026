@@ -240,14 +240,14 @@ def seal(level, name, overlay, path=(), probe=False):
     """Replay a preset's recorded run (steps + the human's `path` of decisions) into approval events,
     decisions, the buyer log, valioLog, verify and the result's totals."""
     pr, path = level["presets"][name], list(path)
+    recorded_path = list(path)
     customer = level["start"]["level"]["customer"]["customerId"]
     m = pr["mandate"]
     hearts = level["start"]["hearts"]
     has_overlay = any(s["quote"].get("scenarioOverlay") for s in pr["steps"])
-    load_type, load_actor = ("SCENARIO_OVERLAY", "scenario") if has_overlay else ("LEVEL_LOADED", "gateway")
-    events = [("10:00", load_actor, load_type, None, [], overlay, {}),
-              ("10:01", "human", "MANDATE_SIGNED", None, [], f"{m['issuedBy']['name']} signed mandate {m['mandateId']}.",
-               {"mandateId": m["mandateId"]})]
+    events = ([ ("10:00", "scenario", "SCENARIO_OVERLAY", None, [], overlay, {}) ] if has_overlay else [])
+    events.append(("10:01", "human", "MANDATE_SIGNED", None, [], f"{m['issuedBy']['name']} signed mandate {m['mandateId']}.",
+                   {"mandateId": m["mandateId"]}))
     decisions, costs, used = {}, [], 0
     for i, s in enumerate(pr["steps"]):
         q, best, apr, o = s["quote"], s["quote"]["plans"][0], s["approval"], s["order"]["body"]
@@ -285,13 +285,19 @@ def seal(level, name, overlay, path=(), probe=False):
                            f"Approval shown to manager ({hearts} heart{'s' * (hearts != 1)} left).", {"approvalId": aid}))
             decisions[aid] = decision_records(apr)
             d = path.pop(0)
-            events.append((plus_min(oat), "human", "APPROVAL_DECIDED", None, [],
-                           f"Manager {d} plan {best['planId']}." if d == "approved"
-                           else f"Manager {d} the request; order {o['orderId']} {d.upper()}.", {"approvalId": aid}))
-            if d == "approved":
-                events.append((plus_min(oat), "gateway", "ORDER_CREATED", "GREEN", [],
-                               created_text(o["orderId"], best), refs))
-                costs.append(best["total"]["cents"])
+            if d == "expired":
+                events.append((plus_min(oat), "gateway", "APPROVAL_EXPIRED", None, apr["reasons"],
+                               f"Approval {aid} expired: no answer in time. Order {o['orderId']} EXPIRED.", refs))
+            else:
+                chosen = best if d == "approved" else next((p for p in q["plans"] if d == f"alternative:{p['planId']}"), None)
+                summary = f"Manager approved plan {best['planId']}." if d == "approved" else (
+                    f"Manager chose plan {chosen['planId']}." if chosen else
+                    f"Manager rejected the request; order {o['orderId']} REJECTED.")
+                events.append((plus_min(oat), "human", "APPROVAL_DECIDED", None, [], summary, {"approvalId": aid}))
+                if chosen:
+                    events.append((plus_min(oat), "gateway", "ORDER_CREATED", "GREEN", [],
+                                   created_text(o["orderId"], chosen), refs))
+                    costs.append(chosen["total"]["cents"])
         s["approvalEvent"] = {"approvalId": aid, "deadline": apr["deadline"], "heartsLeft": hearts}
     assert not path, (name, "unused decisions", path)
     log = log_chain(customer, m["agentId"], events)
@@ -300,6 +306,8 @@ def seal(level, name, overlay, path=(), probe=False):
     pr["valioLog"] = [{**e, "disclosure": DISCLOSURE[e["type"]]} if e["type"] in DISCLOSURE else e for e in log]
     pr["verify"] = verify_chain(log)
     pr["result"].update(logHeadHash=log[-1]["hash"], totalCost=EUR(sum(costs)) if costs else None, heartsUsed=used)
+    pr["demoPath"] = {s["approval"]["approvalId"]: d for s, d in zip(
+        (s for s in pr["steps"] if s["approval"] and s["approval"]["status"] == "OPEN"), recorded_path)}
 
 
 def search_row(p, excluded=None):
@@ -469,14 +477,14 @@ level1["tamperedDemo"] = {"preset": "balanced", "log": tampered, "verify": {"val
 balanced_log = level1["presets"]["balanced"]["log"]
 probe_events = [(e["at"][11:16], e["actor"], e["type"], e["light"], e["reasons"], e["summary"], e["refs"])
                 for e in balanced_log]
-probe_events.insert(3, ("10:05", "gateway", "DATA_BOUNDARY_BLOCKED", "RED", ["DATA_BOUNDARY"],
+search_index = next(i for i, e in enumerate(probe_events) if e[2] == "SEARCH")
+probe_events.insert(search_index + 1, ("10:05", "gateway", "DATA_BOUNDARY_BLOCKED", "RED", ["DATA_BOUNDARY"],
                         "Agent asked for purchase prices; refused.", {}))
 probe_log = log_chain("123", AG1, probe_events)
 probe_valio_log = [{**e, "disclosure": DISCLOSURE[e["type"]]} if e["type"] in DISCLOSURE else e
                    for e in probe_log]
 level1["dataBoundaryDemo"] = {"preset": "balanced", "log": probe_log, "valioLog": probe_valio_log,
                               "verify": verify_chain(probe_log)}
-write("level1.json", finish(level1))
 
 # ======================= Level 2: The Stock-out =======================
 # Scenarios L3-01/L3-02: 464201 has no stock, substitute 464398 in the same category (10400).
@@ -522,7 +530,6 @@ for preset, subst, light, reasons, hearts in [
         "steps": steps, "result": res}
     seal(level2, preset, "Scenario adjustment: 464201 set to sales-blocked this week.",
          ["approved", "approved"] if light == "YELLOW" else [])
-write("level2.json", finish(level2))
 
 # ======================= Level 3: Allergy Emergency =======================
 C3 = {"customerId": "789", "name": "Koivu School kitchen (fictional)", "type": "school"}
@@ -547,7 +554,7 @@ level3 = {"start": start("level3", "Allergy Emergency", C3,
           "presets": {}}
 for preset, allergens in [("allergen_on", ["AE"]), ("allergen_off", [])]:
     mid = f"mdt_l3_{preset}"
-    plans = [plan("pln_safe", [line(SAFE_SP, 300, THU, True)], THU, 300, "BLUE", ["SUBSTITUTION_ALLOWED"],
+    plans = [plan("pln_safe", [line(SAFE_SP, 300, THU, True)], THU, 300, "YELLOW", ["SUBSTITUTION_NOT_ALLOWED"],
                   "300 oat buns (egg-free), Thursday")]
     excl = [{"productId": "990001", "light": "RED", "reason": "SALES_BLOCKED"}]
     excluded_allergens = level3["hiddenRequirements"]["excludeAllergens"]
@@ -555,7 +562,7 @@ for preset, allergens in [("allergen_on", ["AE"]), ("allergen_off", [])]:
     if mandate_allergen_match:
         excl.append({"productId": "463989", "light": "RED", "reason": "ALLERGEN_EXCLUDED"})
     else:
-        plans.append(plan("pln_nut", [line(NUT_SP, 300, THU, True)], THU, 300, "BLUE", ["SUBSTITUTION_ALLOWED"],
+        plans.append(plan("pln_nut", [line(NUT_SP, 300, THU, True)], THU, 300, "YELLOW", ["SUBSTITUTION_NOT_ALLOWED"],
                           "300 shrove buns, Thursday"))
     q = quote(f"qt_l3_{preset}", "789", mid, NEED3, plans, excl, PRIO_PRICE, overlay=True)
     best = q["plans"][0]
@@ -571,18 +578,136 @@ for preset, allergens in [("allergen_on", ["AE"]), ("allergen_off", [])]:
     search = {"results": [search_row(BASE_SP, {"light": "RED", "reason": "SALES_BLOCKED"}), search_row(SAFE_SP),
                           search_row(NUT_SP, {"light": "RED", "reason": "ALLERGEN_EXCLUDED"} if allergens else None)],
               "total": 3}
-    res = (result(100, wallet(q, best), 0, 3, "Your agent bought 300 shrove buns because they were "
-                  "cheapest. They contain egg, and nothing stopped it: the allergen rule was off.",
-                  incident=incident, approvals=0) if incident else
-           result(100, wallet(q, best), 100, 3, "The cheapest bun contains egg, so the gateway blocked it. "
-                  "Your agent bought 300 egg-free oat buns instead.", approvals=0))
+    reason = "Every bun on offer is a substitute, and your mandate allows no substitutes."
+    explanation = ("The usual bun is blocked this week. The gateway blocked the shrove bun, so oat buns at €1,10 each are the only option."
+                   if preset == "allergen_on" else
+                   "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.")
+    receipt = ("The cheapest bun contains egg, so the gateway blocked it. Your agent asked to buy 300 egg-free oat buns instead, and you approved."
+               if preset == "allergen_on" else
+               "Your agent asked to buy 300 shrove buns because they were cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.")
+    res = (result(100, wallet(q, best), 100 if not incident else 0, 2, receipt,
+                  incident=incident, approvals=1))
     level3["presets"][preset] = {
-        "mandate": mandate("789", AG3, ISS3, 500, "same_category", "none", allergens, PRIO_PRICE, mid),
-        "steps": [step(search, q, f"ord_l3_{preset}")], "result": res}
-    seal(level3, preset, "Scenario adjustment: usual bun 990001 set to sales-blocked.")
-write("level3.json", finish(level3))
+        "mandate": mandate("789", AG3, ISS3, 500, "none", "none", allergens, PRIO_PRICE, mid),
+        "steps": [step(search, q, f"ord_l3_{preset}", f"apr_l3_{preset}", reason, explanation)], "result": res}
+    seal(level3, preset, "Scenario adjustment: usual bun 990001 set to sales-blocked.", ["approved"])
+
+# ---------- outcome/trap builder (004 M2-M4, 009 demoPath) ----------
+PRODUCTS = {p["productId"]: p for p in (VALIO_LF, EILA_LF, NOVOBOX, BASE_SP, SAFE_SP, NUT_SP)}
+
+def violates_hidden(level, p):
+    excluded = set(level.get("hiddenRequirements", {}).get("excludeAllergens", []))
+    return bool(excluded.intersection(p.get("allergens", []) + p.get("mayContain", [])))
+
+def selected_plans(level, pr, decisions):
+    chosen = []
+    for s in pr["steps"]:
+        if not s["approval"]:
+            if s["order"]["httpStatus"] == 201:
+                chosen.append((s, s["quote"]["plans"][0]))
+            continue
+        a = s["approval"]
+        if a["status"] != "OPEN":
+            continue
+        d = decisions[a["approvalId"]]
+        if d == "approved":
+            chosen.append((s, s["quote"]["plans"][0]))
+        elif d.startswith("alternative:"):
+            chosen.append((s, next(p for p in s["quote"]["plans"] if p["planId"] == d.split(":", 1)[1])))
+    return chosen
+
+def calculate_result(level, pr, decisions, recorded=False):
+    need = {"level1": 1000, "level2": 240, "level3": 300}[level["start"]["level"]["levelId"]]
+    unit = {"level1": "l", "level2": "l", "level3": "pcs"}[level["start"]["level"]["levelId"]]
+    chosen = selected_plans(level, pr, decisions)
+    on_time = sum(p["onTime"]["amount"] for _, p in chosen)
+    kitchen = min(100, round(100 * on_time / need))
+    incident = None
+    low_lines = 0
+    for _, p in chosen:
+        for ln in p["lines"]:
+            product = PRODUCTS[ln["productId"]]
+            if incident is None and violates_hidden(level, product):
+                codes = sorted(set(level["hiddenRequirements"]["excludeAllergens"]).intersection(
+                    product.get("allergens", []) + product.get("mayContain", [])))
+                names = {"AE": "egg", "AM": "milk", "AW": "wheat", "AP": "peanut", "AN": "tree nut", "SA": "sesame"}
+                incident = {"type": "SAFETY", "productId": ln["productId"],
+                            "reason": "Contains " + ", ".join(f"{names.get(c, c)} ({c})" for c in codes)}
+            if REL.get(ln["productId"]) is not None and REL[ln["productId"]] < LOW_RELIABILITY:
+                low_lines += 1
+    safety = 0 if incident else max(0, 100 - 20 * low_lines)
+    wallet_scores = []
+    for s, chosen_plan in chosen:
+        q = copy.deepcopy(s["quote"])
+        q["plans"] = [p for p in q["plans"] if not any(violates_hidden(level, PRODUCTS[ln["productId"]]) for ln in p["lines"])]
+        wallet_scores.append(wallet(q, chosen_plan) if q["plans"] else 0)
+    wallet_score = min(wallet_scores) if wallet_scores else 100
+    r = copy.deepcopy(pr["result"])
+    r.update(kitchen=kitchen, wallet=wallet_score, safety=safety, incident=incident,
+             heartsLeft=pr["result"]["heartsLeft"], heartsUsed=pr["result"]["heartsUsed"],
+             approvalsAsked=pr["result"]["approvalsAsked"], stars=stars(kitchen, wallet_score, safety, pr["result"]["heartsLeft"]),
+             totalCost=EUR(sum(p["total"]["cents"] for _, p in chosen)) if chosen else None)
+    if not recorded:
+        parts = []
+        for s in pr["steps"]:
+            a = s["approval"]
+            if not a or a["status"] != "OPEN":
+                if a and a["status"] == "EXPIRED":
+                    parts.append("The last request expired unseen: you had no attention left.")
+                continue
+            d = decisions[a["approvalId"]]
+            if d == "approved": parts.append(f"You approved {s['quote']['plans'][0]['summary']}.")
+            elif d.startswith("alternative:"):
+                p = next(p for p in s["quote"]["plans"] if p["planId"] == d.split(":", 1)[1])
+                parts.append(f"You chose {p['summary']}.")
+            elif d == "rejected": parts.append("You rejected a request; nothing was ordered for it.")
+            else: parts.append("A request expired before you answered; nothing was ordered for it.")
+        if kitchen < 100: parts.append(f"{need - on_time} {unit} did not arrive on time.")
+        if incident: parts.append(f"{PRODUCTS[incident['productId']]['name']} contains {incident['reason'].removeprefix('Contains ')}: safety incident.")
+        r["receiptText"] = " ".join(parts)
+    return r
+
+def build_outcomes(level, name, pr):
+    opens = [s for s in pr["steps"] if s["approval"] and s["approval"]["status"] == "OPEN"]
+    if not opens:
+        pr["traps"] = {}
+        return
+    recorded_map = pr["demoPath"]
+    recorded = [recorded_map[s["approval"]["approvalId"]] for s in opens]
+    keys = [recorded]
+    for i, s in enumerate(opens):
+        a = s["approval"]
+        choices = ["approved", "rejected", "expired"] + [f"alternative:{o['planId']}" for o in a["options"] if not o["recommended"]]
+        for d in choices:
+            if d != recorded[i]:
+                variant = list(recorded); variant[i] = d; keys.append(variant)
+    outcomes = {}
+    for path in keys:
+        key = ",".join(path)
+        cloned = copy.deepcopy(pr)
+        decisions = {s["approval"]["approvalId"]: d for s, d in zip(opens, path)}
+        cloned["result"] = calculate_result(level, pr, decisions, path == recorded)
+        seal(level | {"presets": {name: cloned}}, name, "Scenario adjustment: usual bun 990001 set to sales-blocked." if level is level3 else "Scenario overlay.", path)
+        outcomes[key] = {k: cloned[k] for k in ("result", "log", "valioLog", "verify")}
+    pr["outcomes"] = outcomes
+    rec = outcomes[",".join(recorded)]
+    pr.update(rec)
+    traps = {}
+    if name == "balanced" and level is level1:
+        traps = {"apr_l1_balanced": {"pln_b": "late"}}
+    if name == "allergen_off":
+        traps = {"apr_l3_allergen_off": {"pln_nut": "allergen"}}
+    pr["traps"] = traps
+
+for lvl in (level1, level2, level3):
+    for nm, preset_data in lvl["presets"].items():
+        build_outcomes(lvl, nm, preset_data)
+
+for lvl in (level1, level2, level3):
+    write(f"{lvl['start']['level']['levelId']}.json", finish(lvl))
 
 # ---------- self-check ----------
+assert "outcomes" in json.loads((OUT / "level1.json").read_text())["presets"]["balanced"], "AC4 outcomes missing"
 data = {f: json.loads((OUT / f"{f}.json").read_text()) for f in ("level1", "level2", "level3")}
 for f, d in data.items():
     for name, pr in d["presets"].items():
@@ -644,7 +769,7 @@ for f, d in data.items():
         if any(s["quote"].get("scenarioOverlay") for s in pr["steps"]):
             assert any(e["actor"] == "scenario" and e["type"] == "SCENARIO_OVERLAY" for e in vlog), (f, name)
         else:
-            assert any(e["actor"] == "gateway" and e["type"] == "LEVEL_LOADED" for e in vlog), (f, name)
+            assert not any(e["actor"] == "scenario" or e["type"] == "SCENARIO_OVERLAY" for e in vlog), (f, name)
         assert all("disclosure" in e for e in vlog if e["type"] in MUST_DISCLOSE), (f, name)
         assert not any("disclosure" in e for e in log), (f, name)
         assert [{k: v for k, v in e.items() if k != "disclosure"} for e in vlog] == log, (f, name)
@@ -660,7 +785,7 @@ assert events(P1["strict"]) == [2, 1, 0, 0] and events(P1["balanced"]) == [2] an
 assert [s["approval"]["approvalId"] for s in P1["strict"]["steps"]] == [f"apr_l1_strict_{n}" for n in (1, 2, 3, 4)]
 assert [s["quote"]["plans"][0]["planId"] for s in P1["strict"]["steps"]] == ["pln_a", "pln_a", "pln_a", "pln_b"]
 assert P1["strict"]["log"][-1]["type"] == "APPROVAL_EXPIRED" and "ATTENTION_EXHAUSTED" in P1["strict"]["log"][-1]["reasons"]
-assert [r["heartsUsed"] for P in (P1, P2, P3) for r in (pr["result"] for pr in P.values())] == [3, 1, 0, 2, 0, 0, 0]
+assert [r["heartsUsed"] for P in (P1, P2, P3) for r in (pr["result"] for pr in P.values())] == [3, 1, 0, 2, 0, 1, 1]
 plan_total = lambda pr, pid: next(p["total"] for p in pr["steps"][0]["quote"]["plans"] if p["planId"] == pid)
 assert P1["strict"]["result"]["totalCost"] == EUR(700 * VALIO_LF["unitPriceCents"])  # only the approved 700 l
 assert P1["balanced"]["result"]["totalCost"] == plan_total(P1["balanced"], "pln_a")
@@ -688,4 +813,119 @@ assert td["verify"] == verify_chain(td["log"]) == {"valid": False, "brokenAtSeq"
 assert td["log"][4]["summary"] != P1[td["preset"]]["log"][4]["summary"]
 assert not any(e["type"] == "DATA_BOUNDARY_BLOCKED" for e in td["log"])
 assert "tamperedDemo" not in data["level2"] and "tamperedDemo" not in data["level3"]
+
+# ---------- spec 012 acceptance checks ----------
+assert [len(P1["strict"]["outcomes"]), len(P1["balanced"]["outcomes"]),
+        len(P2["strict"]["outcomes"]), len(P3["allergen_on"]["outcomes"]),
+        len(P3["allergen_off"]["outcomes"])] == [10, 5, 5, 3, 4]
+for f, d in data.items():
+    for nm, pr in d["presets"].items():
+        opens = [s for s in pr["steps"] if s["approval"] and s["approval"]["status"] == "OPEN"]
+        assert set(pr["demoPath"]) == {s["approval"]["approvalId"] for s in opens}
+        if opens:
+            rec_key = ",".join(pr["demoPath"][s["approval"]["approvalId"]] for s in opens)
+            assert pr["outcomes"][rec_key] == {k: pr[k] for k in ("result", "log", "valioLog", "verify")}
+            for s in opens:
+                aid, decision = s["approval"]["approvalId"], pr["demoPath"][s["approval"]["approvalId"]]
+                assert aid in pr["decisions"]
+                ev = next(e for e in pr["log"] if e["refs"].get("approvalId") == aid and
+                          e["type"] in ("APPROVAL_DECIDED", "APPROVAL_EXPIRED"))
+                assert (ev["type"] == "APPROVAL_EXPIRED" if decision == "expired" else
+                        ev["type"] == "APPROVAL_DECIDED" and
+                        (ev["summary"].startswith("Manager approved") if decision == "approved" else
+                         ev["summary"].startswith("Manager rejected") if decision == "rejected" else
+                         ev["summary"] == f"Manager chose plan {decision.split(':', 1)[1]}."))
+            assert len(pr["outcomes"]) == 1 + sum(
+                len(["approved", "rejected", "expired"] + [f"alternative:{o['planId']}" for o in s["approval"]["options"] if not o["recommended"]]) - 1
+                for s in opens)
+            for key, outcome in pr["outcomes"].items():
+                assert verify_chain(outcome["log"])["valid"]
+                assert outcome["verify"]["headHash"] == outcome["log"][-1]["hash"] == outcome["result"]["logHeadHash"]
+                assert [{k: v for k, v in e.items() if k != "disclosure"} for e in outcome["valioLog"]] == outcome["log"]
+                assert all(outcome["result"][k] == pr["result"][k] for k in ("heartsLeft", "heartsUsed", "approvalsAsked"))
+                for aid, decision in zip((s["approval"]["approvalId"] for s in opens), key.split(",")):
+                    if decision.startswith("alternative:"):
+                        assert decision.split(":", 1)[1] in pr["decisions"][aid]["alternative"]
+        else:
+            assert "outcomes" not in pr
+        for aid, trap_plans in pr["traps"].items():
+            a_step = next(s for s in opens if s["approval"]["approvalId"] == aid)
+            for pid, trap in trap_plans.items():
+                option = next(o for o in a_step["approval"]["options"] if o["planId"] == pid)
+                plan_data = next(p for p in a_step["quote"]["plans"] if p["planId"] == pid)
+                if trap == "late":
+                    assert any(ln["availableDate"] > a_step["quote"]["need"]["deadline"][:10] for ln in plan_data["lines"])
+                    assert plan_data["onTime"]["amount"] < a_step["quote"]["need"]["quantity"]["amount"]
+                else:
+                    assert any(violates_hidden(d, PRODUCTS[ln["productId"]]) for ln in plan_data["lines"])
+                trap_decision = "approved" if option["recommended"] else f"alternative:{pid}"
+                alt_option = next(o for o in a_step["approval"]["options"] if o["planId"] != pid)
+                alt_decision = "approved" if alt_option["recommended"] else f"alternative:{alt_option['planId']}"
+                trap_key = list(pr["demoPath"].values()); idx = list(pr["demoPath"]).index(aid); trap_key[idx] = trap_decision
+                alt_key = list(pr["demoPath"].values()); alt_key[idx] = alt_decision
+                tr = pr["outcomes"][",".join(trap_key)]["result"]
+                ar = pr["outcomes"][",".join(alt_key)]["result"]
+                assert tr["kitchen"] < ar["kitchen"] or tr["safety"] < ar["safety"]
+assert P1["balanced"]["outcomes"]["alternative:pln_b"]["result"]["kitchen"] == 70
+assert P3["allergen_off"]["outcomes"]["alternative:pln_safe"]["result"]["safety"] == 100
+assert P3["allergen_off"]["outcomes"]["alternative:pln_safe"]["result"]["incident"] is None
+assert P3["allergen_on"]["mandate"]["substitution"] == P3["allergen_off"]["mandate"]["substitution"] == "none"
+for pr in P3.values():
+    assert all(p["policy"] == {"light": "YELLOW", "reasons": ["SUBSTITUTION_NOT_ALLOWED"]}
+               for p in pr["steps"][0]["quote"]["plans"])
+    assert pr["steps"][0]["approval"]["createdAt"] == T("10:06")
+assert P3["allergen_on"]["steps"][0]["approval"]["options"] == [
+    {"planId": "pln_safe", "tier": "best", "recommended": True,
+     "summary": P3["allergen_on"]["steps"][0]["quote"]["plans"][0]["summary"]}]
+assert P3["allergen_off"]["steps"][0]["approval"]["reasonText"] == "Every bun on offer is a substitute, and your mandate allows no substitutes."
+assert P3["allergen_on"]["result"]["stars"] == 3 and P3["allergen_off"]["result"]["stars"] == 0
+assert all(not any(e["type"] == "LEVEL_LOADED" for e in d["presets"][nm]["log"])
+           for d in data.values() for nm in d["presets"])
+assert all("LEVEL_LOADED" not in (OUT / f).read_text() for f in ("level1.json", "level2.json", "level3.json"))
+EVENT_TYPES = {"MANDATE_SIGNED", "MANDATE_REVOKED", "SEARCH", "QUOTE_CREATED", "QUOTE_EXPIRED", "REQUOTE",
+               "ORDER_CREATED", "ORDER_PENDING_APPROVAL", "APPROVAL_SHOWN", "APPROVAL_DECIDED", "APPROVAL_EXPIRED",
+               "POLICY_BLOCKED", "DATA_BOUNDARY_BLOCKED", "SCENARIO_OVERLAY", "AGENT_NOTE"}
+allowed_reasons = {"WITHIN_MANDATE", "SPLIT_ORDER", "SUBSTITUTION_ALLOWED", "OVER_ORDER_LIMIT",
+                   "OVER_WEEK_LIMIT", "SUBSTITUTION_NOT_ALLOWED", "LATE_DELIVERY", "SALES_BLOCKED",
+                   "ALLERGEN_EXCLUDED", "LABEL_REQUIRED", "MANDATE_INVALID", "MANDATE_EXPIRED",
+                   "DATA_BOUNDARY", "ATTENTION_EXHAUSTED", "PRICE_UNAVAILABLE"}
+for d in data.values():
+    records = [*d["presets"].values(), d.get("tamperedDemo", {}), d.get("dataBoundaryDemo", {})]
+    for pr in records:
+        logs = [pr.get("log", []), pr.get("valioLog", [])]
+        logs.extend(o.get(k, []) for o in pr.get("outcomes", {}).values() for k in ("log", "valioLog"))
+        for log in logs:
+            assert all(e["type"] in EVENT_TYPES for e in log)
+            assert all(e["type"] != "POLICY_BLOCKED" or e["actor"] == "human" for e in log)
+            assert all(code in allowed_reasons for e in log for code in e["reasons"])
+        if "steps" in pr:
+            has_overlay = any(s["quote"].get("scenarioOverlay") for s in pr["steps"])
+            for log in logs:
+                assert sum(e["type"] == "SCENARIO_OVERLAY" for e in log) == int(has_overlay)
+                assert sum(e["type"] == "SCENARIO_OVERLAY" and e["actor"] == "scenario" for e in log) == int(has_overlay)
+            for s in pr["steps"]:
+                relevant = [*s["quote"]["excludedProducts"], *s["search"]["results"]]
+                relevant.extend(p["policy"] for p in s["quote"]["plans"])
+                relevant.extend([s["approval"]] if s["approval"] else [])
+                for item in relevant:
+                    codes = [item["reason"]] if isinstance(item.get("reason"), str) else item.get("reasons", [])
+                    if item.get("excluded"):
+                        codes += [item["excluded"]["reason"]]
+                    assert all(code in allowed_reasons for code in codes)
+        elif pr.get("preset") in d["presets"]:
+            source = d["presets"][pr["preset"]]
+            has_overlay = any(s["quote"].get("scenarioOverlay") for s in source["steps"])
+            for log in logs:
+                assert sum(e["type"] == "SCENARIO_OVERLAY" for e in log) == int(has_overlay)
+                assert sum(e["type"] == "SCENARIO_OVERLAY" and e["actor"] == "scenario" for e in log) == int(has_overlay)
+for f, d in data.items():
+    for pr in d["presets"].values():
+        for s in pr["steps"]:
+            for p in s["quote"]["plans"]:
+                lines = [ln for ln in p["lines"]]
+                qty = sum(ln["quantity"]["amount"] for ln in lines)
+                low = sum(ln["quantity"]["amount"] for ln in lines if REL[ln["productId"]] is not None and REL[ln["productId"]] < LOW_RELIABILITY)
+                unknown = any(REL[ln["productId"]] is None for ln in lines)
+                expected_penalty = round(0.2 * low / qty + (0.05 if unknown else 0), 3)
+                assert p["score"]["reliabilityPenalty"] == expected_penalty
 print("ok:", sorted(x.name for x in OUT.glob("*.json")))
