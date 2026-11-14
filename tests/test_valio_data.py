@@ -5,7 +5,7 @@ import pytest
 
 from backend.app.config import Settings
 from backend.app.valio_client import ValioClient
-from backend.app.valio_data import ValioDataCache, parse_rows
+from backend.app.valio_data import ValioDataCache, extract_allergen_data, parse_rows
 
 
 def test_parse_rows_supports_wrapped_json() -> None:
@@ -18,6 +18,45 @@ def test_parse_rows_supports_csv() -> None:
     assert parse_rows(b"productId,name\np1,Milk\n") == [
         {"productId": "p1", "name": "Milk"}
     ]
+
+
+def test_extract_allergen_data_treats_may_contain_as_risky() -> None:
+    product = {
+        "synkkaData": {
+            "classifications": [
+                {
+                    "name": "allergen",
+                    "values": [
+                        {"id": "AP", "unit": "MAY_CONTAIN"},
+                        {"id": "AM", "unit": "CONTAINS"},
+                    ],
+                },
+                {
+                    "name": "nonAllergen",
+                    "values": [{"id": "AF", "unit": "FREE_FROM"}],
+                },
+            ]
+        }
+    }
+
+    assert extract_allergen_data(product) == {
+        "allergens": ["AP", "AM"],
+        "nonAllergens": ["AF"],
+        "allergenDataVerified": True,
+    }
+
+
+def test_extract_allergen_data_marks_empty_classifications_unverified() -> None:
+    product = {
+        "synkkaData": {
+            "classifications": [
+                {"name": "allergen", "values": []},
+                {"name": "nonAllergen", "values": []},
+            ]
+        }
+    }
+
+    assert extract_allergen_data(product)["allergenDataVerified"] is False
 
 
 @pytest.mark.anyio

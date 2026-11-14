@@ -43,6 +43,12 @@ certification-like values exist under `packagingMarkedLabel`, including
 `EU_ECO_LABEL`, `RAINFOREST_ALLIANCE`, and `UTZ_CERTIFIED`; the gateway must preserve
 the source classification rather than treating every label as a certificate.
 
+Allergen values use source codes and a `unit` such as `CONTAINS`, `MAY_CONTAIN`, or
+`UNDECLARED`. The code `AP` is verified as peanut: product `460428` is named
+“Taffel Pähkinä salted peanuts 300g” and has `AP: CONTAINS`. The policy maps the
+mandate value `peanut` to `AP`; any other unmapped human allergen name is treated as
+unknown and produces `RED` rather than being guessed.
+
 ## Price response
 
 `POST /api/price` returns a customer-scoped object with `customerId`, `currency`,
@@ -84,3 +90,17 @@ twist, so that twist will require a scenario overlay or a later requested date.
 Small live price and availability responses are stored in
 `backend/fixtures/valio/`. The complete downloaded files remain under `data/valio/`,
 which is gitignored because of size and environment-specific data.
+
+## Policy decisions
+
+- Spending limits use the tax-inclusive total the kitchen pays.
+- The per-order limit applies to the complete plan total, not individual lines.
+- `same_category` substitution requires an exact match on the catalog `category` field.
+- `PENDING_APPROVAL`, `ORDERED`, and `CONFIRMED` totals are reserved against the weekly
+  limit. `REJECTED` and `EXPIRED` orders are not counted.
+- Allergen exclusions use verified catalog classification codes. A missing, empty, or
+  unmapped allergen classification is treated as unknown and produces `RED` when the
+  mandate excludes allergens.
+- A product with missing or unverified required-label data produces `RED`.
+- A late delivery within the mandate's `one_day` tolerance is allowed; later delivery
+  produces `YELLOW`.
