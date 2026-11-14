@@ -67,6 +67,24 @@ def test_log_requires_authentication_and_discovery_is_public(isolated_gateway_st
     assert response.json()["error"]["code"] == "UNAUTHENTICATED"
 
 
+def test_unhandled_500_keeps_cors_headers(tmp_path) -> None:
+    from backend.app.main import create_app
+
+    isolated = create_app(tmp_path / "cors.sqlite3")
+
+    @isolated.get("/forced-error")
+    async def forced_error():
+        raise RuntimeError("forced test failure")
+
+    with TestClient(isolated, raise_server_exceptions=False) as test_client:
+        response = test_client.get(
+            "/forced-error", headers={"Origin": "http://localhost:5173"}
+        )
+
+    assert response.status_code == 500
+    assert response.headers["access-control-allow-origin"] == "http://localhost:5173"
+
+
 def test_log_views_scope_buyers_and_add_operator_disclosure(isolated_gateway_state) -> None:
     log = app.state.event_log
     log.append(actor="gateway", event_type="SEARCH", request_id="req_a", customer_id="buyer-a", summary="a")

@@ -29,6 +29,20 @@ def test_compare_matches_all_scenario_outcomes(tmp_path):
             assert compared == expected
 
 
+def test_compare_ignores_live_explanation_delay(tmp_path, monkeypatch):
+    monkeypatch.setenv('EXPLAIN_DELAY_MS', '2000')
+    app = create_app(tmp_path / 'delayed.sqlite3')
+    with TestClient(app) as client:
+        started = client.post('/v1/game/levels/level1/start', json={'preset': 'balanced', 'mode': 'replay'})
+        assert started.status_code == 200
+        before = time.monotonic()
+        response = client.get('/v1/game/levels/level1/compare')
+        elapsed = time.monotonic() - before
+
+    assert response.status_code == 200
+    assert elapsed < 10
+
+
 def test_level1_balanced_asgi_run_finishes_with_verified_log(tmp_path, monkeypatch):
     monkeypatch.setenv('VALIO_MODE', 'replay')
     app = create_app(tmp_path / 'integration.sqlite3')

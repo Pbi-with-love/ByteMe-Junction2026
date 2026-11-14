@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 from uuid import uuid4
+from typing import Any
 import asyncio
 import httpx
 import tempfile
@@ -35,11 +36,25 @@ from backend.app.order_store import IdempotencyConflict, OrderStore
 from backend.app.approval_store import ApprovalStore
 from backend.app.game import GameSession, HeartsProvider, new_session_id
 from agent.runner import run_agent
-from agent.explain import template_explainer
+from agent.explain import template_explainer, template_explanation
 from backend.app.policy import PolicyResult, check_plan
 
 
 REQUEST_ID_HEADER = "X-Request-Id"
+CORS_ALLOWED_ORIGINS = (
+    "http://localhost:5173", "http://127.0.0.1:5173",
+    "http://localhost:4173", "http://127.0.0.1:4173",
+)
+
+
+async def _headless_explainer(**kwargs: Any) -> str:
+    """Generate deterministic compare explanations without the live-session delay."""
+    return template_explanation(
+        need=kwargs["need"],
+        plans=kwargs["plans"],
+        recommended_plan_id=kwargs["recommended_plan_id"],
+        approval_reasons=kwargs.get("approval_reasons"),
+    )
 
 
 def error_body(
@@ -453,7 +468,7 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> JSONRe
 @_route_app.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """Keep unexpected failures explicit and in the gateway error shape."""
-    return JSONResponse(
+    response = JSONResponse(
         status_code=500,
         content=error_body(
             code="INTERNAL_ERROR",
@@ -461,6 +476,11 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
             request_id=request_id(request),
         ),
     )
+    origin = request.headers.get("origin")
+    if origin in CORS_ALLOWED_ORIGINS:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Vary"] = "Origin"
+    return response
 
 
 @_route_app.get("/.well-known/agent-commerce.json")
@@ -1566,7 +1586,8 @@ async def run_session(session_id: str, request: Request) -> JSONResponse:
                     session.activity = "idle"
                 async def activity(value):
                     session.activity = value
-                await run_agent(client, agent_token=session.agent_token, mandate_id=str(row["mandate_id"]), needs=session.scenario["needs"], explain=template_explainer, on_step=record, poll_interval=0.05, on_activity=activity)
+                explain = _headless_explainer if state.headless else template_explainer
+                await run_agent(client, agent_token=session.agent_token, mandate_id=str(row["mandate_id"]), needs=session.scenario["needs"], explain=explain, on_step=record, poll_interval=0.05, on_activity=activity)
             session.status = "FINISHED"
             session.activity = "idle"
         except Exception as exc:
@@ -1657,7 +1678,7 @@ async def compare_level(level_id: str, request: Request) -> JSONResponse:
     for preset in scenario["presets"]:
         temp_file = tempfile.NamedTemporaryFile(prefix="gateway-compare-", suffix=".sqlite3", delete=False)
         temp_file.close()
-        headless = create_app(temp_file.name, clock=request.app.state.clock)
+        headless = create_app(temp_file.name, clock=request.app.state.clock, headless=True)
         fixture_root = Path(__file__).resolve().parents[1] / "fixtures" / "valio"
         replay = ReplayValioClient(fixture_root / "catalog", fixture_root / "recorded")
         headless.state.valio_client = replay
@@ -1704,7 +1725,7 @@ async def compare_level(level_id: str, request: Request) -> JSONResponse:
     return JSONResponse(content=payload)
 
 
-def create_app(database_path: str | Path | None = None, *, clock=None) -> FastAPI:
+def create_app(database_path: str | Path | None = None, *, clock=None, headless: bool = False) -> FastAPI:
     """Build an isolated gateway instance using the shared HTTP routes."""
     configuration = Settings.from_env()
     path = database_path or (configuration.valio_cache_directory / "gateway.sqlite3")
@@ -1719,10 +1740,7 @@ def create_app(database_path: str | Path | None = None, *, clock=None) -> FastAP
     application.add_middleware(RequestIdMiddleware)
     application.add_middleware(
         CORSMiddleware,
-        allow_origins=[
-            "http://localhost:5173", "http://127.0.0.1:5173",
-            "http://localhost:4173", "http://127.0.0.1:4173",
-        ],
+        allow_origins=list(CORS_ALLOWED_ORIGINS),
         allow_methods=["*"],
         allow_headers=["*"],
         expose_headers=[REQUEST_ID_HEADER],
@@ -1735,6 +1753,7 @@ def create_app(database_path: str | Path | None = None, *, clock=None) -> FastAP
     application.state.order_store = OrderStore(path, clock=lambda: application.state.clock())
     application.state.approval_store = ApprovalStore(path)
     application.state.approval_timeout_seconds = configuration.approval_timeout_seconds
+    application.state.headless = headless
     def reset_helpers() -> None:
         application.state.event_log.reset()
         application.state.auth_store.reset_mandates()
