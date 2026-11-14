@@ -29,9 +29,14 @@ export class GatewayError extends Error {
   }
 }
 
-export function createGatewayClient(env: Record<string, string | undefined>): GatewayClient {
+export function createGatewayClient(env: Record<string, string | undefined>, mode = gatewayMode(env)): GatewayClient {
+  if (mode === 'replay') return new ReplayGatewayClient({ tamperLog: env.VITE_REPLAY_TAMPER === '1', dataBoundaryDemo: env.VITE_REPLAY_PROBE === '1' });
+  return new HttpGatewayClient(env.VITE_GATEWAY_URL ?? 'http://localhost:8000');
+}
+
+export function gatewayMode(env: Record<string, string | undefined>): 'replay' | 'live' {
   const mode = env.VITE_GATEWAY_MODE;
-  if (!mode || mode === 'replay') return new ReplayGatewayClient({ tamperLog: env.VITE_REPLAY_TAMPER === '1', dataBoundaryDemo: env.VITE_REPLAY_PROBE === '1' });
-  if (mode === 'live') return new HttpGatewayClient(env.VITE_GATEWAY_URL ?? 'http://localhost:8000');
+  if (!mode || mode === 'replay') return 'replay';
+  if (mode === 'live') return 'live';
   throw new Error(`Unknown VITE_GATEWAY_MODE: ${mode}`);
 }
