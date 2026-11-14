@@ -50,3 +50,8 @@ export function formatAllergen(code: string): string {
 export function formatEuroLimit(eur: number): string {
   return formatMoney({ cents: Math.round(eur * 100), currency: 'EUR' });
 }
+
+export function formatPresetLabel(key: string): string {
+  const label = key.replaceAll('_', ' ');
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}

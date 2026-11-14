@@ -1,4 +1,5 @@
-import { ApprovalDecisionSchema, ApprovalSchema, CompareSchema, DiscoverySchema, ErrorEnvelopeSchema, GameResultSchema, GameStartSchema, LogResponseSchema, LogVerifySchema, MandateSchema } from './schemas';
+import { CompareSchema, DiscoverySchema, ErrorEnvelopeSchema, GameResultSchema, GameStartSchema, LogResponseSchema, LogVerifySchema, MandateSchema, TokenResponseSchema } from './schemas';
+import { ApprovalDecisionSchema, ApprovalSchema } from './schemas';
 import { GatewayError, type GatewayClient } from './gateway';
 import type { AgentStep, Compare, Discovery, GameResult, GameStart, Mandate } from './schemas';
 import type { MandateDraft } from './gateway';
@@ -6,6 +7,7 @@ import type { ZodType } from 'zod';
 
 export class HttpGatewayClient implements GatewayClient {
   private token: string | undefined;
+  private operatorToken: string | undefined;
 
   constructor(private readonly baseUrl: string) {}
 
@@ -81,10 +83,24 @@ export class HttpGatewayClient implements GatewayClient {
   }
 
   getLog(view: 'buyer' | 'valio', opts: { since?: number; limit?: number } = {}) {
+    if (view === 'valio') return this.getValioLog(opts);
     const query = new URLSearchParams({ view });
     if (opts.since !== undefined) query.set('since', String(opts.since));
     if (opts.limit !== undefined) query.set('limit', String(opts.limit));
     return this.request(`/v1/log?${query.toString()}`, LogResponseSchema);
+  }
+
+  private async getValioLog(opts: { since?: number; limit?: number } = {}) {
+    if (!this.operatorToken) {
+      const result = await this.request('/v1/auth/tokens', TokenResponseSchema, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ role: 'operator' }),
+      });
+      this.operatorToken = result.token;
+    }
+    const query = new URLSearchParams({ view: 'valio' });
+    if (opts.since !== undefined) query.set('since', String(opts.since));
+    if (opts.limit !== undefined) query.set('limit', String(opts.limit));
+    return this.request(`/v1/log?${query.toString()}`, LogResponseSchema, { headers: { Authorization: `Bearer ${this.operatorToken}` } });
   }
 
   verifyLog() {

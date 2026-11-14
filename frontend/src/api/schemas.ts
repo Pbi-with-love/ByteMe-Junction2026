@@ -145,7 +145,12 @@ export const LevelMockSchema = z.object({
     decisions: z.record(text, z.object({ approved: z.object({httpStatus:z.number().int(),body:z.unknown()}), rejected:z.object({httpStatus:z.number().int(),body:z.unknown()}), alternative:z.record(text,z.object({httpStatus:z.number().int(),body:z.unknown()})), expired:z.object({httpStatus:z.number().int(),body:z.unknown()}), conflict:z.object({httpStatus:z.number().int(),body:z.unknown()}) })).optional(),
     outcomes: z.record(text,z.looseObject({result:GameResultSchema})).optional(),
   })),
+  dataBoundaryDemo: z.object({ preset: text, log: z.array(LogEventSchema), valioLog: z.array(LogEventSchema), verify: LogVerifySchema }).optional(),
   tamperedDemo: z.object({ preset: text, log: z.array(LogEventSchema), verify: LogVerifySchema }).optional(),
   compare: CompareSchema,
 });
 export type LevelMock = z.infer<typeof LevelMockSchema>;
+
+// 006 Valio view additions: logs stay lookup-only and probe data is an explicit recording.
+export const TokenResponseSchema = z.object({ token: text });
+export type TokenResponse = z.infer<typeof TokenResponseSchema>;

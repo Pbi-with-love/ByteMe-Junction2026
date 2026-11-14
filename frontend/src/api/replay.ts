@@ -9,12 +9,12 @@ import { ApprovalDecisionSchema, ApprovalSchema, DiscoverySchema, LevelMockSchem
 const levels: LevelMock[] = [level1, level2, level3].map((mock) => LevelMockSchema.parse(mock));
 const discovery = DiscoverySchema.parse(discoveryData.response);
 export function decisionKey(decisions: string[]): string { return decisions.join(','); }
-type Session = { recording: LevelMock['presets'][string]; cursor: number; decisions: string[]; settled: Map<string, ApprovalDecision>; used: Set<string>; tampered?: { log: LogResponse['events']; verify: LogVerify } };
+type Session = { recording: LevelMock['presets'][string]; cursor: number; decisions: string[]; settled: Map<string, ApprovalDecision>; used: Set<string>; tampered?: { log: LogResponse['events']; verify: LogVerify }; dataBoundaryValioLog?: LogResponse['events'] };
 
 export class ReplayGatewayClient implements GatewayClient {
   private readonly sessions = new Map<string, Session>();
 
-  constructor(private readonly options: { tamperLog?: boolean; levels?: unknown[] } = {}) {}
+  constructor(private readonly options: { tamperLog?: boolean; levels?: unknown[]; dataBoundaryDemo?: boolean } = {}) {}
 
   private mockLevels(): LevelMock[] { return this.options.levels ? this.options.levels.map((item) => LevelMockSchema.parse(item)) : levels; }
 
@@ -30,7 +30,7 @@ export class ReplayGatewayClient implements GatewayClient {
     const tampered = this.options.tamperLog && level.tamperedDemo?.preset === preset
       ? { log: level.tamperedDemo.log, verify: level.tamperedDemo.verify }
       : undefined;
-    this.sessions.set(level.start.sessionId, { recording, cursor: 0, decisions: [], settled: new Map(), used: new Set(), tampered });
+    this.sessions.set(level.start.sessionId, { recording, cursor: 0, decisions: [], settled: new Map(), used: new Set(), tampered, dataBoundaryValioLog: this.options.dataBoundaryDemo && level.dataBoundaryDemo?.preset === preset ? level.dataBoundaryDemo.valioLog : undefined });
     return level.start;
   }
 
@@ -113,9 +113,12 @@ export class ReplayGatewayClient implements GatewayClient {
   async getLog(view: 'buyer' | 'valio', opts: { since?: number; limit?: number } = {}): Promise<LogResponse> {
     const session = this.latestSession();
     if (!session) throw new GatewayError('NOT_FOUND', 'Not found', 404);
-    const record=this.recordFor(this.latestSessionId()!);
-    const events = view==='buyer'?(session.tampered?.log??record.log):record.valioLog;
-    if(!events)throw new GatewayError('NOT_FOUND','Not found',404);
+    const events = view === 'valio' && session.dataBoundaryValioLog
+      ? session.dataBoundaryValioLog
+      : view === 'valio'
+        ? this.recordFor(this.latestSessionId()!).valioLog
+        : session.tampered?.log ?? this.recordFor(this.latestSessionId()!).log;
+    if (!events) throw new GatewayError('NOT_FOUND', 'Not found', 404);
     const filtered = events.filter(({ seq }) => opts.since === undefined || seq > opts.since);
     return { events: opts.limit === undefined ? filtered : filtered.slice(0, opts.limit) };
   }
