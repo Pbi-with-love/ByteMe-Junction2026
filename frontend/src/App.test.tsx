@@ -27,6 +27,26 @@ function makeClient(discovery: () => Promise<Discovery>): GatewayClient {
 }
 
 describe('level shell', () => {
+  it('shows How to play on a first visit, lets the title button reopen it, and remembers closing', async () => {
+    window.localStorage.removeItem('agentKitchen.howToPlaySeen');
+    const client = makeClient(async () => ({ provider: 'Mock Gateway' } as Discovery));
+    const view = render(<App client={client} />);
+    expect(await screen.findByRole('dialog', { name: 'Your job' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Close how to play' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'How to play' }));
+    expect(screen.getByRole('dialog', { name: 'Your job' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Start playing' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    view.unmount();
+    render(<App client={client} />);
+    await screen.findByRole('button', { name: 'How to play' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
   it('keeps static headings aligned with mock levels and loads the provider', async () => {
     LEVELS.forEach((level, index) => {
       expect(level.levelId).toBe(LEVEL_MOCKS[index].start.level.levelId);

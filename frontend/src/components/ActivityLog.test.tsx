@@ -18,6 +18,8 @@ describe('ActivityLog', () => {
     render(<ActivityLog entries={toTimelineEntries(step, 0)} />);
     fireEvent.click(screen.getAllByRole('button')[1]!);
     expect(screen.getByText('Rule applied')).toBeInTheDocument();
+    expect(screen.getByText('Rule applied').parentElement).toHaveTextContent(/Total is above your per-order limit\./);
+    expect(screen.getByText('Rule applied').parentElement).not.toHaveTextContent('OVER_ORDER_LIMIT');
     expect(screen.getByText('Raw gateway data')).toBeInTheDocument();
     expect(screen.getByText(/quoteId/)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /approve/i })).not.toBeInTheDocument();
@@ -29,14 +31,17 @@ describe('ActivityLog', () => {
     render(<ActivityLog entries={[entry]} />);
     const orderButton = screen.getByRole('button');
     expect(orderButton.textContent?.match(new RegExp(`Ordered ${orderId}`, 'g'))).toHaveLength(1);
+    expect(orderButton).toHaveTextContent('Order placed');
+    expect(orderButton).not.toHaveTextContent('ORDERED');
   });
-  it('renders pending approval once and shows the gateway order status', () => {
+  it('renders pending approval as plain English', () => {
     const pendingStep = (level1 as LevelMock).presets.balanced!.steps[0]!;
     const entry = toTimelineEntries(pendingStep, 1)[2]!;
     render(<ActivityLog entries={[entry]} />);
     const orderButton = screen.getByRole('button');
     expect(orderButton.textContent?.match(/Approval requested/g)).toHaveLength(1);
-    expect(orderButton).toHaveTextContent('PENDING_APPROVAL');
+    expect(orderButton).toHaveTextContent('Waiting for your approval');
+    expect(orderButton).not.toHaveTextContent('PENDING_APPROVAL');
   });
   it('renders an empty quote without inventing a recommended plan', () => {
     const emptyQuoteStep = structuredClone(step);
@@ -54,7 +59,7 @@ describe('ActivityLog', () => {
     render(<ActivityLog entries={[entry]} />);
     const card = screen.getByRole('article');
     expect(card).toHaveTextContent(message);
-    expect(card).toHaveTextContent(code);
+    expect(card).not.toHaveTextContent(code);
     expect(card.querySelector('button [data-light]')?.getAttribute('data-light') ?? null).toBe(light);
     expect(screen.queryByRole('button', { name: /approve/i })).not.toBeInTheDocument();
   });

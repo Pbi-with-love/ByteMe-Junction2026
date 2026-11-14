@@ -39,7 +39,7 @@ export function toTimelineEntries(step: DirectorStep, stepIndex: number): Timeli
     orderEntry = { ...base, id: `${stepIndex}-order`, kind: 'order', at: quote.createdAt, light: 'RED', status: 'BLOCKED', title: body.error.message, reasons: [] };
   } else {
     const body = order.body as { error: { code: string; message: string } };
-    orderEntry = { ...base, id: `${stepIndex}-order`, kind: 'order', at: quote.createdAt, light: null, status: 'ERROR', title: `${body.error.code}: ${body.error.message}`, reasons: [] };
+    orderEntry = { ...base, id: `${stepIndex}-order`, kind: 'order', at: quote.createdAt, light: null, status: 'ERROR', title: body.error.message, reasons: [] };
   }
   return [
     { ...base, id: `${stepIndex}-search`, kind: 'search', at: quote.createdAt, light: null, title: `Searched the catalog: ${step.search.total} products, ${searchExcluded} excluded`, reasons: [] },

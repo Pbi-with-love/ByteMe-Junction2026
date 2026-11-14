@@ -524,6 +524,10 @@ button:focus-visible, select:focus-visible, input:focus-visible {
 .demo-speed-control { display: flex; align-items: center; gap: calc(1 * var(--px)); margin-top: calc(1.5 * var(--px)); color: #CBD5E1; font: var(--text-body) / 1.2 var(--font-mono); }
 .demo-speed-control select { min-height: 38px; padding: calc(.5 * var(--px)) calc(1 * var(--px)); color: #0B1B33; background: #fff; border: 2px solid #FACC15; font: var(--text-body) / 1.2 var(--font-display); }
 .demo-controls { display: flex; flex-wrap: wrap; gap: calc(1 * var(--px)); margin-top: calc(2 * var(--px)); }
+.demo-narrator.is-compact { display: flex; flex-direction: column; padding: calc(2 * var(--px)); }
+.demo-narrator.is-compact .demo-copy { flex: 1; min-height: calc(8 * var(--px)); overflow-y: auto; }
+.demo-narrator.is-compact .demo-speed-control { display: none; }
+.demo-narrator.is-compact .demo-controls { flex: none; margin-top: calc(1 * var(--px)); padding: calc(1 * var(--px)) 0; background: #0B1B33; }
 .demo-controls button { min-height: 44px; padding: calc(.75 * var(--px)) calc(1.5 * var(--px)); color: #0B1B33; background: #FACC15; border: 2px solid #fff; font: var(--text-body) / 1.2 var(--font-display); cursor: pointer; }
 .demo-controls button:disabled { color: #CBD5E1; background: #334155; cursor: not-allowed; }
 .demo-spotlight { position: relative; z-index: 1198 !important; outline: 5px solid #FACC15 !important; outline-offset: 5px; box-shadow: 0 0 0 10px #0B1B33, 0 0 22px 14px #FACC15 !important; }

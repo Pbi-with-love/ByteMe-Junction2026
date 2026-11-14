@@ -64,6 +64,19 @@ async function playDemoByHand() {
 describe('Run demo App flow', () => {
   afterEach(() => { cleanup(); vi.useRealTimers(); });
 
+  it('closes the first visit guide before the demo narrator starts', async () => {
+    vi.useFakeTimers();
+    window.localStorage.removeItem('agentKitchen.howToPlaySeen');
+    const { client } = recordingClient();
+    render(<App client={client} />);
+    await pumpUntil(() => Boolean(screen.queryByRole('button', { name: 'Run demo' })));
+    expect(screen.getByRole('dialog', { name: 'Your job' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Run demo' }));
+    await pumpUntil(() => Boolean(screen.queryByText('1 of 15')));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(document.querySelector('.demo-narrator')).toHaveTextContent('Welcome to Agent Kitchen');
+  }, 30_000);
+
   it('makes the same recorded gateway calls as the manual Level 1 Balanced path', async () => {
     vi.useFakeTimers();
     const automated = recordingClient();

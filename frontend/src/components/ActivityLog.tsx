@@ -6,6 +6,10 @@ import { nonValioBrands, type TimelineEntry } from '../game/timeline';
 import LightBadge from './LightBadge';
 
 const labels = { search: 'Search', quote: 'Quote', order: 'Order' } as const;
+const orderErrorLabels: Record<string, string> = {
+  POLICY_BLOCKED: 'Blocked by the mandate.',
+  QUOTE_EXPIRED: 'The quote expired before the order was placed.',
+};
 function Exclusions({ rows, names }: { rows: { productId: string; reason: ReasonCode; light?: Light }[]; names: Map<string, string> }) {
   if (!rows.length) return null;
   return <section className="excluded-list"><strong>Excluded products</strong>{rows.map((row, i) => <div key={`${row.productId}-${i}`}><LightBadge light="RED" /><span>{names.get(row.productId) ?? row.productId}</span><span>{REASON_TEXT[row.reason]}</span></div>)}</section>;
@@ -35,10 +39,10 @@ export default function ActivityLog({ entries }: { entries: TimelineEntry[] }) {
           {entry.kind === 'quote' && summary && <span className="entry-summary">{summary}</span>}
           {entry.kind === 'quote' && quote.scenarioOverlay && <span className="scenario-tag">Scenario adjustment</span>}
           {entry.kind === 'quote' && nonValioBrands(quote, step.search).length > 0 && <span>Recommended plan uses another brand: {nonValioBrands(quote, step.search).join(', ')}.</span>}
-          {entry.status === 'PENDING_APPROVAL' && <span className="order-pending">{order.body.status}</span>}
-          {entry.status === 'ORDERED' && <span>{order.body.status}</span>}
+          {entry.status === 'PENDING_APPROVAL' && <span className="order-pending">Waiting for your approval</span>}
+          {entry.status === 'ORDERED' && <span>Order placed</span>}
           {entry.status === 'BLOCKED' && <span className="order-blocked">Order blocked</span>}
-          {errorOrder && <span className="order-error">{order.body.error.code}: {order.body.error.message}</span>}
+          {errorOrder && <span className="order-error">{orderErrorLabels[order.body.error.code] ?? order.body.error.message}</span>}
         </button>
         {!!exclusionRows.length && <Exclusions rows={exclusionRows} names={names} />}
         {open && <div className="activity-detail" id={`detail-${key}`}>
@@ -50,7 +54,7 @@ export default function ActivityLog({ entries }: { entries: TimelineEntry[] }) {
             {plan.summary && <p>{plan.summary}</p>}
             <ul>{plan.lines.map((line, i) => <li key={`${line.productId}-${i}`}>{names.get(line.productId) ?? line.productId}: {formatQuantity(line.quantity)}</li>)}</ul>
           </section>)}</div>}
-          <section><h3>Rule applied</h3>{(entry.reasons.length ? entry.reasons : order.httpStatus === 202 ? order.body.reasons as ReasonCode[] : []).map((reason: ReasonCode) => <p key={reason}><strong>{reason}</strong> — {REASON_TEXT[reason]}</p>)}{approvalReasonText && <p>{approvalReasonText}</p>}</section>
+          <section><h3>Rule applied</h3>{(entry.reasons.length ? entry.reasons : order.httpStatus === 202 ? order.body.reasons as ReasonCode[] : []).map((reason: ReasonCode) => <p key={reason}>{REASON_TEXT[reason]}</p>)}{approvalReasonText && <p>{approvalReasonText}</p>}</section>
           <section><h3>Raw gateway data</h3><pre tabIndex={0}>{JSON.stringify(step, null, 2)}</pre></section>
         </div>}
       </article>;
