@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from uuid import uuid4
 
@@ -24,6 +24,7 @@ from backend.app.quote_store import QuoteError, QuoteStore, quote_expiry
 from backend.app.valio_data import extract_allergen_data
 from backend.app.valio_client import ValioUpstreamError
 from backend.app.order_store import IdempotencyConflict, OrderStore
+from backend.app.approval_store import ApprovalStore
 from backend.app.policy import PolicyResult, check_plan
 
 
@@ -67,6 +68,7 @@ class RequestIdMiddleware:
             ),
             f"req_{uuid4().hex}",
         )
+
         scope.setdefault("state", {})["request_id"] = request_id
 
         async def send_with_request_id(message: Message) -> None:
@@ -129,6 +131,8 @@ app.state.event_log = EventLog(database_path)
 app.state.auth_store = AuthStore(database_path, signer)
 app.state.quote_store = QuoteStore(database_path, signer) if signer else None
 app.state.order_store = OrderStore(database_path)
+app.state.approval_store = ApprovalStore(database_path)
+app.state.approval_timeout_seconds = settings.approval_timeout_seconds
 
 
 def require_auth(request: Request, *, roles: set[str] | None = None) -> Principal:
@@ -263,6 +267,106 @@ def _planner_product(
     return normalized
 
 
+def _policy_plan(
+    request: Request,
+    plan: dict[str, object],
+) -> dict[str, object]:
+    catalog = request.app.state.valio_data.load("products")
+    products = {str(product.get("id")): product for product in catalog}
+    lines = []
+    for line in plan.get("lines", []):
+        if not isinstance(line, dict) or line.get("productId") not in products:
+            continue
+        lines.append(
+            {
+                **line,
+                "product": _planner_product(products[line["productId"]], []),
+            }
+        )
+    return {**plan, "lines": lines}
+
+
+def _recheck_order_plan(
+    request: Request,
+    plan: dict[str, object],
+    mandate: dict[str, object],
+    *,
+    now: datetime,
+    exclude_order_id: str | None = None,
+) -> PolicyResult:
+    policy_plan = _policy_plan(request, plan)
+    return check_plan(
+        policy_plan,
+        mandate,
+        committed_week_total_cents=request.app.state.order_store.week_total_cents(
+            str(mandate.get("customerId") or ""),
+            now=now,
+            exclude_order_id=exclude_order_id,
+        ),
+        now=now,
+    )
+
+
+def _expire_approval_order(
+    request: Request,
+    approval: dict[str, object],
+    customer_id: str,
+) -> dict[str, object] | None:
+    if approval["status"] != "EXPIRED":
+        return request.app.state.order_store.get(
+            str(approval["orderId"]),
+            customer_id,
+        )
+    order = request.app.state.order_store.get(str(approval["orderId"]), customer_id)
+    if order and order.get("status") == "PENDING_APPROVAL":
+        request.app.state.order_store.update(
+            str(approval["orderId"]),
+            customer_id,
+            status="EXPIRED",
+            response_updates={"status": "EXPIRED"},
+        )
+    return request.app.state.order_store.get(str(approval["orderId"]), customer_id)
+
+
+def _reject_approval(
+    request: Request,
+    approval: dict[str, object],
+    customer_id: str,
+    reason: str,
+) -> None:
+    request.app.state.approval_store.decide(
+        str(approval["approvalId"]),
+        customer_id,
+        status="REJECTED",
+    )
+    request.app.state.order_store.update(
+        str(approval["orderId"]),
+        customer_id,
+        status="REJECTED",
+        response_updates={"status": "REJECTED", "reasons": [reason]},
+    )
+
+
+def _plan_summary(plan: dict[str, object]) -> str:
+    total = plan.get("total", {})
+    cents = total.get("cents") if isinstance(total, dict) else None
+    amount = sum(
+        line.get("quantity", {}).get("amount", 0)
+        for line in plan.get("lines", [])
+        if isinstance(line, dict)
+        and isinstance(line.get("quantity"), dict)
+    )
+    return f"{amount} l, €{(cents or 0) / 100:.2f}"
+
+
+def _consume_approval_heart(request: Request, customer_id: str) -> int | None:
+    """Return the session heart after decrementing it when the game layer exists."""
+    provider = getattr(request.app.state, "hearts_provider", None)
+    if provider is None:
+        return None
+    return provider.consume(customer_id)
+
+
 def _log_order_outcome(
     request: Request,
     principal: Principal,
@@ -272,7 +376,13 @@ def _log_order_outcome(
 ) -> None:
     request.app.state.event_log.append(
         actor="agent",
-        event_type="ORDER_EVALUATED",
+        event_type=(
+            "POLICY_BLOCKED"
+            if result.light == "RED"
+            else "ORDER_PENDING_APPROVAL"
+            if result.light == "YELLOW"
+            else "ORDER_CREATED"
+        ),
         request_id=request_id(request),
         customer_id=principal.customer_id,
         agent_id=principal.agent_id,
@@ -886,6 +996,73 @@ async def create_order(request: Request) -> JSONResponse:
             status_code=409,
             detail={"code": "INVALID_STATE", "message": str(exc)},
         ) from exc
+    if response_status == 202:
+        quote_expires = datetime.fromisoformat(str(quote["expiresAt"]))
+        approval_deadline = min(
+            now + timedelta(
+                seconds=request.app.state.approval_timeout_seconds
+            ),
+            quote_expires,
+        )
+        hearts_left = _consume_approval_heart(request, principal.customer_id)
+        approval_reasons = list(policy_result.reasons)
+        approval_status = "OPEN"
+        if hearts_left == 0:
+            approval_status = "EXPIRED"
+            approval_reasons.append("ATTENTION_EXHAUSTED")
+        approval = request.app.state.approval_store.create(
+            customer_id=principal.customer_id,
+            order_id=stored["orderId"],
+            quote_id=quote_id,
+            reasons=approval_reasons,
+            options=[
+                {
+                    "planId": option.get("planId"),
+                    "tier": option.get("tier"),
+                    "recommended": option.get("recommended", False),
+                    "summary": _plan_summary(option),
+                }
+                for option in quote.get("plans", [])
+                if isinstance(option, dict)
+            ],
+            created_at=now,
+            deadline=approval_deadline,
+            hearts_left=hearts_left,
+            status=approval_status,
+        )
+        if approval_status == "EXPIRED":
+            stored = request.app.state.order_store.update(
+                stored["orderId"],
+                principal.customer_id,
+                status="EXPIRED",
+                response_updates={
+                    "status": "EXPIRED",
+                    "approvalId": approval["approvalId"],
+                    "reasons": approval_reasons,
+                },
+            )
+        else:
+            stored = request.app.state.order_store.update(
+                stored["orderId"],
+                principal.customer_id,
+                status="PENDING_APPROVAL",
+                response_updates={"approvalId": approval["approvalId"]},
+            )
+        request.app.state.event_log.append(
+            actor="gateway",
+            event_type="APPROVAL_SHOWN",
+            request_id=request_id(request),
+            customer_id=principal.customer_id,
+            agent_id=principal.agent_id,
+            light="YELLOW",
+            reasons=approval_reasons,
+            summary=f"Approval {approval['approvalId']} opened.",
+            refs={
+                "approvalId": approval["approvalId"],
+                "orderId": stored["orderId"],
+                "quoteId": quote_id,
+            },
+        )
     _log_order_outcome(request, principal, quote_id, plan_id, policy_result)
     return JSONResponse(status_code=response_status, content=stored)
 
@@ -904,22 +1081,250 @@ async def get_order(order_id: str, request: Request) -> JSONResponse:
             status_code=404,
             detail={"code": "NOT_FOUND", "message": "Order not found."},
         )
+    if order.get("status") == "PENDING_APPROVAL":
+        approval = request.app.state.approval_store.expire_for_order(
+            order_id,
+            principal.customer_id,
+            now=datetime.now().astimezone(),
+        )
+        if approval and approval["status"] == "EXPIRED":
+            request.app.state.order_store.update(
+                order_id,
+                principal.customer_id,
+                status="EXPIRED",
+                response_updates={"status": "EXPIRED"},
+            )
+            order = request.app.state.order_store.get(order_id, principal.customer_id)
     return order
 
 
 @app.get("/v1/approvals/{approval_id}")
 async def get_approval(approval_id: str, request: Request) -> JSONResponse:
-    return stub_response(request, "Approval retrieval")
+    principal = require_auth(request, roles={"human"})
+    if principal.customer_id is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Approval not found."},
+        )
+    approval = request.app.state.approval_store.get(
+        approval_id,
+        principal.customer_id,
+        now=datetime.now().astimezone(),
+    )
+    if approval is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Approval not found."},
+        )
+    order = _expire_approval_order(request, approval, principal.customer_id)
+    if approval["status"] == "EXPIRED":
+        request.app.state.event_log.append(
+            actor="gateway",
+            event_type="APPROVAL_EXPIRED",
+            request_id=request_id(request),
+            customer_id=principal.customer_id,
+            summary=f"Approval {approval_id} expired.",
+            refs={
+                "approvalId": approval_id,
+                "orderId": str(approval["orderId"]),
+            },
+            reasons=["APPROVAL_EXPIRED"],
+            light="RED",
+        )
+    return {**approval, "order": order}
 
 
 @app.post("/v1/approvals/{approval_id}")
 async def decide_approval(approval_id: str, request: Request) -> JSONResponse:
-    return stub_response(request, "Approval decision")
+    principal = require_auth(request, roles={"human"})
+    if principal.customer_id is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Approval not found."},
+        )
+    body = await request_json(request)
+    decision = body.get("decision")
+    if decision not in {"approved", "rejected", "alternative"}:
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "VALIDATION_ERROR", "message": "decision is invalid."},
+        )
+    approval = request.app.state.approval_store.get(
+        approval_id,
+        principal.customer_id,
+        now=datetime.now().astimezone(),
+    )
+    if approval is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Approval not found."},
+        )
+    if approval["status"] != "OPEN":
+        _expire_approval_order(request, approval, principal.customer_id)
+        raise HTTPException(
+            status_code=409,
+            detail={"code": "INVALID_STATE", "message": "Approval is closed."},
+        )
+    order = request.app.state.order_store.get(
+        str(approval["orderId"]),
+        principal.customer_id,
+    )
+    quote = request.app.state.quote_store.get(
+        str(approval["quoteId"]),
+        principal.customer_id,
+        now=datetime.now().astimezone(),
+    )
+    if order is None or quote is None or quote.get("status") == "EXPIRED":
+        raise HTTPException(
+            status_code=409,
+            detail={"code": "QUOTE_EXPIRED", "message": "Quote has expired."},
+        )
+    plan_id = str(order.get("planId"))
+    if decision == "alternative":
+        alternative_id = body.get("planId")
+        if not isinstance(alternative_id, str):
+            raise HTTPException(
+                status_code=400,
+                detail={"code": "VALIDATION_ERROR", "message": "planId is required."},
+            )
+        plan_id = alternative_id
+    plan = next(
+        (
+            value
+            for value in quote.get("plans", [])
+            if isinstance(value, dict) and value.get("planId") == plan_id
+        ),
+        None,
+    )
+    if plan is None:
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "VALIDATION_ERROR", "message": "Plan is not in the quote."},
+        )
+    try:
+        mandate = request.app.state.auth_store.require_mandate(
+            str(quote.get("mandateId")),
+            principal.customer_id,
+        )
+    except MandateError as exc:
+        _reject_approval(request, approval, principal.customer_id, "MANDATE_INVALID")
+        raise HTTPException(
+            status_code=403,
+            detail={"code": exc.code, "message": str(exc)},
+        ) from exc
+    now = datetime.now().astimezone()
+    result = _recheck_order_plan(
+        request,
+        plan,
+        mandate,
+        now=now,
+        exclude_order_id=str(order["orderId"]),
+    )
+    original_reasons = set(approval["reasons"])
+    if decision != "rejected" and (
+        result.light == "RED" or (
+        decision == "alternative"
+        and result.light == "YELLOW"
+        and set(result.reasons) != original_reasons
+        )
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "code": "POLICY_BLOCKED",
+                "message": "The selected decision is blocked by current policy.",
+                "details": {"reasons": list(result.reasons)},
+            },
+        )
+    if decision == "rejected":
+        approval = request.app.state.approval_store.decide(
+            approval_id,
+            principal.customer_id,
+            status="REJECTED",
+        )
+        order = request.app.state.order_store.update(
+            str(order["orderId"]),
+            principal.customer_id,
+            status="REJECTED",
+            response_updates={"status": "REJECTED", "reasons": list(result.reasons)},
+        )
+    else:
+        approval = request.app.state.approval_store.decide(
+            approval_id,
+            principal.customer_id,
+            status="APPROVED",
+        )
+        order = request.app.state.order_store.update(
+            str(order["orderId"]),
+            principal.customer_id,
+            status="CONFIRMED",
+            total_cents=int(plan["total"]["cents"]),
+            response_updates={
+                "status": "ORDERED",
+                "planId": plan_id,
+                "lines": plan.get("lines", []),
+                "total": plan.get("total", {}),
+                "reasons": list(result.reasons),
+            },
+        )
+    request.app.state.event_log.append(
+        actor="human",
+        event_type="APPROVAL_DECIDED",
+        request_id=request_id(request),
+        customer_id=principal.customer_id,
+        light=result.light,
+        reasons=list(result.reasons),
+        summary=f"Approval {approval_id} decision: {decision}.",
+        refs={"approvalId": approval_id, "orderId": str(order["orderId"])},
+    )
+    return {"approval": approval, "order": order}
 
 
 @app.post("/v1/approvals/{approval_id}/explanation")
 async def add_approval_explanation(approval_id: str, request: Request) -> JSONResponse:
-    return stub_response(request, "Approval explanation")
+    principal = require_auth(request, roles={"agent"})
+    if principal.customer_id is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Approval not found."},
+        )
+    body = await request_json(request)
+    text = body.get("text")
+    if not isinstance(text, str) or not text.strip():
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "VALIDATION_ERROR", "message": "text is required."},
+        )
+    approval = request.app.state.approval_store.get(
+        approval_id,
+        principal.customer_id,
+        now=datetime.now().astimezone(),
+    )
+    if approval is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Approval not found."},
+        )
+    if approval["status"] != "OPEN":
+        raise HTTPException(
+            status_code=409,
+            detail={"code": "INVALID_STATE", "message": "Approval is closed."},
+        )
+    updated = request.app.state.approval_store.add_explanation(
+        approval_id,
+        principal.customer_id,
+        text.strip(),
+    )
+    request.app.state.event_log.append(
+        actor="agent",
+        event_type="AGENT_NOTE",
+        request_id=request_id(request),
+        customer_id=principal.customer_id,
+        agent_id=principal.agent_id,
+        summary=f"Agent explanation added to approval {approval_id}.",
+        refs={"approvalId": approval_id},
+    )
+    return updated
 
 
 @app.get("/v1/log")

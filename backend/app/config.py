@@ -19,6 +19,7 @@ class Settings:
     valio_api_key: str
     valio_customer_id: str = ""
     quote_signing_key: str = ""
+    approval_timeout_seconds: int = 20
     valio_cache_directory: Path = ROOT / "data" / "valio"
 
     @classmethod
@@ -28,6 +29,7 @@ class Settings:
             valio_api_key=os.getenv("VALIO_API_KEY", ""),
             valio_customer_id=os.getenv("VALIO_CUSTOMER_ID", ""),
             quote_signing_key=os.getenv("QUOTE_SIGNING_KEY", ""),
+            approval_timeout_seconds=int(os.getenv("APPROVAL_TIMEOUT_SECONDS", "20")),
         )
 
     def require_valio_credentials(self) -> None:

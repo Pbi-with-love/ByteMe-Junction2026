@@ -116,3 +116,8 @@ which is gitignored because of size and environment-specific data.
 - A product with missing or unverified required-label data produces `RED`.
 - A late delivery within the mandate's `one_day` tolerance is allowed; later delivery
   produces `YELLOW`.
+- An alternative approval is accepted only when its re-check has the same reason set
+  shown on the original approval. A new or different `YELLOW` reason is refused and
+  the approval remains `OPEN`, because the human has not approved that new condition.
+- Approval heart accounting is a no-op until game sessions exist; the approval
+  interface already carries `heartsLeft` and supports `ATTENTION_EXHAUSTED`.
