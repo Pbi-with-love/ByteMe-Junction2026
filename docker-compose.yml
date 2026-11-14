@@ -4,7 +4,6 @@ services:
     env_file: .env
     environment:
       VALIO_MODE: replay
-      APPROVAL_TIMEOUT_SECONDS: "60"
     volumes:
       - gateway_data:/app/data/valio
     restart: unless-stopped
