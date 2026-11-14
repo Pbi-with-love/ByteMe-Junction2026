@@ -102,3 +102,44 @@ button, select, input { font: inherit; }
   .signature-row { flex-wrap: wrap; }
   .signature-row .button { width: 100%; }
 }
+
+@font-face { font-family: "Pixelify Sans"; src: url("/fonts/PixelifySans-VariableFont_wght.ttf") format("truetype"); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: "Press Start 2P"; src: url("/fonts/PressStart2P-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@theme {
+  --px: 4px; --color-canvas: #EEF4FA; --color-letterbox: #0B1B33; --color-surface: #FFFFFF; --color-surface-subtle: #D6E3F0;
+  --color-ink: #0B1B33; --color-ink-muted: #475569; --color-brand: #0052B4; --color-brand-hover: #003E8A; --color-brand-subtle: #E0F2FE;
+  --color-sky: #60A5FA; --color-terminal-bg: #1E3A5F; --color-wood: #D49B6A; --color-wood-dark: #9C663B;
+  --color-border: #94A3B8; --color-border-strong: #0B1B33; --color-stamp: #0052B4; --color-error-surface: #FDF2F5; --color-error-ink: #881337;
+  --color-light-green: #15803D; --color-light-green-bg: #DCFCE7; --color-light-blue: #0369A1; --color-light-blue-bg: #E0F2FE;
+  --color-light-yellow: #A16207; --color-light-yellow-bg: #FEF9C3; --color-light-red: #B91C1C; --color-light-red-bg: #FEE2E2;
+  --font-sans: "Pixelify Sans", system-ui, sans-serif; --font-display: "Press Start 2P", monospace; --font-mono: "Pixelify Sans", monospace;
+  --text-title: calc(6 * var(--px)); --text-heading: calc(5 * var(--px)); --text-body: calc(4 * var(--px));
+  --shadow-pixel: calc(1 * var(--px)) calc(1 * var(--px)) 0 #0B1B33;
+  --shadow-focus: 0 0 0 calc(0.5 * var(--px)) #FFFFFF, 0 0 0 calc(1.25 * var(--px)) #0052B4;
+}
+:root { font-family: "Pixelify Sans", sans-serif; background: #EEF4FA; }
+button, select, input { font-family: inherit; }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.game-world { position:fixed;inset:0;display:grid;place-items:center;overflow:hidden;background:var(--color-letterbox); }
+.world-frame { position:relative;flex:none;overflow:hidden; }
+.pixi-host,.world-overlay {position:absolute;inset:0 auto auto 0;width:320px;height:180px;}
+.pixi-host canvas {display:block;width:320px;height:180px;image-rendering:pixelated;}
+.world-overlay {position:absolute;left:0;top:0;pointer-events:none;}
+.station-hotspot {position:absolute;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding:0;border:0;background:transparent;color:#0B1B33;cursor:pointer;pointer-events:auto;font-size:calc(4 * var(--px));}
+.station-label {padding:0 calc(1 * var(--px));border:1px solid #0B1B33;background:#FFFFFF;line-height:1.1;}
+.station-hotspot:focus-visible {outline:1px solid #fff;box-shadow:0 0 0 2px #0052B4;}
+.station-hotspot[aria-disabled="true"] {cursor:not-allowed;}
+.world-children {position:absolute;inset:calc(14 * var(--px)) 0 0;display:grid;place-items:center;pointer-events:none;}
+.world-children > * {pointer-events:auto;}
+.speech-bubble {position:absolute;z-index:3;transform:translate(-50%,-100%);max-width:calc(140 * var(--px));padding:calc(2 * var(--px)) calc(3 * var(--px));border:calc(1 * var(--px)) solid #0B1B33;background:#fff;color:#0B1B33;box-shadow:calc(2 * var(--px)) calc(2 * var(--px)) #0B1B33;font-size:calc(4 * var(--px));line-height:1.25;pointer-events:none;}
+.world-loading,.world-error {position:absolute;z-index:5;padding:calc(4 * var(--px));background:#fff;border:1px solid #0B1B33;box-shadow:4px 4px #0B1B33;font-size:calc(4 * var(--px));}
+.pixel-panel {position:relative;width:min(calc(200 * var(--px)),62.5vw);max-width:calc(200 * var(--px));max-height:calc(152 * var(--px));overflow:auto;padding:calc(4 * var(--px));border:calc(1 * var(--px)) solid #0B1B33;border-radius:0;background:#fff;box-shadow:var(--shadow-pixel);font-size:calc(4 * var(--px));}
+.pixel-panel h2 {font-family:"Press Start 2P",monospace;font-size:calc(5 * var(--px));}
+.pixel-panel-clipboard {border:calc(2 * var(--px)) solid #9C663B;background:#D49B6A;}
+.pixel-panel-terminal {border-top:calc(4 * var(--px)) solid #1E3A5F;}
+.pixel-panel-notice {border-top:calc(1.5 * var(--px)) solid #0052B4;}
+.pixel-panel-alert {border-left:calc(2 * var(--px)) solid #881337;background:#FDF2F5;color:#881337;}
+[hidden] {display:none!important;}
+:root { font-size: clamp(16px, 1.25vw, 24px); }
+.world-children .button { min-height:calc(10 * var(--px)); padding:0 calc(4 * var(--px)); border:calc(.5 * var(--px)) solid #0B1B33; border-radius:0; box-shadow:calc(.75 * var(--px)) calc(.75 * var(--px)) 0 #0B1B33; }
+h1, h2 { font-family: var(--font-display); }

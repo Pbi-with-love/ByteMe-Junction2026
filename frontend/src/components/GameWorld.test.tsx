@@ -1,0 +1,19 @@
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import GameWorld from './GameWorld';
+import { fakeWorld, resetFakeWorld } from '../world/fakeWorld';
+import { createPixiWorld } from '../world/pixiWorld';
+import { fitScale } from '../world/scale';
+const props={stations:[{id:'desk' as const},{id:'terminal' as const,disabledReason:'Sign first.'}],onStation:vi.fn(),onReady:vi.fn(),onExit:vi.fn()};
+describe('GameWorld',()=>{
+ beforeEach(()=>{resetFakeWorld();vi.mocked(createPixiWorld).mockResolvedValue(fakeWorld);});
+ it('exposes responsive scale, accessible hotspots, and the controller state',async()=>{const {container}=render(<GameWorld {...props}/>);expect(screen.getByRole('progressbar')).toHaveTextContent('Loading kitchen…');const root=await screen.findByRole('region',{name:'Kitchen'});expect(root).toHaveAttribute('data-scale',String(fitScale(innerWidth,innerHeight)));expect(root).toHaveStyle({'--px':`${fitScale(innerWidth,innerHeight)}px`});
+  const desk=screen.getByRole('button',{name:'Manager Desk'});const terminal=screen.getByRole('button',{name:'Order Terminal'});expect(terminal).toHaveAttribute('aria-disabled','true');expect(terminal).toHaveAttribute('aria-describedby','terminal-disabled');const scale=Number(root.getAttribute('data-scale'));expect(desk).toHaveStyle({left:`${16*scale}px`,top:`${130*scale}px`});expect(desk).toHaveTextContent('Manager Desk');
+  fireEvent.mouseEnter(desk);expect(fakeWorld.highlight).toHaveBeenLastCalledWith('desk');fireEvent.mouseLeave(desk);expect(fakeWorld.highlight).toHaveBeenLastCalledWith(null);fireEvent.click(desk);fireEvent.click(terminal);expect(props.onStation).toHaveBeenCalledTimes(1);
+  const controller=vi.mocked(props.onReady).mock.calls[0]![0];await act(async()=>{await controller.walkTo('storage');controller.setRobotState('YELLOW');controller.carry(true);controller.burst('stamp');controller.say('Checked data');});expect(root).toHaveAttribute('data-robot-station','storage');expect(root).toHaveAttribute('data-robot-state','YELLOW');expect(root).toHaveAttribute('data-carry','true');expect(root).toHaveAttribute('data-last-burst','stamp');expect(screen.getByRole('status')).toHaveTextContent('Checked data');act(()=>controller.say(null));expect(screen.queryByRole('status')).not.toBeInTheDocument();expect(container.querySelectorAll('button.station-hotspot')).toHaveLength(2);
+ });
+ it('updates scale on resize and destroys an initialized world once',async()=>{const {unmount}=render(<GameWorld {...props}/>);await screen.findByRole('button',{name:'Manager Desk'});const width=Object.getOwnPropertyDescriptor(window,'innerWidth');Object.defineProperty(window,'innerWidth',{configurable:true,value:1280});Object.defineProperty(window,'innerHeight',{configurable:true,value:720});fireEvent(window,new Event('resize'));expect(screen.getByRole('region',{name:'Kitchen'})).toHaveAttribute('data-scale','4');unmount();expect(fakeWorld.destroy).toHaveBeenCalledOnce();if(width)Object.defineProperty(window,'innerWidth',width);
+ });
+ it('shows a drawing error and offers an exit action',async()=>{vi.mocked(createPixiWorld).mockRejectedValueOnce(new Error('GPU unavailable'));render(<GameWorld {...props}/>);expect(await screen.findByRole('alert')).toHaveTextContent('The kitchen could not be drawn: GPU unavailable');fireEvent.click(screen.getByRole('button',{name:'Back to levels'}));expect(props.onExit).toHaveBeenCalledOnce();});
+ it('destroys a world that resolves after unmount',async()=>{let resolve!:(world:typeof fakeWorld)=>void;vi.mocked(createPixiWorld).mockReturnValueOnce(new Promise(r=>resolve=r));const {unmount}=render(<GameWorld {...props}/>);unmount();await act(async()=>{resolve(fakeWorld);await Promise.resolve();});expect(fakeWorld.destroy).toHaveBeenCalledOnce();});
+});
