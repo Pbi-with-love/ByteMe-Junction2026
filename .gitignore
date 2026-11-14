@@ -1,4 +1,5 @@
 node_modules/
+.venv/
 .env
 .env.*
 .DS_Store
@@ -21,6 +22,7 @@ AGENTS.md
 CODEX.md
 GEMINI.md
 CLAUDE.md
+.github/
 
 # keep the template, ignore downloaded Valio data
 !.env.example
