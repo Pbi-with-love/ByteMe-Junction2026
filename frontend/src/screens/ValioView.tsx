@@ -5,7 +5,7 @@ import LightBadge from '../components/LightBadge';
 import PixelPanel from '../components/PixelPanel';
 import { formatTime } from '../lib/format';
 
-type Props = { client: GatewayClient; onBack(): void };
+type Props = { client: GatewayClient; onBack(): void; onLoaded?: () => void };
 type Data = { discovery: Discovery; events: LogEvent[] };
 
 function Chips({ values, locked = false, never = [], empty = 'Nothing' }: { values: string[]; locked?: boolean; never?: string[]; empty?: string }) {
@@ -15,18 +15,18 @@ function Chips({ values, locked = false, never = [], empty = 'Nothing' }: { valu
   </li>;})}</ul>;
 }
 
-export default function ValioView({ client, onBack }: Props) {
+export default function ValioView({ client, onBack, onLoaded }: Props) {
   const [data, setData] = useState<Data>();
   const [error, setError] = useState<string>();
   useEffect(() => {
     let active = true;
     Promise.all([client.discovery(), client.getLog('valio')]).then(([discovery, log]) => {
-      if (active) setData({ discovery, events: [...log.events].sort((a, b) => a.seq - b.seq) });
+      if (active) { setData({ discovery, events: [...log.events].sort((a, b) => a.seq - b.seq) }); onLoaded?.(); }
     }).catch((reason: unknown) => {
       if (active) setError(reason instanceof Error ? reason.message : 'Unable to load Valio view');
     });
     return () => { active = false; };
-  }, [client]);
+  }, [client, onLoaded]);
 
   if (!data) {
     if (error) return <div className="valio-screen"><header className="valio-header"><div><h1>Valio Aimo view</h1><span className="valio-operator">Operator · read-only</span></div><button type="button" className="button button-ghost" onClick={onBack}>Back to results</button></header><main><div role="alert" className="valio-error">Error: {error}</div></main></div>;

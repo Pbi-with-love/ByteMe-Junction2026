@@ -43,7 +43,7 @@ describe('runDemo', () => {
     const controller = new AbortController();
     const promise = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: ['approved'] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', beatMs: 10, waitMs: 100, values: () => ({ stars: '3', compareLoaded: 'true', activity_search: 'true', activity_quote: 'true', activity_order: 'true', approvalDeadline: new Date(Date.now() + 20_000).toISOString() }), spotlight: (element) => { if (element.textContent === 'Start level') firstSpotlightAt = Date.now(); element.classList.add('demo-spotlight'); }, present: (card, step, holdMs) => {
       if (step === 5) { expect(clickedAt.has('Balanced'), 'Balanced is clicked before its card').toBe(true); expect(clickedAt.has('Sign mandate')).toBe(false); }
-      if (step === 9) { approvalAt = Date.now(); expect(card.pauseDisabled).toBe(true); expect(holdMs).toBe(20_000 - DEMO_APPROVAL_MARGIN_MS); return new Promise<void>((resolve) => setTimeout(resolve, holdMs)); }
+      if (step === 9) { approvalAt = Date.now(); expect(card.pauseDisabled).toBe(true); expect(holdMs).toBeGreaterThan(14_000); expect(holdMs).toBeLessThanOrEqual(20_000 - DEMO_APPROVAL_MARGIN_MS); return new Promise<void>((resolve) => setTimeout(resolve, holdMs)); }
       return Promise.resolve();
     } });
     let outcome: Awaited<typeof promise> | undefined;
@@ -57,7 +57,7 @@ describe('runDemo', () => {
   it('limits the approval narration using its gateway deadline at both 20 and 60 seconds', () => {
     vi.useFakeTimers(); vi.setSystemTime(new Date('2026-11-14T10:00:00Z'));
     const now = Date.now(), wanted = 30_000;
-    expect(computeApprovalHoldMs(now + 20_000, wanted)).toBe(14_000);
+    expect(computeApprovalHoldMs(now + 20_000, wanted)).toBe(17_000);
     expect(computeApprovalHoldMs(now + 60_000, wanted)).toBe(30_000);
     expect(computeApprovalHoldMs(now - 1, wanted)).toBe(0);
   });
@@ -69,7 +69,7 @@ describe('runDemo', () => {
     vi.useFakeTimers();
     const root = document.createElement('div'); document.body.append(root);
     const article = document.createElement('article'), heading = document.createElement('h2'); heading.textContent = 'Level One'; article.append(heading); root.append(article);
-    const names = ['Go to the kitchen', 'Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent', 'Approve', 'See result', 'See it from Valio Aimo’s side', 'Back to results', 'Compare presets'];
+    const names = ['Go to the kitchen', 'Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent', 'See result', 'See it from Valio Aimo’s side', 'Back to results', 'Compare presets'];
     const addButton = (name: string, parent: HTMLElement = root) => { const button = document.createElement('button'); button.textContent = name; button.addEventListener('click', () => button.setAttribute('aria-pressed', 'true')); parent.append(button); return button; };
     addButton('Start level', article); names.forEach((name) => addButton(name));
     const values: Record<string, string | undefined> = { stars: '3', compareLoaded: 'true', approvalDeadline: new Date(Date.now() + 20_000).toISOString() };
@@ -77,7 +77,7 @@ describe('runDemo', () => {
     const controller = new AbortController();
     const promise = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: ['approved'] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', values: () => values, present: (_card, step, holdMs, waitUntil) => {
       presented.push(step);
-      if (step === 8) { expect(holdMs).toBe(DEMO_AGENT_LOG_HOLD_MS); workingGate = waitUntil; return new Promise<void>((resolve) => { void waitUntil?.then(() => setTimeout(resolve, holdMs)); }); }
+      if (step === 8) { expect(holdMs).toBe(0); workingGate = waitUntil; return waitUntil ?? Promise.resolve(); }
       return Promise.resolve();
     } });
     let gateReady = false;
@@ -87,11 +87,14 @@ describe('runDemo', () => {
     expect(presented).not.toContain(9);
     values.activity_search = 'true'; values.activity_quote = 'true'; values.activity_order = 'true';
     void workingGate!.then(() => { gateReady = true; });
+    await vi.advanceTimersByTimeAsync(DEMO_POLL_MS + DEMO_AGENT_LOG_HOLD_MS - 1);
+    expect(gateReady).toBe(false);
+    expect(presented).not.toContain(9);
     await vi.advanceTimersByTimeAsync(DEMO_POLL_MS);
-    await vi.advanceTimersByTimeAsync(DEMO_AGENT_LOG_HOLD_MS - 1);
     expect(gateReady).toBe(true);
     expect(presented).not.toContain(9);
-    await vi.advanceTimersByTimeAsync(1);
+    addButton('Approve');
+    await vi.advanceTimersByTimeAsync(DEMO_POLL_MS * 2);
     expect(presented).toContain(9);
     let outcome: Awaited<typeof promise> | undefined; void promise.then((result) => { outcome = result; });
     for (let elapsed = 0; elapsed < 180_000 && outcome === undefined; elapsed += 250) await vi.advanceTimersByTimeAsync(250);
@@ -125,6 +128,31 @@ describe('runDemo', () => {
     const result = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: [] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', present: (_card, step) => { presented.push(step); controller.abort(); return Promise.resolve(); } });
     await expect(result).resolves.toBe('aborted');
     expect(presented).toEqual([1]);
+    root.remove();
+  });
+  it.each([[20, 'normal', 0.6], [20, 'fast', 0.3], [60, 'normal', 0.6], [60, 'fast', 0.3]] as const)('step 9 uses the whole safe window at %is %s, unscaled, and opens as soon as the approval card shows', async (seconds, _name, factor) => {
+    vi.useFakeTimers(); vi.setSystemTime(new Date('2026-11-14T10:00:00Z'));
+    const root = document.createElement('div'); document.body.append(root);
+    const article = document.createElement('article'), heading = document.createElement('h2'); heading.textContent = 'Level One'; article.append(heading); root.append(article);
+    const addButton = (name: string, parent: HTMLElement = root) => { const b = document.createElement('button'); b.textContent = name; b.addEventListener('click', () => b.setAttribute('aria-pressed', 'true')); parent.append(b); return b; };
+    addButton('Start level', article);
+    for (const name of ['Go to the kitchen', 'Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent', 'See result', 'See it from Valio Aimo’s side', 'Back to results', 'Compare presets']) addButton(name);
+    let deadline = Number.NaN;
+    const holds = new Map<number, number>(); const shownAt = new Map<number, number>(); let pauseDisabled: boolean | undefined;
+    const controller = new AbortController();
+    const promise = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: ['approved'] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', speedFactor: () => factor, beatMs: 10, values: () => ({ stars: '3', compareLoaded: 'true', approvalDeadline: Number.isNaN(deadline) ? undefined : new Date(deadline).toISOString() }), present: (card, step, holdMs, waitUntil) => {
+      holds.set(step, holdMs); shownAt.set(step, Date.now());
+      if (step === 9) pauseDisabled = card.pauseDisabled;
+      if (step === 8) { setTimeout(() => { deadline = Date.now() + seconds * 1000; addButton('Approve'); }, 1000); return waitUntil ?? Promise.resolve(); } // approval opens while step 8 still holds
+      return Promise.resolve();
+    } });
+    let outcome: Awaited<typeof promise> | undefined; void promise.then((v) => { outcome = v; });
+    for (let t = 0; t < 400_000 && outcome === undefined; t += 50) await vi.advanceTimersByTimeAsync(50);
+    expect(outcome).toBe('done');
+    expect(shownAt.get(9)! - shownAt.get(8)!).toBeLessThanOrEqual(1_200);
+    expect(holds.get(9)).toBe(16_200); // full reading time at Slow (27 words), never scaled; fits both windows
+    expect(holds.get(9)).toBeLessThanOrEqual(deadline - shownAt.get(9)! - DEMO_APPROVAL_MARGIN_MS);
+    expect(pauseDisabled).toBe(seconds < 30);
     root.remove();
   });
 });

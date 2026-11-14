@@ -33,4 +33,10 @@ describe('DemoNarrator', () => {
     expect(onNext).toHaveBeenCalledOnce(); expect(pageClick).not.toHaveBeenCalled();
     page.remove();
   });
+  it('shows N of N on the outro card, and no counter on the stop card', () => {
+    const { rerender } = render(<DemoNarrator step={15} total={15} title="o" text="x" paused={false} speed="slow" final onPause={() => {}} onSpeedChange={() => {}} onNext={() => {}} onExit={() => {}} onReplay={() => {}} onBack={() => {}} />);
+    expect(screen.getByText('15 of 15')).toBeInTheDocument();
+    rerender(<DemoNarrator step={0} total={15} title="s" text="x" paused={false} speed="slow" final failed onPause={() => {}} onSpeedChange={() => {}} onNext={() => {}} onExit={() => {}} onReplay={() => {}} />);
+    expect(screen.queryByText(/of 15/)).toBeNull();
+  });
 });

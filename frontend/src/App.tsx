@@ -12,7 +12,7 @@ import { runDemo } from './game/runDemo';
 import { formatEuroLimit, formatPresetLabel } from './lib/format';
 import AgentWorking from './components/AgentWorking';
 import DemoNarrator from './components/DemoNarrator';
-import type { DemoCard } from './game/demoScript';
+import { narratorCopy, type DemoCard } from './game/demoScript';
 import HowToPlay from './components/HowToPlay';
 import { markHowToPlaySeen, shouldShowHowToPlay } from './game/firstVisit';
 import { narratorBlockers, placeNarrator } from './game/narratorPlacement';
@@ -33,6 +33,7 @@ export default function App({ client }: { client: GatewayClient }) {
   const [screen, setScreen] = useState<Screen>('levels');
   const [compareLevelId, setCompareLevelId] = useState<string | null>(null);
   const [compareReady, setCompareReady] = useState(false);
+  const [valioReady, setValioReady] = useState(false);
   const [start, setStart] = useState<GameStart | null>(null);
   const [presets, setPresets] = useState<Record<string, Mandate>>({});
   const [runId, setRunId] = useState(0);
@@ -62,11 +63,25 @@ export default function App({ client }: { client: GatewayClient }) {
   const closeHowToPlay = useCallback(() => { setHowToOpen(false); markHowToPlaySeen(); }, []);
   useLayoutEffect(() => {
     if (!demoCard) return;
+    if (demoCard.step === 13 && !valioReady) return;
     const card = document.querySelector<HTMLElement>('.demo-narrator');
     if (!card) return;
-    const blockers = narratorBlockers(demoCard.step);
-    placeNarrator(card, demoCard.step, [...blockers], { width: window.innerWidth, height: window.innerHeight });
-  }, [demoCard, compareReady]);
+    const frame = window.requestAnimationFrame(() => placeNarrator(card, demoCard.step, narratorBlockers(demoCard.step), { width: window.innerWidth, height: window.innerHeight }));
+    return () => window.cancelAnimationFrame(frame);
+  }, [demoCard?.step, valioReady]);
+  useEffect(() => {
+    let timer: number | undefined;
+    const resize = () => {
+      if (timer !== undefined) window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        const current = demoCardRef.current;
+        const card = document.querySelector<HTMLElement>('.demo-narrator');
+        if (current && card && (current.step !== 13 || valioReady)) placeNarrator(card, current.step, narratorBlockers(current.step), { width: window.innerWidth, height: window.innerHeight });
+      }, 150);
+    };
+    window.addEventListener('resize', resize);
+    return () => { window.removeEventListener('resize', resize); if (timer !== undefined) window.clearTimeout(timer); };
+  }, [valioReady]);
   async function startLevel(levelId: string, presetKey?: string, showBrief = true) {
     setLoading(true); setError('');
     try {
@@ -106,7 +121,7 @@ export default function App({ client }: { client: GatewayClient }) {
   const changeDemoSpeed = useCallback((speed: DemoSpeed) => {
     const oldFactor = demoCurrentFactor.current, nextFactor = DEMO_SPEED_FACTORS[speed];
     demoSpeedRef.current = speed; setDemoSpeed(speed);
-    if (demoCardRef.current?.card.pauseDisabled || !demoWaiter.current) return;
+    if (demoCardRef.current?.step === 9 || !demoWaiter.current) return;
     if (demoTimer.current !== null) {
       demoRemaining.current = Math.max(0, demoRemaining.current - (Date.now() - demoStarted.current)) * nextFactor / oldFactor;
       window.clearTimeout(demoTimer.current); demoTimer.current = null;
@@ -118,6 +133,8 @@ export default function App({ client }: { client: GatewayClient }) {
     }
     demoCurrentFactor.current = nextFactor;
   }, [scheduleDemoAdvance]);
+  const onValioLoaded = useCallback(() => setValioReady(true), []);
+  useEffect(() => { if (screen !== 'valio') setValioReady(false); }, [screen]);
   const onCompareLoaded = useCallback((data: import('./api/schemas').Compare) => {
     const strictApprovals = data.presets.strict?.approvalsAsked;
     if (strictApprovals !== undefined) demoValues.current.strictApprovals = String(strictApprovals);
@@ -129,9 +146,9 @@ export default function App({ client }: { client: GatewayClient }) {
     demoAbort.current?.abort();
     const controller = new AbortController(); demoAbort.current = controller;
     const title = LEVELS.find((level) => level.levelId === DEMO.levelId)?.title ?? '';
-    setDemoLoading(true); demoValues.current = {}; demoPausedRef.current = false; demoSpeedRef.current = 'slow'; setDemoSpeed('slow'); demoGatePending.current = false; demoCardRef.current = null; setDemoCard(null); void runDemo({ root: document.body, script: DEMO, signal: controller.signal, levelTitle: title, presetLabel: formatPresetLabel, speedFactor: () => DEMO_SPEED_FACTORS[demoSpeedRef.current], beatMs: DEMO_BEAT_MS, resultHoldMs: DEMO_RESULT_HOLD_MS, waitMs: DEMO_WAIT_MS, present: presentDemoCard, values: () => demoValues.current, sleep: async (duration) => { let remaining = duration; while (remaining > 0) { const slice = demoPausedRef.current ? DEMO_PAUSE_POLL_MS : Math.min(DEMO_PAUSE_POLL_MS, remaining); await new Promise<void>((resolve) => window.setTimeout(resolve, slice)); if (!demoPausedRef.current) remaining -= slice; } }, spotlight: (element) => { element.classList.add('demo-spotlight'); const card = document.querySelector<HTMLElement>('.demo-narrator'); if (card) { const blockers = narratorBlockers(demoCardRef.current?.step ?? 1); placeNarrator(card, demoCardRef.current?.step ?? 1, [...blockers], { width: window.innerWidth, height: window.innerHeight }); } if (demoSpotlightTimer.current !== null) window.clearTimeout(demoSpotlightTimer.current); const clearRing = () => { if (demoPausedRef.current) demoSpotlightTimer.current = window.setTimeout(clearRing, DEMO_PAUSE_POLL_MS); else { element.classList.remove('demo-spotlight'); demoSpotlightTimer.current = null; } }; demoSpotlightTimer.current = window.setTimeout(clearRing, DEMO_SPOTLIGHT_MS * DEMO_SPEED_FACTORS[demoSpeedRef.current]); } }).then(async (result) => { if (result === 'stuck' || result === 'interrupted') await presentDemoCard({ title: 'The demo stopped', text: result === 'interrupted' ? 'The demo stopped because a player clicked a control while the guided run was in progress.' : 'The demo stopped because a screen or gateway response did not arrive in time.', automatic: false }, 0, 0); }).finally(() => { if (demoAbort.current === controller) demoAbort.current = null; setDemoLoading(false); if (demoCardRef.current?.step !== 15 && demoCardRef.current?.step !== 0) { demoCardRef.current = null; setDemoCard(null); } });
+    setDemoLoading(true); demoValues.current = {}; demoPausedRef.current = false; demoSpeedRef.current = 'slow'; setDemoSpeed('slow'); demoGatePending.current = false; demoCardRef.current = null; setDemoCard(null); void runDemo({ root: document.body, script: DEMO, signal: controller.signal, levelTitle: title, presetLabel: formatPresetLabel, speedFactor: () => DEMO_SPEED_FACTORS[demoSpeedRef.current], beatMs: DEMO_BEAT_MS, resultHoldMs: DEMO_RESULT_HOLD_MS, waitMs: DEMO_WAIT_MS, present: presentDemoCard, values: () => demoValues.current, sleep: async (duration) => { let remaining = duration; while (remaining > 0) { const slice = demoPausedRef.current ? DEMO_PAUSE_POLL_MS : Math.min(DEMO_PAUSE_POLL_MS, remaining); await new Promise<void>((resolve) => window.setTimeout(resolve, slice)); if (!demoPausedRef.current) remaining -= slice; } }, spotlight: (element) => { element.classList.add('demo-spotlight'); const card = document.querySelector<HTMLElement>('.demo-narrator'); if (card && demoCardRef.current?.step !== 13) { const blockers = narratorBlockers(demoCardRef.current?.step ?? 1); placeNarrator(card, demoCardRef.current?.step ?? 1, [...blockers], { width: window.innerWidth, height: window.innerHeight }); } if (demoSpotlightTimer.current !== null) window.clearTimeout(demoSpotlightTimer.current); const clearRing = () => { if (demoPausedRef.current) demoSpotlightTimer.current = window.setTimeout(clearRing, DEMO_PAUSE_POLL_MS); else { element.classList.remove('demo-spotlight'); demoSpotlightTimer.current = null; } }; demoSpotlightTimer.current = window.setTimeout(clearRing, DEMO_SPOTLIGHT_MS * DEMO_SPEED_FACTORS[demoSpeedRef.current]); } }).then(async (result) => { if (result === 'stuck' || result === 'interrupted') await presentDemoCard({ title: 'The demo stopped', text: result === 'interrupted' ? 'The demo stopped because a player clicked a control while the guided run was in progress.' : 'The demo stopped because a screen or gateway response did not arrive in time.', automatic: false }, 0, 0); }).finally(() => { if (demoAbort.current === controller) demoAbort.current = null; setDemoLoading(false); if (demoCardRef.current?.step !== 15 && demoCardRef.current?.step !== 0) { demoCardRef.current = null; setDemoCard(null); } });
   }
-  const narrator = demoCard && <><span className="demo-mode-badge">DEMO</span><DemoNarrator step={demoCard.step} total={15} title={demoCard.card.title} text={demoCard.card.text} paused={demoPaused} speed={demoSpeed} pauseDisabled={demoCard.card.pauseDisabled} final={demoCard.step === 15 || demoCard.step === 0} failed={demoCard.step === 0} onPause={toggleDemoPause} onSpeedChange={changeDemoSpeed} onNext={advanceDemo} onExit={() => { demoAbort.current?.abort(); demoAbort.current = null; advanceDemo(); document.querySelectorAll('.demo-spotlight').forEach((element) => element.classList.remove('demo-spotlight')); if (demoSpotlightTimer.current !== null) window.clearTimeout(demoSpotlightTimer.current); demoCardRef.current = null; setDemoCard(null); setDemoLoading(false); }} onReplay={() => { demoAbort.current?.abort(); demoAbort.current = null; demoCardRef.current = null; setDemoCard(null); setDemoLoading(false); setError(''); setStart(null); setCompareLevelId(null); setScreen('levels'); window.setTimeout(startDemo, 0); }} onBack={() => { demoAbort.current?.abort(); demoCardRef.current = null; setDemoCard(null); setDemoLoading(false); setError(''); setScreen('levels'); setStart(null); }} /></>;
+  const narrator = demoCard && <><span className="demo-mode-badge">DEMO</span><DemoNarrator step={demoCard.step} total={narratorCopy.length} title={demoCard.card.title} text={demoCard.card.text} paused={demoPaused} speed={demoSpeed} pauseDisabled={demoCard.card.pauseDisabled} final={demoCard.step === 15 || demoCard.step === 0} failed={demoCard.step === 0} onPause={toggleDemoPause} onSpeedChange={changeDemoSpeed} onNext={advanceDemo} onExit={() => { demoAbort.current?.abort(); demoAbort.current = null; advanceDemo(); document.querySelectorAll('.demo-spotlight').forEach((element) => element.classList.remove('demo-spotlight')); if (demoSpotlightTimer.current !== null) window.clearTimeout(demoSpotlightTimer.current); demoCardRef.current = null; setDemoCard(null); setDemoLoading(false); }} onReplay={() => { demoAbort.current?.abort(); demoAbort.current = null; demoCardRef.current = null; setDemoCard(null); setDemoLoading(false); setError(''); setStart(null); setCompareLevelId(null); setScreen('levels'); window.setTimeout(startDemo, 0); }} onBack={() => { demoAbort.current?.abort(); demoCardRef.current = null; setDemoCard(null); setDemoLoading(false); setError(''); setScreen('levels'); setStart(null); }} /></>;
   function openCompare(levelId: string) {
     setCompareReady(false);
     setCompareLevelId(levelId);
@@ -153,7 +170,7 @@ export default function App({ client }: { client: GatewayClient }) {
         onCompare={() => openCompare(start.level.levelId)}
         onExit={() => { demoAbort.current?.abort(); demoAbort.current = null; setError(''); setScreen('levels'); setStart(null); }} />
     </div>
-    {screen === 'valio' && <ValioView client={client} onBack={() => setScreen('kitchen')} />}
+    {screen === 'valio' && <ValioView client={client} onBack={() => setScreen('kitchen')} onLoaded={onValioLoaded} />}
     {narrator}
   </>;
   if (screen === 'compare' && compareLevelId) return <><Compare client={client} levelId={compareLevelId} onLoaded={onCompareLoaded} onBack={() => { demoAbort.current?.abort(); demoAbort.current = null; setScreen('levels'); }} />{narrator}</>;

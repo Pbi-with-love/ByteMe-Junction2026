@@ -1,4 +1,4 @@
-import { DEMO_APPROVAL_MARGIN_MS, DEMO_AGENT_LOG_HOLD_MS, DEMO_BEAT_MS, DEMO_MIN_READ_MS, DEMO_POLL_MS, DEMO_RESULT_HOLD_MS, DEMO_SCREEN_HOLD_MS, DEMO_SPOTLIGHT_MS, DEMO_WAIT_MS, DEMO_WORD_MS, type DemoDecision, type DemoScript } from './demo';
+import { DEMO_APPROVAL_MARGIN_MS, DEMO_APPROVAL_PAUSE_THRESHOLD_MS, DEMO_AGENT_LOG_HOLD_MS, DEMO_BEAT_MS, DEMO_MIN_READ_MS, DEMO_POLL_MS, DEMO_RESULT_HOLD_MS, DEMO_SCREEN_HOLD_MS, DEMO_SPOTLIGHT_MS, DEMO_WAIT_MS, DEMO_WORD_MS, type DemoDecision, type DemoScript } from './demo';
 import type { DemoCard } from './demoScript';
 
 type Options = { root: ParentNode; script: DemoScript; signal: AbortSignal; levelTitle: string; presetLabel(key: string): string; speedFactor?: () => number; beatMs?: number; resultHoldMs?: number; waitMs?: number; sleep?: (ms: number) => Promise<void>; present?: (card: DemoCard, step: number, holdMs: number, waitUntil?: Promise<void>) => Promise<void>; spotlight?: (element: HTMLElement) => void; values?: () => Record<string, string | undefined>; isTrusted?: (event: Event) => boolean };
@@ -61,20 +61,26 @@ export async function runDemo(opts: Options): Promise<'done' | 'aborted' | 'stuc
       const card = cards[index]!;
       const text = demoCardText(index, opts.values?.() ?? {});
       const words = text.split(/\s+/).filter(Boolean).length;
-      const wanted = Math.max(DEMO_MIN_READ_MS, words * DEMO_WORD_MS) * factor();
+      const slowReadingTime = Math.max(DEMO_MIN_READ_MS, words * DEMO_WORD_MS);
+      const wanted = slowReadingTime * factor();
       const deadline = Date.parse(opts.values?.().approvalDeadline ?? '');
-      const hold = card.pauseDisabled ? (Number.isFinite(deadline) ? computeApprovalHoldMs(deadline, wanted) : 0) : (holdOverride ?? wanted);
-      await opts.present!({ ...card, text }, index + 1, hold, waitUntil);
+      const hold = card.pauseDisabled ? (Number.isFinite(deadline) ? computeApprovalHoldMs(deadline, slowReadingTime) : 0) : (holdOverride ?? wanted);
+      const pauseDisabled = card.pauseDisabled && Number.isFinite(deadline) && deadline - Date.now() < DEMO_APPROVAL_PAUSE_THRESHOLD_MS;
+      await opts.present!({ ...card, text, ...(card.pauseDisabled ? { pauseDisabled } : {}) }, index + 1, hold, waitUntil);
     };
     async function narratedClick(index: number, get: () => HTMLElement | null, approval = false) {
       if (signal.aborted) return false;
       const approvalTarget = approval ? await find(get) : null;
       if (approval && !approvalTarget) return false;
+      // Approval: ring the button while the card is read; no extra spotlight wait, the countdown is real time.
+      if (approvalTarget) opts.spotlight?.(approvalTarget);
       await show(index);
       const el = approvalTarget ?? await find(get);
       if (!el || stop()) return false;
-      opts.spotlight?.(el);
-      try { await sleep(DEMO_SPOTLIGHT_MS); } catch { return false; }
+      if (!approval) {
+        opts.spotlight?.(el);
+        try { await sleep(DEMO_SPOTLIGHT_MS); } catch { return false; }
+      }
       if (signal.aborted || !el.isConnected) return false;
       allowScriptClick = true; el.click(); allowScriptClick = false;
       try { await sleep(beat); } catch { return false; }
@@ -107,7 +113,12 @@ export async function runDemo(opts: Options): Promise<'done' | 'aborted' | 'stuc
       if (!await narratedClick(5, () => target(root, 'Sign mandate'))) return stop() ?? 'stuck';
       if (!await plainClick(() => target(root, 'Order Terminal'))) return stop() ?? 'stuck';
       if (!await narratedClick(6, () => target(root, 'Send to agent'))) return stop() ?? 'stuck';
-      await show(7, DEMO_AGENT_LOG_HOLD_MS * factor(), waitForDataAll(['activity_search', 'activity_quote', 'activity_order']));
+      // Step 8 ends the moment the approval card is open (its countdown is real time); otherwise after the log rows plus a short hold.
+      const approvalName = script.decisions[0] === 'rejected' ? 'Reject' : 'Approve';
+      const approvalOpen = (async () => { const until = Date.now() + wait; while (!stop() && Date.now() <= until) { if (target(root, approvalName)) return; await rawSleep(DEMO_POLL_MS); } await new Promise<never>(() => {}); })();
+      const logsThenHold = waitForDataAll(['activity_search', 'activity_quote', 'activity_order']).then(() => sleep(DEMO_AGENT_LOG_HOLD_MS));
+      const approvalOrLogReady = Promise.race([approvalOpen, logsThenHold]);
+      await show(7, 0, approvalOrLogReady);
       if (script.decisions[0] === 'approved') {
         if (!await narratedClick(8, () => target(root, 'Approve'), true)) return stop() ?? 'stuck';
       } else if (script.decisions[0] === 'rejected') {
