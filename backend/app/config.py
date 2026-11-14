@@ -18,6 +18,7 @@ class Settings:
     valio_api_base_url: str
     valio_api_key: str
     valio_customer_id: str = ""
+    quote_signing_key: str = ""
     valio_cache_directory: Path = ROOT / "data" / "valio"
 
     @classmethod
@@ -26,6 +27,7 @@ class Settings:
             valio_api_base_url=os.getenv("VALIO_API_BASE_URL", "").rstrip("/"),
             valio_api_key=os.getenv("VALIO_API_KEY", ""),
             valio_customer_id=os.getenv("VALIO_CUSTOMER_ID", ""),
+            quote_signing_key=os.getenv("QUOTE_SIGNING_KEY", ""),
         )
 
     def require_valio_credentials(self) -> None:
