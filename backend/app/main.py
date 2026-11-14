@@ -22,7 +22,7 @@ from backend.app.auth import AuthStore, Principal
 from backend.app.signing import DocumentSigner
 from backend.app.auth import MandateError
 from backend.app.search import CatalogSearch, SearchValidationError
-from backend.app.planner import build_milk_plans
+from backend.app.planner import build_plans
 from backend.app.quote_store import QuoteError, QuoteStore, quote_expiry
 from backend.app.valio_data import extract_allergen_data
 from backend.app.valio_client import ValioUpstreamError
@@ -400,15 +400,7 @@ def _reject_approval(
 
 
 def _plan_summary(plan: dict[str, object]) -> str:
-    total = plan.get("total", {})
-    cents = total.get("cents") if isinstance(total, dict) else None
-    amount = sum(
-        line.get("quantity", {}).get("amount", 0)
-        for line in plan.get("lines", [])
-        if isinstance(line, dict)
-        and isinstance(line.get("quantity"), dict)
-    )
-    return f"{amount} l, €{(cents or 0) / 100:.2f}"
+    return str(plan.get("summary", ""))
 
 
 def _consume_approval_heart(request: Request, customer_id: str) -> int | None:
@@ -782,11 +774,12 @@ async def create_quote(request: Request) -> JSONResponse:
     prices = {str(row.get("productId")): row for row in price_rows}
     availability = {str(row.get("productId")): row for row in availability_rows}
     try:
-        planned = build_milk_plans(
+        planned = build_plans(
             products=normalized_products,
             prices=price_rows,
             availability=availability_rows,
             need_amount=amount,
+            unit=quantity["unit"],
             deadline=deadline,
             mandate=mandate,
             now=datetime.now().astimezone(),
@@ -796,10 +789,14 @@ async def create_quote(request: Request) -> JSONResponse:
             for plan in planned["plans"]
             for line in plan["lines"]
         ]
-        expires_at = quote_expiry(
-            lines=all_lines,
-            prices=prices,
-            availability=availability,
+        expires_at = (
+            quote_expiry(
+                lines=all_lines,
+                prices=prices,
+                availability=availability,
+            )
+            if all_lines
+            else datetime.now().astimezone().isoformat()
         )
     except (QuoteError, ValueError) as exc:
         raise HTTPException(
@@ -832,7 +829,8 @@ async def create_quote(request: Request) -> JSONResponse:
         agent_id=principal.agent_id,
         summary=f"Quote {quote['quoteId']} created.",
         refs={"quoteId": quote["quoteId"], "mandateId": mandate_id},
-        payload={"planCount": len(quote["plans"])},
+        reasons=["PRICE_UNAVAILABLE"] if planned["priceUnavailable"] else [],
+        payload={"planCount": len(quote["plans"]), "unconvertible": planned["unconvertible"], "priceUnavailable": planned["priceUnavailable"]},
     )
     return JSONResponse(status_code=201, content=quote)
 

@@ -25,6 +25,9 @@ already exist in API_CONTRACT.md v1. Nothing here changes the contract.
 - deliveryReliability null is never treated as 1.0: fixed 0.05 score penalty.
 - No possible plan → 201 with plans: [] and excludedProducts filled; the agent reports
   back and never orders.
+- Missing or ambiguous unit conversion leaves a product out of plans, not excludedProducts, and logs its productId in QUOTE_CREATED payload.unconvertible.
+- Missing, errored, or netPriceFound:false price leaves a product out of plans, not excludedProducts, and logs its productId in QUOTE_CREATED payload.priceUnavailable with PRICE_UNAVAILABLE in reasons.
+- Keep the best plan of each kind, sort by score.total descending, then quantity-weighted comparisonPrice ascending, minimum deliveryReliability descending (null lowest), and productId tuple ascending; assign best/better/good tiers and planIds after sorting.
 
 ## Log
 - Levels without an overlay emit no SCENARIO_OVERLAY event.
