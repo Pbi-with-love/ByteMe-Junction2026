@@ -12,6 +12,7 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 from backend.app.config import Settings
 from backend.app.valio_client import ValioClient
 from backend.app.valio_data import ValioDataCache
+from backend.app.eventlog import EventLog
 
 
 REQUEST_ID_HEADER = "X-Request-Id"
@@ -105,6 +106,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 app.add_middleware(RequestIdMiddleware)
+app.state.event_log = EventLog(Settings.from_env().valio_cache_directory / "gateway.sqlite3")
 
 
 @app.exception_handler(HTTPException)
@@ -206,13 +208,25 @@ async def add_approval_explanation(approval_id: str, request: Request) -> JSONRe
 
 
 @app.get("/v1/log")
-async def get_log(request: Request) -> JSONResponse:
-    return stub_response(request, "Audit log")
+async def get_log(
+    request: Request,
+    since: int = 0,
+    limit: int = 100,
+) -> dict[str, object]:
+    if since < 0 or limit < 1 or limit > 1000:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "code": "VALIDATION_ERROR",
+                "message": "since must be non-negative and limit must be between 1 and 1000.",
+            },
+        )
+    return {"events": request.app.state.event_log.list(since=since, limit=limit)}
 
 
 @app.get("/v1/log/verify")
-async def verify_log(request: Request) -> JSONResponse:
-    return stub_response(request, "Audit log verification")
+async def verify_log(request: Request) -> dict[str, object]:
+    return request.app.state.event_log.verify()
 
 
 @app.get("/v1/events")
