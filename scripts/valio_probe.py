@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Probe the Valio mock API: ping, download the 3 files, one sample price + availability call.
 
-Usage: python3 scripts/valio_probe.py [--customer ID] [--ids 1,2,3] [--date YYYY-MM-DD]
+Usage: python -m scripts.valio_probe [--customer ID] [--ids 1,2,3] [--date YYYY-MM-DD]
 Reads VALIO_API_BASE_URL, VALIO_API_KEY (and optional VALIO_CUSTOMER_ID) from .env at the
 repo root. Everything it receives is saved under data/valio/ (gitignored).
 """
@@ -15,14 +15,14 @@ import os
 import pathlib
 import re
 import sys
-import urllib.error
-import urllib.request
+
+import httpx
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "valio"
 DOWNLOADS = ["products", "delivery-reliability", "carbon-footprint"]
 # The auth header format is not known yet: try each, move on at 401/403, report the one that works.
-AUTHS = [("x-api-key", "{}"), ("Authorization", "Bearer {}"), ("Ocp-Apim-Subscription-Key", "{}"), (None, "")]
+AUTHS = [("X-API-Key", "{}"), ("Authorization", "Bearer {}"), ("Ocp-Apim-Subscription-Key", "{}"), (None, "")]
 ID_KEY = re.compile(r"(?i)(product|material|item|article)?[_ ]?(id|number|no|code|sku)")
 
 
@@ -47,27 +47,33 @@ def call(method: str, path: str, body=None):
     global auth_i
     while True:
         name, fmt = AUTHS[auth_i]
-        headers = {"Accept": "*/*"}
+        headers = {"Accept": "*/*", "User-Agent": "python-httpx"}
         if name:
             headers[name] = fmt.format(KEY)
-        data = None
-        if body is not None:
-            data = json.dumps(body).encode()
-            headers["Content-Type"] = "application/json"
-        req = urllib.request.Request(BASE + path, data=data, method=method, headers=headers)
         try:
-            with urllib.request.urlopen(req, timeout=120) as res:
-                return res.status, res.headers, res.read()
-        except urllib.error.HTTPError as err:
-            if err.code in (401, 403) and auth_i + 1 < len(AUTHS):
+            res = httpx.request(
+                method,
+                BASE + path,
+                headers=headers,
+                json=body,
+                timeout=120,
+                follow_redirects=True,
+            )
+            if res.status_code < 400:
+                return res.status_code, res.headers, res.content
+            if res.status_code in (401, 403) and auth_i + 1 < len(AUTHS):
                 auth_i += 1
                 continue
-            return err.code, err.headers, err.read()
+            return res.status_code, res.headers, res.content
+        except httpx.HTTPError as err:
+            print(f"request failed: {err}", file=sys.stderr)
+            return 599, {}, str(err).encode()
 
 
 def save(stem: str, headers, raw: bytes) -> pathlib.Path:
     name = re.search(r'filename="?([^";]+)', headers.get("Content-Disposition", ""))
-    ext = pathlib.Path(name.group(1)).suffix if name else mimetypes.guess_extension(headers.get_content_type())
+    content_type = headers.get("Content-Type", "").split(";", 1)[0].strip()
+    ext = pathlib.Path(name.group(1)).suffix if name else mimetypes.guess_extension(content_type)
     path = OUT / f"{stem}{ext or '.bin'}"
     path.write_bytes(raw)
     return path
@@ -124,7 +130,10 @@ def main() -> int:
             print(f"{name}: HTTP {status} {raw[:300]!r}")
             continue
         path = save(name, headers, raw)
-        print(f"{name}: HTTP 200, {headers.get_content_type()}, {len(raw)} bytes -> {path.relative_to(ROOT)}")
+        print(
+            f"{name}: HTTP 200, {headers.get('Content-Type', '')}, "
+            f"{len(raw)} bytes -> {path.relative_to(ROOT)}"
+        )
         if name == "products":
             catalog = raw
 

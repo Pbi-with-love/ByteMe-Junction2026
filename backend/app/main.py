@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
+
+from backend.app.config import Settings
+from backend.app.valio_client import ValioClient
+from backend.app.valio_data import ValioDataCache
 
 
 REQUEST_ID_HEADER = "X-Request-Id"
@@ -79,7 +84,26 @@ def stub_response(request: Request, endpoint: str) -> JSONResponse:
     )
 
 
-app = FastAPI(title="Valio Aimo Trust Gateway", version="0.1.0")
+@asynccontextmanager
+async def lifespan(application: FastAPI):
+    settings = Settings.from_env()
+    client = ValioClient(settings)
+    try:
+        application.state.valio_data = ValioDataCache(
+            client,
+            settings.valio_cache_directory,
+        )
+        await application.state.valio_data.refresh()
+        yield
+    finally:
+        await client.close()
+
+
+app = FastAPI(
+    title="Valio Aimo Trust Gateway",
+    version="0.1.0",
+    lifespan=lifespan,
+)
 app.add_middleware(RequestIdMiddleware)
 
 
