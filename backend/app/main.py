@@ -3,19 +3,20 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+import asyncio
+import json
+import logging
 from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
-import json
 import os
 from pathlib import Path
 from uuid import uuid4
 from typing import Any
-import asyncio
-import httpx
 import tempfile
+import httpx
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
@@ -42,10 +43,7 @@ from backend.app.policy import PolicyResult, check_plan
 
 
 REQUEST_ID_HEADER = "X-Request-Id"
-CORS_ALLOWED_ORIGINS = (
-    "http://localhost:5173", "http://127.0.0.1:5173",
-    "http://localhost:4173", "http://127.0.0.1:4173",
-)
+logger = logging.getLogger(__name__)
 
 
 async def _headless_explainer(**kwargs: Any) -> str:
@@ -130,7 +128,7 @@ def stub_response(request: Request, endpoint: str) -> JSONResponse:
 async def lifespan(application: FastAPI):
     settings = Settings.from_env()
     frontend_dist = ROOT / "frontend" / "dist"
-    if frontend_dist.is_dir():  # mounted at startup so every API route registered before it wins
+    if frontend_dist.is_dir():
         application.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
     fixture_root = Path(__file__).resolve().parents[1] / "fixtures" / "valio"
     catalog_directory = fixture_root / "catalog"
@@ -143,6 +141,7 @@ async def lifespan(application: FastAPI):
             client = OverlayValioClient(client, scenario.get("overlay"))
     else:
         client = ValioClient(settings)
+    expiry_task = asyncio.create_task(_approval_expiry_loop(application))
     try:
         application.state.valio_data = ValioDataCache(
             client,
@@ -150,9 +149,28 @@ async def lifespan(application: FastAPI):
             fallback_directory=catalog_directory,
         )
         application.state.valio_client = client
+        try:
+            for dataset in ("products", "delivery-reliability", "carbon-footprint"):
+                application.state.valio_data.load(dataset)
+        except (FileNotFoundError, ValueError):
+            try:
+                await asyncio.wait_for(application.state.valio_data.refresh(), timeout=10)
+            except (ValioUpstreamError, ValueError, asyncio.TimeoutError) as exc:
+                try:
+                    for dataset in ("products", "delivery-reliability", "carbon-footprint"):
+                        application.state.valio_data.load(dataset)
+                except (FileNotFoundError, ValueError) as cache_exc:
+                    raise RuntimeError(
+                        "Valio upstream is unavailable and the local catalog cache is incomplete."
+                    ) from cache_exc
+                logger.warning(
+                    "Valio refresh failed; serving the existing local catalog cache: %s",
+                    exc,
+                )
         products = application.state.valio_data.load("products")
         reliability_rows = application.state.valio_data.load("delivery-reliability")
         carbon_rows = application.state.valio_data.load("carbon-footprint")
+        products = application.state.valio_data.load("products")
         application.state.catalog_search = CatalogSearch(
             products,
             {
@@ -170,6 +188,8 @@ async def lifespan(application: FastAPI):
         )
         yield
     finally:
+        expiry_task.cancel()
+        await asyncio.gather(expiry_task, return_exceptions=True)
         await client.close()
 
 
@@ -388,14 +408,71 @@ def _expire_approval_order(
     return request.app.state.order_store.get(str(approval["orderId"]), customer_id)
 
 
-def _log_approval_expired(request: Request, approval: dict[str, object], customer_id: str) -> None:
-    if request.app.state.approval_store.claim_expired_log(str(approval["approvalId"]), customer_id):
-        request.app.state.event_log.append(
-            actor="gateway", event_type="APPROVAL_EXPIRED", request_id=request_id(request),
-            customer_id=customer_id, summary=f"Approval {approval['approvalId']} expired.",
-            refs={"approvalId": str(approval["approvalId"]), "orderId": str(approval["orderId"])},
+def _record_approval_expiry(
+    request: Request | FastAPI,
+    approval: dict[str, object],
+    customer_id: str,
+    *,
+    request_id_value: str,
+) -> None:
+    state = request.app.state if isinstance(request, Request) else request.state
+    order = state.order_store.get(str(approval["orderId"]), customer_id)
+    if order and order.get("status") == "PENDING_APPROVAL":
+        state.order_store.update(
+            str(approval["orderId"]),
+            customer_id,
+            status="EXPIRED",
+            response_updates={"status": "EXPIRED"},
+        )
+    approval_id = str(approval["approvalId"])
+    if not state.event_log.has_event(
+        "APPROVAL_EXPIRED",
+        "approvalId",
+        approval_id,
+    ):
+        state.event_log.append(
+            actor="gateway",
+            event_type="APPROVAL_EXPIRED",
+            request_id=request_id_value,
+            customer_id=customer_id,
+            summary=f"Approval {approval_id} expired.",
+            refs={
+                "approvalId": approval_id,
+                "orderId": str(approval["orderId"]),
+            },
+            light="RED",
         )
 
+
+async def _approval_expiry_loop(application: FastAPI) -> None:
+    try:
+        while True:
+            await asyncio.sleep(0.25)
+            for approval in application.state.approval_store.expire_due(
+                now=datetime.now().astimezone()
+            ):
+                customer_id = str(approval["customerId"])
+                _record_approval_expiry(
+                    application,
+                    approval,
+                    customer_id,
+                    request_id_value=f"expiry_{approval['approvalId']}",
+                )
+    except asyncio.CancelledError:
+        raise
+
+
+def _log_approval_expired(
+    request: Request,
+    approval: dict[str, object],
+    customer_id: str,
+) -> None:
+    _record_approval_expiry(
+        request,
+        approval,
+        customer_id,
+        request_id_value=request_id(request),
+    )
 
 def _reject_approval(
     request: Request,
@@ -481,7 +558,7 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
         ),
     )
     origin = request.headers.get("origin")
-    if origin in CORS_ALLOWED_ORIGINS:
+    if origin in request.app.state.cors_allowed_origins:
         response.headers["Access-Control-Allow-Origin"] = origin
         response.headers["Vary"] = "Origin"
     return response
@@ -1174,12 +1251,11 @@ async def get_order(order_id: str, request: Request) -> JSONResponse:
             now=request.app.state.clock(),
         )
         if approval and approval["status"] == "EXPIRED":
-            _log_approval_expired(request, approval, principal.customer_id)
-            request.app.state.order_store.update(
-                order_id,
+            _record_approval_expiry(
+                request,
+                approval,
                 principal.customer_id,
-                status="EXPIRED",
-                response_updates={"status": "EXPIRED"},
+                request_id_value=request_id(request),
             )
             order = request.app.state.order_store.get(order_id, principal.customer_id)
     return order
@@ -1205,7 +1281,12 @@ async def get_approval(approval_id: str, request: Request) -> JSONResponse:
         )
     order = _expire_approval_order(request, approval, principal.customer_id)
     if approval["status"] == "EXPIRED":
-        _log_approval_expired(request, approval, principal.customer_id)
+        _record_approval_expiry(
+            request,
+            approval,
+            principal.customer_id,
+            request_id_value=request_id(request),
+        )
     return {**approval, "order": order}
 
 
@@ -1473,8 +1554,92 @@ async def verify_log(request: Request) -> dict[str, object]:
 
 
 @_route_app.get("/v1/events")
-async def events(request: Request) -> JSONResponse:
-    return stub_response(request, "Live events")
+async def events(
+    request: Request,
+    sessionId: str | None = None,
+    since: int = 0,
+) -> StreamingResponse:
+    principal = require_auth(request)
+    if principal.customer_id is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Event stream not found."},
+        )
+    if since == 0:
+        last_event_id = request.headers.get("Last-Event-ID")
+        if last_event_id:
+            try:
+                since = int(last_event_id)
+            except ValueError as exc:
+                raise HTTPException(
+                    status_code=400,
+                    detail={
+                        "code": "VALIDATION_ERROR",
+                        "message": "Last-Event-ID must be an integer.",
+                    },
+                ) from exc
+    if since < 0:
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "VALIDATION_ERROR", "message": "since must be non-negative."},
+        )
+
+    async def stream():
+        cursor = since
+        while not await request.is_disconnected():
+            events_for_customer = request.app.state.event_log.list_for_customer(
+                principal.customer_id,
+                since=cursor,
+                limit=100,
+            )
+            if events_for_customer:
+                for event in events_for_customer:
+                    cursor = max(cursor, event["seq"])
+                    yield _sse_event("log", event)
+                    if event["type"] in {"APPROVAL_SHOWN", "APPROVAL_EXPIRED"}:
+                        approval_id = event["refs"].get("approvalId")
+                        approval = (
+                            request.app.state.approval_store.get(
+                                approval_id,
+                                principal.customer_id,
+                            )
+                            if approval_id
+                            else None
+                        )
+                        if approval:
+                            yield _sse_event(
+                                "approval",
+                                {
+                                    "approvalId": approval["approvalId"],
+                                    "deadline": approval["deadline"],
+                                    "heartsLeft": approval["heartsLeft"],
+                                },
+                            )
+                continue
+            yield ": keep-alive\n\n"
+            await asyncio.sleep(0.25)
+
+    return StreamingResponse(
+        stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Session-Id": sessionId or "",
+        },
+    )
+
+
+def _sse_event(event_name: str, data: object) -> str:
+    event_id = (
+        f"id: {data['seq']}\n"
+        if event_name == "log" and isinstance(data, dict) and "seq" in data
+        else ""
+    )
+    return (
+        f"{event_id}event: {event_name}\n"
+        f"data: {json.dumps(data, ensure_ascii=False)}\n\n"
+    )
 
 
 @_route_app.get("/v1/game/levels/{level_id}/presets")
@@ -1764,14 +1929,25 @@ def create_app(database_path: str | Path | None = None, *, clock=None, headless:
     application.router.routes.extend(_route_app.router.routes)
     application.exception_handlers.update(_route_app.exception_handlers)
     application.add_middleware(RequestIdMiddleware)
+    cors_origins = tuple(
+        set(configuration.cors_allowed_origins)
+        | {
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+            "http://localhost:4173",
+            "http://127.0.0.1:4173",
+        }
+    )
     application.add_middleware(
         CORSMiddleware,
-        allow_origins=list(CORS_ALLOWED_ORIGINS),
+        allow_origins=list(cors_origins),
+        allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
         expose_headers=[REQUEST_ID_HEADER],
     )
     application.state.clock = clock or (lambda: datetime.now().astimezone())
+    application.state.cors_allowed_origins = cors_origins
     application.state.signer = document_signer
     application.state.event_log = EventLog(path, clock=lambda: application.state.clock())
     application.state.auth_store = AuthStore(path, document_signer, clock=lambda: application.state.clock())

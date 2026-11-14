@@ -1,518 +1,355 @@
+# Agent Kitchen: a Trust Gateway for Autonomous Purchasing
 
-# README.md: Agent Kitchen
+**Junction 2026 · Valio Aimo challenge "Trusted Trade Agents" · Team ByteMe**
 
-> Junction 2026, Valio Aimo challenge "Trusted Trade Agents".
-> This file is the single source of truth for what we are building and why.
-> Read it fully before writing code. When this file and a request conflict, ask.
+> **Agents don't need a chatbot. They need a mandate.**
+> The **mandate** is the buyer's promise. The **quote** is Valio Aimo's promise. The **log** is proof that both were kept.
 
----
+We built the **Valio Aimo Trust Gateway**: an open, documented interface through which *any* external AI purchasing agent can look up products, get signed fixed-price quotes, place orders, and be stopped, or sent for human approval, when it exceeds the authority its buyer gave it.
 
-## 1. What we are building (one paragraph)
-
-**Agent Kitchen** is an *interactive simulation platform for trusted autonomous purchasing*.
-The player is a kitchen manager. An external AI purchasing agent buys ingredients from
-Valio Aimo on the kitchen's behalf. The player's only real job is deciding **how much
-authority to give the agent** (the "mandate", Finnish: *valtakirja*) and answering the
-agent's approval requests. Underneath the game sits a real **Valio Aimo Trust Gateway**:
-the interface through which any external agent can look up products, get signed quotes,
-place orders, and be stopped when it exceeds its authority.
-
-The game is the demo layer. The gateway is the actual answer to the challenge.
-
-**Never pitch or describe this as "a restaurant management game".**
-
-### Core message
-> Agents don't need a chatbot. They need a mandate.
-> Three promises: the **mandate** is the buyer's promise, the **quote** is Valio Aimo's
-> promise, the **log** is proof both kept them.
-
-### Challenge requirements we must visibly satisfy
-| Requirement (core) | Where it lives |
-|---|---|
-| Product, price & availability lookup | `POST /search`, `POST /quote` |
-| Inquiry → order at fixed price | Quote lifecycle + `POST /orders` |
-| Permission & human approval | Mandate + policy engine + approval cards |
-
-| Optional direction | Where it lives |
-|---|---|
-| Delivery reliability & sustainability | Ranking factors + labels in option cards |
-| Substitution / exceptions | Plan generator (split, substitute, later date) |
-| Traceability & explainability | Hash-chained log, "receipt that explains itself" |
+To make the guardrails easy to *see and feel*, we put a small game on top: **Agent Kitchen**. You play the kitchen manager, decide how much authority to give a robot buyer, and watch what the gateway allows, flags or blocks. **The game is only the demo layer. The gateway is the answer to the challenge.**
 
 ---
 
-## 2. Golden rules (non-negotiable)
+## 1. The 60-second tour (for judges)
 
-1. **The gate is law, the prompt is a wish.** Every policy check runs in the backend
-   gateway. The frontend never contains rules, limits, or secrets. If the agent asks for
-   something outside its mandate, the gateway refuses, regardless of what the agent says.
-2. **No secrets in code or in this file.** Valio API key, Anthropic API key and the
-   quote-signing private key live in `.env` (gitignored). Provide `.env.example` only.
-3. **Real data first.** Prices, availability, dates, reliability and carbon data come from
-   the Valio mock API or its downloaded files. Scenario twists that the data cannot produce
-   go through the *scenario overlay* (§9.3), which is always flagged in the log.
-4. **Deterministic decisions, LLM for language.** Filtering, ranking, policy and scoring are
-   plain code and give identical results on every run. The LLM is used only to
-   (a) parse a free-text kitchen request into a structured need and
-   (b) write human-readable explanations from a structured decision record.
-   The LLM must never invent a price, quantity, date or product.
-5. **No fake success.** A button never just shows "Order successful". Every game action
-   calls the gateway and renders what the gateway returned.
-6. **Data boundary.** An agent token is scoped to exactly one customer. The gateway never
-   returns purchase prices, margins, other customers' prices or supplier contracts (§6.6).
-7. **Demo safety.** Every level can run in `live` mode or `replay` mode (recorded gateway
-   responses). Replay mode must look identical on screen.
+1. **Start the stack** (see [Quick start](#6-quick-start)) and open the app.
+2. Press **Demo** to run *Level 1: The Weekly Order* end to end: a hotel needs 1,000 l of lactose-free milk by Monday 06:00, but only ~700 l is available on time.
+3. Watch the agent go **request → search → availability and price lookup → plan → policy check → signed quote → (approval if needed) → order**, all through real gateway calls.
+4. Open the **Audit log** and the **"See it from Valio Aimo's side"** view to see every decision, every blocked attempt, and what data was *withheld* from the agent.
+5. Open **Compare** to replay the same need with a **Strict / Balanced / Loose** mandate and see the trade-off between attention cost and risk.
+
+<!-- VERIFY: add a screenshot or GIF here, e.g. ![demo](docs/img/demo.gif) -->
 
 ---
 
-## 3. Architecture
+## 2. How this maps to the judging criteria
 
-```
-┌──────────────────────────────┐        ┌──────────────────────────────┐
-│ Game frontend (React + TS)   │        │ Buyer agent runner           │
-│ screens, animations, input   │        │ LLM parse + calls gateway    │
-│ NO rules, NO secrets         │        │ like any external agent      │
-└──────────────┬───────────────┘        └──────────────┬───────────────┘
-               │ HTTP (game + approvals)                │ HTTP (agent API)
-               ▼                                        ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│ Valio Aimo Trust Gateway (backend)                                  │
-│  discovery · mandates · search · quote engine · policy engine       │
-│  plan generator · orders · approvals · audit log · scenario overlay │
-└──────────────────────────────┬──────────────────────────────────────┘
-                               ▼
-              Valio mock API (price, availability, 3 download files)
-```
-
-The agent runner is deliberately a **separate caller** of the gateway, so we can say:
-"swap our agent for any hotel's own agent; the gateway stays the same."
-
-### Stack (keep it light)
-- Frontend: React + TypeScript + Vite + Tailwind + Motion + PixiJS v8 (top-down pixel-art game
-  world, see §10.6). **No Phaser, no 3D.**
-- Backend: FastAPI (Python) by default. Express is acceptable if the team prefers Node;
-  decide once, do not mix.
-- Storage: SQLite (or JSON files for the very first prototype).
-- Signing: ed25519 (e.g. PyNaCl) or HMAC-SHA256. Keep it to a small `signing` module.
-- LLM: Anthropic API with plain tool-calling. No LangGraph or agent frameworks needed.
-
-### Suggested repo layout
-```
-/frontend          React game
-/gateway           FastAPI app
-  /api             route handlers
-  /domain          mandate, quote, order, approval, log models
-  /policy          policy engine (pure functions, unit tested)
-  /planner         plan generation + ranking (pure functions, unit tested)
-  /valio           mock API client + file loaders + cache
-  /scenarios       level definitions + overlays
-/agent             buyer agent runner
-/recordings        replay files for demo mode
-/docs              data-notes.md, pitch notes
-```
+| Criterion | What to look at | Where |
+|---|---|---|
+| **Working end-to-end demo (30%)** | Full flow request → lookup → quote → approval → order against the Valio mock API, with live and replay modes | `POST /v1/search` → `POST /v1/quotes` → `POST /v1/orders`; [Quick start](#6-quick-start) |
+| **Solving the user need (20%)** | Free-text request parsed into a structured need; candidates filtered by hard constraints; plans ranked by the buyer's own priorities | [Plan generator](#4-how-the-agent-finds-the-right-order) |
+| **Autonomy and controls (20%)** | Signed mandate; four-light policy engine; clear split of what the agent decides alone, what needs sign-off, and what is never allowed; hash-chained audit log | [Guardrails](#3-autonomy-and-controls) |
+| **Robustness to exceptions (15%)** | Partial availability, split orders, later dates, substitutions, blocked products, allergens, expired quotes | [Exceptions](#5-exception-handling) |
+| **Openness and production path (15%)** | Documented HTTP API, discovery document, mapping to open standards, explicit assumptions and limitations, roadmap | [Openness](#8-openness-and-standards), [Assumptions](#9-assumptions-and-limitations), [Roadmap](#10-path-to-production) |
 
 ---
 
-## 4. Valio mock API: what exists and what does not
+## 3. Autonomy and controls
 
-### Exists
-- `GET /api/ping`
-- `POST /api/availability` body `{customer, requestedDate, products: [productId, ...]}` (1-1000 ids)
-  - per product: `productId`, `closingTime` (order cut-off), `salesBlock`, `logisticModel`,
-    `scheduleLines[]` each `{salesBlock, availableAmount, availableDate, salesUnit}`
-- `POST /api/price` same body shape
-  - per product: `catalogPrice`, `priceWithTax`, `listPrice`, `comparisonPrice` +
-    `comparisonUnit` (normalised unit price, e.g. €/l), `tax`, `netPriceFound`, `error`;
-    each price has `validFrom` / `validTo`
-  - prices are **customer-specific**
-- `GET /api/products/download`: product catalog file
-- `GET /api/delivery-reliability/download`: reliability data
-- `GET /api/carbon-footprint/download`: category-level carbon ranges
+### 3.1 Principle: the gate is law, the prompt is a wish
 
-### Does NOT exist (we build it in the gateway)
-- product search, order placement, mandates, approvals, substitution, audit log.
+Every rule is enforced **in the gateway**, never in the agent's prompt and never in the frontend. If the agent asks for something outside its mandate, the gateway refuses, no matter what the agent says. Decisions are plain, deterministic code. The **LLM is used only for language**: parsing a free-text request into a structured need, and writing human-readable explanations from a structured decision record. It never invents a price, quantity, date or product.
 
-### TODO before building levels
-Download the three files, inspect them, and write `docs/data-notes.md` with: all columns,
-whether lactose-free / allergen / label / certificate fields exist, pack sizes vs
-`salesUnit`, how reliability is keyed (product? supplier?), and which real products can
-drive each level's twist. **Do not assume field names; verify them.**
-The base URL and auth header format come from the resource portal docs; put them in `.env`.
+### 3.2 The mandate (*valtakirja*)
 
----
+A signed, time-limited document that states what the agent may do for one customer:
 
-## 5. Domain model
-
-### 5.1 Mandate (the buyer's promise)
-```json
+```jsonc
 {
   "mandateId": "mdt_01",
   "customerId": "123",
   "issuedBy": { "name": "Anna Virtanen", "role": "Kitchen manager" },
   "agentId": "kitchenbuyer-hotel-kamp",
   "limits": { "perOrderEur": 500, "perWeekEur": 3000 },
-  "substitution": "same_category",
-  "lateDelivery": "none",
+  "substitution": "same_category",          // none | same_category | any
+  "lateDelivery": "none",                   // none | one_day
   "hardConstraints": { "excludeAllergens": ["peanut"], "requireLabels": [] },
   "priorities": ["on_time", "price", "sustainability"],
   "validUntil": "2026-12-31T23:59:59+02:00",
   "signature": "base64..."
 }
 ```
-- `substitution`: `none` | `same_category` | `any`
-- `lateDelivery`: `none` | `one_day`
-- Signed by the gateway on behalf of the issuing human; verified on every request.
 
-### 5.2 Quote (Valio Aimo's promise)
-Contains: `quoteId`, `customerId`, `mandateId`, plan lines (productId, qty, salesUnit,
-unit price, availableDate), totals, `expiresAt` = min(price `validTo`, `closingTime`),
-evidence (source call timestamps), `policyResult`, `signature`.
+### 3.3 Who decides what
 
-State machine:
+| Outcome | Meaning | Who acts | Example |
+|---|---|---|---|
+| 🟢 **GREEN** | Within mandate | **Agent alone** | Order inside budget, on time |
+| 🔵 **BLUE** | Within mandate but notable | **Agent alone, human is informed** | Split order, allowed substitution |
+| 🟡 **YELLOW** | Outside mandate but approvable | **Human sign-off required** | Over the per-order limit, later delivery, wider substitution |
+| 🔴 **RED** | Never allowed | **Nobody. Blocked, no approve button** | Wrong or expired mandate, blocked product, allergen violation, access to other customers' data |
+
+### 3.4 Evaluation order (first match wins per item; the order takes the worst light)
+
+1. Mandate missing, unsigned, expired or for the wrong customer → 🔴
+2. Data-boundary violation (other customers' data, purchase prices) → 🔴
+3. Product `salesBlock` → 🔴 for that product (excluded from plans)
+4. Hard constraint violated (allergen, required label) → 🔴 for that product
+5. Quote expired → re-quote (the UI shows whether the price changed)
+6. Total above `perOrderEur` or `perWeekEur` → 🟡. Limits apply to the **sum of all orders created from the same need**, so **splitting one need into many small orders cannot bypass a limit**.
+7. Substitution beyond the allowed level → 🟡
+8. Delivery later than the deadline beyond `lateDelivery` → 🟡
+9. Split across products or dates, or substitution within the allowed level → 🔵
+10. Otherwise → 🟢
+
+Policy functions are **pure functions with a unit test per rule** (`tests/`).
+
+### 3.5 Logging and auditability
+
+Every request, decision, approval and order is written to an **append-only, hash-chained log**: `hash = sha256(prevHash + canonical payload)`. Each event records `seq`, `timestamp`, `actor` (agent / human / gateway / scenario), `type` and `payload`, and every response carries a `requestId` that appears in the log. There are **two views** of the same log:
+
+- **Buyer view**: what my agent did, what it asked, who approved what.
+- **Valio view**: what the gateway returned to the agent, what was **withheld**, and what was blocked.
+
+Any tampering breaks the chain, and the result screen shows a **receipt that explains itself** with hash verification.
+
+---
+
+## 4. How the agent finds the right order
+
+```
+free-text request ──LLM parse──► structured need {query, qty, unit, deadline}
+        │
+        ▼
+ catalog search (keyword + attribute filters) ── remove 🔴 products
+        │
+        ▼
+ batched price + availability lookup (customer-specific prices)
+        │
+        ▼
+ plan generator:  (a) single product on time   (b) split across products on time
+                  (c) single product, later    (d) split across dates
+        │
+        ▼
+ score by the mandate's priorities (weights 0.5 / 0.3 / 0.2) ──► top 3: best / better / good
+        │
+        ▼
+ policy check ──► signed quote ──► order (or approval card)
+```
+
+Scoring inputs: share delivered on time, normalised unit price (`comparisonPrice`), sustainability labels and category carbon ranges, and a **delivery-reliability penalty** from Valio's reliability data. The explanation shown to the buyer is generated from the structured decision record only, and if the recommended plan uses a non-Valio brand it says so plainly.
+
+---
+
+## 5. Exception handling
+
+| Situation | What the gateway does | Level |
+|---|---|---|
+| **Partial availability** (700 of 1,000 l on time) | Builds split-by-product and split-by-date plans, ranks them, shows the on-time shortfall explicitly | 1 |
+| **Stock-out / sales block** | Excludes the product, proposes a compatible substitute, explains price, unit and label trade-offs. Inside the allowed level it is 🔵, outside it is 🟡 | 2 |
+| **Allergen conflict** | Hard constraint, 🔴 with no approve button. The cheapest substitute is never offered if it breaks the rule | 3 |
+| **Quote expires** (price `validTo` or order `closingTime`) | Quote is `EXPIRED`, can be re-quoted, and the UI shows whether the price changed | all |
+| **No human answer in time** | Approval expires and the action is **not** taken (fail-safe) | all |
+| **Limit evasion by order splitting** | Limits are checked on the sum per need | all |
+| **Agent exceeds its mandate or asks for forbidden data** | 🔴 refusal with a reason code, logged | all |
+
+<!-- VERIFY: add rows for what is actually implemented: price `error` / `netPriceFound=false`, unit or pack-size mismatch, upstream API failure/timeouts, `closingTime` and delivery-day constraints. -->
+
+---
+
+## 6. Quick start
+
+**Requirements:** Python 3.11+, Node 20+, a Valio mock-API key, an Anthropic API key (for request parsing and explanations).
+
+```bash
+# 1. Configuration (secrets live only in .env, which is gitignored)
+cp .env.example .env
+#    set VALIO_API_BASE_URL, VALIO_API_KEY, ANTHROPIC_API_KEY, QUOTE_SIGNING_KEY
+
+# 2. Backend (gateway)
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn backend.app.main:app --reload --host 127.0.0.1 --port 8000
+
+# 3. Frontend
+cd frontend && npm install && npm run dev            # VERIFY: port
+
+# 4. Tests
+pytest                                               # policy, planner, log, quote lifecycle
+```
+
+**Modes**
+
+- `live`: every action calls the gateway, which calls the Valio mock API.
+- `replay`: recorded gateway responses, identical on screen. This is a safety net for flaky networks, **not** the primary demo path.
+
+<!-- VERIFY: state exactly how to switch modes (env var / UI toggle) and which one is the default. -->
+
+---
+
+## 7. Gateway API
+
+The gateway is deliberately a **separate service from the game**. Any hotel's own agent can call it; the game's robot is just one client.
+
+| Method | Path | Purpose |
+|---|---|---|
+| GET | `/.well-known/agent-commerce.json` | Discovery: capabilities, mandate schema, policy summary |
+| POST | `/v1/mandates` | Create and sign a mandate |
+| POST | `/v1/search` | Search the catalog (keyword + attribute filters) |
+| POST | `/v1/quotes` | Build plans, rank, policy-check, sign a time-limited quote |
+| POST | `/v1/orders` | Place an order from a valid, unexpired quote |
+| POST | `/v1/approvals/{id}` | Human decision: approve, choose alternative, reject |
+| GET | `/v1/log?view=buyer\|valio` | Audit trail, two views |
+
+Full request and response schemas: **`docs/design/API_CONTRACT.md`** <!-- VERIFY path; ideally also publish openapi.yaml, FastAPI serves /openapi.json and /docs by default -->.
+
+**Quote lifecycle**
+
 ```
 QUOTED → PENDING_APPROVAL → APPROVED → ORDERED → CONFIRMED
 QUOTED → ORDERED                      (GREEN / BLUE, no approval needed)
-any open state → EXPIRED              (past expiresAt)
-PENDING_APPROVAL → REJECTED | EXPIRED (no answer before timeout)
+any open state → EXPIRED              (past expiresAt = min(price validTo, closingTime))
+PENDING_APPROVAL → REJECTED | EXPIRED
 ```
-An expired quote can be re-quoted; the UI must show whether the price changed.
-
-### 5.3 Order
-Created only from a valid, unexpired quote whose policy result allows it. Stored locally
-(the mock API has no order endpoint). Fields: `orderId`, `quoteId`, lines, total, status.
-
-### 5.4 Approval
-`approvalId`, `quoteId`, reason codes, options (good/better/best plans), `recommended`,
-`deadline` (real-time countdown), `decision`: `approved | alternative:<planId> | rejected | expired`.
-
-### 5.5 Log event
-`seq`, `timestamp`, `actor` (agent / human / gateway / scenario), `type`, `payload`,
-`prevHash`, `hash` = sha256(prevHash + canonical payload). Append-only.
 
 ---
 
-## 6. Gateway behaviour
+## 8. Openness and standards
 
-### 6.1 Endpoints
-| Method | Path | Purpose |
+We chose **plain HTTP + JSON, documented schemas and standard cryptography**. Nothing here requires our software on the other side. The table is honest about what is implemented and what is a mapping we would adopt for production.
+
+| Our building block | Built on / maps to | Status |
 |---|---|---|
-| GET | `/.well-known/agent-commerce.json` | Capabilities, mandate schema, policy summary |
-| POST | `/mandates` | Create + sign a mandate |
-| POST | `/search` | Search the downloaded catalog (keyword + attribute filters) |
-| POST | `/quote` | Build plans from price + availability, rank, policy-check, sign |
-| POST | `/orders` | Place order from quote id |
-| POST | `/approvals/{id}` | Human decision |
-| GET | `/log?view=buyer\|valio` | Audit trail, two views |
-| POST | `/game/levels/{id}/start` | Load scenario, reset state (game-only) |
+| Gateway API | REST/HTTP + JSON; OpenAPI 3 (auto-generated by FastAPI at `/openapi.json`) | Implemented <!-- VERIFY --> |
+| Agent tool access | Plain tool-calling over HTTP; the same operations can be exposed as an **MCP** server so any MCP-capable agent can use them | Mapping (roadmap) |
+| Discovery | `/.well-known/` convention (RFC 8615) | Implemented |
+| Signed mandate and quote | ed25519 / HMAC-SHA256 over canonical JSON; production mapping to **JWS/JWT** (RFC 7515/7519) and **HTTP Message Signatures** (RFC 9421) | Implemented / mapping |
+| Audit log | Append-only SHA-256 hash chain; head hash can be anchored externally (timestamping service / transparency log) | Implemented / roadmap |
+| Timestamps and zones | ISO 8601 with offset, Europe/Helsinki | Implemented |
+| Money | Integer cents internally, ISO 4217 currency | Implemented |
+| Agent identity and authorisation | Agent token scoped to exactly one customer; production mapping to **OAuth 2.0** client credentials with scoped tokens | Implemented / mapping |
+| Order and product data | Production mapping to **Peppol BIS / UBL** (orders) and **GS1** identifiers (products, GTIN) | Mapping (roadmap) |
+| Sustainability | Valio carbon-footprint category ranges and labels, surfaced as-is, with no invented numbers | Implemented |
 
-### 6.2 Policy engine: four outcomes
-| Light | Meaning | Player sees |
+**Open by design**
+
+- **Documented formats**: mandate, quote, approval and log-event schemas are in `docs/`.
+- **Swap the agent**: the buyer agent in `agent/` is a normal API client. Replace it with any agent and the gateway stays the same.
+- **Swap the LLM**: the LLM is used only for parsing and wording and sits behind one small module. <!-- VERIFY -->
+- **Explicit data boundary** (below), so integrators know exactly what an agent can and cannot see.
+- **Source and assets**: our own code and CC0/OFL-licensed assets only, with sources recorded in `docs/ASSETS.md`. <!-- VERIFY -->
+
+### Data boundary
+
+| Tier | Contents |
+|---|---|
+| **Public** | Catalog, labels, certificates, category carbon ranges |
+| **Customer-scoped** | That customer's prices, quotes, orders and log |
+| **Never exposed** | Purchase prices, margins, other customers' data, supplier contracts |
+
+An agent token is scoped to one customer. The Valio view shows "returned to agent" versus "withheld" for every call.
+
+---
+
+## 9. Assumptions and limitations
+
+We want reviewers to see exactly where the prototype stops.
+
+- **Orders are stored locally.** The mock API has no order endpoint, so `POST /v1/orders` records the order in our store and does not transmit it to a real order system.
+- **Availability is a snapshot** from the mock API. Stock can change between quote and delivery; the quote's `expiresAt` bounds the price promise, not physical stock.
+- **Scenario overlay.** Where the real mock data cannot produce a teaching twist, a flagged **scenario overlay** adjusts availability for specific product IDs. Every overlay change is logged with `actor: "scenario"` and shown in the Valio view. **Prices are never overlaid.** <!-- VERIFY: list which levels use real data and which use an overlay -->
+- **Substitution is category-based.** Substitutes are matched by product category and checked against hard constraints. Pack-size and taste equivalence are not modelled.
+- **Mandate signing.** The gateway signs the mandate on behalf of the issuing human. A production system would have the human sign with their own key or through a strong-authentication flow.
+- **Approvals.** The 20-second approval countdown and the "hearts" attention budget are **game mechanics**. In production, approvals would be queued and escalated rather than dropped.
+- **Allergen toggle.** Level 3 lets you turn the allergen rule *off* to demonstrate why such rules must never be left to a hurried human. A real deployment would default these rules **on** and non-optional.
+- **Single-tenant demo**: one customer per agent token, SQLite storage, no rate limiting.
+
+---
+
+## 10. Path to production
+
+| Horizon | Step |
+|---|---|
+| **Next (weeks)** | Publish the OpenAPI spec and an **MCP server** wrapper; move mandate and quote signatures to JWS and HTTP Message Signatures; human-held signing keys for mandates; configurable per-category rules |
+| **Then (months)** | Real order transmission (Peppol/UBL or Valio's order API); webhooks for stock changes and delivery status; approval queue with escalation and mobile push; external anchoring of the audit-log head |
+| **Later** | Multi-tenant isolation and OAuth 2.0 scopes; standing-order anomaly detection (Level 4); recipe-based multi-product sourcing (Level 5); **agent-to-agent** negotiation with Valio Aimo's seller agent (Level 6); conformance test suite so third-party agents can self-certify |
+
+---
+
+## 11. The levels (the game layer)
+
+| Level | Scenario | What it teaches |
 |---|---|---|
-| 🟢 GREEN | Within mandate | Agent just does it |
-| 🔵 BLUE | Within mandate but notable (split order, allowed substitution) | Info toast, no cost |
-| 🟡 YELLOW | Outside mandate but approvable | Phone approval card, costs 1 heart |
-| 🔴 RED | Never allowed | Blocked with reason, **no approve button** |
+| **1. The Weekly Order** (hotel) | 1,000 l lactose-free milk by Monday 06:00; ~700 l available on time | Partial availability and mandate tuning: Strict runs out of approvals, Loose does exactly what it is allowed to, Balanced gets full on-time delivery with one approval |
+| **2. The Stock-out** (restaurant) | Standing cheese order, item blocked mid-week | Substitution inside versus outside the mandate (🔵 vs 🟡) |
+| **3. Allergy Emergency** (school kitchen) | Cheapest substitute contains an allergen | Some rules must be 🔴, not left to a human approval |
 
-### 6.3 Evaluation order (first match wins per item; order result = worst light)
-1. Mandate missing, unsigned, expired, or wrong customer → RED
-2. Data-boundary violation (asking for other customers, purchase prices) → RED
-3. Product `salesBlock` → RED for that product (excluded from plans)
-4. Hard constraint violated (allergen, required label) → RED for that product
-5. Quote expired → re-quote (not a light)
-6. Total > `perOrderEur` or week total > `perWeekEur` → YELLOW.
-   Limits are checked on the **sum of all orders created from the same need/quote**, so
-   splitting one need into several small orders can never bypass a limit. Unit test required.
-7. Substitution beyond allowed level → YELLOW
-8. Delivery later than deadline beyond `lateDelivery` → YELLOW
-9. Split across products/dates, or substitution within allowed level → BLUE
-10. Otherwise → GREEN
-
-Policy functions are pure and must have unit tests for every rule.
-
-### 6.4 Plan generator (response logic for partial availability)
-Given a need `{query, qty, unit, deadline}`:
-1. Candidates = catalog matches minus RED products.
-2. Fetch price + availability for candidates (one batched call each).
-3. Build plans: (a) single product on time, (b) split across products on time,
-   (c) single product with later date, (d) split across dates.
-4. Score each plan with weights from `mandate.priorities` (first 0.5, second 0.3, third 0.2):
-   - on_time = qty delivered by deadline / qty needed
-   - price = cheapest plan cost / this plan cost (use `comparisonPrice` to normalise units)
-   - sustainability = share of qty with labels/certificates, plus lower carbon category
-   - reliability penalty from delivery-reliability data
-5. Present top 3 as **best / better / good**, recommended = highest score.
-
-### 6.5 Explanations
-The LLM receives the structured decision record (plans, scores, policy reasons) and writes
-2-3 sentences. It may only use values present in the record.
-Neutrality: if the recommended plan uses a non-Valio brand, say so plainly.
-
-### 6.6 Data boundary tiers
-- Public: catalog, labels, certificates, category carbon ranges.
-- Customer-scoped: that customer's prices, quotes, orders, log.
-- Never exposed: purchase prices, margins, other customers' data, supplier contracts.
-The Valio view in the game shows "returned to agent" vs "withheld" for every call.
+Every level runs on the **same gateway and policy engine**, not on separate fakes. The **Compare** screen replays a level under Strict / Balanced / Loose mandates and shows approvals asked, attention used, cost, on-time share and safety side by side.
 
 ---
 
-## 7. Game mechanics
+## 12. Architecture
 
-### 7.1 Player resources
-- **Attention ❤️❤️❤️** (3 per level). Each YELLOW approval card costs 1 heart when shown.
-  At 0 hearts, further YELLOW requests are auto-expired (manager too busy) and the action
-  is not taken.
-- **Risk** is not a counter; it shows up as consequences in scoring.
+```mermaid
+flowchart LR
+  subgraph Client
+    UI["Game frontend<br/>React + TS + PixiJS<br/>no rules, no secrets"]
+    AG["Buyer agent<br/>LLM parse + tool calls<br/>any external agent works"]
+  end
+  subgraph GW["Valio Aimo Trust Gateway (FastAPI)"]
+    direction TB
+    M["Mandates + signing"]
+    S["Search"]
+    Q["Quote engine<br/>plan generator + ranking"]
+    P["Policy engine<br/>pure functions"]
+    O["Orders + approvals"]
+    L["Hash-chained audit log"]
+  end
+  V["Valio mock API<br/>price · availability · catalog<br/>reliability · carbon"]
+  UI -->|approvals, game actions| GW
+  AG -->|agent API| GW
+  GW --> V
+```
 
-The whole game is one tension: tight mandate → many approvals → out of hearts → missed
-orders. Loose mandate → no approvals → costly or unsafe choices. Find the balance.
+```mermaid
+sequenceDiagram
+  participant A as Buyer agent
+  participant G as Trust Gateway
+  participant V as Valio mock API
+  participant H as Human (kitchen manager)
+  A->>G: POST /v1/search (need)
+  G->>V: availability + price (batched)
+  G-->>A: candidates (red products removed)
+  A->>G: POST /v1/quotes (need, mandateId)
+  G->>G: plan, rank, policy check, sign
+  alt GREEN / BLUE
+    G-->>A: signed quote (no approval needed)
+    A->>G: POST /v1/orders (quoteId)
+  else YELLOW
+    G-->>H: approval card (options, deadline)
+    H->>G: POST /approvals/{id}
+    G-->>A: approved / alternative / rejected
+  else RED
+    G-->>A: blocked + reason code
+  end
+  G->>G: append to hash-chained log
+```
 
-### 7.2 Level loop (60-120 seconds)
-1. **Brief**: mission card (customer, need, deadline, cut-off), shown in the kitchen.
-2. **Mandate**: player clicks the **Manager Desk**, sets 4 controls (per-order limit
-   200/500/2000 €, substitution, late delivery, allergen rule) and presses **Sign**.
-   Stamp animation.
-3. **Run**: player clicks the **Order Terminal**. Game clock runs from 10:00 to
-   `closingTime` (default 1 real second = 4 game minutes). The robot walks between
-   stations; the activity log shows each step with its light. YELLOW → robot stops, the
-   Phone Station rings, approval card overlay with **20 s real-time countdown**, options
-   best/better/good, actions Approve / Choose other / Reject. The kitchen stays visible.
-4. **Result**: scores, stars, receipt that explains itself, button **"See it from Valio
-   Aimo's side"**.
+**Why these technical choices**
 
-### 7.3 Scoring
-- 🍳 **Kitchen** = qty delivered on time / qty needed × 100
-- 💶 **Wallet** = max(0, 100 − 3 × overspend%) where overspend% is vs the best compliant plan
-- 🛡️ **Safety** = 100; any hard-constraint incident → 0; each low-reliability choice −20
-- ❤️ **Hearts left** (0-3)
-
-Stars:
-- ⭐⭐⭐ Kitchen 100, Wallet ≥ 90, Safety 100, Hearts ≥ 1
-- ⭐⭐ Kitchen ≥ 90 and Safety ≥ 80 (a hotel missing 30% of an ingredient is a service failure)
-- ⭐ anything else with Safety > 0
-- 💥 Safety incident: 0 stars, red "Safety incident" screen
-
-### 7.4 Replay comparison (the "aha" screen)
-After a level the player can replay it with presets **Strict / Balanced / Loose**.
-Results appear side by side (approvals asked, hearts used, cost, kitchen %, safety).
-This screen is the visual answer to the challenge's "guardrails model" question.
-
----
-
-## 8. Levels
-
-MVP = Levels 1-3. Build them on the same gateway and policy engine, never as separate fakes.
-
-### Level 1: The Weekly Order (Hotel)
-- Need: 1,000 l lactose-free milk by Monday 06:00, cut-off 14:00.
-- Hidden twist: only ~700 l of the Valio product available on time; rest needs another
-  brand or a later date.
-- Expected:
-  - Strict (200 €, no substitution, no late): 3+ approvals, hearts run out, 300 l missing
-    (Kitchen 70) → ⭐
-  - Loose (2000 €, any, one day, priorities `price, on_time, sustainability`): the cheapest
-    plan is "1,000 l Valio: 700 l Monday + 300 l Tuesday" (cheaper than the on-time split with
-    the other brand). Agent picks it automatically (BLUE, 0 approvals), Kitchen 70 → ⭐.
-    Lesson: the agent did exactly what the mandate allowed; the mandate allowed too much.
-  - Balanced (500 €, same category, none): 1 approval for budget, full on time → ⭐⭐⭐
-  - The reliability penalty (§6.4) stays in ranking unchanged.
-
-### Level 2: The Stock-out (Restaurant)
-- Need: standing order of a cheese/dairy item; mid-week `salesBlock` or zero availability.
-- Agent must propose a compatible substitute and explain the trade-off (price, unit, label).
-- Teaches BLUE vs YELLOW: substitution inside vs outside allowed level.
-- The standing order has two deliveries in the week (Wednesday + Friday); the item is blocked
-  all week, so each delivery is its own need/quote/order.
-- Expected: Strict (no substitution) → 2 approvals (one per delivery), 1 heart left;
-  Balanced (same category) → 0 approvals, 2 BLUE toasts. Both ⭐⭐⭐; the compare screen shows
-  the attention cost.
-
-### Level 3: Allergy Emergency (School kitchen)
-- Need: substitute for an unavailable item; cheapest substitute contains an allergen.
-- The mandate allows no substitution, so the agent must ask before buying a substitute
-  (1 approval, costs 1 heart).
-- Allergen rule ON → gateway blocks the egg product (RED, no approve button); the card only
-  offers safe options → good score.
-- Allergen rule OFF → the cheaper egg product appears on the approval card with its allergen
-  disclosed (trap option, §10.8); approving it → **Safety incident**.
-- Lesson: some rules must never be left to a hurried human approval.
-- Pitch note: a real deployment would default these rules ON; the toggle exists to teach.
-
-### Stretch levels (only after MVP is solid)
-- Level 4 Standing-order drift: recurring order creeps up; agent flags anomaly before auto-renewal.
-- Level 5 Last-minute banquet: multi-product need from a recipe, partial sourcing.
-- Level 6 Seasonal offer: Valio Aimo's seller agent proposes a product; buyer agent evaluates it
-  against the mandate (agent-to-agent).
+- **FastAPI + SQLite**: small, typed, self-documenting (OpenAPI for free), easy for anyone to run.
+- **Deterministic policy and planner**: auditable and reproducible, with identical results on every run. This is what makes them testable.
+- **LLM only for language**: avoids hallucinated prices or dates and keeps decisions explainable.
+- **ed25519 / HMAC over canonical JSON**: standard primitives and a small `signing` module, easy to swap for JWS.
+- **PixiJS for the demo layer**: lightweight 2D, kept strictly separate from business rules.
 
 ---
 
-## 9. Scenarios and data
+## 13. Repository layout
 
-### 9.1 Level definition file (`/gateway/scenarios/level1.json`)
-customer, need, deadline, cut-off, candidate product ids (from real data), preset mandates,
-expected outcome per preset (used by tests), optional overlay.
+```
+agent/       buyer agent runner (a normal client of the gateway)
+backend/     Trust Gateway: API, domain, policy, planner, Valio client, scenarios
+frontend/    game and approval UI (React + TypeScript + PixiJS), no business rules
+docs/        API contract, data notes, design notes
+scripts/     helper scripts (data download, recordings)
+tests/       unit tests for policy, planner, quote lifecycle, log integrity
+.env.example configuration template (no secrets in the repo)
+```
 
-### 9.2 Prefer real twists
-First try to find real products in the mock data whose `scheduleLines` naturally create the
-twist (partial quantity, later date, salesBlock).
-
-### 9.3 Scenario overlay
-If the data cannot produce a twist, the overlay may adjust availability or flags for
-specific product ids. Every overlay change is logged with `actor: "scenario"` and shown in
-the Valio view as "scenario adjustment". Prices are never overlaid.
-
-### 9.4 Recordings
-`/recordings/levelN-<preset>.json` stores gateway responses for replay mode. Regenerate
-whenever gateway logic changes.
+<!-- VERIFY: adjust to the real structure; link docs/data-notes.md and docs/design/API_CONTRACT.md -->
 
 ---
 
-## 10. UI & GAME WORLD
+## 14. Team, licence and credits
 
-### 10.1 Game direction
+**Team ByteMe**: <!-- add names / roles -->
 
-Agent Kitchen is a **2D top-down kitchen simulation game**, not a dashboard with decorative animations.
+**Licence:** <!-- add LICENSE file, e.g. MIT or Apache-2.0 -->
 
-The kitchen is the primary game environment. The player is the kitchen manager, while a small autonomous robot represents the external AI purchasing agent.
-
-The robot moves around the kitchen, interacts with stations, executes purchasing tasks, encounters policy decisions, and completes deliveries.
-
-The game world visualises what happens inside the Trust Gateway. All meaningful actions must still call the real gateway.
-
-### 10.2 Visual world
-
-A single 2D kitchen environment contains interactive stations:
-
-- Manager Desk: configure and sign the mandate.
-- Order Terminal: receive purchasing requests.
-- Storage / Refrigerator: represent product inventory and availability.
-- Phone Station: display human approval requests.
-- Delivery Entrance: represent completed or failed deliveries.
-
-Use a top-down or slightly angled 2D perspective.
-
-### 10.3 Robot agent
-
-The robot is the visual representation of the autonomous buyer agent.
-
-It must support:
-
-- Walking between kitchen stations.
-- Idle, walking, working and waiting animations.
-- Picking up or carrying ingredient boxes as visual feedback.
-- Stopping when human approval is required.
-- Displaying different emotional states based on gateway decisions.
-
-Robot states:
-
-- GREEN: calm, continues autonomously.
-- BLUE: informative, continues with a notification.
-- YELLOW: uncertain, stops and requests human approval.
-- RED: blocked by the gateway, cannot proceed.
-
-Robot movement and animations are presentation only. The gateway remains the source of truth for every decision.
-
-### 10.4 Gameplay interaction
-
-The player interacts with the kitchen through contextual UI:
-
-- Click the manager desk to configure the mandate.
-- Click the order terminal to submit a purchasing request.
-- Observe the robot autonomously executing the task.
-- Receive approval notifications when the gateway returns YELLOW.
-- Inspect blocked actions when the gateway returns RED.
-- Observe the robot completing delivery when an order is confirmed.
-
-Approval cards and notifications should appear as in-game overlays rather than replacing the entire game environment.
-
-### 10.5 Supporting interfaces
-
-The following interfaces complement the game world:
-
-1. Mandate document: signed authority and policy configuration.
-2. Agent activity log: chronological gateway events.
-3. Approval notification: human-in-the-loop decisions.
-4. Result and receipt: scores, order details and hash verification.
-5. Valio view: gateway activity, blocked attempts and data boundaries.
-6. Replay comparison: Strict / Balanced / Loose mandate outcomes.
-
-### 10.6 Technical constraints
-
-- React + TypeScript + Vite.
-- Use **PixiJS (v8)** for the 2D game world (user decision: PixiJS instead of Phaser).
-- Use React for menus, mandate configuration, notifications and supporting interfaces
-  (HTML overlays on top of the canvas, styled as in-game objects).
-- PixiJS handles rendering, sprites, animation and movement; simple grid-based walkability
-  (blocked tiles) stands in for collision.
-- The game world communicates with the backend through the API client (`GatewayClient`).
-- No business rules, policy limits or secrets inside PixiJS or React.
-- No Phaser, no 3D.
-
-A lightweight grid-based movement system is sufficient. Avoid unnecessary physics or complex simulation systems.
-
-### 10.7 Visual direction
-
-- 2D pixel art or polished cartoon-style illustrations (decided: pixel art).
-- Top-down kitchen environment.
-- Valio-inspired blue and white palette without using unauthorised logos.
-- Clear and readable sprites suitable for projector demonstrations.
-- Smooth robot movement and expressive animations.
-- The game world should remain visible during approvals and notifications.
-- Assets: our own pixel art or CC0/OFL-licensed packs only; record source and licence of every asset.
-- The four light colours are used identically everywhere. Must work on a projector: large type, high contrast.
-
-### 10.8 Art and scope guardrails
-- Art kit first: a dedicated spec defines tile size (16×16, scaled with nearest-neighbour),
-  palette (hex), kitchen grid with the 5 station positions, robot frames, and how the four
-  lights are shown. Sprites are drawn with Pixi Graphics or come from a CC0 pack (record
-  source + licence). Argon's handoff for any world spec must contain these numbers.
-- Vertical slice first: robot tweens between fixed station points; state shown as an
-  emote above the head plus a bob. Grid pathfinding and frame animations are polish.
-- The frontend mock gateway only replays JSON produced by frontend/mocks/generate.py.
-  It never computes policy, ranking or scores.
-- Manager Desk has 5 controls: per-order limit, substitution, late delivery,
-  priority (on time / lowest price), allergen rule.
-- Order Terminal sends the level's predefined request; it may be shown as natural text.
-- Approval cards may contain a trap option (late or allergen visible on the card);
-  approving a trap the card disclosed costs Safety or Kitchen points.
-- Demo mode: one button runs Level 1 Balanced end to end, then opens the compare screen.
-- API paths: API_CONTRACT.md (v1, unchanged) is authoritative; §6.1 is a summary.
-  Behaviour v1 leaves open is in docs/design/GATEWAY_RULES.md.
+**Data:** Valio Aimo mock API provided for Junction 2026. **Art and assets:** our own or CC0/OFL-licensed, with sources in `docs/ASSETS.md`.
 
 ---
 
-## 11. Build priorities (in order)
-
-1. Inspect data → `docs/data-notes.md`.
-2. Gateway: valio client, search, quote, policy engine with tests, orders, log.
-3. Agent runner calling the gateway for Level 1.
-4. Frontend game world (§10) + overlays wired to Level 1.
-5. Replay mode + recording for Level 1.
-6. Levels 2 and 3.
-7. Replay comparison screen, Valio view.
-8. Game polish (animations, particles, sound), discovery file polish.
-9. Stretch levels.
-
-At any point the newest stable build must be demoable.
-
----
-
-## 12. Conventions
-
-- TypeScript strict mode; Python type hints; small pure functions for policy and planner.
-- Money as integer cents internally; display in € with comma decimal (Finnish style) in UI.
-- Times in Europe/Helsinki; store ISO 8601 with offset.
-- All user-facing text in English.
-- Typographic quotes and apostrophes in UI copy.
-- Every gateway response includes `requestId` and appears in the log.
-- Before adding a dependency, check it is really needed.
-
----
-
-## 13. Glossary
-
-- **Mandate / valtakirja**: signed authority the buyer gives its agent.
-- **Quote**: signed, time-limited offer from Valio Aimo.
-- **Gateway**: Valio Aimo's agent-facing interface; enforces all rules.
-- **Plan**: one way to fulfil a need (products × quantities × dates).
-- **Hearts**: the manager's limited attention in the game.
-- **Overlay**: flagged scenario adjustment when real data cannot produce a twist.
+*Developer notes (internal spec, conventions, build priorities) have moved to `docs/design/SPEC.md`.*

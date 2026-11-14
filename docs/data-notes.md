@@ -90,6 +90,50 @@ Valio's raw responses, for example `2026-11-19T00:00:00+0200` and
 | 2 | Primary `464306`; substitute `464401` on Wednesday and Friday | Both products are category `10400` and lactose-free. On each need date, the availability overlay blocks the primary and supplies 120 L of the substitute on time. Recorded price rows are unchanged. |
 | 3 | Usual primary `468855`; AE trap `462635`; safe option `473726` | Category `41820` has verified allergen rows for all three. `462635` contains `AE` and has the lowest selected-candidate comparison price (€6.42/L); `473726` has no AE risk, costs €8.43/L, and shares the primary's category and `FREE_FROM_GLUTEN` / `FREE_FROM_LACTOSE` claims. The usual product is verified AE-free but is sales-blocked by the availability overlay. The need is 20 L of school-kitchen pistachio ice cream; the safe product's 2.5 L each and the trap's 5 L each cover that quantity. |
 
+The sample availability request for 2026-11-16 returned all five products as
+available and not sales-blocked. It did not produce the Level 1 partial-availability
+twist, so that twist will require a scenario overlay or a later requested date.
+
+For the peanut exclusion used by the Allergy level, one of the five Level 1 milk
+candidates (`464179`) has `AP: FREE_FROM`; the other four have neither `AP` in
+`allergen` nor `nonAllergen` and therefore produce `RED` as missing data. Across all
+91 non-deleted products in category `10400`, 15 have `AP: FREE_FROM`, none list `AP`
+as a risk, and 76 have no `AP` classification. The demo must use the verified
+`464179` product as its safe candidate rather than treating missing data as safe.
+
+## Replay fixtures
+
+Small live price and availability responses are stored in
+`backend/fixtures/valio/`. The complete downloaded files remain under `data/valio/`,
+which is gitignored because of size and environment-specific data.
+
+## Policy decisions
+
+- Spending limits use the tax-inclusive total the kitchen pays.
+- The per-order limit applies to the complete plan total, not individual lines.
+- `same_category` substitution requires an exact match on the catalog `category` field.
+- `PENDING_APPROVAL`, `ORDERED`, and `CONFIRMED` totals are reserved against the weekly
+  limit. `REJECTED` and `EXPIRED` orders are not counted.
+- Allergen exclusions use verified catalog classification codes. A missing, empty, or
+  unmapped allergen classification is treated as unknown and produces `RED` when the
+  mandate excludes allergens.
+- A product with missing or unverified required-label data produces `RED`.
+- A late delivery within the mandate's `one_day` tolerance is allowed; later delivery
+  produces `YELLOW`.
+- An alternative approval is accepted only when its re-check has the same reason set
+  shown on the original approval. A new or different `YELLOW` reason is refused and
+  the approval remains `OPEN`, because the human has not approved that new condition.
+- Approval heart accounting is a no-op until game sessions exist; the approval
+  interface already carries `heartsLeft` and supports `ATTENTION_EXHAUSTED`.
+
+## Live events
+
+`GET /v1/events` accepts the contract's `sessionId` query parameter for forward
+compatibility, but currently scopes replay and live delivery by the authenticated
+customer because game sessions are not implemented yet. Clients should send
+`since` or use the `Last-Event-ID` header when reconnecting; the latter replays
+only events with a newer log sequence.
+
 Scenario recordings are raw `/api/price` and `/api/availability` response objects grouped by
 customer and `requestedDate` in `backend/fixtures/valio/recorded/`. Their product values are not
 rewritten. Only the scenario overlay changes `salesBlock`, `scheduleLines`, or `closingTime` in

@@ -20,6 +20,11 @@ class Settings:
     valio_customer_id: str = ""
     quote_signing_key: str = ""
     approval_timeout_seconds: int = 20
+    cors_allowed_origins: tuple[str, ...] = (
+        "http://localhost:3000",
+        "http://localhost:4173",
+        "http://localhost:5173",
+    )
     valio_cache_directory: Path = ROOT / "data" / "valio"
 
     @classmethod
@@ -30,6 +35,14 @@ class Settings:
             valio_customer_id=os.getenv("VALIO_CUSTOMER_ID", ""),
             quote_signing_key=os.getenv("QUOTE_SIGNING_KEY", ""),
             approval_timeout_seconds=int(os.getenv("APPROVAL_TIMEOUT_SECONDS", "20")),
+            cors_allowed_origins=tuple(
+                origin.strip()
+                for origin in os.getenv(
+                    "CORS_ALLOWED_ORIGINS",
+                    "http://localhost:3000,http://localhost:4173,http://localhost:5173",
+                ).split(",")
+                if origin.strip()
+            ),
         )
 
     def require_valio_credentials(self) -> None:
