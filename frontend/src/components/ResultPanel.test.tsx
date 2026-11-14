@@ -18,6 +18,7 @@ describe('ResultPanel', () => {
     const onLoaded = vi.fn();
     const onPlayAgain = vi.fn();
     render(<ResultPanel client={client} sessionId={start.sessionId} startHearts={start.hearts} onLoaded={onLoaded} onPlayAgain={onPlayAgain} />);
+    expect(screen.getByText('Agent is working…')).toBeInTheDocument();
     expect(screen.getByText('Loading result…')).toBeInTheDocument();
     expect(await screen.findByRole('heading', { name: 'Result' })).toBeInTheDocument();
     expect(screen.getByRole('meter', { name: 'Kitchen' })).toHaveAttribute('aria-valuenow', String(level1.presets.balanced.result.kitchen));

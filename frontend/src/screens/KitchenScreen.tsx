@@ -3,6 +3,7 @@ import type { GatewayClient } from '../api/gateway';
 import type { Approval, ApprovalDecision, Discovery, GameStart, Mandate } from '../api/schemas';
 import GameWorld from '../components/GameWorld';
 import PixelPanel from '../components/PixelPanel';
+import AgentWorking, { type AgentActivity } from '../components/AgentWorking';
 import ActivityLog from '../components/ActivityLog';
 import GameClock from '../components/GameClock';
 import { toTimelineEntries, type TimelineEntry } from '../game/timeline';
@@ -24,6 +25,8 @@ export default function KitchenScreen({ client, start, presets, discovery, onExi
   const [panel, setPanel] = useState<'closed' | 'brief' | 'mandate' | 'terminal' | 'done' | 'error' | 'phone' | 'result'>('closed');
   const [signed, setSigned] = useState<Mandate | null>(null);
   const [running, setRunning] = useState(false);
+  const [waiting, setWaiting] = useState(false);
+  const [activity, setActivity] = useState<AgentActivity>('idle');
   const [error, setError] = useState('');
   const [world, setWorld] = useState<WorldController | null>(null);
   const [entries, setEntries] = useState<TimelineEntry[]>([]);
@@ -32,6 +35,11 @@ export default function KitchenScreen({ client, start, presets, discovery, onExi
   const clock = useGameClock(start.clock);
   const abort = useRef<AbortController | null>(null);
   useEffect(() => () => abort.current?.abort(), []);
+  useEffect(() => {
+    if (!running || waiting) return;
+    const timer = window.setInterval(() => setActivity(client.activity?.(start.sessionId) ?? 'idle'), 150);
+    return () => window.clearInterval(timer);
+  }, [client, running, start.sessionId, waiting]);
   const hint = running ? 'The agent is working.' : signed ? 'Click the Order Terminal to send the request.' : 'Click the Manager Desk to read the brief and sign the mandate.';
   function closePanel() { const prior = panel; setPanel('closed'); requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`button[aria-label="${prior === 'terminal' ? 'Order Terminal' : 'Manager Desk'}"]`)?.focus()); }
   function station(id: StationId) { if (id === 'desk') setPanel('brief'); if (id === 'terminal' && signed && !running) setPanel('terminal'); }
@@ -44,13 +52,14 @@ export default function KitchenScreen({ client, start, presets, discovery, onExi
   const onApprovalNeeded=useCallback((approval:Approval,step:import('../api/schemas').AgentStep)=>new Promise<void>(resolve=>{setActiveApproval(approval);setApprovalStep(step);setPhoneHidden(false);setPanel('phone');settledIds.current.delete(approval.approvalId);settleWaiters.current.set(approval.approvalId,()=>{resolve();});world?.ring(approval.status==='OPEN');}),[world]);
   async function send() {
     if (!world || running) return;
-    setPanel('closed'); setRunning(true); clock.start();
+    setPanel('closed'); setRunning(true); setActivity('idle'); clock.start();
     const controller = new AbortController(); abort.current = controller;
-    try { const result = await runAgent({ client, sessionId: start.sessionId, world, signal: controller.signal, onMark,onApprovalNeeded,holdMs }); if (result === 'finished') { clock.stop(); setRunning(false); setPanel('done'); } }
+    try { const result = await runAgent({ client, sessionId: start.sessionId, world, signal: controller.signal, onMark,onApprovalNeeded,onWaiting:(value)=>{setWaiting(value);const current=client.activity?.(start.sessionId) ?? 'idle';setActivity(value&&current==='idle'?'searching':current);},holdMs }); if (result === 'finished') { clock.stop(); setRunning(false); setPanel('done'); } }
     catch (reason) { clock.stop(); setRunning(false); setError(reason instanceof Error ? reason.message : String(reason)); setPanel('error'); }
   }
   useEffect(() => () => clock.stop(), [clock.stop]);
   return <GameWorld panelOpen={panel !== 'closed'} stations={[{ id: 'desk' }, { id: 'terminal', disabledReason: !signed ? 'Sign the mandate at the Manager Desk first.' : running ? 'The agent is working.' : undefined },{id:'phone',disabledReason:!activeApproval||settledIds.current.has(activeApproval.approvalId)?'No approval request right now.':undefined}]} onStation={id=>{if(id==='phone'){setPhoneHidden(false);setPanel('phone');return;}station(id);}} onReady={setWorld} onExit={onExit} hud={<header className="kitchen-hud"><div><h1>{start.level.title}</h1><span>{start.level.customer.name}</span></div><p role="status">{hint}</p><GameClock time={clock.time} running={clock.running} /><HeartsMeter hearts={hearts} max={start.hearts}/><button className="button button-ghost" onClick={onExit}>Back to levels</button></header>} side={<ActivityLog entries={entries} />}>
+    {running && (waiting || activity !== 'idle') && panel === 'closed' && <AgentWorking activity={activity === 'idle' ? 'searching' : activity} />}
     {activeApproval&&approvalStep&&<Phone key={activeApproval.approvalId} client={client} approval={activeApproval} step={approvalStep} hidden={panel!=='phone'||phoneHidden} onHide={()=>{setPhoneHidden(true);requestAnimationFrame(()=>document.querySelector<HTMLButtonElement>('button[aria-label="Phone Station"]')?.focus());}} onSettled={onSettled}/>}
     <PixelPanel variant="clipboard" title={panel === 'mandate' ? 'Valtakirja' : 'Brief'} hidden={panel !== 'brief' && panel !== 'mandate'} onClose={closePanel}>
       <div className="clipboard-paper">
@@ -64,7 +73,7 @@ export default function KitchenScreen({ client, start, presets, discovery, onExi
       </div>
     </PixelPanel>
     <PixelPanel variant="terminal" title="Request" hidden={panel !== 'terminal'} onClose={closePanel}>
-      <p>“{start.level.brief}”</p><p>{start.level.customer.name}</p><p><strong>Deliver by</strong> {formatDateTime(start.level.deadline)}</p><button className="button button-primary" onClick={() => void send()}>Send to agent</button>
+      <p>“{start.level.brief}”</p><p>{start.level.customer.name}</p><p><strong>Deliver by</strong> {formatDateTime(start.level.deadline)}</p><button className="button button-primary" disabled={running} aria-busy={running} onClick={() => void send()}>{running ? 'Sending…' : 'Send to agent'}</button>
     </PixelPanel>
     <PixelPanel variant="notice" title="The agent is done." hidden={panel !== 'done'}><button className="button button-primary" onClick={()=>setPanel('result')}>See result</button><button className="button button-ghost" onClick={onExit}>Back to levels</button></PixelPanel>
     {panel==='result'&&<ResultPanel client={client} sessionId={start.sessionId} startHearts={start.hearts} onLoaded={(result:GameResult)=>{if(result.incident)world?.setRobotState('RED');}} onPlayAgain={onPlayAgain??onExit} onValioView={onValioView} onCompare={onCompare}/>}

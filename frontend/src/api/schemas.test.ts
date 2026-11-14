@@ -63,6 +63,14 @@ describe('gateway schemas', () => {
       .toBe(false);
   });
 
+  it('accepts expired pending orders and gateway events with no agent id', () => {
+    const level1 = mocks['../../mocks/level1.json'] as { presets: Record<string, { steps: Array<Record<string, any>>; log?: any[] }> };
+    const step = level1.presets.balanced.steps.find((item) => item.order.httpStatus === 202)!;
+    expect(AgentStepSchema.parse({ ...step, order: { ...step.order, body: { ...step.order.body, status: 'EXPIRED' } } })).toBeTruthy();
+    const event = level1.presets.balanced.log![0]!;
+    expect(LogResponseSchema.parse({ events: [{ ...event, agentId: null }] }).events[0]?.agentId).toBeNull();
+  });
+
   it('parses optional result cost and non-negative hearts used', () => {
     const level1 = mocks['../../mocks/level1.json'] as { presets: Record<string, { result: Record<string, unknown> }> };
     const result = level1.presets.strict.result;

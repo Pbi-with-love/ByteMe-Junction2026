@@ -4,6 +4,7 @@ Plan scores (CLAUDE.md §6.4), wallet and stars (§7.3) are computed, then self-
 import copy
 import hashlib
 import json
+import math
 import pathlib
 import sys
 
@@ -48,7 +49,7 @@ def mandate(customer, agent, issuer, per_order, subst, late, allergens, prioriti
 
 def line(p, amount, date, substitute):
     REL[p["productId"]] = p["deliveryReliability"]
-    packs = -(-amount // p["packSize"]["amount"])  # ceil
+    packs = math.ceil(amount / p["packSize"]["amount"])  # ceil
     unit = p["unitPriceCents"]
     return {
         "productId": p["productId"],
@@ -340,6 +341,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 # /api/price responses are recorded. Allergen codes are the catalog's (AM milk, AE egg, AW wheat, AP peanut).
 CARBON_MILK = {"category": "10400", "kgCo2ePerKg": {"min": 1.1, "max": 1.1}}
 CARBON_BAKERY = {"category": "bakery (mock)", "kgCo2ePerKg": {"min": 1.0, "max": 1.6}}
+CARBON_ICE_CREAM = {"category": "41820", "kgCo2ePerKg": {"min": 1.0, "max": 1.6}}
 PRIO_DEFAULT = ["on_time", "price", "sustainability"]
 PRIO_PRICE = ["price", "on_time", "sustainability"]
 
@@ -531,39 +533,37 @@ for preset, subst, light, reasons, hearts in [
     seal(level2, preset, "Scenario adjustment: 464201 set to sales-blocked this week.",
          ["approved", "approved"] if light == "YELLOW" else [])
 
-# ======================= Level 3: Allergy Emergency =======================
+# ======================= Level 3: The Pistachio Order =======================
 C3 = {"customerId": "789", "name": "Koivu School kitchen (fictional)", "type": "school"}
 AG3, ISS3 = "kitchenbuyer-koivu-school", {"name": "Liisa Korhonen", "role": "School kitchen manager"}
 THU = "2026-11-19"
-# 463989 is the real shrove bun (contains AE AM AW UW, may contain AN SA). The usual bun and the
-# egg-free bun are FICTIONAL ids (no egg-free bakery item is known from the catalog yet).
-BASE_SP = {"productId": "990001", "name": "Cinnamon bun, egg-free (fictional)", "brand": "Valio Aimo",
-           "category": "bakery (mock)", "salesUnit": "ST", "packSize": {"amount": 1, "unit": "pcs"}, "labels": [],
-           "allergens": ["AW"], "carbonCategory": CARBON_BAKERY, "deliveryReliability": None,
-           "unitPriceCents": 95, "comparisonCents": 95}
-SAFE_SP = {**BASE_SP, "productId": "990002", "name": "Oat bun, egg-free (fictional)", "unitPriceCents": 110,
-           "comparisonCents": 110}
-NUT_SP = {**BASE_SP, "productId": "463989", "name": "Shrove bun", "allergens": ["AE", "AM", "AW", "UW"],
-          "mayContain": ["AN", "SA"], "unitPriceCents": 80, "comparisonCents": 80}
-NEED3 = {"description": "Buns for school dessert (usual product unavailable)",
-         "quantity": {"amount": 300, "unit": "pcs"}, "deadline": T("06:00", THU),
-         "candidateProductIds": ["990001", "990002", "463989"]}
-level3 = {"start": start("level3", "Allergy Emergency", C3,
-                         "300 buns by Thursday 06:00 for a pupil with an egg allergy. Usual bun unavailable.", T("06:00", THU)),
+# The Level 3 products and pack sizes are verified in docs/data-notes.md.
+BASE_SP = {"productId": "468855", "name": "GelatoLAB-Espoo Pistachio lactose-free ice cream, 5 L", "brand": "GelatoLAB-Espoo",
+           "category": "ice cream", "salesUnit": "ST", "packSize": {"amount": 5, "unit": "l"}, "labels": ["FREE_FROM_GLUTEN", "FREE_FROM_LACTOSE"],
+           "allergens": [], "carbonCategory": CARBON_ICE_CREAM, "deliveryReliability": None,
+           "unitPriceCents": 4110, "comparisonCents": 822}
+SAFE_SP = {**BASE_SP, "productId": "473726", "name": "GelatoLAB-Espoo Pistachio lactose-free ice cream, 2.5 L", "packSize": {"amount": 2.5, "unit": "l"}, "unitPriceCents": 2109, "comparisonCents": 843}
+NUT_SP = {**BASE_SP, "productId": "462635", "name": "GelatoLAB-Espoo Cookies Cream ice cream, 5 L", "allergens": ["AE", "AM"],
+          "mayContain": [], "unitPriceCents": 3211, "comparisonCents": 642}
+NEED3 = {"description": "Pistachio ice cream for school kitchen (usual product unavailable)",
+         "quantity": {"amount": 20, "unit": "l"}, "deadline": T("06:00", THU),
+         "candidateProductIds": ["468855", "473726", "462635"]}
+level3 = {"start": start("level3", "The Pistachio Order", C3,
+                         "20 l pistachio ice cream by 2026-11-19 06:00+02:00", T("06:00", THU)),
           "hiddenRequirements": {"excludeAllergens": ["AE"]},
           "presets": {}}
 for preset, allergens in [("allergen_on", ["AE"]), ("allergen_off", [])]:
     mid = f"mdt_l3_{preset}"
-    plans = [plan("pln_safe", [line(SAFE_SP, 300, THU, True)], THU, 300, "YELLOW", ["SUBSTITUTION_NOT_ALLOWED"],
-                  "300 oat buns (egg-free), Thursday")]
-    excl = [{"productId": "990001", "light": "RED", "reason": "SALES_BLOCKED"}]
+    plans = [plan("pln_safe", [line(SAFE_SP, 20, THU, True)], THU, 20, "YELLOW", ["SUBSTITUTION_NOT_ALLOWED"],
+                  "20 l pistachio ice cream, Thursday")]
+    excl = [{"productId": "468855", "light": "RED", "reason": "SALES_BLOCKED"}]
     excluded_allergens = level3["hiddenRequirements"]["excludeAllergens"]
     mandate_allergen_match = any(code in allergens for code in NUT_SP["allergens"] + NUT_SP.get("mayContain", []))
     if mandate_allergen_match:
-        excl.append({"productId": "463989", "light": "RED", "reason": "ALLERGEN_EXCLUDED"})
+        excl.append({"productId": "462635", "light": "RED", "reason": "ALLERGEN_EXCLUDED"})
     else:
-        plans.append(plan("pln_nut", [line(NUT_SP, 300, THU, True)], THU, 300, "YELLOW", ["SUBSTITUTION_NOT_ALLOWED"],
-                          "300 shrove buns, Thursday"))
+        plans.append(plan("pln_nut", [line(NUT_SP, 20, THU, True)], THU, 20, "YELLOW", ["SUBSTITUTION_NOT_ALLOWED"],
+                          "20 l Cookies Cream ice cream, Thursday"))
     q = quote(f"qt_l3_{preset}", "789", mid, NEED3, plans, excl, PRIO_PRICE, overlay=True)
     best = q["plans"][0]
     product_by_id = {p["productId"]: p for p in (BASE_SP, SAFE_SP, NUT_SP)}
@@ -578,19 +578,19 @@ for preset, allergens in [("allergen_on", ["AE"]), ("allergen_off", [])]:
     search = {"results": [search_row(BASE_SP, {"light": "RED", "reason": "SALES_BLOCKED"}), search_row(SAFE_SP),
                           search_row(NUT_SP, {"light": "RED", "reason": "ALLERGEN_EXCLUDED"} if allergens else None)],
               "total": 3}
-    reason = "Every bun on offer is a substitute, and your mandate allows no substitutes."
-    explanation = ("The usual bun is blocked this week. The gateway blocked the shrove bun, so oat buns at €1,10 each are the only option."
+    reason = "Every ice cream option is a substitute, and your mandate allows no substitutes."
+    explanation = ("The usual pistachio ice cream is blocked. The gateway blocked the Cookies Cream ice cream, so the 2.5 l pistachio tubs are the only option."
                    if preset == "allergen_on" else
-                   "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.")
-    receipt = ("The cheapest bun contains egg, so the gateway blocked it. Your agent asked to buy 300 egg-free oat buns instead, and you approved."
+                   "The usual pistachio ice cream is blocked. Cookies Cream is cheapest at €6,42/l; pistachio costs €8,43/l.")
+    receipt = ("The cheapest ice cream contains egg, so the gateway blocked it. Your agent asked to buy 20 l of pistachio ice cream instead, and you approved."
                if preset == "allergen_on" else
-               "Your agent asked to buy 300 shrove buns because they were cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.")
+               "Your agent asked to buy 20 l of Cookies Cream ice cream because it was cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.")
     res = (result(100, wallet(q, best), 100 if not incident else 0, 2, receipt,
                   incident=incident, approvals=1))
     level3["presets"][preset] = {
         "mandate": mandate("789", AG3, ISS3, 500, "none", "none", allergens, PRIO_PRICE, mid),
         "steps": [step(search, q, f"ord_l3_{preset}", f"apr_l3_{preset}", reason, explanation)], "result": res}
-    seal(level3, preset, "Scenario adjustment: usual bun 990001 set to sales-blocked.", ["approved"])
+    seal(level3, preset, "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.", ["approved"])
 
 # ---------- outcome/trap builder (004 M2-M4, 009 demoPath) ----------
 PRODUCTS = {p["productId"]: p for p in (VALIO_LF, EILA_LF, NOVOBOX, BASE_SP, SAFE_SP, NUT_SP)}
@@ -617,8 +617,8 @@ def selected_plans(level, pr, decisions):
     return chosen
 
 def calculate_result(level, pr, decisions, recorded=False):
-    need = {"level1": 1000, "level2": 240, "level3": 300}[level["start"]["level"]["levelId"]]
-    unit = {"level1": "l", "level2": "l", "level3": "pcs"}[level["start"]["level"]["levelId"]]
+    need = {"level1": 1000, "level2": 240, "level3": 20}[level["start"]["level"]["levelId"]]
+    unit = {"level1": "l", "level2": "l", "level3": "l"}[level["start"]["level"]["levelId"]]
     chosen = selected_plans(level, pr, decisions)
     on_time = sum(p["onTime"]["amount"] for _, p in chosen)
     kitchen = min(100, round(100 * on_time / need))
@@ -687,7 +687,7 @@ def build_outcomes(level, name, pr):
         cloned = copy.deepcopy(pr)
         decisions = {s["approval"]["approvalId"]: d for s, d in zip(opens, path)}
         cloned["result"] = calculate_result(level, pr, decisions, path == recorded)
-        seal(level | {"presets": {name: cloned}}, name, "Scenario adjustment: usual bun 990001 set to sales-blocked." if level is level3 else "Scenario overlay.", path)
+        seal(level | {"presets": {name: cloned}}, name, "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked." if level is level3 else "Scenario overlay.", path)
         outcomes[key] = {k: cloned[k] for k in ("result", "log", "valioLog", "verify")}
     pr["outcomes"] = outcomes
     rec = outcomes[",".join(recorded)]
@@ -806,7 +806,7 @@ assert level1_file["dataBoundaryDemo"]["verify"]["valid"] is True
 assert all(rs == [["SALES_BLOCKED"]] * 2 for rs in map(search_reasons, P2.values()))
 assert search_reasons(P3["allergen_on"]) == [["SALES_BLOCKED", "ALLERGEN_EXCLUDED"]]
 assert search_reasons(P3["allergen_off"]) == [["SALES_BLOCKED"]]
-assert any(e["type"] == "ORDER_CREATED" and "463989" in e["summary"] for e in P3["allergen_off"]["log"])
+assert any(e["type"] == "ORDER_CREATED" and "462635" in e["summary"] for e in P3["allergen_off"]["log"])
 assert any(e["type"] == "ORDER_CREATED" and e["light"] == "BLUE" for e in P1["loose"]["log"])
 td = data["level1"]["tamperedDemo"]
 assert td["verify"] == verify_chain(td["log"]) == {"valid": False, "brokenAtSeq": 5}
@@ -877,7 +877,7 @@ for pr in P3.values():
 assert P3["allergen_on"]["steps"][0]["approval"]["options"] == [
     {"planId": "pln_safe", "tier": "best", "recommended": True,
      "summary": P3["allergen_on"]["steps"][0]["quote"]["plans"][0]["summary"]}]
-assert P3["allergen_off"]["steps"][0]["approval"]["reasonText"] == "Every bun on offer is a substitute, and your mandate allows no substitutes."
+assert P3["allergen_off"]["steps"][0]["approval"]["reasonText"] == "Every ice cream option is a substitute, and your mandate allows no substitutes."
 assert P3["allergen_on"]["result"]["stars"] == 3 and P3["allergen_off"]["result"]["stars"] == 0
 assert all(not any(e["type"] == "LEVEL_LOADED" for e in d["presets"][nm]["log"])
            for d in data.values() for nm in d["presets"])

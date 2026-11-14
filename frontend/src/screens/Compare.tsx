@@ -7,6 +7,7 @@ import { bestIndexes } from '../game/compare';
 import { formatMoney, formatPresetLabel } from '../lib/format';
 import PixelSprite from '../components/PixelSprite';
 import { Stars } from '../components/ResultPanel';
+import AgentWorking from '../components/AgentWorking';
 
 type Props = { client: GatewayClient; levelId: string; onBack: () => void };
 const ROWS = [
@@ -68,7 +69,7 @@ export default function Compare({ client, levelId, onBack }: Props) {
     <header className="compare-heading"><h1 id="compare-heading">Agents don’t need a chatbot. They need a mandate.</h1>
       <p><strong>{levelTitle}</strong> · Mandate = buyer’s promise · Quote = Valio Aimo’s promise · Log = proof both kept them</p>
     </header>
-    {!data && !error && <div className="compare-state" role="status">Loading comparison…</div>}
+    {!data && !error && <div className="compare-state"><AgentWorking activity="explaining" message="Comparing mandates…" /></div>}
     {error && <div className="compare-error" role="alert">{error}</div>}
     {data && <div className="compare-frame"><table aria-labelledby="compare-heading">
       <thead><tr><th scope="col">Metric</th>{entries.map(([key, result], index) => {

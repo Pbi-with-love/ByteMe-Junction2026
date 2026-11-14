@@ -4,13 +4,13 @@
     "sessionId": "ses_level3",
     "level": {
       "levelId": "level3",
-      "title": "Allergy Emergency",
+      "title": "The Pistachio Order",
       "customer": {
         "customerId": "789",
         "name": "Koivu School kitchen (fictional)",
         "type": "school"
       },
-      "brief": "300 buns by Thursday 06:00 for a pupil with an egg allergy. Usual bun unavailable.",
+      "brief": "20 l pistachio ice cream by 2026-11-19 06:00+02:00",
       "deadline": "2026-11-19T06:00:00+02:00",
       "closingTime": "2026-11-14T14:00:00+02:00"
     },
@@ -72,21 +72,22 @@
           "search": {
             "results": [
               {
-                "productId": "990001",
-                "name": "Cinnamon bun, egg-free (fictional)",
-                "brand": "Valio Aimo",
-                "category": "bakery (mock)",
+                "productId": "468855",
+                "name": "GelatoLAB-Espoo Pistachio lactose-free ice cream, 5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
                 "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pcs"
+                  "amount": 5,
+                  "unit": "l"
                 },
-                "labels": [],
-                "allergens": [
-                  "AW"
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
                 ],
+                "allergens": [],
                 "carbonCategory": {
-                  "category": "bakery (mock)",
+                  "category": "41820",
                   "kgCo2ePerKg": {
                     "min": 1.0,
                     "max": 1.6
@@ -99,21 +100,22 @@
                 }
               },
               {
-                "productId": "990002",
-                "name": "Oat bun, egg-free (fictional)",
-                "brand": "Valio Aimo",
-                "category": "bakery (mock)",
+                "productId": "473726",
+                "name": "GelatoLAB-Espoo Pistachio lactose-free ice cream, 2.5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
                 "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pcs"
+                  "amount": 2.5,
+                  "unit": "l"
                 },
-                "labels": [],
-                "allergens": [
-                  "AW"
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
                 ],
+                "allergens": [],
                 "carbonCategory": {
-                  "category": "bakery (mock)",
+                  "category": "41820",
                   "kgCo2ePerKg": {
                     "min": 1.0,
                     "max": 1.6
@@ -123,24 +125,25 @@
                 "excluded": null
               },
               {
-                "productId": "463989",
-                "name": "Shrove bun",
-                "brand": "Valio Aimo",
-                "category": "bakery (mock)",
+                "productId": "462635",
+                "name": "GelatoLAB-Espoo Cookies Cream ice cream, 5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
                 "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pcs"
+                  "amount": 5,
+                  "unit": "l"
                 },
-                "labels": [],
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
+                ],
                 "allergens": [
                   "AE",
-                  "AM",
-                  "AW",
-                  "UW"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "bakery (mock)",
+                  "category": "41820",
                   "kgCo2ePerKg": {
                     "min": 1.0,
                     "max": 1.6
@@ -163,16 +166,16 @@
             "createdAt": "2026-11-14T10:05:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Buns for school dessert (usual product unavailable)",
+              "description": "Pistachio ice cream for school kitchen (usual product unavailable)",
               "quantity": {
-                "amount": 300,
-                "unit": "pcs"
+                "amount": 20,
+                "unit": "l"
               },
               "deadline": "2026-11-19T06:00:00+02:00",
               "candidateProductIds": [
-                "990001",
-                "990002",
-                "463989"
+                "468855",
+                "473726",
+                "462635"
               ]
             },
             "plans": [
@@ -180,26 +183,26 @@
                 "planId": "pln_safe",
                 "lines": [
                   {
-                    "productId": "990002",
+                    "productId": "473726",
                     "quantity": {
-                      "amount": 300,
-                      "unit": "pcs"
+                      "amount": 20,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 300,
+                      "amount": 8,
                       "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 110,
+                      "cents": 2109,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 110,
+                      "cents": 843,
                       "currency": "EUR",
-                      "per": "pcs"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 33000,
+                      "cents": 16872,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-19",
@@ -207,12 +210,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 33000,
+                  "cents": 16872,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 300,
-                  "unit": "pcs"
+                  "amount": 20,
+                  "unit": "l"
                 },
                 "policy": {
                   "light": "YELLOW",
@@ -220,7 +223,7 @@
                     "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "300 oat buns (egg-free), Thursday, €330,00",
+                "summary": "20 l pistachio ice cream, Thursday, €168,72",
                 "score": {
                   "total": 0.75,
                   "onTime": 1.0,
@@ -234,12 +237,12 @@
             ],
             "excludedProducts": [
               {
-                "productId": "990001",
+                "productId": "468855",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               },
               {
-                "productId": "463989",
+                "productId": "462635",
                 "light": "RED",
                 "reason": "ALLERGEN_EXCLUDED"
               }
@@ -282,16 +285,16 @@
             "reasons": [
               "SUBSTITUTION_NOT_ALLOWED"
             ],
-            "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+            "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
             "options": [
               {
                 "planId": "pln_safe",
                 "tier": "best",
                 "recommended": true,
-                "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                "summary": "20 l pistachio ice cream, Thursday, €168,72"
               }
             ],
-            "agentExplanation": "The usual bun is blocked this week. The gateway blocked the shrove bun, so oat buns at €1,10 each are the only option.",
+            "agentExplanation": "The usual pistachio ice cream is blocked. The gateway blocked the Cookies Cream ice cream, so the 2.5 l pistachio tubs are the only option.",
             "deadline": "2026-11-14T10:06:20+02:00",
             "createdAt": "2026-11-14T10:06:00+02:00"
           },
@@ -309,11 +312,11 @@
         "heartsLeft": 2,
         "stars": 3,
         "incident": null,
-        "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent asked to buy 300 egg-free oat buns instead, and you approved.",
-        "logHeadHash": "sha256:e800baad621a75d5",
+        "receiptText": "The cheapest ice cream contains egg, so the gateway blocked it. Your agent asked to buy 20 l of pistachio ice cream instead, and you approved.",
+        "logHeadHash": "sha256:52f196a4aeb9c25a",
         "approvalsAsked": 1,
         "totalCost": {
-          "cents": 33000,
+          "cents": 16872,
           "currency": "EUR"
         },
         "heartsUsed": 1
@@ -330,16 +333,16 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "options": [
                 {
                   "planId": "pln_safe",
                   "tier": "best",
                   "recommended": true,
-                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
                 }
               ],
-              "agentExplanation": "The usual bun is blocked this week. The gateway blocked the shrove bun, so oat buns at €1,10 each are the only option.",
+              "agentExplanation": "The usual pistachio ice cream is blocked. The gateway blocked the Cookies Cream ice cream, so the 2.5 l pistachio tubs are the only option.",
               "deadline": "2026-11-14T10:06:20+02:00",
               "createdAt": "2026-11-14T10:06:00+02:00",
               "decision": "approved",
@@ -356,16 +359,16 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "options": [
                 {
                   "planId": "pln_safe",
                   "tier": "best",
                   "recommended": true,
-                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
                 }
               ],
-              "agentExplanation": "The usual bun is blocked this week. The gateway blocked the shrove bun, so oat buns at €1,10 each are the only option.",
+              "agentExplanation": "The usual pistachio ice cream is blocked. The gateway blocked the Cookies Cream ice cream, so the 2.5 l pistachio tubs are the only option.",
               "deadline": "2026-11-14T10:06:20+02:00",
               "createdAt": "2026-11-14T10:06:00+02:00",
               "decision": "rejected",
@@ -383,16 +386,16 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "options": [
                 {
                   "planId": "pln_safe",
                   "tier": "best",
                   "recommended": true,
-                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
                 }
               ],
-              "agentExplanation": "The usual bun is blocked this week. The gateway blocked the shrove bun, so oat buns at €1,10 each are the only option.",
+              "agentExplanation": "The usual pistachio ice cream is blocked. The gateway blocked the Cookies Cream ice cream, so the 2.5 l pistachio tubs are the only option.",
               "deadline": "2026-11-14T10:06:20+02:00",
               "createdAt": "2026-11-14T10:06:00+02:00",
               "decision": "expired",
@@ -426,10 +429,10 @@
           "requestId": "req_001",
           "light": null,
           "reasons": [],
-          "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+          "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
           "refs": {},
           "prevHash": "sha256:0000000000000000",
-          "hash": "sha256:b93fc76c2b33e638"
+          "hash": "sha256:3abc58a30964e4bd"
         },
         {
           "seq": 2,
@@ -446,8 +449,8 @@
           "refs": {
             "mandateId": "mdt_l3_allergen_on"
           },
-          "prevHash": "sha256:b93fc76c2b33e638",
-          "hash": "sha256:4f385f2b305ef633"
+          "prevHash": "sha256:3abc58a30964e4bd",
+          "hash": "sha256:aba6a1b32ae6670c"
         },
         {
           "seq": 3,
@@ -463,10 +466,10 @@
             "SALES_BLOCKED",
             "ALLERGEN_EXCLUDED"
           ],
-          "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+          "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
           "refs": {},
-          "prevHash": "sha256:4f385f2b305ef633",
-          "hash": "sha256:f46074c41e56a687"
+          "prevHash": "sha256:aba6a1b32ae6670c",
+          "hash": "sha256:b8576ed40c991ba5"
         },
         {
           "seq": 4,
@@ -481,12 +484,12 @@
           "reasons": [
             "SUBSTITUTION_NOT_ALLOWED"
           ],
-          "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+          "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
           "refs": {
             "quoteId": "qt_l3_allergen_on"
           },
-          "prevHash": "sha256:f46074c41e56a687",
-          "hash": "sha256:5f7ce6f17fe111e0"
+          "prevHash": "sha256:b8576ed40c991ba5",
+          "hash": "sha256:44e5149bb6fb8bcd"
         },
         {
           "seq": 5,
@@ -501,14 +504,14 @@
           "reasons": [
             "SUBSTITUTION_NOT_ALLOWED"
           ],
-          "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+          "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
           "refs": {
             "quoteId": "qt_l3_allergen_on",
             "orderId": "ord_l3_allergen_on",
             "approvalId": "apr_l3_allergen_on"
           },
-          "prevHash": "sha256:5f7ce6f17fe111e0",
-          "hash": "sha256:8ca3a3c7cc696d5f"
+          "prevHash": "sha256:44e5149bb6fb8bcd",
+          "hash": "sha256:e6f3fb3f73873d04"
         },
         {
           "seq": 6,
@@ -527,8 +530,8 @@
           "refs": {
             "approvalId": "apr_l3_allergen_on"
           },
-          "prevHash": "sha256:8ca3a3c7cc696d5f",
-          "hash": "sha256:e266a588f76dbf00"
+          "prevHash": "sha256:e6f3fb3f73873d04",
+          "hash": "sha256:1cc111f1ef3155f2"
         },
         {
           "seq": 7,
@@ -545,8 +548,8 @@
           "refs": {
             "approvalId": "apr_l3_allergen_on"
           },
-          "prevHash": "sha256:e266a588f76dbf00",
-          "hash": "sha256:0d05fa0e43612c18"
+          "prevHash": "sha256:1cc111f1ef3155f2",
+          "hash": "sha256:8c6f0111bddbd3e8"
         },
         {
           "seq": 8,
@@ -559,14 +562,14 @@
           "requestId": "req_008",
           "light": "GREEN",
           "reasons": [],
-          "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (990002).",
+          "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (473726).",
           "refs": {
             "quoteId": "qt_l3_allergen_on",
             "orderId": "ord_l3_allergen_on",
             "approvalId": "apr_l3_allergen_on"
           },
-          "prevHash": "sha256:0d05fa0e43612c18",
-          "hash": "sha256:e800baad621a75d5"
+          "prevHash": "sha256:8c6f0111bddbd3e8",
+          "hash": "sha256:52f196a4aeb9c25a"
         }
       ],
       "valioLog": [
@@ -581,10 +584,10 @@
           "requestId": "req_001",
           "light": null,
           "reasons": [],
-          "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+          "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
           "refs": {},
           "prevHash": "sha256:0000000000000000",
-          "hash": "sha256:b93fc76c2b33e638"
+          "hash": "sha256:3abc58a30964e4bd"
         },
         {
           "seq": 2,
@@ -601,8 +604,8 @@
           "refs": {
             "mandateId": "mdt_l3_allergen_on"
           },
-          "prevHash": "sha256:b93fc76c2b33e638",
-          "hash": "sha256:4f385f2b305ef633"
+          "prevHash": "sha256:3abc58a30964e4bd",
+          "hash": "sha256:aba6a1b32ae6670c"
         },
         {
           "seq": 3,
@@ -618,10 +621,10 @@
             "SALES_BLOCKED",
             "ALLERGEN_EXCLUDED"
           ],
-          "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+          "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
           "refs": {},
-          "prevHash": "sha256:4f385f2b305ef633",
-          "hash": "sha256:f46074c41e56a687",
+          "prevHash": "sha256:aba6a1b32ae6670c",
+          "hash": "sha256:b8576ed40c991ba5",
           "disclosure": {
             "returnedToAgent": [
               "catalog",
@@ -647,12 +650,12 @@
           "reasons": [
             "SUBSTITUTION_NOT_ALLOWED"
           ],
-          "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+          "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
           "refs": {
             "quoteId": "qt_l3_allergen_on"
           },
-          "prevHash": "sha256:f46074c41e56a687",
-          "hash": "sha256:5f7ce6f17fe111e0",
+          "prevHash": "sha256:b8576ed40c991ba5",
+          "hash": "sha256:44e5149bb6fb8bcd",
           "disclosure": {
             "returnedToAgent": [
               "netPrices",
@@ -680,14 +683,14 @@
           "reasons": [
             "SUBSTITUTION_NOT_ALLOWED"
           ],
-          "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+          "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
           "refs": {
             "quoteId": "qt_l3_allergen_on",
             "orderId": "ord_l3_allergen_on",
             "approvalId": "apr_l3_allergen_on"
           },
-          "prevHash": "sha256:5f7ce6f17fe111e0",
-          "hash": "sha256:8ca3a3c7cc696d5f",
+          "prevHash": "sha256:44e5149bb6fb8bcd",
+          "hash": "sha256:e6f3fb3f73873d04",
           "disclosure": {
             "returnedToAgent": [
               "orders"
@@ -712,8 +715,8 @@
           "refs": {
             "approvalId": "apr_l3_allergen_on"
           },
-          "prevHash": "sha256:8ca3a3c7cc696d5f",
-          "hash": "sha256:e266a588f76dbf00"
+          "prevHash": "sha256:e6f3fb3f73873d04",
+          "hash": "sha256:1cc111f1ef3155f2"
         },
         {
           "seq": 7,
@@ -730,8 +733,8 @@
           "refs": {
             "approvalId": "apr_l3_allergen_on"
           },
-          "prevHash": "sha256:e266a588f76dbf00",
-          "hash": "sha256:0d05fa0e43612c18"
+          "prevHash": "sha256:1cc111f1ef3155f2",
+          "hash": "sha256:8c6f0111bddbd3e8"
         },
         {
           "seq": 8,
@@ -744,14 +747,14 @@
           "requestId": "req_008",
           "light": "GREEN",
           "reasons": [],
-          "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (990002).",
+          "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (473726).",
           "refs": {
             "quoteId": "qt_l3_allergen_on",
             "orderId": "ord_l3_allergen_on",
             "approvalId": "apr_l3_allergen_on"
           },
-          "prevHash": "sha256:0d05fa0e43612c18",
-          "hash": "sha256:e800baad621a75d5",
+          "prevHash": "sha256:8c6f0111bddbd3e8",
+          "hash": "sha256:52f196a4aeb9c25a",
           "disclosure": {
             "returnedToAgent": [
               "orders"
@@ -763,7 +766,7 @@
       "verify": {
         "valid": true,
         "events": 8,
-        "headHash": "sha256:e800baad621a75d5"
+        "headHash": "sha256:52f196a4aeb9c25a"
       },
       "demoPath": {
         "apr_l3_allergen_on": "approved"
@@ -777,11 +780,11 @@
             "heartsLeft": 2,
             "stars": 3,
             "incident": null,
-            "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent asked to buy 300 egg-free oat buns instead, and you approved.",
-            "logHeadHash": "sha256:e800baad621a75d5",
+            "receiptText": "The cheapest ice cream contains egg, so the gateway blocked it. Your agent asked to buy 20 l of pistachio ice cream instead, and you approved.",
+            "logHeadHash": "sha256:52f196a4aeb9c25a",
             "approvalsAsked": 1,
             "totalCost": {
-              "cents": 33000,
+              "cents": 16872,
               "currency": "EUR"
             },
             "heartsUsed": 1
@@ -798,10 +801,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -818,8 +821,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_on"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:4f385f2b305ef633"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
             },
             {
               "seq": 3,
@@ -835,10 +838,10 @@
                 "SALES_BLOCKED",
                 "ALLERGEN_EXCLUDED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
               "refs": {},
-              "prevHash": "sha256:4f385f2b305ef633",
-              "hash": "sha256:f46074c41e56a687"
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5"
             },
             {
               "seq": 4,
@@ -853,12 +856,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on"
               },
-              "prevHash": "sha256:f46074c41e56a687",
-              "hash": "sha256:5f7ce6f17fe111e0"
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd"
             },
             {
               "seq": 5,
@@ -873,14 +876,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on",
                 "orderId": "ord_l3_allergen_on",
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:5f7ce6f17fe111e0",
-              "hash": "sha256:8ca3a3c7cc696d5f"
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04"
             },
             {
               "seq": 6,
@@ -899,8 +902,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:8ca3a3c7cc696d5f",
-              "hash": "sha256:e266a588f76dbf00"
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
             },
             {
               "seq": 7,
@@ -917,8 +920,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:e266a588f76dbf00",
-              "hash": "sha256:0d05fa0e43612c18"
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:8c6f0111bddbd3e8"
             },
             {
               "seq": 8,
@@ -931,14 +934,14 @@
               "requestId": "req_008",
               "light": "GREEN",
               "reasons": [],
-              "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (990002).",
+              "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (473726).",
               "refs": {
                 "quoteId": "qt_l3_allergen_on",
                 "orderId": "ord_l3_allergen_on",
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:0d05fa0e43612c18",
-              "hash": "sha256:e800baad621a75d5"
+              "prevHash": "sha256:8c6f0111bddbd3e8",
+              "hash": "sha256:52f196a4aeb9c25a"
             }
           ],
           "valioLog": [
@@ -953,10 +956,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -973,8 +976,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_on"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:4f385f2b305ef633"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
             },
             {
               "seq": 3,
@@ -990,10 +993,10 @@
                 "SALES_BLOCKED",
                 "ALLERGEN_EXCLUDED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
               "refs": {},
-              "prevHash": "sha256:4f385f2b305ef633",
-              "hash": "sha256:f46074c41e56a687",
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5",
               "disclosure": {
                 "returnedToAgent": [
                   "catalog",
@@ -1019,12 +1022,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on"
               },
-              "prevHash": "sha256:f46074c41e56a687",
-              "hash": "sha256:5f7ce6f17fe111e0",
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd",
               "disclosure": {
                 "returnedToAgent": [
                   "netPrices",
@@ -1052,14 +1055,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on",
                 "orderId": "ord_l3_allergen_on",
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:5f7ce6f17fe111e0",
-              "hash": "sha256:8ca3a3c7cc696d5f",
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04",
               "disclosure": {
                 "returnedToAgent": [
                   "orders"
@@ -1084,8 +1087,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:8ca3a3c7cc696d5f",
-              "hash": "sha256:e266a588f76dbf00"
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
             },
             {
               "seq": 7,
@@ -1102,8 +1105,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:e266a588f76dbf00",
-              "hash": "sha256:0d05fa0e43612c18"
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:8c6f0111bddbd3e8"
             },
             {
               "seq": 8,
@@ -1116,14 +1119,14 @@
               "requestId": "req_008",
               "light": "GREEN",
               "reasons": [],
-              "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (990002).",
+              "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (473726).",
               "refs": {
                 "quoteId": "qt_l3_allergen_on",
                 "orderId": "ord_l3_allergen_on",
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:0d05fa0e43612c18",
-              "hash": "sha256:e800baad621a75d5",
+              "prevHash": "sha256:8c6f0111bddbd3e8",
+              "hash": "sha256:52f196a4aeb9c25a",
               "disclosure": {
                 "returnedToAgent": [
                   "orders"
@@ -1135,7 +1138,7 @@
           "verify": {
             "valid": true,
             "events": 8,
-            "headHash": "sha256:e800baad621a75d5"
+            "headHash": "sha256:52f196a4aeb9c25a"
           }
         },
         "rejected": {
@@ -1146,8 +1149,8 @@
             "heartsLeft": 2,
             "stars": 1,
             "incident": null,
-            "receiptText": "You rejected a request; nothing was ordered for it. 300 pcs did not arrive on time.",
-            "logHeadHash": "sha256:4ea941dbd4a26b51",
+            "receiptText": "You rejected a request; nothing was ordered for it. 20 l did not arrive on time.",
+            "logHeadHash": "sha256:8ad86812a5acd91d",
             "approvalsAsked": 1,
             "totalCost": null,
             "heartsUsed": 1
@@ -1164,10 +1167,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -1184,8 +1187,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_on"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:4f385f2b305ef633"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
             },
             {
               "seq": 3,
@@ -1201,10 +1204,10 @@
                 "SALES_BLOCKED",
                 "ALLERGEN_EXCLUDED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
               "refs": {},
-              "prevHash": "sha256:4f385f2b305ef633",
-              "hash": "sha256:f46074c41e56a687"
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5"
             },
             {
               "seq": 4,
@@ -1219,12 +1222,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on"
               },
-              "prevHash": "sha256:f46074c41e56a687",
-              "hash": "sha256:5f7ce6f17fe111e0"
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd"
             },
             {
               "seq": 5,
@@ -1239,14 +1242,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on",
                 "orderId": "ord_l3_allergen_on",
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:5f7ce6f17fe111e0",
-              "hash": "sha256:8ca3a3c7cc696d5f"
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04"
             },
             {
               "seq": 6,
@@ -1265,8 +1268,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:8ca3a3c7cc696d5f",
-              "hash": "sha256:e266a588f76dbf00"
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
             },
             {
               "seq": 7,
@@ -1283,8 +1286,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:e266a588f76dbf00",
-              "hash": "sha256:4ea941dbd4a26b51"
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:8ad86812a5acd91d"
             }
           ],
           "valioLog": [
@@ -1299,10 +1302,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -1319,8 +1322,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_on"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:4f385f2b305ef633"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
             },
             {
               "seq": 3,
@@ -1336,10 +1339,10 @@
                 "SALES_BLOCKED",
                 "ALLERGEN_EXCLUDED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
               "refs": {},
-              "prevHash": "sha256:4f385f2b305ef633",
-              "hash": "sha256:f46074c41e56a687",
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5",
               "disclosure": {
                 "returnedToAgent": [
                   "catalog",
@@ -1365,12 +1368,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on"
               },
-              "prevHash": "sha256:f46074c41e56a687",
-              "hash": "sha256:5f7ce6f17fe111e0",
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd",
               "disclosure": {
                 "returnedToAgent": [
                   "netPrices",
@@ -1398,14 +1401,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on",
                 "orderId": "ord_l3_allergen_on",
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:5f7ce6f17fe111e0",
-              "hash": "sha256:8ca3a3c7cc696d5f",
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04",
               "disclosure": {
                 "returnedToAgent": [
                   "orders"
@@ -1430,8 +1433,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:8ca3a3c7cc696d5f",
-              "hash": "sha256:e266a588f76dbf00"
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
             },
             {
               "seq": 7,
@@ -1448,14 +1451,14 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:e266a588f76dbf00",
-              "hash": "sha256:4ea941dbd4a26b51"
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:8ad86812a5acd91d"
             }
           ],
           "verify": {
             "valid": true,
             "events": 7,
-            "headHash": "sha256:4ea941dbd4a26b51"
+            "headHash": "sha256:8ad86812a5acd91d"
           }
         },
         "expired": {
@@ -1466,8 +1469,8 @@
             "heartsLeft": 2,
             "stars": 1,
             "incident": null,
-            "receiptText": "A request expired before you answered; nothing was ordered for it. 300 pcs did not arrive on time.",
-            "logHeadHash": "sha256:a4469ea5bbea4457",
+            "receiptText": "A request expired before you answered; nothing was ordered for it. 20 l did not arrive on time.",
+            "logHeadHash": "sha256:4135bac4ab5802f7",
             "approvalsAsked": 1,
             "totalCost": null,
             "heartsUsed": 1
@@ -1484,10 +1487,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -1504,8 +1507,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_on"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:4f385f2b305ef633"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
             },
             {
               "seq": 3,
@@ -1521,10 +1524,10 @@
                 "SALES_BLOCKED",
                 "ALLERGEN_EXCLUDED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
               "refs": {},
-              "prevHash": "sha256:4f385f2b305ef633",
-              "hash": "sha256:f46074c41e56a687"
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5"
             },
             {
               "seq": 4,
@@ -1539,12 +1542,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on"
               },
-              "prevHash": "sha256:f46074c41e56a687",
-              "hash": "sha256:5f7ce6f17fe111e0"
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd"
             },
             {
               "seq": 5,
@@ -1559,14 +1562,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on",
                 "orderId": "ord_l3_allergen_on",
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:5f7ce6f17fe111e0",
-              "hash": "sha256:8ca3a3c7cc696d5f"
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04"
             },
             {
               "seq": 6,
@@ -1585,8 +1588,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:8ca3a3c7cc696d5f",
-              "hash": "sha256:e266a588f76dbf00"
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
             },
             {
               "seq": 7,
@@ -1607,8 +1610,8 @@
                 "orderId": "ord_l3_allergen_on",
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:e266a588f76dbf00",
-              "hash": "sha256:a4469ea5bbea4457"
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:4135bac4ab5802f7"
             }
           ],
           "valioLog": [
@@ -1623,10 +1626,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -1643,8 +1646,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_on"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:4f385f2b305ef633"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
             },
             {
               "seq": 3,
@@ -1660,10 +1663,10 @@
                 "SALES_BLOCKED",
                 "ALLERGEN_EXCLUDED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
               "refs": {},
-              "prevHash": "sha256:4f385f2b305ef633",
-              "hash": "sha256:f46074c41e56a687",
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5",
               "disclosure": {
                 "returnedToAgent": [
                   "catalog",
@@ -1689,12 +1692,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on"
               },
-              "prevHash": "sha256:f46074c41e56a687",
-              "hash": "sha256:5f7ce6f17fe111e0",
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd",
               "disclosure": {
                 "returnedToAgent": [
                   "netPrices",
@@ -1722,14 +1725,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_on needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_on",
                 "orderId": "ord_l3_allergen_on",
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:5f7ce6f17fe111e0",
-              "hash": "sha256:8ca3a3c7cc696d5f",
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04",
               "disclosure": {
                 "returnedToAgent": [
                   "orders"
@@ -1754,8 +1757,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:8ca3a3c7cc696d5f",
-              "hash": "sha256:e266a588f76dbf00"
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
             },
             {
               "seq": 7,
@@ -1776,14 +1779,14 @@
                 "orderId": "ord_l3_allergen_on",
                 "approvalId": "apr_l3_allergen_on"
               },
-              "prevHash": "sha256:e266a588f76dbf00",
-              "hash": "sha256:a4469ea5bbea4457"
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:4135bac4ab5802f7"
             }
           ],
           "verify": {
             "valid": true,
             "events": 7,
-            "headHash": "sha256:a4469ea5bbea4457"
+            "headHash": "sha256:4135bac4ab5802f7"
           }
         }
       },
@@ -1828,21 +1831,22 @@
           "search": {
             "results": [
               {
-                "productId": "990001",
-                "name": "Cinnamon bun, egg-free (fictional)",
-                "brand": "Valio Aimo",
-                "category": "bakery (mock)",
+                "productId": "468855",
+                "name": "GelatoLAB-Espoo Pistachio lactose-free ice cream, 5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
                 "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pcs"
+                  "amount": 5,
+                  "unit": "l"
                 },
-                "labels": [],
-                "allergens": [
-                  "AW"
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
                 ],
+                "allergens": [],
                 "carbonCategory": {
-                  "category": "bakery (mock)",
+                  "category": "41820",
                   "kgCo2ePerKg": {
                     "min": 1.0,
                     "max": 1.6
@@ -1855,21 +1859,22 @@
                 }
               },
               {
-                "productId": "990002",
-                "name": "Oat bun, egg-free (fictional)",
-                "brand": "Valio Aimo",
-                "category": "bakery (mock)",
+                "productId": "473726",
+                "name": "GelatoLAB-Espoo Pistachio lactose-free ice cream, 2.5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
                 "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pcs"
+                  "amount": 2.5,
+                  "unit": "l"
                 },
-                "labels": [],
-                "allergens": [
-                  "AW"
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
                 ],
+                "allergens": [],
                 "carbonCategory": {
-                  "category": "bakery (mock)",
+                  "category": "41820",
                   "kgCo2ePerKg": {
                     "min": 1.0,
                     "max": 1.6
@@ -1879,24 +1884,25 @@
                 "excluded": null
               },
               {
-                "productId": "463989",
-                "name": "Shrove bun",
-                "brand": "Valio Aimo",
-                "category": "bakery (mock)",
+                "productId": "462635",
+                "name": "GelatoLAB-Espoo Cookies Cream ice cream, 5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
                 "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pcs"
+                  "amount": 5,
+                  "unit": "l"
                 },
-                "labels": [],
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
+                ],
                 "allergens": [
                   "AE",
-                  "AM",
-                  "AW",
-                  "UW"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "bakery (mock)",
+                  "category": "41820",
                   "kgCo2ePerKg": {
                     "min": 1.0,
                     "max": 1.6
@@ -1916,16 +1922,16 @@
             "createdAt": "2026-11-14T10:05:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Buns for school dessert (usual product unavailable)",
+              "description": "Pistachio ice cream for school kitchen (usual product unavailable)",
               "quantity": {
-                "amount": 300,
-                "unit": "pcs"
+                "amount": 20,
+                "unit": "l"
               },
               "deadline": "2026-11-19T06:00:00+02:00",
               "candidateProductIds": [
-                "990001",
-                "990002",
-                "463989"
+                "468855",
+                "473726",
+                "462635"
               ]
             },
             "plans": [
@@ -1933,26 +1939,26 @@
                 "planId": "pln_nut",
                 "lines": [
                   {
-                    "productId": "463989",
+                    "productId": "462635",
                     "quantity": {
-                      "amount": 300,
-                      "unit": "pcs"
+                      "amount": 20,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 300,
+                      "amount": 4,
                       "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 80,
+                      "cents": 3211,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 80,
+                      "cents": 642,
                       "currency": "EUR",
-                      "per": "pcs"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 24000,
+                      "cents": 12844,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-19",
@@ -1960,12 +1966,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 24000,
+                  "cents": 12844,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 300,
-                  "unit": "pcs"
+                  "amount": 20,
+                  "unit": "l"
                 },
                 "policy": {
                   "light": "YELLOW",
@@ -1973,7 +1979,7 @@
                     "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "300 shrove buns, Thursday, €240,00",
+                "summary": "20 l Cookies Cream ice cream, Thursday, €128,44",
                 "score": {
                   "total": 0.75,
                   "onTime": 1.0,
@@ -1988,26 +1994,26 @@
                 "planId": "pln_safe",
                 "lines": [
                   {
-                    "productId": "990002",
+                    "productId": "473726",
                     "quantity": {
-                      "amount": 300,
-                      "unit": "pcs"
+                      "amount": 20,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 300,
+                      "amount": 8,
                       "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 110,
+                      "cents": 2109,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 110,
+                      "cents": 843,
                       "currency": "EUR",
-                      "per": "pcs"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 33000,
+                      "cents": 16872,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-19",
@@ -2015,12 +2021,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 33000,
+                  "cents": 16872,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 300,
-                  "unit": "pcs"
+                  "amount": 20,
+                  "unit": "l"
                 },
                 "policy": {
                   "light": "YELLOW",
@@ -2028,11 +2034,11 @@
                     "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "300 oat buns (egg-free), Thursday, €330,00",
+                "summary": "20 l pistachio ice cream, Thursday, €168,72",
                 "score": {
-                  "total": 0.613,
+                  "total": 0.63,
                   "onTime": 1.0,
-                  "price": 0.727,
+                  "price": 0.761,
                   "sustainability": 0.0,
                   "reliabilityPenalty": 0.05
                 },
@@ -2042,7 +2048,7 @@
             ],
             "excludedProducts": [
               {
-                "productId": "990001",
+                "productId": "468855",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               }
@@ -2085,22 +2091,22 @@
             "reasons": [
               "SUBSTITUTION_NOT_ALLOWED"
             ],
-            "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+            "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
             "options": [
               {
                 "planId": "pln_nut",
                 "tier": "best",
                 "recommended": true,
-                "summary": "300 shrove buns, Thursday, €240,00"
+                "summary": "20 l Cookies Cream ice cream, Thursday, €128,44"
               },
               {
                 "planId": "pln_safe",
                 "tier": "better",
                 "recommended": false,
-                "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                "summary": "20 l pistachio ice cream, Thursday, €168,72"
               }
             ],
-            "agentExplanation": "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.",
+            "agentExplanation": "The usual pistachio ice cream is blocked. Cookies Cream is cheapest at €6,42/l; pistachio costs €8,43/l.",
             "deadline": "2026-11-14T10:06:20+02:00",
             "createdAt": "2026-11-14T10:06:00+02:00"
           },
@@ -2119,14 +2125,14 @@
         "stars": 0,
         "incident": {
           "type": "SAFETY",
-          "productId": "463989",
+          "productId": "462635",
           "reason": "Contains egg (AE)"
         },
-        "receiptText": "Your agent asked to buy 300 shrove buns because they were cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
-        "logHeadHash": "sha256:9221e93710749fe5",
+        "receiptText": "Your agent asked to buy 20 l of Cookies Cream ice cream because it was cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
+        "logHeadHash": "sha256:b2a0d8f0d0f4fbd4",
         "approvalsAsked": 1,
         "totalCost": {
-          "cents": 24000,
+          "cents": 12844,
           "currency": "EUR"
         },
         "heartsUsed": 1
@@ -2143,22 +2149,22 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "options": [
                 {
                   "planId": "pln_nut",
                   "tier": "best",
                   "recommended": true,
-                  "summary": "300 shrove buns, Thursday, €240,00"
+                  "summary": "20 l Cookies Cream ice cream, Thursday, €128,44"
                 },
                 {
                   "planId": "pln_safe",
                   "tier": "better",
                   "recommended": false,
-                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
                 }
               ],
-              "agentExplanation": "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.",
+              "agentExplanation": "The usual pistachio ice cream is blocked. Cookies Cream is cheapest at €6,42/l; pistachio costs €8,43/l.",
               "deadline": "2026-11-14T10:06:20+02:00",
               "createdAt": "2026-11-14T10:06:00+02:00",
               "decision": "approved",
@@ -2175,22 +2181,22 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "options": [
                 {
                   "planId": "pln_nut",
                   "tier": "best",
                   "recommended": true,
-                  "summary": "300 shrove buns, Thursday, €240,00"
+                  "summary": "20 l Cookies Cream ice cream, Thursday, €128,44"
                 },
                 {
                   "planId": "pln_safe",
                   "tier": "better",
                   "recommended": false,
-                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
                 }
               ],
-              "agentExplanation": "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.",
+              "agentExplanation": "The usual pistachio ice cream is blocked. Cookies Cream is cheapest at €6,42/l; pistachio costs €8,43/l.",
               "deadline": "2026-11-14T10:06:20+02:00",
               "createdAt": "2026-11-14T10:06:00+02:00",
               "decision": "rejected",
@@ -2208,22 +2214,22 @@
                 "reasons": [
                   "SUBSTITUTION_NOT_ALLOWED"
                 ],
-                "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+                "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
                 "options": [
                   {
                     "planId": "pln_nut",
                     "tier": "best",
                     "recommended": true,
-                    "summary": "300 shrove buns, Thursday, €240,00"
+                    "summary": "20 l Cookies Cream ice cream, Thursday, €128,44"
                   },
                   {
                     "planId": "pln_safe",
                     "tier": "better",
                     "recommended": false,
-                    "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                    "summary": "20 l pistachio ice cream, Thursday, €168,72"
                   }
                 ],
-                "agentExplanation": "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.",
+                "agentExplanation": "The usual pistachio ice cream is blocked. Cookies Cream is cheapest at €6,42/l; pistachio costs €8,43/l.",
                 "deadline": "2026-11-14T10:06:20+02:00",
                 "createdAt": "2026-11-14T10:06:00+02:00",
                 "decision": "alternative:pln_safe",
@@ -2241,22 +2247,22 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "reasonText": "Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "options": [
                 {
                   "planId": "pln_nut",
                   "tier": "best",
                   "recommended": true,
-                  "summary": "300 shrove buns, Thursday, €240,00"
+                  "summary": "20 l Cookies Cream ice cream, Thursday, €128,44"
                 },
                 {
                   "planId": "pln_safe",
                   "tier": "better",
                   "recommended": false,
-                  "summary": "300 oat buns (egg-free), Thursday, €330,00"
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
                 }
               ],
-              "agentExplanation": "The usual bun is blocked this week. Shrove buns are cheapest at €0,80 each; oat buns cost €1,10.",
+              "agentExplanation": "The usual pistachio ice cream is blocked. Cookies Cream is cheapest at €6,42/l; pistachio costs €8,43/l.",
               "deadline": "2026-11-14T10:06:20+02:00",
               "createdAt": "2026-11-14T10:06:00+02:00",
               "decision": "expired",
@@ -2290,10 +2296,10 @@
           "requestId": "req_001",
           "light": null,
           "reasons": [],
-          "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+          "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
           "refs": {},
           "prevHash": "sha256:0000000000000000",
-          "hash": "sha256:b93fc76c2b33e638"
+          "hash": "sha256:3abc58a30964e4bd"
         },
         {
           "seq": 2,
@@ -2310,8 +2316,8 @@
           "refs": {
             "mandateId": "mdt_l3_allergen_off"
           },
-          "prevHash": "sha256:b93fc76c2b33e638",
-          "hash": "sha256:c0f8057fd564ff0b"
+          "prevHash": "sha256:3abc58a30964e4bd",
+          "hash": "sha256:0fb7a9ae10578386"
         },
         {
           "seq": 3,
@@ -2326,10 +2332,10 @@
           "reasons": [
             "SALES_BLOCKED"
           ],
-          "summary": "Searched the catalog: 3 products, excluded 990001.",
+          "summary": "Searched the catalog: 3 products, excluded 468855.",
           "refs": {},
-          "prevHash": "sha256:c0f8057fd564ff0b",
-          "hash": "sha256:94f2d28a6a920ea4"
+          "prevHash": "sha256:0fb7a9ae10578386",
+          "hash": "sha256:7129654a3d08e60c"
         },
         {
           "seq": 4,
@@ -2344,12 +2350,12 @@
           "reasons": [
             "SUBSTITUTION_NOT_ALLOWED"
           ],
-          "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+          "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
           "refs": {
             "quoteId": "qt_l3_allergen_off"
           },
-          "prevHash": "sha256:94f2d28a6a920ea4",
-          "hash": "sha256:8d3b5aed3daad9d9"
+          "prevHash": "sha256:7129654a3d08e60c",
+          "hash": "sha256:2a0b5b598e700252"
         },
         {
           "seq": 5,
@@ -2364,14 +2370,14 @@
           "reasons": [
             "SUBSTITUTION_NOT_ALLOWED"
           ],
-          "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+          "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
           "refs": {
             "quoteId": "qt_l3_allergen_off",
             "orderId": "ord_l3_allergen_off",
             "approvalId": "apr_l3_allergen_off"
           },
-          "prevHash": "sha256:8d3b5aed3daad9d9",
-          "hash": "sha256:89a7d24dff894358"
+          "prevHash": "sha256:2a0b5b598e700252",
+          "hash": "sha256:63d8d0f235a4203c"
         },
         {
           "seq": 6,
@@ -2390,8 +2396,8 @@
           "refs": {
             "approvalId": "apr_l3_allergen_off"
           },
-          "prevHash": "sha256:89a7d24dff894358",
-          "hash": "sha256:0fca6962e17be2d9"
+          "prevHash": "sha256:63d8d0f235a4203c",
+          "hash": "sha256:6d7a40eec431dabb"
         },
         {
           "seq": 7,
@@ -2408,8 +2414,8 @@
           "refs": {
             "approvalId": "apr_l3_allergen_off"
           },
-          "prevHash": "sha256:0fca6962e17be2d9",
-          "hash": "sha256:953f8dcd635556f3"
+          "prevHash": "sha256:6d7a40eec431dabb",
+          "hash": "sha256:767da412c28989b8"
         },
         {
           "seq": 8,
@@ -2422,14 +2428,14 @@
           "requestId": "req_008",
           "light": "GREEN",
           "reasons": [],
-          "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (463989).",
+          "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (462635).",
           "refs": {
             "quoteId": "qt_l3_allergen_off",
             "orderId": "ord_l3_allergen_off",
             "approvalId": "apr_l3_allergen_off"
           },
-          "prevHash": "sha256:953f8dcd635556f3",
-          "hash": "sha256:9221e93710749fe5"
+          "prevHash": "sha256:767da412c28989b8",
+          "hash": "sha256:b2a0d8f0d0f4fbd4"
         }
       ],
       "valioLog": [
@@ -2444,10 +2450,10 @@
           "requestId": "req_001",
           "light": null,
           "reasons": [],
-          "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+          "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
           "refs": {},
           "prevHash": "sha256:0000000000000000",
-          "hash": "sha256:b93fc76c2b33e638"
+          "hash": "sha256:3abc58a30964e4bd"
         },
         {
           "seq": 2,
@@ -2464,8 +2470,8 @@
           "refs": {
             "mandateId": "mdt_l3_allergen_off"
           },
-          "prevHash": "sha256:b93fc76c2b33e638",
-          "hash": "sha256:c0f8057fd564ff0b"
+          "prevHash": "sha256:3abc58a30964e4bd",
+          "hash": "sha256:0fb7a9ae10578386"
         },
         {
           "seq": 3,
@@ -2480,10 +2486,10 @@
           "reasons": [
             "SALES_BLOCKED"
           ],
-          "summary": "Searched the catalog: 3 products, excluded 990001.",
+          "summary": "Searched the catalog: 3 products, excluded 468855.",
           "refs": {},
-          "prevHash": "sha256:c0f8057fd564ff0b",
-          "hash": "sha256:94f2d28a6a920ea4",
+          "prevHash": "sha256:0fb7a9ae10578386",
+          "hash": "sha256:7129654a3d08e60c",
           "disclosure": {
             "returnedToAgent": [
               "catalog",
@@ -2509,12 +2515,12 @@
           "reasons": [
             "SUBSTITUTION_NOT_ALLOWED"
           ],
-          "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+          "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
           "refs": {
             "quoteId": "qt_l3_allergen_off"
           },
-          "prevHash": "sha256:94f2d28a6a920ea4",
-          "hash": "sha256:8d3b5aed3daad9d9",
+          "prevHash": "sha256:7129654a3d08e60c",
+          "hash": "sha256:2a0b5b598e700252",
           "disclosure": {
             "returnedToAgent": [
               "netPrices",
@@ -2542,14 +2548,14 @@
           "reasons": [
             "SUBSTITUTION_NOT_ALLOWED"
           ],
-          "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+          "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
           "refs": {
             "quoteId": "qt_l3_allergen_off",
             "orderId": "ord_l3_allergen_off",
             "approvalId": "apr_l3_allergen_off"
           },
-          "prevHash": "sha256:8d3b5aed3daad9d9",
-          "hash": "sha256:89a7d24dff894358",
+          "prevHash": "sha256:2a0b5b598e700252",
+          "hash": "sha256:63d8d0f235a4203c",
           "disclosure": {
             "returnedToAgent": [
               "orders"
@@ -2574,8 +2580,8 @@
           "refs": {
             "approvalId": "apr_l3_allergen_off"
           },
-          "prevHash": "sha256:89a7d24dff894358",
-          "hash": "sha256:0fca6962e17be2d9"
+          "prevHash": "sha256:63d8d0f235a4203c",
+          "hash": "sha256:6d7a40eec431dabb"
         },
         {
           "seq": 7,
@@ -2592,8 +2598,8 @@
           "refs": {
             "approvalId": "apr_l3_allergen_off"
           },
-          "prevHash": "sha256:0fca6962e17be2d9",
-          "hash": "sha256:953f8dcd635556f3"
+          "prevHash": "sha256:6d7a40eec431dabb",
+          "hash": "sha256:767da412c28989b8"
         },
         {
           "seq": 8,
@@ -2606,14 +2612,14 @@
           "requestId": "req_008",
           "light": "GREEN",
           "reasons": [],
-          "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (463989).",
+          "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (462635).",
           "refs": {
             "quoteId": "qt_l3_allergen_off",
             "orderId": "ord_l3_allergen_off",
             "approvalId": "apr_l3_allergen_off"
           },
-          "prevHash": "sha256:953f8dcd635556f3",
-          "hash": "sha256:9221e93710749fe5",
+          "prevHash": "sha256:767da412c28989b8",
+          "hash": "sha256:b2a0d8f0d0f4fbd4",
           "disclosure": {
             "returnedToAgent": [
               "orders"
@@ -2625,7 +2631,7 @@
       "verify": {
         "valid": true,
         "events": 8,
-        "headHash": "sha256:9221e93710749fe5"
+        "headHash": "sha256:b2a0d8f0d0f4fbd4"
       },
       "demoPath": {
         "apr_l3_allergen_off": "approved"
@@ -2640,14 +2646,14 @@
             "stars": 0,
             "incident": {
               "type": "SAFETY",
-              "productId": "463989",
+              "productId": "462635",
               "reason": "Contains egg (AE)"
             },
-            "receiptText": "Your agent asked to buy 300 shrove buns because they were cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
-            "logHeadHash": "sha256:9221e93710749fe5",
+            "receiptText": "Your agent asked to buy 20 l of Cookies Cream ice cream because it was cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
+            "logHeadHash": "sha256:b2a0d8f0d0f4fbd4",
             "approvalsAsked": 1,
             "totalCost": {
-              "cents": 24000,
+              "cents": 12844,
               "currency": "EUR"
             },
             "heartsUsed": 1
@@ -2664,10 +2670,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -2684,8 +2690,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_off"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:c0f8057fd564ff0b"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
             },
             {
               "seq": 3,
@@ -2700,10 +2706,10 @@
               "reasons": [
                 "SALES_BLOCKED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
               "refs": {},
-              "prevHash": "sha256:c0f8057fd564ff0b",
-              "hash": "sha256:94f2d28a6a920ea4"
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c"
             },
             {
               "seq": 4,
@@ -2718,12 +2724,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off"
               },
-              "prevHash": "sha256:94f2d28a6a920ea4",
-              "hash": "sha256:8d3b5aed3daad9d9"
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252"
             },
             {
               "seq": 5,
@@ -2738,14 +2744,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:8d3b5aed3daad9d9",
-              "hash": "sha256:89a7d24dff894358"
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c"
             },
             {
               "seq": 6,
@@ -2764,8 +2770,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:89a7d24dff894358",
-              "hash": "sha256:0fca6962e17be2d9"
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
             },
             {
               "seq": 7,
@@ -2782,8 +2788,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:0fca6962e17be2d9",
-              "hash": "sha256:953f8dcd635556f3"
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:767da412c28989b8"
             },
             {
               "seq": 8,
@@ -2796,14 +2802,14 @@
               "requestId": "req_008",
               "light": "GREEN",
               "reasons": [],
-              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (463989).",
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (462635).",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:953f8dcd635556f3",
-              "hash": "sha256:9221e93710749fe5"
+              "prevHash": "sha256:767da412c28989b8",
+              "hash": "sha256:b2a0d8f0d0f4fbd4"
             }
           ],
           "valioLog": [
@@ -2818,10 +2824,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -2838,8 +2844,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_off"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:c0f8057fd564ff0b"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
             },
             {
               "seq": 3,
@@ -2854,10 +2860,10 @@
               "reasons": [
                 "SALES_BLOCKED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
               "refs": {},
-              "prevHash": "sha256:c0f8057fd564ff0b",
-              "hash": "sha256:94f2d28a6a920ea4",
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c",
               "disclosure": {
                 "returnedToAgent": [
                   "catalog",
@@ -2883,12 +2889,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off"
               },
-              "prevHash": "sha256:94f2d28a6a920ea4",
-              "hash": "sha256:8d3b5aed3daad9d9",
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252",
               "disclosure": {
                 "returnedToAgent": [
                   "netPrices",
@@ -2916,14 +2922,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:8d3b5aed3daad9d9",
-              "hash": "sha256:89a7d24dff894358",
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c",
               "disclosure": {
                 "returnedToAgent": [
                   "orders"
@@ -2948,8 +2954,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:89a7d24dff894358",
-              "hash": "sha256:0fca6962e17be2d9"
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
             },
             {
               "seq": 7,
@@ -2966,8 +2972,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:0fca6962e17be2d9",
-              "hash": "sha256:953f8dcd635556f3"
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:767da412c28989b8"
             },
             {
               "seq": 8,
@@ -2980,14 +2986,14 @@
               "requestId": "req_008",
               "light": "GREEN",
               "reasons": [],
-              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (463989).",
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (462635).",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:953f8dcd635556f3",
-              "hash": "sha256:9221e93710749fe5",
+              "prevHash": "sha256:767da412c28989b8",
+              "hash": "sha256:b2a0d8f0d0f4fbd4",
               "disclosure": {
                 "returnedToAgent": [
                   "orders"
@@ -2999,7 +3005,7 @@
           "verify": {
             "valid": true,
             "events": 8,
-            "headHash": "sha256:9221e93710749fe5"
+            "headHash": "sha256:b2a0d8f0d0f4fbd4"
           }
         },
         "rejected": {
@@ -3010,8 +3016,8 @@
             "heartsLeft": 2,
             "stars": 1,
             "incident": null,
-            "receiptText": "You rejected a request; nothing was ordered for it. 300 pcs did not arrive on time.",
-            "logHeadHash": "sha256:2d2698eef830f559",
+            "receiptText": "You rejected a request; nothing was ordered for it. 20 l did not arrive on time.",
+            "logHeadHash": "sha256:0fbd37d831183130",
             "approvalsAsked": 1,
             "totalCost": null,
             "heartsUsed": 1
@@ -3028,10 +3034,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -3048,8 +3054,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_off"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:c0f8057fd564ff0b"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
             },
             {
               "seq": 3,
@@ -3064,10 +3070,10 @@
               "reasons": [
                 "SALES_BLOCKED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
               "refs": {},
-              "prevHash": "sha256:c0f8057fd564ff0b",
-              "hash": "sha256:94f2d28a6a920ea4"
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c"
             },
             {
               "seq": 4,
@@ -3082,12 +3088,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off"
               },
-              "prevHash": "sha256:94f2d28a6a920ea4",
-              "hash": "sha256:8d3b5aed3daad9d9"
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252"
             },
             {
               "seq": 5,
@@ -3102,14 +3108,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:8d3b5aed3daad9d9",
-              "hash": "sha256:89a7d24dff894358"
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c"
             },
             {
               "seq": 6,
@@ -3128,8 +3134,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:89a7d24dff894358",
-              "hash": "sha256:0fca6962e17be2d9"
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
             },
             {
               "seq": 7,
@@ -3146,8 +3152,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:0fca6962e17be2d9",
-              "hash": "sha256:2d2698eef830f559"
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:0fbd37d831183130"
             }
           ],
           "valioLog": [
@@ -3162,10 +3168,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -3182,8 +3188,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_off"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:c0f8057fd564ff0b"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
             },
             {
               "seq": 3,
@@ -3198,10 +3204,10 @@
               "reasons": [
                 "SALES_BLOCKED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
               "refs": {},
-              "prevHash": "sha256:c0f8057fd564ff0b",
-              "hash": "sha256:94f2d28a6a920ea4",
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c",
               "disclosure": {
                 "returnedToAgent": [
                   "catalog",
@@ -3227,12 +3233,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off"
               },
-              "prevHash": "sha256:94f2d28a6a920ea4",
-              "hash": "sha256:8d3b5aed3daad9d9",
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252",
               "disclosure": {
                 "returnedToAgent": [
                   "netPrices",
@@ -3260,14 +3266,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:8d3b5aed3daad9d9",
-              "hash": "sha256:89a7d24dff894358",
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c",
               "disclosure": {
                 "returnedToAgent": [
                   "orders"
@@ -3292,8 +3298,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:89a7d24dff894358",
-              "hash": "sha256:0fca6962e17be2d9"
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
             },
             {
               "seq": 7,
@@ -3310,14 +3316,14 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:0fca6962e17be2d9",
-              "hash": "sha256:2d2698eef830f559"
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:0fbd37d831183130"
             }
           ],
           "verify": {
             "valid": true,
             "events": 7,
-            "headHash": "sha256:2d2698eef830f559"
+            "headHash": "sha256:0fbd37d831183130"
           }
         },
         "expired": {
@@ -3328,8 +3334,8 @@
             "heartsLeft": 2,
             "stars": 1,
             "incident": null,
-            "receiptText": "A request expired before you answered; nothing was ordered for it. 300 pcs did not arrive on time.",
-            "logHeadHash": "sha256:a150aa91fd44036e",
+            "receiptText": "A request expired before you answered; nothing was ordered for it. 20 l did not arrive on time.",
+            "logHeadHash": "sha256:51ee58ba4944c933",
             "approvalsAsked": 1,
             "totalCost": null,
             "heartsUsed": 1
@@ -3346,10 +3352,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -3366,8 +3372,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_off"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:c0f8057fd564ff0b"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
             },
             {
               "seq": 3,
@@ -3382,10 +3388,10 @@
               "reasons": [
                 "SALES_BLOCKED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
               "refs": {},
-              "prevHash": "sha256:c0f8057fd564ff0b",
-              "hash": "sha256:94f2d28a6a920ea4"
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c"
             },
             {
               "seq": 4,
@@ -3400,12 +3406,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off"
               },
-              "prevHash": "sha256:94f2d28a6a920ea4",
-              "hash": "sha256:8d3b5aed3daad9d9"
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252"
             },
             {
               "seq": 5,
@@ -3420,14 +3426,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:8d3b5aed3daad9d9",
-              "hash": "sha256:89a7d24dff894358"
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c"
             },
             {
               "seq": 6,
@@ -3446,8 +3452,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:89a7d24dff894358",
-              "hash": "sha256:0fca6962e17be2d9"
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
             },
             {
               "seq": 7,
@@ -3468,8 +3474,8 @@
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:0fca6962e17be2d9",
-              "hash": "sha256:a150aa91fd44036e"
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:51ee58ba4944c933"
             }
           ],
           "valioLog": [
@@ -3484,10 +3490,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -3504,8 +3510,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_off"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:c0f8057fd564ff0b"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
             },
             {
               "seq": 3,
@@ -3520,10 +3526,10 @@
               "reasons": [
                 "SALES_BLOCKED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
               "refs": {},
-              "prevHash": "sha256:c0f8057fd564ff0b",
-              "hash": "sha256:94f2d28a6a920ea4",
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c",
               "disclosure": {
                 "returnedToAgent": [
                   "catalog",
@@ -3549,12 +3555,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off"
               },
-              "prevHash": "sha256:94f2d28a6a920ea4",
-              "hash": "sha256:8d3b5aed3daad9d9",
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252",
               "disclosure": {
                 "returnedToAgent": [
                   "netPrices",
@@ -3582,14 +3588,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:8d3b5aed3daad9d9",
-              "hash": "sha256:89a7d24dff894358",
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c",
               "disclosure": {
                 "returnedToAgent": [
                   "orders"
@@ -3614,8 +3620,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:89a7d24dff894358",
-              "hash": "sha256:0fca6962e17be2d9"
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
             },
             {
               "seq": 7,
@@ -3636,14 +3642,14 @@
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:0fca6962e17be2d9",
-              "hash": "sha256:a150aa91fd44036e"
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:51ee58ba4944c933"
             }
           ],
           "verify": {
             "valid": true,
             "events": 7,
-            "headHash": "sha256:a150aa91fd44036e"
+            "headHash": "sha256:51ee58ba4944c933"
           }
         },
         "alternative:pln_safe": {
@@ -3654,11 +3660,11 @@
             "heartsLeft": 2,
             "stars": 3,
             "incident": null,
-            "receiptText": "You chose 300 oat buns (egg-free), Thursday, €330,00.",
-            "logHeadHash": "sha256:a09586866381bac0",
+            "receiptText": "You chose 20 l pistachio ice cream, Thursday, €168,72.",
+            "logHeadHash": "sha256:a9ddaac4e68ad3c7",
             "approvalsAsked": 1,
             "totalCost": {
-              "cents": 33000,
+              "cents": 16872,
               "currency": "EUR"
             },
             "heartsUsed": 1
@@ -3675,10 +3681,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -3695,8 +3701,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_off"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:c0f8057fd564ff0b"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
             },
             {
               "seq": 3,
@@ -3711,10 +3717,10 @@
               "reasons": [
                 "SALES_BLOCKED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
               "refs": {},
-              "prevHash": "sha256:c0f8057fd564ff0b",
-              "hash": "sha256:94f2d28a6a920ea4"
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c"
             },
             {
               "seq": 4,
@@ -3729,12 +3735,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off"
               },
-              "prevHash": "sha256:94f2d28a6a920ea4",
-              "hash": "sha256:8d3b5aed3daad9d9"
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252"
             },
             {
               "seq": 5,
@@ -3749,14 +3755,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:8d3b5aed3daad9d9",
-              "hash": "sha256:89a7d24dff894358"
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c"
             },
             {
               "seq": 6,
@@ -3775,8 +3781,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:89a7d24dff894358",
-              "hash": "sha256:0fca6962e17be2d9"
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
             },
             {
               "seq": 7,
@@ -3793,8 +3799,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:0fca6962e17be2d9",
-              "hash": "sha256:bafd9cc317485021"
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:087863aa40f2026e"
             },
             {
               "seq": 8,
@@ -3807,14 +3813,14 @@
               "requestId": "req_008",
               "light": "GREEN",
               "reasons": [],
-              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_safe (990002).",
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_safe (473726).",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:bafd9cc317485021",
-              "hash": "sha256:a09586866381bac0"
+              "prevHash": "sha256:087863aa40f2026e",
+              "hash": "sha256:a9ddaac4e68ad3c7"
             }
           ],
           "valioLog": [
@@ -3829,10 +3835,10 @@
               "requestId": "req_001",
               "light": null,
               "reasons": [],
-              "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
               "refs": {},
               "prevHash": "sha256:0000000000000000",
-              "hash": "sha256:b93fc76c2b33e638"
+              "hash": "sha256:3abc58a30964e4bd"
             },
             {
               "seq": 2,
@@ -3849,8 +3855,8 @@
               "refs": {
                 "mandateId": "mdt_l3_allergen_off"
               },
-              "prevHash": "sha256:b93fc76c2b33e638",
-              "hash": "sha256:c0f8057fd564ff0b"
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
             },
             {
               "seq": 3,
@@ -3865,10 +3871,10 @@
               "reasons": [
                 "SALES_BLOCKED"
               ],
-              "summary": "Searched the catalog: 3 products, excluded 990001.",
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
               "refs": {},
-              "prevHash": "sha256:c0f8057fd564ff0b",
-              "hash": "sha256:94f2d28a6a920ea4",
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c",
               "disclosure": {
                 "returnedToAgent": [
                   "catalog",
@@ -3894,12 +3900,12 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off"
               },
-              "prevHash": "sha256:94f2d28a6a920ea4",
-              "hash": "sha256:8d3b5aed3daad9d9",
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252",
               "disclosure": {
                 "returnedToAgent": [
                   "netPrices",
@@ -3927,14 +3933,14 @@
               "reasons": [
                 "SUBSTITUTION_NOT_ALLOWED"
               ],
-              "summary": "Order ord_l3_allergen_off needs approval: Every bun on offer is a substitute, and your mandate allows no substitutes.",
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:8d3b5aed3daad9d9",
-              "hash": "sha256:89a7d24dff894358",
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c",
               "disclosure": {
                 "returnedToAgent": [
                   "orders"
@@ -3959,8 +3965,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:89a7d24dff894358",
-              "hash": "sha256:0fca6962e17be2d9"
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
             },
             {
               "seq": 7,
@@ -3977,8 +3983,8 @@
               "refs": {
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:0fca6962e17be2d9",
-              "hash": "sha256:bafd9cc317485021"
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:087863aa40f2026e"
             },
             {
               "seq": 8,
@@ -3991,14 +3997,14 @@
               "requestId": "req_008",
               "light": "GREEN",
               "reasons": [],
-              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_safe (990002).",
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_safe (473726).",
               "refs": {
                 "quoteId": "qt_l3_allergen_off",
                 "orderId": "ord_l3_allergen_off",
                 "approvalId": "apr_l3_allergen_off"
               },
-              "prevHash": "sha256:bafd9cc317485021",
-              "hash": "sha256:a09586866381bac0",
+              "prevHash": "sha256:087863aa40f2026e",
+              "hash": "sha256:a9ddaac4e68ad3c7",
               "disclosure": {
                 "returnedToAgent": [
                   "orders"
@@ -4010,7 +4016,7 @@
           "verify": {
             "valid": true,
             "events": 8,
-            "headHash": "sha256:a09586866381bac0"
+            "headHash": "sha256:a9ddaac4e68ad3c7"
           }
         }
       },
@@ -4031,11 +4037,11 @@
         "heartsLeft": 2,
         "stars": 3,
         "incident": null,
-        "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent asked to buy 300 egg-free oat buns instead, and you approved.",
-        "logHeadHash": "sha256:e800baad621a75d5",
+        "receiptText": "The cheapest ice cream contains egg, so the gateway blocked it. Your agent asked to buy 20 l of pistachio ice cream instead, and you approved.",
+        "logHeadHash": "sha256:52f196a4aeb9c25a",
         "approvalsAsked": 1,
         "totalCost": {
-          "cents": 33000,
+          "cents": 16872,
           "currency": "EUR"
         },
         "heartsUsed": 1
@@ -4048,14 +4054,14 @@
         "stars": 0,
         "incident": {
           "type": "SAFETY",
-          "productId": "463989",
+          "productId": "462635",
           "reason": "Contains egg (AE)"
         },
-        "receiptText": "Your agent asked to buy 300 shrove buns because they were cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
-        "logHeadHash": "sha256:9221e93710749fe5",
+        "receiptText": "Your agent asked to buy 20 l of Cookies Cream ice cream because it was cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
+        "logHeadHash": "sha256:b2a0d8f0d0f4fbd4",
         "approvalsAsked": 1,
         "totalCost": {
-          "cents": 24000,
+          "cents": 12844,
           "currency": "EUR"
         },
         "heartsUsed": 1

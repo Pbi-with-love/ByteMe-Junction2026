@@ -69,7 +69,7 @@ export const OrderSchema = z.object({
   lines: z.array(PlanLineSchema), total: MoneySchema, createdAt: dateTime,
 });
 export type Order = z.infer<typeof OrderSchema>;
-export const PendingOrderSchema = z.object({ orderId: text, status: z.literal('PENDING_APPROVAL'), approvalId: text, reasons: z.array(ReasonCodeSchema) });
+export const PendingOrderSchema = z.object({ orderId: text, status: z.enum(['PENDING_APPROVAL', 'EXPIRED']), approvalId: text, reasons: z.array(ReasonCodeSchema) });
 export type PendingOrder = z.infer<typeof PendingOrderSchema>;
 export const RecordedOrderSchema = z.discriminatedUnion('httpStatus', [
   z.object({ httpStatus: z.literal(201), body: OrderSchema }), z.object({ httpStatus: z.literal(202), body: PendingOrderSchema }),
@@ -85,7 +85,7 @@ export const ApprovalDecisionSchema = ApprovalSchema.extend({ decision: text, or
 export type ApprovalDecision = z.infer<typeof ApprovalDecisionSchema>;
 export const LogEventSchema = z.object({
   seq: z.number().int(), eventId: text, at: dateTime, actor: z.enum(['agent', 'human', 'gateway', 'scenario']), type: text,
-  customerId: text, agentId: text, requestId: text, light: LightSchema.nullable(), reasons: z.array(ReasonCodeSchema),
+  customerId: text, agentId: text.nullable(), requestId: text, light: LightSchema.nullable(), reasons: z.array(ReasonCodeSchema),
   summary: text, refs: z.object({
     mandateId: text.optional(), quoteId: text.optional(), orderId: text.optional(), approvalId: text.optional(),
   }).optional(),
