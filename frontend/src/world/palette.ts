@@ -23,5 +23,6 @@ export const PALETTE = {
   4: '#FEE2E2',
   e: '#881' + '337',
   a: '#FDF2F5',
+  h: '#F6C8A8', j: '#D99B78', r: '#5C3A21', v: '#166534', q: '#4ADE80', z: '#F59E0B', y: '#FDE047', x: '#F43F5E', i: '#93C5FD',
 } as const;
 export const LIGHT_COLOURS = { GREEN: PALETTE.G, BLUE: PALETTE.B, YELLOW: PALETTE.Y, RED: PALETTE.R } as const;
