@@ -1447,6 +1447,30 @@ async def events(request: Request) -> JSONResponse:
     return stub_response(request, "Live events")
 
 
+@app.get("/v1/game/levels/{level_id}/presets")
+async def game_presets(level_id: str, request: Request) -> dict[str, object]:
+    scenario_path = Path(__file__).resolve().parent / "scenarios" / f"{level_id}.json"
+    if not scenario_path.is_file():
+        raise HTTPException(status_code=404, detail={"code": "NOT_FOUND", "message": "Level not found."})
+    scenario = json.loads(scenario_path.read_text(encoding="utf-8"))
+    result: dict[str, object] = {}
+    for preset, value in scenario.get("presets", {}).items():
+        mandate = value["mandate"]
+        issued_by = mandate["issuedBy"]
+        limits = mandate["limits"]
+        result[preset] = {
+            **mandate,
+            "mandateId": f"preset_{preset}",
+            "customerId": scenario["customer"]["customerId"],
+            "issuedAt": scenario["now"],
+            "status": "ACTIVE",
+            "signature": {"alg": "none", "keyId": "preset", "value": ""},
+            "summaryText": (f"{issued_by['name']} authorises {mandate['agentId']} to order up to "
+                            f"€{limits['perOrderEur']} per order and €{limits['perWeekEur']} per week."),
+        }
+    return result
+
+
 @app.post("/v1/game/levels/{level_id}/start")
 async def start_level(level_id: str, request: Request) -> JSONResponse:
     return stub_response(request, "Game level start")
