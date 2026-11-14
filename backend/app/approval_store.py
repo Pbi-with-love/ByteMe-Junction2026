@@ -163,10 +163,36 @@ class ApprovalStore:
             return None
         return self.get(row["approval_id"], customer_id, now=now)
 
+    def expire_due(self, *, now: datetime) -> list[dict[str, Any]]:
+        rows = self._connection.execute(
+            """
+            SELECT approval_id FROM approvals
+            WHERE status = 'OPEN' AND deadline <= ?
+            """,
+            (now.isoformat(),),
+        ).fetchall()
+        if not rows:
+            return []
+        self._connection.executemany(
+            "UPDATE approvals SET status = 'EXPIRED' WHERE approval_id = ? AND status = 'OPEN'",
+            [(row["approval_id"],) for row in rows],
+        )
+        self._connection.commit()
+        expired: list[dict[str, Any]] = []
+        for row in rows:
+            current = self._connection.execute(
+                "SELECT * FROM approvals WHERE approval_id = ?",
+                (row["approval_id"],),
+            ).fetchone()
+            if current is not None and current["status"] == "EXPIRED":
+                expired.append(_approval(current))
+        return expired
+
 
 def _approval(row: sqlite3.Row) -> dict[str, Any]:
     return {
         "approvalId": row["approval_id"],
+        "customerId": row["customer_id"],
         "orderId": row["order_id"],
         "quoteId": row["quote_id"],
         "status": row["status"],
