@@ -1,9 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { createGatewayClient } from './gateway';
+import { createGatewayClient, gatewayMode } from './gateway';
 import { HttpGatewayClient } from './http';
 import { ReplayGatewayClient } from './replay';
 
 describe('createGatewayClient', () => {
+  it('reports replay/live mode and rejects unknown modes with the established message', () => {
+    expect(gatewayMode({})).toBe('replay');
+    expect(gatewayMode({ VITE_GATEWAY_MODE: 'replay' })).toBe('replay');
+    expect(gatewayMode({ VITE_GATEWAY_MODE: 'live' })).toBe('live');
+    expect(() => gatewayMode({ VITE_GATEWAY_MODE: 'other' })).toThrow('Unknown VITE_GATEWAY_MODE: other');
+  });
   it('defaults to replay and accepts replay explicitly', () => {
     expect(createGatewayClient({})).toBeInstanceOf(ReplayGatewayClient);
     expect(createGatewayClient({ VITE_GATEWAY_MODE: 'replay' })).toBeInstanceOf(ReplayGatewayClient);
