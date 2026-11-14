@@ -10,7 +10,7 @@
         "name": "Ravintola Kivi (fictional)",
         "type": "restaurant"
       },
-      "brief": "Standing order: 40 kg Edam by Wednesday 06:00 and 40 kg by Friday 06:00.",
+      "brief": "Standing order: 120 l semi-skimmed milk by Wednesday 06:00 and 120 l by Friday 06:00.",
       "deadline": "2026-11-20T06:00:00+02:00",
       "closingTime": "2026-11-14T14:00:00+02:00"
     },
@@ -65,54 +65,54 @@
           "search": {
             "results": [
               {
-                "productId": "520101",
-                "name": "Edam cheese 1 kg block (mock)",
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.95,
+                "deliveryReliability": 1.0,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "520144",
-                "name": "Gouda cheese 1 kg block (mock)",
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.96,
+                "deliveryReliability": 1.0,
                 "excluded": null
               }
             ],
@@ -126,15 +126,15 @@
             "createdAt": "2026-11-14T10:06:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Standing order: Edam cheese, delivery 1 of 2",
+              "description": "Standing order: semi-skimmed milk, delivery 1 of 2",
               "quantity": {
-                "amount": 40,
-                "unit": "kg"
+                "amount": 120,
+                "unit": "l"
               },
               "deadline": "2026-11-18T06:00:00+02:00",
               "candidateProductIds": [
-                "520101",
-                "520144"
+                "464201",
+                "464398"
               ]
             },
             "plans": [
@@ -142,26 +142,26 @@
                 "planId": "pln_a",
                 "lines": [
                   {
-                    "productId": "520144",
+                    "productId": "464398",
                     "quantity": {
-                      "amount": 40,
-                      "unit": "kg"
+                      "amount": 120,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 40,
-                      "unit": "PCE"
+                      "amount": 120,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR",
-                      "per": "kg"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 49600,
+                      "cents": 16200,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-18",
@@ -169,12 +169,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 49600,
+                  "cents": 16200,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 40,
-                  "unit": "kg"
+                  "amount": 120,
+                  "unit": "l"
                 },
                 "policy": {
                   "light": "YELLOW",
@@ -182,7 +182,7 @@
                     "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00",
                 "score": {
                   "total": 0.8,
                   "onTime": 1.0,
@@ -196,7 +196,7 @@
             ],
             "excludedProducts": [
               {
-                "productId": "520101",
+                "productId": "464201",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               }
@@ -239,16 +239,16 @@
             "reasons": [
               "SUBSTITUTION_NOT_ALLOWED"
             ],
-            "reasonText": "Gouda is a substitute, and your mandate allows no substitutes.",
+            "reasonText": "Valio Eila is a substitute, and your mandate allows no substitutes.",
             "options": [
               {
                 "planId": "pln_a",
                 "tier": "best",
                 "recommended": true,
-                "summary": "40 kg Gouda instead of Edam, €496,00"
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00"
               }
             ],
-            "agentExplanation": "Edam is blocked from sale this week. Gouda is the closest cheese, €0,50/kg more.",
+            "agentExplanation": "Valio semi-skimmed has no stock this week. Valio Eila is the closest milk, €0,06/l more.",
             "deadline": "2026-11-14T10:06:20+02:00",
             "createdAt": "2026-11-14T10:06:00+02:00"
           }
@@ -257,54 +257,54 @@
           "search": {
             "results": [
               {
-                "productId": "520101",
-                "name": "Edam cheese 1 kg block (mock)",
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.95,
+                "deliveryReliability": 1.0,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "520144",
-                "name": "Gouda cheese 1 kg block (mock)",
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.96,
+                "deliveryReliability": 1.0,
                 "excluded": null
               }
             ],
@@ -318,15 +318,15 @@
             "createdAt": "2026-11-14T10:30:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Standing order: Edam cheese, delivery 2 of 2",
+              "description": "Standing order: semi-skimmed milk, delivery 2 of 2",
               "quantity": {
-                "amount": 40,
-                "unit": "kg"
+                "amount": 120,
+                "unit": "l"
               },
               "deadline": "2026-11-20T06:00:00+02:00",
               "candidateProductIds": [
-                "520101",
-                "520144"
+                "464201",
+                "464398"
               ]
             },
             "plans": [
@@ -334,26 +334,26 @@
                 "planId": "pln_a",
                 "lines": [
                   {
-                    "productId": "520144",
+                    "productId": "464398",
                     "quantity": {
-                      "amount": 40,
-                      "unit": "kg"
+                      "amount": 120,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 40,
-                      "unit": "PCE"
+                      "amount": 120,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR",
-                      "per": "kg"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 49600,
+                      "cents": 16200,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-20",
@@ -361,12 +361,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 49600,
+                  "cents": 16200,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 40,
-                  "unit": "kg"
+                  "amount": 120,
+                  "unit": "l"
                 },
                 "policy": {
                   "light": "YELLOW",
@@ -374,7 +374,7 @@
                     "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00",
                 "score": {
                   "total": 0.8,
                   "onTime": 1.0,
@@ -388,7 +388,7 @@
             ],
             "excludedProducts": [
               {
-                "productId": "520101",
+                "productId": "464201",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               }
@@ -431,16 +431,16 @@
             "reasons": [
               "SUBSTITUTION_NOT_ALLOWED"
             ],
-            "reasonText": "Gouda is a substitute, and your mandate allows no substitutes.",
+            "reasonText": "Valio Eila is a substitute, and your mandate allows no substitutes.",
             "options": [
               {
                 "planId": "pln_a",
                 "tier": "best",
                 "recommended": true,
-                "summary": "40 kg Gouda instead of Edam, €496,00"
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00"
               }
             ],
-            "agentExplanation": "Edam is blocked from sale this week. Gouda is the closest cheese, €0,50/kg more.",
+            "agentExplanation": "Valio semi-skimmed has no stock this week. Valio Eila is the closest milk, €0,06/l more.",
             "deadline": "2026-11-14T10:30:20+02:00",
             "createdAt": "2026-11-14T10:30:00+02:00"
           }
@@ -453,8 +453,8 @@
         "heartsLeft": 1,
         "stars": 3,
         "incident": null,
-        "receiptText": "Edam was blocked from sale all week. Your agent had to ask you before each delivery (Wednesday and Friday) to switch to Gouda; you approved both.",
-        "logHeadHash": "sha256:4c49ad6e469aaf84",
+        "receiptText": "Valio semi-skimmed had no stock all week. Your agent had to ask you before each delivery (Wednesday and Friday) to switch to Valio Eila; you approved both.",
+        "logHeadHash": "sha256:ac82bd08a9118fba",
         "approvalsAsked": 2
       }
     },
@@ -497,54 +497,54 @@
           "search": {
             "results": [
               {
-                "productId": "520101",
-                "name": "Edam cheese 1 kg block (mock)",
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.95,
+                "deliveryReliability": 1.0,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "520144",
-                "name": "Gouda cheese 1 kg block (mock)",
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.96,
+                "deliveryReliability": 1.0,
                 "excluded": null
               }
             ],
@@ -558,15 +558,15 @@
             "createdAt": "2026-11-14T10:06:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Standing order: Edam cheese, delivery 1 of 2",
+              "description": "Standing order: semi-skimmed milk, delivery 1 of 2",
               "quantity": {
-                "amount": 40,
-                "unit": "kg"
+                "amount": 120,
+                "unit": "l"
               },
               "deadline": "2026-11-18T06:00:00+02:00",
               "candidateProductIds": [
-                "520101",
-                "520144"
+                "464201",
+                "464398"
               ]
             },
             "plans": [
@@ -574,26 +574,26 @@
                 "planId": "pln_a",
                 "lines": [
                   {
-                    "productId": "520144",
+                    "productId": "464398",
                     "quantity": {
-                      "amount": 40,
-                      "unit": "kg"
+                      "amount": 120,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 40,
-                      "unit": "PCE"
+                      "amount": 120,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR",
-                      "per": "kg"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 49600,
+                      "cents": 16200,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-18",
@@ -601,12 +601,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 49600,
+                  "cents": 16200,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 40,
-                  "unit": "kg"
+                  "amount": 120,
+                  "unit": "l"
                 },
                 "policy": {
                   "light": "BLUE",
@@ -614,7 +614,7 @@
                     "SUBSTITUTION_ALLOWED"
                   ]
                 },
-                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00",
                 "score": {
                   "total": 0.8,
                   "onTime": 1.0,
@@ -628,7 +628,7 @@
             ],
             "excludedProducts": [
               {
-                "productId": "520101",
+                "productId": "464201",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               }
@@ -661,26 +661,26 @@
               "status": "ORDERED",
               "lines": [
                 {
-                  "productId": "520144",
+                  "productId": "464398",
                   "quantity": {
-                    "amount": 40,
-                    "unit": "kg"
+                    "amount": 120,
+                    "unit": "l"
                   },
                   "salesQuantity": {
-                    "amount": 40,
-                    "unit": "PCE"
+                    "amount": 120,
+                    "unit": "ST"
                   },
                   "unitPrice": {
-                    "cents": 1240,
+                    "cents": 135,
                     "currency": "EUR"
                   },
                   "comparisonPrice": {
-                    "cents": 1240,
+                    "cents": 135,
                     "currency": "EUR",
-                    "per": "kg"
+                    "per": "l"
                   },
                   "lineTotal": {
-                    "cents": 49600,
+                    "cents": 16200,
                     "currency": "EUR"
                   },
                   "availableDate": "2026-11-18",
@@ -688,7 +688,7 @@
                 }
               ],
               "total": {
-                "cents": 49600,
+                "cents": 16200,
                 "currency": "EUR"
               },
               "createdAt": "2026-11-14T10:06:00+02:00"
@@ -700,54 +700,54 @@
           "search": {
             "results": [
               {
-                "productId": "520101",
-                "name": "Edam cheese 1 kg block (mock)",
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.95,
+                "deliveryReliability": 1.0,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "520144",
-                "name": "Gouda cheese 1 kg block (mock)",
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.96,
+                "deliveryReliability": 1.0,
                 "excluded": null
               }
             ],
@@ -761,15 +761,15 @@
             "createdAt": "2026-11-14T10:30:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Standing order: Edam cheese, delivery 2 of 2",
+              "description": "Standing order: semi-skimmed milk, delivery 2 of 2",
               "quantity": {
-                "amount": 40,
-                "unit": "kg"
+                "amount": 120,
+                "unit": "l"
               },
               "deadline": "2026-11-20T06:00:00+02:00",
               "candidateProductIds": [
-                "520101",
-                "520144"
+                "464201",
+                "464398"
               ]
             },
             "plans": [
@@ -777,26 +777,26 @@
                 "planId": "pln_a",
                 "lines": [
                   {
-                    "productId": "520144",
+                    "productId": "464398",
                     "quantity": {
-                      "amount": 40,
-                      "unit": "kg"
+                      "amount": 120,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 40,
-                      "unit": "PCE"
+                      "amount": 120,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR",
-                      "per": "kg"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 49600,
+                      "cents": 16200,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-20",
@@ -804,12 +804,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 49600,
+                  "cents": 16200,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 40,
-                  "unit": "kg"
+                  "amount": 120,
+                  "unit": "l"
                 },
                 "policy": {
                   "light": "BLUE",
@@ -817,7 +817,7 @@
                     "SUBSTITUTION_ALLOWED"
                   ]
                 },
-                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00",
                 "score": {
                   "total": 0.8,
                   "onTime": 1.0,
@@ -831,7 +831,7 @@
             ],
             "excludedProducts": [
               {
-                "productId": "520101",
+                "productId": "464201",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               }
@@ -864,26 +864,26 @@
               "status": "ORDERED",
               "lines": [
                 {
-                  "productId": "520144",
+                  "productId": "464398",
                   "quantity": {
-                    "amount": 40,
-                    "unit": "kg"
+                    "amount": 120,
+                    "unit": "l"
                   },
                   "salesQuantity": {
-                    "amount": 40,
-                    "unit": "PCE"
+                    "amount": 120,
+                    "unit": "ST"
                   },
                   "unitPrice": {
-                    "cents": 1240,
+                    "cents": 135,
                     "currency": "EUR"
                   },
                   "comparisonPrice": {
-                    "cents": 1240,
+                    "cents": 135,
                     "currency": "EUR",
-                    "per": "kg"
+                    "per": "l"
                   },
                   "lineTotal": {
-                    "cents": 49600,
+                    "cents": 16200,
                     "currency": "EUR"
                   },
                   "availableDate": "2026-11-20",
@@ -891,7 +891,7 @@
                 }
               ],
               "total": {
-                "cents": 49600,
+                "cents": 16200,
                 "currency": "EUR"
               },
               "createdAt": "2026-11-14T10:30:00+02:00"
@@ -907,8 +907,8 @@
         "heartsLeft": 3,
         "stars": 3,
         "incident": null,
-        "receiptText": "Edam was blocked from sale all week. Your agent switched both deliveries to Gouda in the same category (+€0,50/kg) and told you without asking.",
-        "logHeadHash": "sha256:cc259e5435f76acf",
+        "receiptText": "Valio semi-skimmed had no stock all week. Your agent switched both deliveries to Valio Eila in the same category (+€0,06/l) and told you without asking.",
+        "logHeadHash": "sha256:1401a4d5daeed9b7",
         "approvalsAsked": 0
       }
     }
@@ -923,8 +923,8 @@
         "heartsLeft": 1,
         "stars": 3,
         "incident": null,
-        "receiptText": "Edam was blocked from sale all week. Your agent had to ask you before each delivery (Wednesday and Friday) to switch to Gouda; you approved both.",
-        "logHeadHash": "sha256:4c49ad6e469aaf84",
+        "receiptText": "Valio semi-skimmed had no stock all week. Your agent had to ask you before each delivery (Wednesday and Friday) to switch to Valio Eila; you approved both.",
+        "logHeadHash": "sha256:ac82bd08a9118fba",
         "approvalsAsked": 2
       },
       "balanced": {
@@ -934,8 +934,8 @@
         "heartsLeft": 3,
         "stars": 3,
         "incident": null,
-        "receiptText": "Edam was blocked from sale all week. Your agent switched both deliveries to Gouda in the same category (+€0,50/kg) and told you without asking.",
-        "logHeadHash": "sha256:cc259e5435f76acf",
+        "receiptText": "Valio semi-skimmed had no stock all week. Your agent switched both deliveries to Valio Eila in the same category (+€0,06/l) and told you without asking.",
+        "logHeadHash": "sha256:1401a4d5daeed9b7",
         "approvalsAsked": 0
       }
     }

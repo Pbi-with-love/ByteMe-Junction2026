@@ -10,7 +10,7 @@
         "name": "Koivu School kitchen (fictional)",
         "type": "school"
       },
-      "brief": "60 packs of spread by Thursday 06:00. Usual product unavailable.",
+      "brief": "300 egg-free buns by Thursday 06:00. Usual bun unavailable.",
       "deadline": "2026-11-19T06:00:00+02:00",
       "closingTime": "2026-11-14T14:00:00+02:00"
     },
@@ -43,7 +43,7 @@
         "lateDelivery": "none",
         "hardConstraints": {
           "excludeAllergens": [
-            "peanut"
+            "AE"
           ],
           "requireLabels": []
         },
@@ -60,81 +60,88 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing peanut."
+        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing AE."
       },
       "steps": [
         {
           "search": {
             "results": [
               {
-                "productId": "610001",
-                "name": "Plant-based spread 400 g (mock)",
-                "brand": "Valio",
-                "category": "spreads",
-                "salesUnit": "PCE",
+                "productId": "990001",
+                "name": "Cinnamon bun, egg-free (fictional)",
+                "brand": "Valio Aimo",
+                "category": "bakery (mock)",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "pack"
+                  "unit": "pcs"
                 },
                 "labels": [],
-                "allergens": [],
+                "allergens": [
+                  "AW"
+                ],
                 "carbonCategory": {
-                  "category": "spreads",
+                  "category": "bakery (mock)",
                   "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
+                    "min": 1.0,
+                    "max": 1.6
                   }
                 },
-                "deliveryReliability": 0.94,
+                "deliveryReliability": null,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "610022",
-                "name": "Sunflower spread 400 g (mock)",
-                "brand": "Nordlakt",
-                "category": "spreads",
-                "salesUnit": "PCE",
+                "productId": "990002",
+                "name": "Oat bun, egg-free (fictional)",
+                "brand": "Valio Aimo",
+                "category": "bakery (mock)",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "pack"
-                },
-                "labels": [],
-                "allergens": [],
-                "carbonCategory": {
-                  "category": "spreads",
-                  "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
-                  }
-                },
-                "deliveryReliability": 0.94,
-                "excluded": null
-              },
-              {
-                "productId": "610035",
-                "name": "Peanut & oat spread 400 g (mock)",
-                "brand": "Pohjola Farm",
-                "category": "spreads",
-                "salesUnit": "PCE",
-                "packSize": {
-                  "amount": 1,
-                  "unit": "pack"
+                  "unit": "pcs"
                 },
                 "labels": [],
                 "allergens": [
-                  "peanut"
+                  "AW"
                 ],
                 "carbonCategory": {
-                  "category": "spreads",
+                  "category": "bakery (mock)",
                   "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
+                    "min": 1.0,
+                    "max": 1.6
                   }
                 },
-                "deliveryReliability": 0.94,
+                "deliveryReliability": null,
+                "excluded": null
+              },
+              {
+                "productId": "463989",
+                "name": "Shrove bun",
+                "brand": "Valio Aimo",
+                "category": "bakery (mock)",
+                "salesUnit": "ST",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "pcs"
+                },
+                "labels": [],
+                "allergens": [
+                  "AE",
+                  "AM",
+                  "AW",
+                  "UW"
+                ],
+                "carbonCategory": {
+                  "category": "bakery (mock)",
+                  "kgCo2ePerKg": {
+                    "min": 1.0,
+                    "max": 1.6
+                  }
+                },
+                "deliveryReliability": null,
                 "excluded": {
                   "light": "RED",
                   "reason": "ALLERGEN_EXCLUDED"
@@ -151,16 +158,16 @@
             "createdAt": "2026-11-14T10:05:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Spread for school breakfast (usual product unavailable)",
+              "description": "Egg-free buns for school dessert (usual product unavailable)",
               "quantity": {
-                "amount": 60,
-                "unit": "pack"
+                "amount": 300,
+                "unit": "pcs"
               },
               "deadline": "2026-11-19T06:00:00+02:00",
               "candidateProductIds": [
-                "610001",
-                "610022",
-                "610035"
+                "990001",
+                "990002",
+                "463989"
               ]
             },
             "plans": [
@@ -168,26 +175,26 @@
                 "planId": "pln_safe",
                 "lines": [
                   {
-                    "productId": "610022",
+                    "productId": "990002",
                     "quantity": {
-                      "amount": 60,
-                      "unit": "pack"
+                      "amount": 300,
+                      "unit": "pcs"
                     },
                     "salesQuantity": {
-                      "amount": 60,
-                      "unit": "PCE"
+                      "amount": 300,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 420,
+                      "cents": 110,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1050,
+                      "cents": 110,
                       "currency": "EUR",
-                      "per": "pack"
+                      "per": "pcs"
                     },
                     "lineTotal": {
-                      "cents": 25200,
+                      "cents": 33000,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-19",
@@ -195,12 +202,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 25200,
+                  "cents": 33000,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 60,
-                  "unit": "pack"
+                  "amount": 300,
+                  "unit": "pcs"
                 },
                 "policy": {
                   "light": "BLUE",
@@ -208,7 +215,7 @@
                     "SUBSTITUTION_ALLOWED"
                   ]
                 },
-                "summary": "60 packs sunflower spread, Thursday, €252,00",
+                "summary": "300 oat buns (egg-free), Thursday, €330,00",
                 "score": {
                   "total": 0.8,
                   "onTime": 1.0,
@@ -222,12 +229,12 @@
             ],
             "excludedProducts": [
               {
-                "productId": "610001",
+                "productId": "990001",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               },
               {
-                "productId": "610035",
+                "productId": "463989",
                 "light": "RED",
                 "reason": "ALLERGEN_EXCLUDED"
               }
@@ -260,26 +267,26 @@
               "status": "ORDERED",
               "lines": [
                 {
-                  "productId": "610022",
+                  "productId": "990002",
                   "quantity": {
-                    "amount": 60,
-                    "unit": "pack"
+                    "amount": 300,
+                    "unit": "pcs"
                   },
                   "salesQuantity": {
-                    "amount": 60,
-                    "unit": "PCE"
+                    "amount": 300,
+                    "unit": "ST"
                   },
                   "unitPrice": {
-                    "cents": 420,
+                    "cents": 110,
                     "currency": "EUR"
                   },
                   "comparisonPrice": {
-                    "cents": 1050,
+                    "cents": 110,
                     "currency": "EUR",
-                    "per": "pack"
+                    "per": "pcs"
                   },
                   "lineTotal": {
-                    "cents": 25200,
+                    "cents": 33000,
                     "currency": "EUR"
                   },
                   "availableDate": "2026-11-19",
@@ -287,7 +294,7 @@
                 }
               ],
               "total": {
-                "cents": 25200,
+                "cents": 33000,
                 "currency": "EUR"
               },
               "createdAt": "2026-11-14T10:06:00+02:00"
@@ -303,8 +310,8 @@
         "heartsLeft": 3,
         "stars": 3,
         "incident": null,
-        "receiptText": "The cheapest spread contains peanut, so the gateway blocked it. Your agent bought 60 packs of sunflower spread instead.",
-        "logHeadHash": "sha256:9872442a548d7282",
+        "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent bought 300 egg-free oat buns instead.",
+        "logHeadHash": "sha256:445f4d38308fac33",
         "approvalsAsked": 0
       }
     },
@@ -347,74 +354,81 @@
           "search": {
             "results": [
               {
-                "productId": "610001",
-                "name": "Plant-based spread 400 g (mock)",
-                "brand": "Valio",
-                "category": "spreads",
-                "salesUnit": "PCE",
+                "productId": "990001",
+                "name": "Cinnamon bun, egg-free (fictional)",
+                "brand": "Valio Aimo",
+                "category": "bakery (mock)",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "pack"
+                  "unit": "pcs"
                 },
                 "labels": [],
-                "allergens": [],
+                "allergens": [
+                  "AW"
+                ],
                 "carbonCategory": {
-                  "category": "spreads",
+                  "category": "bakery (mock)",
                   "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
+                    "min": 1.0,
+                    "max": 1.6
                   }
                 },
-                "deliveryReliability": 0.94,
+                "deliveryReliability": null,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "610022",
-                "name": "Sunflower spread 400 g (mock)",
-                "brand": "Nordlakt",
-                "category": "spreads",
-                "salesUnit": "PCE",
+                "productId": "990002",
+                "name": "Oat bun, egg-free (fictional)",
+                "brand": "Valio Aimo",
+                "category": "bakery (mock)",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "pack"
-                },
-                "labels": [],
-                "allergens": [],
-                "carbonCategory": {
-                  "category": "spreads",
-                  "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
-                  }
-                },
-                "deliveryReliability": 0.94,
-                "excluded": null
-              },
-              {
-                "productId": "610035",
-                "name": "Peanut & oat spread 400 g (mock)",
-                "brand": "Pohjola Farm",
-                "category": "spreads",
-                "salesUnit": "PCE",
-                "packSize": {
-                  "amount": 1,
-                  "unit": "pack"
+                  "unit": "pcs"
                 },
                 "labels": [],
                 "allergens": [
-                  "peanut"
+                  "AW"
                 ],
                 "carbonCategory": {
-                  "category": "spreads",
+                  "category": "bakery (mock)",
                   "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
+                    "min": 1.0,
+                    "max": 1.6
                   }
                 },
-                "deliveryReliability": 0.94,
+                "deliveryReliability": null,
+                "excluded": null
+              },
+              {
+                "productId": "463989",
+                "name": "Shrove bun",
+                "brand": "Valio Aimo",
+                "category": "bakery (mock)",
+                "salesUnit": "ST",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "pcs"
+                },
+                "labels": [],
+                "allergens": [
+                  "AE",
+                  "AM",
+                  "AW",
+                  "UW"
+                ],
+                "carbonCategory": {
+                  "category": "bakery (mock)",
+                  "kgCo2ePerKg": {
+                    "min": 1.0,
+                    "max": 1.6
+                  }
+                },
+                "deliveryReliability": null,
                 "excluded": null
               }
             ],
@@ -428,16 +442,16 @@
             "createdAt": "2026-11-14T10:05:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Spread for school breakfast (usual product unavailable)",
+              "description": "Egg-free buns for school dessert (usual product unavailable)",
               "quantity": {
-                "amount": 60,
-                "unit": "pack"
+                "amount": 300,
+                "unit": "pcs"
               },
               "deadline": "2026-11-19T06:00:00+02:00",
               "candidateProductIds": [
-                "610001",
-                "610022",
-                "610035"
+                "990001",
+                "990002",
+                "463989"
               ]
             },
             "plans": [
@@ -445,26 +459,26 @@
                 "planId": "pln_nut",
                 "lines": [
                   {
-                    "productId": "610035",
+                    "productId": "463989",
                     "quantity": {
-                      "amount": 60,
-                      "unit": "pack"
+                      "amount": 300,
+                      "unit": "pcs"
                     },
                     "salesQuantity": {
-                      "amount": 60,
-                      "unit": "PCE"
+                      "amount": 300,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 310,
+                      "cents": 80,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 775,
+                      "cents": 80,
                       "currency": "EUR",
-                      "per": "pack"
+                      "per": "pcs"
                     },
                     "lineTotal": {
-                      "cents": 18600,
+                      "cents": 24000,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-19",
@@ -472,12 +486,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 18600,
+                  "cents": 24000,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 60,
-                  "unit": "pack"
+                  "amount": 300,
+                  "unit": "pcs"
                 },
                 "policy": {
                   "light": "BLUE",
@@ -485,7 +499,7 @@
                     "SUBSTITUTION_ALLOWED"
                   ]
                 },
-                "summary": "60 packs peanut & oat spread, Thursday, €186,00",
+                "summary": "300 shrove buns, Thursday, €240,00",
                 "score": {
                   "total": 0.8,
                   "onTime": 1.0,
@@ -500,26 +514,26 @@
                 "planId": "pln_safe",
                 "lines": [
                   {
-                    "productId": "610022",
+                    "productId": "990002",
                     "quantity": {
-                      "amount": 60,
-                      "unit": "pack"
+                      "amount": 300,
+                      "unit": "pcs"
                     },
                     "salesQuantity": {
-                      "amount": 60,
-                      "unit": "PCE"
+                      "amount": 300,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 420,
+                      "cents": 110,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1050,
+                      "cents": 110,
                       "currency": "EUR",
-                      "per": "pack"
+                      "per": "pcs"
                     },
                     "lineTotal": {
-                      "cents": 25200,
+                      "cents": 33000,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-19",
@@ -527,12 +541,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 25200,
+                  "cents": 33000,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 60,
-                  "unit": "pack"
+                  "amount": 300,
+                  "unit": "pcs"
                 },
                 "policy": {
                   "light": "BLUE",
@@ -540,11 +554,11 @@
                     "SUBSTITUTION_ALLOWED"
                   ]
                 },
-                "summary": "60 packs sunflower spread, Thursday, €252,00",
+                "summary": "300 oat buns (egg-free), Thursday, €330,00",
                 "score": {
-                  "total": 0.669,
+                  "total": 0.663,
                   "onTime": 1.0,
-                  "price": 0.738,
+                  "price": 0.727,
                   "sustainability": 0.0,
                   "reliabilityPenalty": 0.0
                 },
@@ -554,7 +568,7 @@
             ],
             "excludedProducts": [
               {
-                "productId": "610001",
+                "productId": "990001",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               }
@@ -587,26 +601,26 @@
               "status": "ORDERED",
               "lines": [
                 {
-                  "productId": "610035",
+                  "productId": "463989",
                   "quantity": {
-                    "amount": 60,
-                    "unit": "pack"
+                    "amount": 300,
+                    "unit": "pcs"
                   },
                   "salesQuantity": {
-                    "amount": 60,
-                    "unit": "PCE"
+                    "amount": 300,
+                    "unit": "ST"
                   },
                   "unitPrice": {
-                    "cents": 310,
+                    "cents": 80,
                     "currency": "EUR"
                   },
                   "comparisonPrice": {
-                    "cents": 775,
+                    "cents": 80,
                     "currency": "EUR",
-                    "per": "pack"
+                    "per": "pcs"
                   },
                   "lineTotal": {
-                    "cents": 18600,
+                    "cents": 24000,
                     "currency": "EUR"
                   },
                   "availableDate": "2026-11-19",
@@ -614,7 +628,7 @@
                 }
               ],
               "total": {
-                "cents": 18600,
+                "cents": 24000,
                 "currency": "EUR"
               },
               "createdAt": "2026-11-14T10:06:00+02:00"
@@ -631,11 +645,11 @@
         "stars": 0,
         "incident": {
           "type": "SAFETY",
-          "productId": "610035",
-          "reason": "Contains peanut"
+          "productId": "463989",
+          "reason": "Contains egg (AE)"
         },
-        "receiptText": "Your agent bought 60 packs of Peanut & oat spread because it was cheapest. Nothing stopped it: the allergen rule was off.",
-        "logHeadHash": "sha256:e7888d86975376f9",
+        "receiptText": "Your agent bought 300 shrove buns because they were cheapest. They contain egg, and nothing stopped it: the allergen rule was off.",
+        "logHeadHash": "sha256:7ab870e835d0dbc6",
         "approvalsAsked": 0
       }
     }
@@ -650,8 +664,8 @@
         "heartsLeft": 3,
         "stars": 3,
         "incident": null,
-        "receiptText": "The cheapest spread contains peanut, so the gateway blocked it. Your agent bought 60 packs of sunflower spread instead.",
-        "logHeadHash": "sha256:9872442a548d7282",
+        "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent bought 300 egg-free oat buns instead.",
+        "logHeadHash": "sha256:445f4d38308fac33",
         "approvalsAsked": 0
       },
       "allergen_off": {
@@ -662,11 +676,11 @@
         "stars": 0,
         "incident": {
           "type": "SAFETY",
-          "productId": "610035",
-          "reason": "Contains peanut"
+          "productId": "463989",
+          "reason": "Contains egg (AE)"
         },
-        "receiptText": "Your agent bought 60 packs of Peanut & oat spread because it was cheapest. Nothing stopped it: the allergen rule was off.",
-        "logHeadHash": "sha256:e7888d86975376f9",
+        "receiptText": "Your agent bought 300 shrove buns because they were cheapest. They contain egg, and nothing stopped it: the allergen rule was off.",
+        "logHeadHash": "sha256:7ab870e835d0dbc6",
         "approvalsAsked": 0
       }
     }

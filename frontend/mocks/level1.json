@@ -43,7 +43,7 @@
         "lateDelivery": "none",
         "hardConstraints": {
           "excludeAllergens": [
-            "peanut"
+            "AP"
           ],
           "requireLabels": []
         },
@@ -60,88 +60,82 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €200 per order, with no substitutes and no late deliveries, never products containing peanut."
+        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €200 per order, with no substitutes and no late deliveries, never products containing AP."
       },
       "steps": [
         {
           "search": {
             "results": [
               {
-                "productId": "460013",
-                "name": "Lactose-free milk drink 1.5% 10 l bag-in-box (mock)",
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "milk",
-                "salesUnit": "BIB",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 10,
+                  "amount": 1,
                   "unit": "l"
                 },
-                "labels": [
-                  "lactose_free"
-                ],
+                "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "milk",
+                  "category": "10400",
                   "kgCo2ePerKg": {
                     "min": 1.1,
-                    "max": 1.4
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.97,
+                "deliveryReliability": 1.0,
                 "excluded": null
               },
               {
-                "productId": "460063",
-                "name": "Nordlakt premium lactose-free milk 10 l (mock)",
-                "brand": "Nordlakt",
-                "category": "milk",
-                "salesUnit": "BIB",
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 10,
+                  "amount": 1,
                   "unit": "l"
                 },
-                "labels": [
-                  "lactose_free"
-                ],
+                "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "milk",
+                  "category": "10400",
                   "kgCo2ePerKg": {
                     "min": 1.1,
-                    "max": 1.4
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.91,
+                "deliveryReliability": 1.0,
                 "excluded": null
               },
               {
-                "productId": "460056",
-                "name": "Pohjola Farm lactose-free milk 10 l (mock)",
-                "brand": "Pohjola Farm",
-                "category": "milk",
-                "salesUnit": "BIB",
+                "productId": "463038",
+                "name": "Valio Eila semi-skimmed 10 l Novobox",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "KI",
                 "packSize": {
-                  "amount": 10,
+                  "amount": 20,
                   "unit": "l"
                 },
-                "labels": [
-                  "lactose_free"
-                ],
+                "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "milk",
+                  "category": "10400",
                   "kgCo2ePerKg": {
                     "min": 1.1,
-                    "max": 1.4
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.62,
+                "deliveryReliability": null,
                 "excluded": null
               }
             ],
@@ -162,9 +156,9 @@
               },
               "deadline": "2026-11-16T06:00:00+02:00",
               "candidateProductIds": [
-                "460013",
-                "460063",
-                "460056"
+                "464201",
+                "464398",
+                "463038"
               ]
             },
             "plans": [
@@ -172,17 +166,17 @@
                 "planId": "pln_a",
                 "lines": [
                   {
-                    "productId": "460013",
+                    "productId": "464201",
                     "quantity": {
                       "amount": 700,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 70,
-                      "unit": "BIB"
+                      "amount": 700,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1290,
+                      "cents": 129,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -198,17 +192,17 @@
                     "isSubstitute": false
                   },
                   {
-                    "productId": "460063",
+                    "productId": "464398",
                     "quantity": {
                       "amount": 300,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 30,
-                      "unit": "BIB"
+                      "amount": 300,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 2500,
+                      "cents": 250,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -240,7 +234,7 @@
                     "SPLIT_ORDER"
                   ]
                 },
-                "summary": "700 l Valio + 300 l Nordlakt, all Monday, €1 653,00",
+                "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00",
                 "score": {
                   "total": 0.734,
                   "onTime": 1.0,
@@ -252,20 +246,76 @@
                 "recommended": true
               },
               {
+                "planId": "pln_c",
+                "lines": [
+                  {
+                    "productId": "463038",
+                    "quantity": {
+                      "amount": 1000,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 50,
+                      "unit": "KI"
+                    },
+                    "unitPrice": {
+                      "cents": 3900,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 195,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 195000,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 195000,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 1000,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "SUBSTITUTION_NOT_ALLOWED"
+                  ]
+                },
+                "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00",
+                "score": {
+                  "total": 0.699,
+                  "onTime": 1.0,
+                  "price": 0.662,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "better",
+                "recommended": false
+              },
+              {
                 "planId": "pln_b",
                 "lines": [
                   {
-                    "productId": "460013",
+                    "productId": "464201",
                     "quantity": {
                       "amount": 700,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 70,
-                      "unit": "BIB"
+                      "amount": 700,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1290,
+                      "cents": 129,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -281,17 +331,17 @@
                     "isSubstitute": false
                   },
                   {
-                    "productId": "460013",
+                    "productId": "464201",
                     "quantity": {
                       "amount": 300,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 30,
-                      "unit": "BIB"
+                      "amount": 300,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1290,
+                      "cents": 129,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -323,69 +373,13 @@
                     "SPLIT_ORDER"
                   ]
                 },
-                "summary": "1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00",
+                "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00",
                 "score": {
                   "total": 0.65,
                   "onTime": 0.7,
                   "price": 1.0,
                   "sustainability": 0.0,
                   "reliabilityPenalty": 0.0
-                },
-                "tier": "better",
-                "recommended": false
-              },
-              {
-                "planId": "pln_c",
-                "lines": [
-                  {
-                    "productId": "460056",
-                    "quantity": {
-                      "amount": 1000,
-                      "unit": "l"
-                    },
-                    "salesQuantity": {
-                      "amount": 100,
-                      "unit": "BIB"
-                    },
-                    "unitPrice": {
-                      "cents": 1950,
-                      "currency": "EUR"
-                    },
-                    "comparisonPrice": {
-                      "cents": 195,
-                      "currency": "EUR",
-                      "per": "l"
-                    },
-                    "lineTotal": {
-                      "cents": 195000,
-                      "currency": "EUR"
-                    },
-                    "availableDate": "2026-11-16",
-                    "isSubstitute": true
-                  }
-                ],
-                "total": {
-                  "cents": 195000,
-                  "currency": "EUR"
-                },
-                "onTime": {
-                  "amount": 1000,
-                  "unit": "l"
-                },
-                "policy": {
-                  "light": "YELLOW",
-                  "reasons": [
-                    "OVER_ORDER_LIMIT",
-                    "SUBSTITUTION_NOT_ALLOWED"
-                  ]
-                },
-                "summary": "1 000 l Pohjola Farm, Monday (delivery reliability 62 %), €1 950,00",
-                "score": {
-                  "total": 0.499,
-                  "onTime": 1.0,
-                  "price": 0.662,
-                  "sustainability": 0.0,
-                  "reliabilityPenalty": 0.2
                 },
                 "tier": "good",
                 "recommended": false
@@ -438,22 +432,22 @@
                 "planId": "pln_a",
                 "tier": "best",
                 "recommended": true,
-                "summary": "700 l Valio + 300 l Nordlakt, all Monday, €1 653,00"
-              },
-              {
-                "planId": "pln_b",
-                "tier": "better",
-                "recommended": false,
-                "summary": "1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00"
+                "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00"
               },
               {
                 "planId": "pln_c",
+                "tier": "better",
+                "recommended": false,
+                "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00"
+              },
+              {
+                "planId": "pln_b",
                 "tier": "good",
                 "recommended": false,
-                "summary": "1 000 l Pohjola Farm, Monday (delivery reliability 62 %), €1 950,00"
+                "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00"
               }
             ],
-            "agentExplanation": "Only 700 l of Valio milk can arrive by Monday. Topping up with 300 l of Nordlakt keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
+            "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. Topping up with 300 l of Valio Eila keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
             "deadline": "2026-11-14T10:06:20+02:00",
             "createdAt": "2026-11-14T10:06:00+02:00"
           }
@@ -488,7 +482,7 @@
         "lateDelivery": "none",
         "hardConstraints": {
           "excludeAllergens": [
-            "peanut"
+            "AP"
           ],
           "requireLabels": []
         },
@@ -505,88 +499,82 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing peanut."
+        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing AP."
       },
       "steps": [
         {
           "search": {
             "results": [
               {
-                "productId": "460013",
-                "name": "Lactose-free milk drink 1.5% 10 l bag-in-box (mock)",
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "milk",
-                "salesUnit": "BIB",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 10,
+                  "amount": 1,
                   "unit": "l"
                 },
-                "labels": [
-                  "lactose_free"
-                ],
+                "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "milk",
+                  "category": "10400",
                   "kgCo2ePerKg": {
                     "min": 1.1,
-                    "max": 1.4
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.97,
+                "deliveryReliability": 1.0,
                 "excluded": null
               },
               {
-                "productId": "460063",
-                "name": "Nordlakt premium lactose-free milk 10 l (mock)",
-                "brand": "Nordlakt",
-                "category": "milk",
-                "salesUnit": "BIB",
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 10,
+                  "amount": 1,
                   "unit": "l"
                 },
-                "labels": [
-                  "lactose_free"
-                ],
+                "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "milk",
+                  "category": "10400",
                   "kgCo2ePerKg": {
                     "min": 1.1,
-                    "max": 1.4
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.91,
+                "deliveryReliability": 1.0,
                 "excluded": null
               },
               {
-                "productId": "460056",
-                "name": "Pohjola Farm lactose-free milk 10 l (mock)",
-                "brand": "Pohjola Farm",
-                "category": "milk",
-                "salesUnit": "BIB",
+                "productId": "463038",
+                "name": "Valio Eila semi-skimmed 10 l Novobox",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "KI",
                 "packSize": {
-                  "amount": 10,
+                  "amount": 20,
                   "unit": "l"
                 },
-                "labels": [
-                  "lactose_free"
-                ],
+                "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "milk",
+                  "category": "10400",
                   "kgCo2ePerKg": {
                     "min": 1.1,
-                    "max": 1.4
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.62,
+                "deliveryReliability": null,
                 "excluded": null
               }
             ],
@@ -607,9 +595,9 @@
               },
               "deadline": "2026-11-16T06:00:00+02:00",
               "candidateProductIds": [
-                "460013",
-                "460063",
-                "460056"
+                "464201",
+                "464398",
+                "463038"
               ]
             },
             "plans": [
@@ -617,17 +605,17 @@
                 "planId": "pln_a",
                 "lines": [
                   {
-                    "productId": "460013",
+                    "productId": "464201",
                     "quantity": {
                       "amount": 700,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 70,
-                      "unit": "BIB"
+                      "amount": 700,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1290,
+                      "cents": 129,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -643,17 +631,17 @@
                     "isSubstitute": false
                   },
                   {
-                    "productId": "460063",
+                    "productId": "464398",
                     "quantity": {
                       "amount": 300,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 30,
-                      "unit": "BIB"
+                      "amount": 300,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 2500,
+                      "cents": 250,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -685,7 +673,7 @@
                     "SUBSTITUTION_ALLOWED"
                   ]
                 },
-                "summary": "700 l Valio + 300 l Nordlakt, all Monday, €1 653,00",
+                "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00",
                 "score": {
                   "total": 0.734,
                   "onTime": 1.0,
@@ -697,20 +685,76 @@
                 "recommended": true
               },
               {
+                "planId": "pln_c",
+                "lines": [
+                  {
+                    "productId": "463038",
+                    "quantity": {
+                      "amount": 1000,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 50,
+                      "unit": "KI"
+                    },
+                    "unitPrice": {
+                      "cents": 3900,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 195,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 195000,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 195000,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 1000,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "SUBSTITUTION_ALLOWED"
+                  ]
+                },
+                "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00",
+                "score": {
+                  "total": 0.699,
+                  "onTime": 1.0,
+                  "price": 0.662,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "better",
+                "recommended": false
+              },
+              {
                 "planId": "pln_b",
                 "lines": [
                   {
-                    "productId": "460013",
+                    "productId": "464201",
                     "quantity": {
                       "amount": 700,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 70,
-                      "unit": "BIB"
+                      "amount": 700,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1290,
+                      "cents": 129,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -726,17 +770,17 @@
                     "isSubstitute": false
                   },
                   {
-                    "productId": "460013",
+                    "productId": "464201",
                     "quantity": {
                       "amount": 300,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 30,
-                      "unit": "BIB"
+                      "amount": 300,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1290,
+                      "cents": 129,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -768,69 +812,13 @@
                     "SPLIT_ORDER"
                   ]
                 },
-                "summary": "1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00",
+                "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00",
                 "score": {
                   "total": 0.65,
                   "onTime": 0.7,
                   "price": 1.0,
                   "sustainability": 0.0,
                   "reliabilityPenalty": 0.0
-                },
-                "tier": "better",
-                "recommended": false
-              },
-              {
-                "planId": "pln_c",
-                "lines": [
-                  {
-                    "productId": "460056",
-                    "quantity": {
-                      "amount": 1000,
-                      "unit": "l"
-                    },
-                    "salesQuantity": {
-                      "amount": 100,
-                      "unit": "BIB"
-                    },
-                    "unitPrice": {
-                      "cents": 1950,
-                      "currency": "EUR"
-                    },
-                    "comparisonPrice": {
-                      "cents": 195,
-                      "currency": "EUR",
-                      "per": "l"
-                    },
-                    "lineTotal": {
-                      "cents": 195000,
-                      "currency": "EUR"
-                    },
-                    "availableDate": "2026-11-16",
-                    "isSubstitute": true
-                  }
-                ],
-                "total": {
-                  "cents": 195000,
-                  "currency": "EUR"
-                },
-                "onTime": {
-                  "amount": 1000,
-                  "unit": "l"
-                },
-                "policy": {
-                  "light": "YELLOW",
-                  "reasons": [
-                    "OVER_ORDER_LIMIT",
-                    "SUBSTITUTION_ALLOWED"
-                  ]
-                },
-                "summary": "1 000 l Pohjola Farm, Monday (delivery reliability 62 %), €1 950,00",
-                "score": {
-                  "total": 0.499,
-                  "onTime": 1.0,
-                  "price": 0.662,
-                  "sustainability": 0.0,
-                  "reliabilityPenalty": 0.2
                 },
                 "tier": "good",
                 "recommended": false
@@ -881,22 +869,22 @@
                 "planId": "pln_a",
                 "tier": "best",
                 "recommended": true,
-                "summary": "700 l Valio + 300 l Nordlakt, all Monday, €1 653,00"
-              },
-              {
-                "planId": "pln_b",
-                "tier": "better",
-                "recommended": false,
-                "summary": "1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00"
+                "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00"
               },
               {
                 "planId": "pln_c",
+                "tier": "better",
+                "recommended": false,
+                "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00"
+              },
+              {
+                "planId": "pln_b",
                 "tier": "good",
                 "recommended": false,
-                "summary": "1 000 l Pohjola Farm, Monday (delivery reliability 62 %), €1 950,00"
+                "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00"
               }
             ],
-            "agentExplanation": "Only 700 l of Valio milk can arrive by Monday. Topping up with 300 l of Nordlakt keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
+            "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. Topping up with 300 l of Valio Eila keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
             "deadline": "2026-11-14T10:06:20+02:00",
             "createdAt": "2026-11-14T10:06:00+02:00"
           }
@@ -909,8 +897,8 @@
         "heartsLeft": 2,
         "stars": 3,
         "incident": null,
-        "receiptText": "Your agent bought 700 l of Valio and 300 l of Nordlakt, all arriving Monday. You approved once because the total €1 653,00 was above your €500 limit.",
-        "logHeadHash": "sha256:921d6959b5c93b6b",
+        "receiptText": "Your agent bought 700 l of Valio semi-skimmed and 300 l of Valio Eila, all arriving Monday. You approved once because the total €1 653,00 was above your €500 limit.",
+        "logHeadHash": "sha256:958a4cf57431ee4f",
         "approvalsAsked": 1
       },
       "log": [
@@ -1083,7 +1071,7 @@
         "lateDelivery": "one_day",
         "hardConstraints": {
           "excludeAllergens": [
-            "peanut"
+            "AP"
           ],
           "requireLabels": []
         },
@@ -1100,88 +1088,82 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €2000 per order, with any substitute and deliveries up to one day late, never products containing peanut."
+        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €2000 per order, with any substitute and deliveries up to one day late, never products containing AP."
       },
       "steps": [
         {
           "search": {
             "results": [
               {
-                "productId": "460013",
-                "name": "Lactose-free milk drink 1.5% 10 l bag-in-box (mock)",
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "milk",
-                "salesUnit": "BIB",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 10,
+                  "amount": 1,
                   "unit": "l"
                 },
-                "labels": [
-                  "lactose_free"
-                ],
+                "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "milk",
+                  "category": "10400",
                   "kgCo2ePerKg": {
                     "min": 1.1,
-                    "max": 1.4
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.97,
+                "deliveryReliability": 1.0,
                 "excluded": null
               },
               {
-                "productId": "460063",
-                "name": "Nordlakt premium lactose-free milk 10 l (mock)",
-                "brand": "Nordlakt",
-                "category": "milk",
-                "salesUnit": "BIB",
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 10,
+                  "amount": 1,
                   "unit": "l"
                 },
-                "labels": [
-                  "lactose_free"
-                ],
+                "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "milk",
+                  "category": "10400",
                   "kgCo2ePerKg": {
                     "min": 1.1,
-                    "max": 1.4
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.91,
+                "deliveryReliability": 1.0,
                 "excluded": null
               },
               {
-                "productId": "460056",
-                "name": "Pohjola Farm lactose-free milk 10 l (mock)",
-                "brand": "Pohjola Farm",
-                "category": "milk",
-                "salesUnit": "BIB",
+                "productId": "463038",
+                "name": "Valio Eila semi-skimmed 10 l Novobox",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "KI",
                 "packSize": {
-                  "amount": 10,
+                  "amount": 20,
                   "unit": "l"
                 },
-                "labels": [
-                  "lactose_free"
-                ],
+                "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "milk",
+                  "category": "10400",
                   "kgCo2ePerKg": {
                     "min": 1.1,
-                    "max": 1.4
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.62,
+                "deliveryReliability": null,
                 "excluded": null
               }
             ],
@@ -1202,9 +1184,9 @@
               },
               "deadline": "2026-11-16T06:00:00+02:00",
               "candidateProductIds": [
-                "460013",
-                "460063",
-                "460056"
+                "464201",
+                "464398",
+                "463038"
               ]
             },
             "plans": [
@@ -1212,17 +1194,17 @@
                 "planId": "pln_b",
                 "lines": [
                   {
-                    "productId": "460013",
+                    "productId": "464201",
                     "quantity": {
                       "amount": 700,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 70,
-                      "unit": "BIB"
+                      "amount": 700,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1290,
+                      "cents": 129,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -1238,17 +1220,17 @@
                     "isSubstitute": false
                   },
                   {
-                    "productId": "460013",
+                    "productId": "464201",
                     "quantity": {
                       "amount": 300,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 30,
-                      "unit": "BIB"
+                      "amount": 300,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1290,
+                      "cents": 129,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -1278,7 +1260,7 @@
                     "SPLIT_ORDER"
                   ]
                 },
-                "summary": "1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00",
+                "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00",
                 "score": {
                   "total": 0.71,
                   "onTime": 0.7,
@@ -1293,17 +1275,17 @@
                 "planId": "pln_a",
                 "lines": [
                   {
-                    "productId": "460013",
+                    "productId": "464201",
                     "quantity": {
                       "amount": 700,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 70,
-                      "unit": "BIB"
+                      "amount": 700,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1290,
+                      "cents": 129,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -1319,17 +1301,17 @@
                     "isSubstitute": false
                   },
                   {
-                    "productId": "460063",
+                    "productId": "464398",
                     "quantity": {
                       "amount": 300,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 30,
-                      "unit": "BIB"
+                      "amount": 300,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 2500,
+                      "cents": 250,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -1360,7 +1342,7 @@
                     "SUBSTITUTION_ALLOWED"
                   ]
                 },
-                "summary": "700 l Valio + 300 l Nordlakt, all Monday, €1 653,00",
+                "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00",
                 "score": {
                   "total": 0.69,
                   "onTime": 1.0,
@@ -1375,17 +1357,17 @@
                 "planId": "pln_c",
                 "lines": [
                   {
-                    "productId": "460056",
+                    "productId": "463038",
                     "quantity": {
                       "amount": 1000,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 100,
-                      "unit": "BIB"
+                      "amount": 50,
+                      "unit": "KI"
                     },
                     "unitPrice": {
-                      "cents": 1950,
+                      "cents": 3900,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
@@ -1415,13 +1397,13 @@
                     "SUBSTITUTION_ALLOWED"
                   ]
                 },
-                "summary": "1 000 l Pohjola Farm, Monday (delivery reliability 62 %), €1 950,00",
+                "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00",
                 "score": {
-                  "total": 0.431,
+                  "total": 0.631,
                   "onTime": 1.0,
                   "price": 0.662,
                   "sustainability": 0.0,
-                  "reliabilityPenalty": 0.2
+                  "reliabilityPenalty": 0.0
                 },
                 "tier": "good",
                 "recommended": false
@@ -1456,17 +1438,17 @@
               "status": "ORDERED",
               "lines": [
                 {
-                  "productId": "460013",
+                  "productId": "464201",
                   "quantity": {
                     "amount": 700,
                     "unit": "l"
                   },
                   "salesQuantity": {
-                    "amount": 70,
-                    "unit": "BIB"
+                    "amount": 700,
+                    "unit": "ST"
                   },
                   "unitPrice": {
-                    "cents": 1290,
+                    "cents": 129,
                     "currency": "EUR"
                   },
                   "comparisonPrice": {
@@ -1482,17 +1464,17 @@
                   "isSubstitute": false
                 },
                 {
-                  "productId": "460013",
+                  "productId": "464201",
                   "quantity": {
                     "amount": 300,
                     "unit": "l"
                   },
                   "salesQuantity": {
-                    "amount": 30,
-                    "unit": "BIB"
+                    "amount": 300,
+                    "unit": "ST"
                   },
                   "unitPrice": {
-                    "cents": 1290,
+                    "cents": 129,
                     "currency": "EUR"
                   },
                   "comparisonPrice": {
@@ -1525,8 +1507,8 @@
         "heartsLeft": 3,
         "stars": 1,
         "incident": null,
-        "receiptText": "Your agent did exactly what your mandate allowed: it picked the cheapest plan, 1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00. One day late was allowed, so it never asked you. Monday breakfast was 300 l short.",
-        "logHeadHash": "sha256:196be6fce08f6201",
+        "receiptText": "Your agent did exactly what your mandate allowed: it picked the cheapest plan, 1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00. One day late was allowed, so it never asked you. Monday breakfast was 300 l short.",
+        "logHeadHash": "sha256:11681b1682fbbd64",
         "approvalsAsked": 0
       }
     }
@@ -1552,8 +1534,8 @@
         "heartsLeft": 2,
         "stars": 3,
         "incident": null,
-        "receiptText": "Your agent bought 700 l of Valio and 300 l of Nordlakt, all arriving Monday. You approved once because the total €1 653,00 was above your €500 limit.",
-        "logHeadHash": "sha256:921d6959b5c93b6b",
+        "receiptText": "Your agent bought 700 l of Valio semi-skimmed and 300 l of Valio Eila, all arriving Monday. You approved once because the total €1 653,00 was above your €500 limit.",
+        "logHeadHash": "sha256:958a4cf57431ee4f",
         "approvalsAsked": 1
       },
       "loose": {
@@ -1563,8 +1545,8 @@
         "heartsLeft": 3,
         "stars": 1,
         "incident": null,
-        "receiptText": "Your agent did exactly what your mandate allowed: it picked the cheapest plan, 1 000 l Valio: 700 l Monday + 300 l Tuesday, €1 290,00. One day late was allowed, so it never asked you. Monday breakfast was 300 l short.",
-        "logHeadHash": "sha256:196be6fce08f6201",
+        "receiptText": "Your agent did exactly what your mandate allowed: it picked the cheapest plan, 1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00. One day late was allowed, so it never asked you. Monday breakfast was 300 l short.",
+        "logHeadHash": "sha256:11681b1682fbbd64",
         "approvalsAsked": 0
       }
     }
