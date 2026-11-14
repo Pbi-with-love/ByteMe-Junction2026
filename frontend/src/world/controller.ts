@@ -7,4 +7,5 @@ export interface WorldController {
   carry(on: boolean): void;
   say(text: string | null): void;
   burst(kind: BurstKind): void;
+  ring(on: boolean): void;
 }

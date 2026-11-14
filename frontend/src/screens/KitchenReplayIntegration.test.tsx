@@ -22,7 +22,7 @@ describe('KitchenScreen replay integration', () => {
     const startLevel = vi.spyOn(client, 'startLevel');
     const start = await client.startLevel(level.start.level.levelId, preset);
     const presets = Object.fromEntries(Object.entries(level.presets).map(([key, value]) => [key, value.mandate])) as Record<string, Mandate>;
-    render(<KitchenScreen client={client} start={start} presets={presets} discovery={discovery.response as Discovery} onExit={() => {}} />);
+    render(<KitchenScreen client={client} start={start} presets={presets} discovery={discovery.response as Discovery} onExit={() => {}} onPlayAgain={() => {}} />);
     fireEvent.click(await screen.findByRole('button', { name: 'Manager Desk' }));
     fireEvent.click(screen.getByRole('button', { name: 'Write the mandate' }));
     fireEvent.click(screen.getByRole('button', { name: labelFor(preset) }));
@@ -34,10 +34,8 @@ describe('KitchenScreen replay integration', () => {
     expect(screen.getByRole('log', { name: 'Activity log' })).toHaveTextContent('No agent activity yet.');
     fireEvent.click(screen.getByRole('button', { name: 'Send to agent' }));
     expect(startLevel).toHaveBeenCalledOnce();
-    vi.useFakeTimers();
-    await act(async () => { await vi.runAllTimersAsync(); });
-    vi.useRealTimers();
-    expect(await screen.findByRole('dialog', { name: 'The agent is done.' })).toBeInTheDocument();
+    for (const step of recording.steps) if(step.approval?.status==='OPEN') fireEvent.click(await screen.findByRole('button',{name:'Approve'}, {timeout:15000}));
+    expect(await screen.findByRole('dialog', { name: 'The agent is done.' }, {timeout:15000})).toBeInTheDocument();
 
     const expected = recording.steps.flatMap((step, index) => toTimelineEntries(step, index));
     const log = screen.getByRole('log', { name: 'Activity log' });
@@ -58,5 +56,5 @@ describe('KitchenScreen replay integration', () => {
       expect(cards[3]!.getAttribute('data-entry-id')).toBe('1-search');
     }
     vi.useRealTimers();
-  });
+  },30000);
 });

@@ -1,4 +1,4 @@
-import type { AgentStep, Compare, Discovery, GameResult, GameStart, Mandate } from './schemas';
+import type { AgentStep, Approval, ApprovalDecision, Compare, Discovery, GameResult, GameStart, Mandate } from './schemas';
 
 export type MandateDraft = Omit<Mandate, 'mandateId' | 'customerId' | 'issuedAt' | 'status' | 'signature' | 'summaryText'>;
 import { HttpGatewayClient } from './http';
@@ -14,6 +14,8 @@ export interface GatewayClient {
   compare(levelId: string): Promise<Compare>;
   presets(levelId: string): Promise<Record<string, Mandate>>;
   signMandate(sessionId: string, draft: MandateDraft): Promise<Mandate>;
+  decideApproval(approvalId: string, decision: 'approved' | 'rejected' | 'alternative', planId?: string): Promise<ApprovalDecision>;
+  getApproval(approvalId: string): Promise<Approval>;
 }
 
 export class GatewayError extends Error {

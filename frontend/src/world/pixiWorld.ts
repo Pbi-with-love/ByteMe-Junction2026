@@ -42,7 +42,9 @@ export async function createPixiWorld(host: HTMLElement, opts: { reducedMotion: 
   }
   for(const p of PLANT_TILES)tile(propsStations,'plant',p.x*TILE,MAP_ORIGIN.y+p.y*TILE);
   tile(propsStations,'crate_stack',CRATE_TILE.x*TILE,MAP_ORIGIN.y+CRATE_TILE.y*TILE);
-  for(const id of Object.keys(STATIONS) as StationId[]){const r=stationRect(id);tile(propsStations,id,r.x,r.y);}
+  const phoneRect=stationRect('phone');
+  const phoneStation=tile(propsStations,'phone',phoneRect.x,phoneRect.y);
+  for(const id of (Object.keys(STATIONS) as StationId[]).filter(id=>id!=='phone')){const r=stationRect(id);tile(propsStations,id,r.x,r.y);}
 
   const manager=tile(actors,'manager_idle_0',0,0), courier=tile(actors,'courier_idle_0',0,0);
   manager.x=MANAGER_TILE.x*TILE;manager.y=MAP_ORIGIN.y+MANAGER_TILE.y*TILE;
@@ -51,7 +53,7 @@ export async function createPixiWorld(host: HTMLElement, opts: { reducedMotion: 
   const highlightGraphic=new Graphics(); overlay.addChild(highlightGraphic);
   type Burst={kind:BurstKind;started:number;sprites:Sprite[]};
   const bursts=new Set<Burst>();
-  let position={...ROBOT_START}, target={...ROBOT_START}, start={...ROBOT_START}, elapsed=0, moving=false, state:RobotState='idle', hasBox=false, selected:StationId|null=null, time=0, currentStation:StationId='terminal', segmentStep:{dx:-1|0|1;dy:-1|0|1}|null=null, anim:Anim='idle', animStarted=0, lastDelivered:number|null=null, destroyed=false;
+  let position={...ROBOT_START}, target={...ROBOT_START}, start={...ROBOT_START}, elapsed=0, moving=false, state:RobotState='idle', hasBox=false, selected:StationId|null=null, ringing=false, time=0, currentStation:StationId='terminal', segmentStep:{dx:-1|0|1;dy:-1|0|1}|null=null, anim:Anim='idle', animStarted=0, lastDelivered:number|null=null, destroyed=false;
   const moveListeners=new Set<(p:Point)=>void>(), arrivalListeners=new Set<(s:StationId)=>void>();
   const emitMove=()=>moveListeners.forEach(cb=>cb({x:position.x+8,y:position.y}));
   const updateRobot=()=>{
@@ -69,16 +71,16 @@ export async function createPixiWorld(host: HTMLElement, opts: { reducedMotion: 
     updateRobot();
     const managerSet=managerAnim(state,currentStation);manager.texture=texture(frameAt(managerSet,Math.max(0,time-animStarted),opts.reducedMotion));
     if(lastDelivered!==null){courier.visible=true;const courierSet=courierAnim(time-lastDelivered)!;courier.texture=texture(frameAt(courierSet,time-lastDelivered,opts.reducedMotion));}
-    highlightGraphic.clear();if(selected){const r=stationRect(selected);highlightGraphic.rect(r.x,r.y,r.w,r.h).stroke({color:colour('s'),width:1});}
+    highlightGraphic.clear();if(selected){const r=stationRect(selected);highlightGraphic.rect(r.x,r.y,r.w,r.h).stroke({color:colour('s'),width:1});}if(ringing&&opts.reducedMotion)highlightGraphic.rect(phoneRect.x-1,phoneRect.y-1,phoneRect.w+2,phoneRect.h+2).stroke({color:colour('Y'),width:1});
     updateParticles();
   };
-  const ticker=()=>{time+=app.ticker.deltaMS;if(moving){elapsed+=app.ticker.deltaMS;if(route){const at=pathAt(route,elapsed);position=at.p;segmentStep={dx:at.dx,dy:at.dy};emitMove();if(elapsed>=routeDuration)finishWalk();}else{position=tweenAt(start,target,elapsed);segmentStep={dx:Math.sign(target.x-start.x) as -1|0|1,dy:Math.sign(target.y-start.y) as -1|0|1};emitMove();if(elapsed>=tweenMs(start,target))finishWalk();}}redraw();};
+  const ticker=()=>{time+=app.ticker.deltaMS;phoneStation.x=phoneRect.x+(ringing&&!opts.reducedMotion&&Math.floor(time/100)%2===0?1:ringing&&!opts.reducedMotion?-1:0);if(moving){elapsed+=app.ticker.deltaMS;if(route){const at=pathAt(route,elapsed);position=at.p;segmentStep={dx:at.dx,dy:at.dy};emitMove();if(elapsed>=routeDuration)finishWalk();}else{position=tweenAt(start,target,elapsed);segmentStep={dx:Math.sign(target.x-start.x) as -1|0|1,dy:Math.sign(target.y-start.y) as -1|0|1};emitMove();if(elapsed>=tweenMs(start,target))finishWalk();}}redraw();};
   let route:Point[]|null=null,routeDuration=0,walkResolve:(()=>void)|null=null,walkTarget:StationId|null=null;
   const finishWalk=()=>{if(!walkTarget)return;const id=walkTarget;moving=false;position={...target};segmentStep=null;currentStation=id;walkTarget=null;const resolve=walkResolve;walkResolve=null;emitMove();arrivalListeners.forEach(cb=>cb(id));resolve?.();};
   app.ticker.add(ticker);
   const controller:PixiWorld={
     walkTo(id){if(destroyed)return Promise.resolve();if(walkResolve){walkResolve();walkResolve=null;}const next=accessPoint(id);const points=stationPath(currentStation,id);route=points.length?points:null;routeDuration=route?route.slice(1).length*125:0;start={...position};target=next;elapsed=0;walkTarget=id;if(opts.reducedMotion||sameTile(position,next)){position={...next};moving=false;segmentStep=null;currentStation=id;emitMove();arrivalListeners.forEach(cb=>cb(id));redraw();return Promise.resolve();}if(!route){routeDuration=tweenMs(start,target);}moving=true;return new Promise<void>(resolve=>{walkResolve=resolve;});},
-    setRobotState(s){state=s;animStarted=time;redraw();},carry(on){hasBox=on;animStarted=time;redraw();},burst(kind){if(opts.reducedMotion)return;if(kind==='delivered')lastDelivered=time;const count=kind==='stamp'?10:12;const sprites=Array.from({length:count},()=>new Sprite(Texture.EMPTY));particles.addChild(...sprites);bursts.add({kind,started:time,sprites});},highlight(id){selected=id;redraw();},
+    setRobotState(s){state=s;animStarted=time;redraw();},carry(on){hasBox=on;animStarted=time;redraw();},burst(kind){if(opts.reducedMotion)return;if(kind==='delivered')lastDelivered=time;const count=kind==='stamp'?10:12;const sprites=Array.from({length:count},()=>new Sprite(Texture.EMPTY));particles.addChild(...sprites);bursts.add({kind,started:time,sprites});},highlight(id){selected=id;redraw();},ring(on){ringing=on;if(!on)phoneStation.x=phoneRect.x;redraw();},
     onRobotMove(cb){moveListeners.add(cb);cb({x:position.x+8,y:position.y});return()=>moveListeners.delete(cb);},
     onArrived(cb){arrivalListeners.add(cb);return()=>arrivalListeners.delete(cb);},destroy(){destroyed=true;app.ticker.remove(ticker);if(walkResolve){walkResolve();walkResolve=null;}bursts.clear();app.destroy(true,{children:true,texture:true,textureSource:true});host.replaceChildren();},
   };

@@ -24,3 +24,11 @@ export function directStep(step:DirectorStep):WorldCommand[]{
  else {const err=order.body as ErrorEnvelope;commands.push({kind:'mark',entry:'order'},{kind:'state',state:'idle'},{kind:'say',text:`${err.error.code}: ${err.error.message}`},hold());}
  return commands;
 }
+
+export function directDecision(settled: { status: string; orderStatus?: string }): WorldCommand[] {
+ if (settled.orderStatus === 'ORDERED' || settled.orderStatus === 'CONFIRMED') return [
+  {kind:'carry',on:true},{kind:'walk',to:'delivery'},{kind:'state',state:'idle'},
+  {kind:'say',text:`Order ${settled.orderStatus}`},{kind:'burst',burst:'delivered'},hold(),{kind:'carry',on:false},
+ ];
+ return [{kind:'state',state:'idle'},{kind:'say',text:`Approval ${settled.status}`},hold()];
+}

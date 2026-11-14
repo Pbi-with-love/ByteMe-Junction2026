@@ -6,15 +6,31 @@ import level3 from '../../mocks/level3.json';
 import { createGatewayClient, GatewayError } from './gateway';
 import type { LevelMock, Mandate } from './schemas';
 import { controlsOf, toDraft } from './mandate';
-import { ReplayGatewayClient } from './replay';
+import { decisionKey, ReplayGatewayClient } from './replay';
 
 const mocks = [level1, level2, level3] as unknown as LevelMock[];
 
+async function playRecordedPath(client: ReplayGatewayClient, sessionId: string, recording: LevelMock['presets'][string]) {
+ const expectedKey=Object.entries(recording.outcomes??{}).find(([,outcome])=>JSON.stringify(outcome.result)===JSON.stringify(recording.result))?.[0]??'';
+ const choices=expectedKey?expectedKey.split(','):[];let index=0;
+ for(const expected of recording.steps){const step=await client.nextStep(sessionId);if(step?.approval?.status==='OPEN'){const choice=choices[index++]??'approved';if(choice==='rejected'||choice==='approved')await client.decideApproval(step.approval.approvalId,choice);else if(choice.startsWith('alternative:'))await client.decideApproval(step.approval.approvalId,'alternative',choice.slice('alternative:'.length));}}
+}
+
 describe('ReplayGatewayClient', () => {
+  it('replays approval decisions once and keys results by the decision path',async()=>{
+    expect(decisionKey(['approved','alternative:pln_b'])).toBe('approved,alternative:pln_b');expect(decisionKey([])).toBe('');
+    const client=new ReplayGatewayClient();const start=await client.startLevel('level1','balanced');
+    const decision=await client.decideApproval('apr_l1_balanced','approved');
+    expect(decision).toEqual(level1.presets.balanced.decisions.apr_l1_balanced.approved.body);
+    await expect(client.decideApproval('apr_l1_balanced','approved')).rejects.toMatchObject({code:'INVALID_STATE',httpStatus:409});
+    expect(await client.getApproval('apr_l1_balanced')).toMatchObject(decision);
+    expect(start.sessionId).toBeTruthy();
+  });
   it('returns each recording’s log and verification with exclusive since and limit', async () => {
     const client = new ReplayGatewayClient();
     for (const mock of mocks) for (const [preset, recording] of Object.entries(mock.presets)) {
       const start = await client.startLevel(mock.start.level.levelId, preset);
+      await playRecordedPath(client,start.sessionId,recording);
       expect(await client.getLog('buyer')).toEqual({ events: recording.log });
       expect(await client.verifyLog()).toEqual(recording.verify);
       expect(await client.getLog('buyer', { since: recording.log![0]!.seq, limit: 1 })).toEqual({ events: recording.log!.slice(1, 2) });
@@ -30,6 +46,8 @@ describe('ReplayGatewayClient', () => {
     const client = createGatewayClient({ VITE_GATEWAY_MODE: 'replay', VITE_REPLAY_TAMPER: '1' }) as ReplayGatewayClient;
     const mock = mocks.find((item) => item.tamperedDemo)!;
     const start = await client.startLevel(mock.start.level.levelId, mock.tamperedDemo!.preset);
+    const recording=mock.presets[mock.tamperedDemo!.preset]!;
+    await playRecordedPath(client,start.sessionId,recording);
     expect(await client.getLog('buyer')).toEqual({ events: mock.tamperedDemo!.log });
     expect(await client.verifyLog()).toEqual(mock.tamperedDemo!.verify);
     expect(await client.getLog('buyer', { since: 1, limit: 1 })).toEqual({ events: mock.tamperedDemo!.log.filter((event) => event.seq > 1).slice(0, 1) });
@@ -41,7 +59,8 @@ describe('ReplayGatewayClient', () => {
     await expect(client.verifyLog()).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
     await expect(client.getLog('valio')).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
     const start = await client.startLevel('level1', 'balanced');
-    await expect(client.getLog('valio')).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
+    await playRecordedPath(client,start.sessionId,level1.presets.balanced as unknown as LevelMock['presets'][string]);
+    await expect(client.getLog('valio')).resolves.toEqual({events:level1.presets.balanced.outcomes.approved.valioLog});
     expect(start.sessionId).toBeTruthy();
   });
   it('looks up starts, steps, results, comparisons, and discovery directly from mocks', async () => {
@@ -52,7 +71,11 @@ describe('ReplayGatewayClient', () => {
       for (const [preset, recording] of Object.entries(mock.presets)) {
         const start = await client.startLevel(mock.start.level.levelId, preset);
         expect(start).toEqual(mock.start);
-        const steps = await Promise.all(recording.steps.map(() => client.nextStep(start.sessionId)));
+        const steps = [];
+        for (const expected of recording.steps) {
+          const step = await client.nextStep(start.sessionId); steps.push(step);
+          if (step?.approval?.status === 'OPEN') { const choice=Object.keys(recording.outcomes??{}).find(key=>JSON.stringify(recording.outcomes![key]!.result)===JSON.stringify(recording.result))?.split(',')[steps.filter(s=>s?.approval?.status==='OPEN').length-1]??'approved'; if(choice==='approved'||choice==='rejected')await client.decideApproval(step.approval.approvalId,choice);else if(choice.startsWith('alternative:'))await client.decideApproval(step.approval.approvalId,'alternative',choice.slice(12)); }
+        }
         expect(steps).toEqual(recording.steps);
         expect(await client.nextStep(start.sessionId)).toBeNull();
         expect(await client.getResult(start.sessionId)).toEqual(recording.result);

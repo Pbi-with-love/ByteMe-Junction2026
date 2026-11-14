@@ -17,6 +17,8 @@ function makeClient(discovery: () => Promise<Discovery>): GatewayClient {
     compare: async () => { throw new Error('unused'); },
     presets: async () => ({}),
     signMandate: async () => { throw new Error('unused'); },
+    decideApproval: async () => { throw new Error('unused'); },
+    getApproval: async () => { throw new Error('unused'); },
   };
 }
 
@@ -61,5 +63,29 @@ describe('level shell', () => {
     const clipboard = await screen.findByRole('dialog', { name: 'Valtakirja' });
     expect(within(clipboard).getAllByRole('heading', { name: 'Valtakirja' })).toHaveLength(1);
     expect(clipboard.querySelector('.mandate-doc')).toBeNull();
+  });
+
+  it('starts a fresh same-level session from the result Play again action',async()=>{
+    const client=makeClient(async()=>discoveryData.response as Discovery);
+    const preset=Object.values(LEVEL_MOCKS[0]!.presets)[1]!.mandate;
+    client.presets=vi.fn(async()=>({balanced:preset}));
+    client.signMandate=vi.fn(async()=>preset);
+    client.startLevel=vi.fn()
+      .mockResolvedValueOnce({...LEVEL_MOCKS[0]!.start,sessionId:'session-first'})
+      .mockResolvedValueOnce({...LEVEL_MOCKS[0]!.start,sessionId:'session-restarted'});
+    render(<App client={client}/>);
+    fireEvent.click((await screen.findAllByRole('button',{name:'Start level'}))[0]!);
+    await waitFor(()=>expect(client.startLevel).toHaveBeenCalledTimes(1));
+    fireEvent.click(await screen.findByRole('button',{name:'Manager Desk'}));
+    fireEvent.click(await screen.findByRole('button',{name:'Write the mandate'}));
+    fireEvent.click(await screen.findByRole('button',{name:'Balanced'}));
+    fireEvent.click(await screen.findByRole('button',{name:'Sign mandate'}));
+    fireEvent.keyDown(document,{key:'Escape'});
+    fireEvent.click(await screen.findByRole('button',{name:'Order Terminal'}));
+    fireEvent.click(await screen.findByRole('button',{name:'Send to agent'}));
+    fireEvent.click(await screen.findByRole('button',{name:'See result'}));
+    fireEvent.click(await screen.findByRole('button',{name:'Play again'}));
+    await waitFor(()=>expect(client.startLevel).toHaveBeenCalledTimes(2));
+    expect(client.startLevel).toHaveBeenLastCalledWith('level1','balanced');
   });
 });

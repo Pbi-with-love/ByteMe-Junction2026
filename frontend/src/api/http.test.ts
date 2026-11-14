@@ -74,6 +74,21 @@ describe('HttpGatewayClient', () => {
     expect(fetchMock).toHaveBeenCalledTimes(count);
   });
 
+  it('posts and gets approval decisions with the human bearer token and validates alternatives', async () => {
+    const body=level1.presets.balanced.decisions.apr_l1_balanced.approved.body;
+    const fetchMock=vi.fn().mockResolvedValueOnce(response(level1.start)).mockResolvedValueOnce(response(body)).mockResolvedValueOnce(response(level1.presets.balanced.steps[0]!.approval));
+    vi.stubGlobal('fetch',fetchMock);const client=new HttpGatewayClient('http://gw.test');
+    await client.startLevel('level1','balanced');
+    expect(await client.decideApproval('apr_l1_balanced','approved')).toEqual(body);
+    expect(fetchMock.mock.calls[1]![0]).toBe('http://gw.test/v1/approvals/apr_l1_balanced');
+    expect(fetchMock.mock.calls[1]![1]).toMatchObject({method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${level1.start.tokens.human}`},body:'{"decision":"approved"}'});
+    expect(await client.getApproval('apr_l1_balanced')).toEqual(level1.presets.balanced.steps[0]!.approval);
+    expect(fetchMock.mock.calls[2]![1]?.headers).toMatchObject({Authorization:`Bearer ${level1.start.tokens.human}`});
+    const calls=fetchMock.mock.calls.length;
+    await expect(client.decideApproval('apr_l1_balanced','alternative')).rejects.toMatchObject({code:'VALIDATION_ERROR'});
+    expect(fetchMock).toHaveBeenCalledTimes(calls);
+  });
+
   it('maps error envelopes, bare HTTP errors, network failures, and invalid responses', async () => {
     const client = new HttpGatewayClient('http://gw.test');
     const fetchMock = vi.fn()

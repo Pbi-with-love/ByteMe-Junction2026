@@ -76,11 +76,13 @@ export const RecordedOrderSchema = z.discriminatedUnion('httpStatus', [
 ]);
 export type RecordedOrder = z.infer<typeof RecordedOrderSchema>;
 export const ApprovalSchema = z.object({
-  approvalId: text, orderId: text, quoteId: text, status: text, reasons: z.array(ReasonCodeSchema), reasonText: text,
+  approvalId: text, orderId: text, quoteId: text, status: z.enum(['OPEN','APPROVED','REJECTED','EXPIRED']), reasons: z.array(ReasonCodeSchema), reasonText: text,
   options: z.array(z.object({ planId: text, tier: optionalText, recommended: z.boolean().optional(), summary: text })),
   agentExplanation: text.optional(), deadline: dateTime, createdAt: dateTime,
-});
+}).passthrough();
 export type Approval = z.infer<typeof ApprovalSchema>;
+export const ApprovalDecisionSchema = ApprovalSchema.extend({ decision: text, orderStatus: text });
+export type ApprovalDecision = z.infer<typeof ApprovalDecisionSchema>;
 export const LogEventSchema = z.object({
   seq: z.number().int(), eventId: text, at: dateTime, actor: z.enum(['agent', 'human', 'gateway', 'scenario']), type: text,
   customerId: text, agentId: text, requestId: text, light: LightSchema.nullable(), reasons: z.array(ReasonCodeSchema),
@@ -139,7 +141,9 @@ export type AgentStep = z.infer<typeof AgentStepSchema>;
 export const LevelMockSchema = z.object({
   start: GameStartSchema,
   presets: z.record(text, z.object({
-    mandate: MandateSchema, steps: z.array(AgentStepSchema), result: GameResultSchema, log: z.array(LogEventSchema).optional(), verify: LogVerifySchema.optional(),
+    mandate: MandateSchema, steps: z.array(AgentStepSchema), result: GameResultSchema, log: z.array(LogEventSchema).optional(), valioLog: z.array(LogEventSchema).optional(), verify: LogVerifySchema.optional(),
+    decisions: z.record(text, z.object({ approved: z.object({httpStatus:z.number().int(),body:z.unknown()}), rejected:z.object({httpStatus:z.number().int(),body:z.unknown()}), alternative:z.record(text,z.object({httpStatus:z.number().int(),body:z.unknown()})), expired:z.object({httpStatus:z.number().int(),body:z.unknown()}), conflict:z.object({httpStatus:z.number().int(),body:z.unknown()}) })).optional(),
+    outcomes: z.record(text,z.looseObject({result:GameResultSchema})).optional(),
   })),
   tamperedDemo: z.object({ preset: text, log: z.array(LogEventSchema), verify: LogVerifySchema }).optional(),
   compare: CompareSchema,

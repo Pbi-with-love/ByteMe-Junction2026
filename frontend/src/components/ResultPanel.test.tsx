@@ -13,6 +13,7 @@ describe('ResultPanel', () => {
   it('loads result, log, and verification; shows gateway values and actions', async () => {
     const client = new ReplayGatewayClient();
     const start = await client.startLevel('level1', 'balanced');
+    for (const step of level1.presets.balanced.steps) if (step.approval?.status === 'OPEN') await client.decideApproval(step.approval.approvalId, 'approved');
     const onLoaded = vi.fn();
     const onPlayAgain = vi.fn();
     render(<ResultPanel client={client} sessionId={start.sessionId} startHearts={start.hearts} onLoaded={onLoaded} onPlayAgain={onPlayAgain} />);

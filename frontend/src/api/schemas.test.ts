@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   DiscoverySchema,
+  ApprovalSchema,
+  ApprovalDecisionSchema,
   AgentStepSchema,
   GameResultSchema,
   LevelMockSchema,
@@ -19,6 +21,12 @@ const mocks = import.meta.glob('../../mocks/*.json', {
 }) as Record<string, unknown>;
 
 describe('gateway schemas', () => {
+  it('validates gateway approval states and decision response fields',()=>{
+    const raw=(mocks['../../mocks/level1.json'] as {presets:Record<string,{decisions:Record<string,{approved:{body:unknown}}>} >}).presets.balanced.decisions.apr_l1_balanced.approved.body;
+    expect(ApprovalDecisionSchema.parse(raw)).toHaveProperty('orderStatus','CONFIRMED');
+    expect(ApprovalSchema.safeParse({...raw as object,status:'CLOSED'}).success).toBe(false);
+    expect(ApprovalSchema.parse(raw)).toHaveProperty('status','APPROVED');
+  });
   it('validates log envelopes and both verification states', () => {
     expect(LogResponseSchema.safeParse({ events: [] }).success).toBe(true);
     expect(LogResponseSchema.safeParse({ events: 'x' }).success).toBe(false);

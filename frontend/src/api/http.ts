@@ -1,4 +1,4 @@
-import { CompareSchema, DiscoverySchema, ErrorEnvelopeSchema, GameResultSchema, GameStartSchema, LogResponseSchema, LogVerifySchema, MandateSchema } from './schemas';
+import { ApprovalDecisionSchema, ApprovalSchema, CompareSchema, DiscoverySchema, ErrorEnvelopeSchema, GameResultSchema, GameStartSchema, LogResponseSchema, LogVerifySchema, MandateSchema } from './schemas';
 import { GatewayError, type GatewayClient } from './gateway';
 import type { AgentStep, Compare, Discovery, GameResult, GameStart, Mandate } from './schemas';
 import type { MandateDraft } from './gateway';
@@ -60,6 +60,16 @@ export class HttpGatewayClient implements GatewayClient {
 
   signMandate(_sessionId: string, draft: MandateDraft): Promise<Mandate> {
     return this.request('/v1/mandates', MandateSchema, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(draft) });
+  }
+
+  decideApproval(approvalId: string, decision: 'approved' | 'rejected' | 'alternative', planId?: string) {
+    if (decision === 'alternative' && !planId) return Promise.reject(new GatewayError('VALIDATION_ERROR', 'planId is required for an alternative decision', 400));
+    const body = decision === 'alternative' ? { decision, planId } : { decision };
+    return this.request(`/v1/approvals/${encodeURIComponent(approvalId)}`, ApprovalDecisionSchema, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  }
+
+  getApproval(approvalId: string) {
+    return this.request(`/v1/approvals/${encodeURIComponent(approvalId)}`, ApprovalSchema);
   }
 
   async nextStep(_sessionId: string): Promise<AgentStep | null> {
