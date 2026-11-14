@@ -44,7 +44,7 @@ def test_compare_ignores_live_explanation_delay(tmp_path, monkeypatch):
 
 
 def test_level1_balanced_asgi_run_finishes_with_verified_log(tmp_path, monkeypatch):
-    monkeypatch.delenv('ANTHROPIC_API_KEY', raising=False)
+    monkeypatch.delenv('VERDA_API_KEY', raising=False)
     monkeypatch.setenv('VALIO_MODE', 'replay')
     app = create_app(tmp_path / 'integration.sqlite3')
     with TestClient(app) as client:
@@ -79,7 +79,7 @@ def test_level1_balanced_asgi_run_finishes_with_verified_log(tmp_path, monkeypat
 
 
 def test_level3_approval_step_carries_allergen_disclosure_even_when_search_is_empty(tmp_path, monkeypatch):
-    monkeypatch.delenv('ANTHROPIC_API_KEY', raising=False)
+    monkeypatch.delenv('VERDA_API_KEY', raising=False)
     monkeypatch.setenv('VALIO_MODE', 'replay')
     app = create_app(tmp_path / 'level3-disclosure.sqlite3')
     with TestClient(app) as client:
@@ -107,12 +107,12 @@ def test_level3_approval_step_carries_allergen_disclosure_even_when_search_is_em
 
 def test_live_game_session_uses_llm_explainer_while_headless_compare_stays_template(tmp_path, monkeypatch):
     import backend.app.main as game_main
-    monkeypatch.delenv('ANTHROPIC_API_KEY', raising=False)
+    monkeypatch.delenv('VERDA_API_KEY', raising=False)
     monkeypatch.setenv('VALIO_MODE', 'replay')
     calls = []
     async def live_explainer(**kwargs):
         calls.append(kwargs)
-        kwargs['on_outcome']({'source': 'claude', 'reason': None, 'elapsedMs': 17})
+        kwargs['on_outcome']({'source': 'llm', 'reason': None, 'elapsedMs': 17})
         return 'Live explainer test sentence.'
     monkeypatch.setattr(game_main, 'explain_order', live_explainer, raising=False)
     app = create_app(tmp_path / 'live-explainer.sqlite3')
@@ -137,6 +137,6 @@ def test_live_game_session_uses_llm_explainer_while_headless_compare_stays_templ
             time.sleep(.01)
         assert session['status'] == 'FINISHED', session.get('error')
         assert len(calls) == 1
-        assert session['explainSource'] == 'claude'
+        assert session['explainSource'] == 'llm'
         assert session['explainFallbackReason'] is None
         assert session['explainElapsedMs'] == 17

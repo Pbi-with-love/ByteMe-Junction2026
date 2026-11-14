@@ -42,8 +42,8 @@ already exist in API_CONTRACT.md v1. Nothing here changes the contract.
 - The gateway clock starts at the scenario `now` and advances by real elapsed time; approval deadlines remain 20 real seconds.
 - Each session starts with three hearts; approvals one through three are shown and decrement hearts, while later approvals expire unseen with `ATTENTION_EXHAUSTED`.
 - Exhausted approvals return HTTP 202 with an order body whose status is `EXPIRED`.
-- Session payloads may add `explainSource` (`claude` or `template`), `explainFallbackReason` (`no_key`, `timeout`, `api_error`, `refusal`, `max_tokens`, `invalid_number`, or `missing_brand`; null when Claude supplied the explanation), and `explainElapsedMs` for the latest explanation call.
-- Claude explanations use kitchen-manager language: 2–3 short sentences, UI-formatted amounts and quantities, a plain explanation of the mandate setting behind the outcome, and a named non-Valio brand when recommended; internal ids, field names and reason codes are rejected.
+- Session payloads may add `explainSource` (`llm` or `template`), `explainFallbackReason` (`no_key`, `timeout`, `api_error`, `max_tokens`, `invalid_number`, or `missing_brand`; null when the LLM supplied the explanation), and `explainElapsedMs` for the latest explanation call.
+- LLM explanations use kitchen-manager language: 2–3 short sentences, Finnish UI-formatted amounts and quantities, a plain explanation of the mandate setting behind the outcome, and a named non-Valio brand when recommended; internal ids, field names and reason codes are rejected.
 - Kitchen scores on-time delivered need quantity; Wallet scores against the cheapest compliant on-time quote plan; Safety scores allergens and low delivery reliability; stars follow the scoring thresholds in spec 016.
 - Headless compare runs use replay upstream data, a template explainer and the scenario's simulated human decisions in isolated gateway instances.
 - `GET /v1/events` remains unimplemented; clients poll `GET /v1/game/sessions/{sessionId}`.
