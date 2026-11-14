@@ -121,3 +121,11 @@ which is gitignored because of size and environment-specific data.
   the approval remains `OPEN`, because the human has not approved that new condition.
 - Approval heart accounting is a no-op until game sessions exist; the approval
   interface already carries `heartsLeft` and supports `ATTENTION_EXHAUSTED`.
+
+## Live events
+
+`GET /v1/events` accepts the contract's `sessionId` query parameter for forward
+compatibility, but currently scopes replay and live delivery by the authenticated
+customer because game sessions are not implemented yet. Clients should send
+`since` or use the `Last-Event-ID` header when reconnecting; the latter replays
+only events with a newer log sequence.

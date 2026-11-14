@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+import asyncio
+import json
 from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
+from starlette.middleware.cors import CORSMiddleware
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from backend.app.config import Settings
@@ -103,6 +106,7 @@ def stub_response(request: Request, endpoint: str) -> JSONResponse:
 async def lifespan(application: FastAPI):
     settings = Settings.from_env()
     client = ValioClient(settings)
+    expiry_task = asyncio.create_task(_approval_expiry_loop(application))
     try:
         application.state.valio_data = ValioDataCache(
             client,
@@ -115,6 +119,8 @@ async def lifespan(application: FastAPI):
         )
         yield
     finally:
+        expiry_task.cancel()
+        await asyncio.gather(expiry_task, return_exceptions=True)
         await client.close()
 
 
@@ -125,6 +131,13 @@ app = FastAPI(
 )
 app.add_middleware(RequestIdMiddleware)
 settings = Settings.from_env()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=list(settings.cors_allowed_origins),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 signer = DocumentSigner(settings.quote_signing_key) if settings.quote_signing_key else None
 database_path = settings.valio_cache_directory / "gateway.sqlite3"
 app.state.event_log = EventLog(database_path)
@@ -326,6 +339,61 @@ def _expire_approval_order(
             response_updates={"status": "EXPIRED"},
         )
     return request.app.state.order_store.get(str(approval["orderId"]), customer_id)
+
+
+def _record_approval_expiry(
+    request: Request | FastAPI,
+    approval: dict[str, object],
+    customer_id: str,
+    *,
+    request_id_value: str,
+) -> None:
+    state = request.app.state if isinstance(request, Request) else request.state
+    order = state.order_store.get(str(approval["orderId"]), customer_id)
+    if order and order.get("status") == "PENDING_APPROVAL":
+        state.order_store.update(
+            str(approval["orderId"]),
+            customer_id,
+            status="EXPIRED",
+            response_updates={"status": "EXPIRED"},
+        )
+    approval_id = str(approval["approvalId"])
+    if not state.event_log.has_event(
+        "APPROVAL_EXPIRED",
+        "approvalId",
+        approval_id,
+    ):
+        state.event_log.append(
+            actor="gateway",
+            event_type="APPROVAL_EXPIRED",
+            request_id=request_id_value,
+            customer_id=customer_id,
+            summary=f"Approval {approval_id} expired.",
+            refs={
+                "approvalId": approval_id,
+                "orderId": str(approval["orderId"]),
+            },
+            reasons=["APPROVAL_EXPIRED"],
+            light="RED",
+        )
+
+
+async def _approval_expiry_loop(application: FastAPI) -> None:
+    try:
+        while True:
+            await asyncio.sleep(0.25)
+            for approval in application.state.approval_store.expire_due(
+                now=datetime.now().astimezone()
+            ):
+                customer_id = str(approval["customerId"])
+                _record_approval_expiry(
+                    application,
+                    approval,
+                    customer_id,
+                    request_id_value=f"expiry_{approval['approvalId']}",
+                )
+    except asyncio.CancelledError:
+        raise
 
 
 def _reject_approval(
@@ -1088,11 +1156,11 @@ async def get_order(order_id: str, request: Request) -> JSONResponse:
             now=datetime.now().astimezone(),
         )
         if approval and approval["status"] == "EXPIRED":
-            request.app.state.order_store.update(
-                order_id,
+            _record_approval_expiry(
+                request,
+                approval,
                 principal.customer_id,
-                status="EXPIRED",
-                response_updates={"status": "EXPIRED"},
+                request_id_value=request_id(request),
             )
             order = request.app.state.order_store.get(order_id, principal.customer_id)
     return order
@@ -1118,18 +1186,11 @@ async def get_approval(approval_id: str, request: Request) -> JSONResponse:
         )
     order = _expire_approval_order(request, approval, principal.customer_id)
     if approval["status"] == "EXPIRED":
-        request.app.state.event_log.append(
-            actor="gateway",
-            event_type="APPROVAL_EXPIRED",
-            request_id=request_id(request),
-            customer_id=principal.customer_id,
-            summary=f"Approval {approval_id} expired.",
-            refs={
-                "approvalId": approval_id,
-                "orderId": str(approval["orderId"]),
-            },
-            reasons=["APPROVAL_EXPIRED"],
-            light="RED",
+        _record_approval_expiry(
+            request,
+            approval,
+            principal.customer_id,
+            request_id_value=request_id(request),
         )
     return {**approval, "order": order}
 
@@ -1350,8 +1411,92 @@ async def verify_log(request: Request) -> dict[str, object]:
 
 
 @app.get("/v1/events")
-async def events(request: Request) -> JSONResponse:
-    return stub_response(request, "Live events")
+async def events(
+    request: Request,
+    sessionId: str | None = None,
+    since: int = 0,
+) -> StreamingResponse:
+    principal = require_auth(request)
+    if principal.customer_id is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Event stream not found."},
+        )
+    if since == 0:
+        last_event_id = request.headers.get("Last-Event-ID")
+        if last_event_id:
+            try:
+                since = int(last_event_id)
+            except ValueError as exc:
+                raise HTTPException(
+                    status_code=400,
+                    detail={
+                        "code": "VALIDATION_ERROR",
+                        "message": "Last-Event-ID must be an integer.",
+                    },
+                ) from exc
+    if since < 0:
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "VALIDATION_ERROR", "message": "since must be non-negative."},
+        )
+
+    async def stream():
+        cursor = since
+        while not await request.is_disconnected():
+            events_for_customer = request.app.state.event_log.list_for_customer(
+                principal.customer_id,
+                since=cursor,
+                limit=100,
+            )
+            if events_for_customer:
+                for event in events_for_customer:
+                    cursor = max(cursor, event["seq"])
+                    yield _sse_event("log", event)
+                    if event["type"] in {"APPROVAL_SHOWN", "APPROVAL_EXPIRED"}:
+                        approval_id = event["refs"].get("approvalId")
+                        approval = (
+                            request.app.state.approval_store.get(
+                                approval_id,
+                                principal.customer_id,
+                            )
+                            if approval_id
+                            else None
+                        )
+                        if approval:
+                            yield _sse_event(
+                                "approval",
+                                {
+                                    "approvalId": approval["approvalId"],
+                                    "deadline": approval["deadline"],
+                                    "heartsLeft": approval["heartsLeft"],
+                                },
+                            )
+                continue
+            yield ": keep-alive\n\n"
+            await asyncio.sleep(0.25)
+
+    return StreamingResponse(
+        stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Session-Id": sessionId or "",
+        },
+    )
+
+
+def _sse_event(event_name: str, data: object) -> str:
+    event_id = (
+        f"id: {data['seq']}\n"
+        if event_name == "log" and isinstance(data, dict) and "seq" in data
+        else ""
+    )
+    return (
+        f"{event_id}event: {event_name}\n"
+        f"data: {json.dumps(data, ensure_ascii=False)}\n\n"
+    )
 
 
 @app.post("/v1/game/levels/{level_id}/start")
