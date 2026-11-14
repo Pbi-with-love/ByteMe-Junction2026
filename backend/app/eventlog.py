@@ -7,7 +7,7 @@ import json
 import sqlite3
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from uuid import uuid4
 
 
@@ -24,10 +24,11 @@ def event_hash(event: dict[str, Any], previous_hash: str) -> str:
 
 
 class EventLog:
-    def __init__(self, path: str | Path) -> None:
+    def __init__(self, path: str | Path, *, clock: Callable[[], datetime] | None = None) -> None:
         if str(path) != ":memory:":
             Path(path).parent.mkdir(parents=True, exist_ok=True)
         self._connection = sqlite3.connect(path, check_same_thread=False)
+        self._clock = clock or (lambda: datetime.now().astimezone())
         self._connection.row_factory = sqlite3.Row
         self._connection.execute(
             """
@@ -55,6 +56,11 @@ class EventLog:
     def close(self) -> None:
         self._connection.close()
 
+    def reset(self) -> None:
+        self._connection.execute("DELETE FROM events")
+        self._connection.execute("DELETE FROM sqlite_sequence WHERE name = 'events'")
+        self._connection.commit()
+
     def append(
         self,
         *,
@@ -77,7 +83,7 @@ class EventLog:
         event: dict[str, Any] = {
             "seq": self._next_sequence(),
             "eventId": f"evt_{uuid4().hex}",
-            "at": at or datetime.now().astimezone().isoformat(),
+            "at": at or self._clock().isoformat(),
             "actor": actor,
             "type": event_type,
             "customerId": customer_id,

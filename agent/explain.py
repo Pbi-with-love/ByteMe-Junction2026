@@ -64,7 +64,7 @@ def _numbers(value: str) -> list[str]:
     return [re.sub(r"[ ,.]+", "", token) for token in re.findall(r"\d+(?:[ ,.]+\d+)*", value)]
 
 
-async def template_explainer(*, need: dict[str, Any], plans: list[dict[str, Any]], recommended_plan_id: str | None, approval_reasons: list[str] | None = None) -> str:
+async def template_explainer(*, need: dict[str, Any], plans: list[dict[str, Any]], recommended_plan_id: str | None, approval_reasons: list[str] | None = None, per_order_limit: Any = None, non_valio_brands: list[str] | None = None) -> str:
     """Template-only path used by the gateway and deterministic tests."""
     delay_ms = int(os.getenv("EXPLAIN_DELAY_MS", "0") or "0")
     if delay_ms > 0:

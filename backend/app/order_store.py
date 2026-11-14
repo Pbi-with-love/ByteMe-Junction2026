@@ -7,7 +7,7 @@ import json
 import sqlite3
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from uuid import uuid4
 
 from backend.app.eventlog import canonical_json
@@ -18,10 +18,11 @@ class IdempotencyConflict(ValueError):
 
 
 class OrderStore:
-    def __init__(self, path: str | Path) -> None:
+    def __init__(self, path: str | Path, *, clock: Callable[[], datetime] | None = None) -> None:
         if str(path) != ":memory:":
             Path(path).parent.mkdir(parents=True, exist_ok=True)
         self._connection = sqlite3.connect(path, check_same_thread=False)
+        self._clock = clock or (lambda: datetime.now().astimezone())
         self._connection.row_factory = sqlite3.Row
         self._connection.execute(
             """
@@ -45,6 +46,10 @@ class OrderStore:
 
     def close(self) -> None:
         self._connection.close()
+
+    def reset(self) -> None:
+        self._connection.execute("DELETE FROM orders")
+        self._connection.commit()
 
     def existing(
         self,
@@ -103,7 +108,7 @@ class OrderStore:
                     _request_hash(request_body),
                     status,
                     total_cents,
-                    created_at or datetime.now().astimezone().isoformat(),
+                    created_at or self._clock().isoformat(),
                     response_status,
                     json.dumps(value, ensure_ascii=False, sort_keys=True),
                 ),

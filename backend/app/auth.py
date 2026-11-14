@@ -10,7 +10,7 @@ import sqlite3
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from uuid import uuid4
 
 from backend.app.signing import DocumentSigner
@@ -30,12 +30,13 @@ class MandateError(ValueError):
 
 
 class AuthStore:
-    def __init__(self, path: str | Path, signer: DocumentSigner | None = None) -> None:
+    def __init__(self, path: str | Path, signer: DocumentSigner | None = None, *, clock: Callable[[], datetime] | None = None) -> None:
         if str(path) != ":memory:":
             Path(path).parent.mkdir(parents=True, exist_ok=True)
         self._connection = sqlite3.connect(path, check_same_thread=False)
         self._connection.row_factory = sqlite3.Row
         self._signer = signer
+        self._clock = clock or (lambda: datetime.now().astimezone())
         self._connection.executescript(
             """
             CREATE TABLE IF NOT EXISTS tokens (
@@ -61,6 +62,10 @@ class AuthStore:
     def close(self) -> None:
         self._connection.close()
 
+    def reset_mandates(self) -> None:
+        self._connection.execute("DELETE FROM mandates")
+        self._connection.commit()
+
     def issue_token(
         self,
         *,
@@ -79,7 +84,7 @@ class AuthStore:
                 role,
                 customer_id,
                 agent_id,
-                datetime.now().astimezone().isoformat(),
+                self._clock().isoformat(),
             ),
         )
         self._connection.commit()
@@ -140,7 +145,7 @@ class AuthStore:
             **request_data,
             "mandateId": mandate_id,
             "customerId": principal.customer_id,
-            "issuedAt": datetime.now().astimezone().isoformat(),
+            "issuedAt": self._clock().isoformat(),
             "status": "ACTIVE",
         }
         document["summaryText"] = (
@@ -210,7 +215,7 @@ class AuthStore:
             expires_at = datetime.fromisoformat(mandate["validUntil"])
         except (KeyError, TypeError, ValueError) as exc:
             raise MandateError("MANDATE_INVALID", "Mandate has an invalid expiry.") from exc
-        if datetime.now(expires_at.tzinfo) > expires_at:
+        if self._clock().astimezone(expires_at.tzinfo) > expires_at:
             raise MandateError("MANDATE_EXPIRED", "Mandate has expired.")
         if self._signer is None:
             raise MandateError("MANDATE_INVALID", "Mandate signing is not configured.")

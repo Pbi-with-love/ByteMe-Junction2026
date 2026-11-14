@@ -35,16 +35,23 @@ def build_plans(
     deadline: str,
     mandate: dict[str, Any],
     now: datetime,
+    requested_product_id: str | None = None,
 ) -> dict[str, Any]:
     """Build deterministic plans for a need expressed in a supported unit."""
     price_by_id = {str(row.get("productId")): row for row in prices}
     availability_by_id = {str(row.get("productId")): row for row in availability}
+    requested_product = next(
+        (product for product in products if str(product.get("id", "")) == requested_product_id),
+        min(products, key=lambda product: str(product.get("id", ""))) if products else {},
+    )
+    requested_product_id = str(requested_product.get("id", ""))
+    requested_category = requested_product.get("category")
     candidates: list[_Candidate] = []
     excluded: list[dict[str, str]] = []
     unconvertible: list[str] = []
     price_unavailable: list[str] = []
 
-    for product in sorted(products, key=lambda value: str(value.get("id", ""))):
+    for product in sorted(products, key=lambda value: (str(value.get("id", "")) != requested_product_id, str(value.get("id", "")))):
         product_id = str(product.get("id", ""))
         policy = check_product(product, mandate)
         if policy.light == "RED":
@@ -96,7 +103,7 @@ def build_plans(
     single_plans = [
         plan
         for candidate in candidates
-        if (plan := _single_product_plan(candidate, need_amount, deadline, mandate, now))
+        if (plan := _single_product_plan(candidate, need_amount, deadline, mandate, now, requested_product_id, requested_category))
         is not None
     ]
     delayed = [plan for plan in single_plans if _has_late_line(plan, deadline)]
@@ -106,7 +113,7 @@ def build_plans(
         for index, first in enumerate(candidates)
         for second in candidates[index + 1 :]
         if (plan := _split_product_plan(
-            first, second, need_amount, deadline, mandate, now
+            first, second, need_amount, deadline, mandate, now, requested_product_id, requested_category
         ))
         is not None
     ]
@@ -147,6 +154,8 @@ def _single_product_plan(
     deadline: str,
     mandate: dict[str, Any],
     now: datetime,
+    requested_product_id: str,
+    requested_category: Any,
 ) -> dict[str, Any] | None:
     remaining = need_amount
     lines: list[dict[str, Any]] = []
@@ -167,7 +176,7 @@ def _single_product_plan(
         remaining -= amount
     if remaining > 0 or not lines:
         return None
-    return _finish_plan(lines, candidate.product, deadline, mandate, now)
+    return _finish_plan(lines, candidate.product, deadline, mandate, now, requested_product_id, requested_category)
 
 
 def _split_product_plan(
@@ -177,6 +186,8 @@ def _split_product_plan(
     deadline: str,
     mandate: dict[str, Any],
     now: datetime,
+    requested_product_id: str,
+    requested_category: Any,
 ) -> dict[str, Any] | None:
     first_capacity = sum(
         Decimal(str(schedule.get("availableAmount", 0))) * first.amount_per_sale
@@ -190,7 +201,7 @@ def _split_product_plan(
     if not second_lines:
         return None
     lines = first_lines + second_lines
-    return _finish_plan(lines, first.product, deadline, mandate, now)
+    return _finish_plan(lines, first.product, deadline, mandate, now, requested_product_id, requested_category)
 
 
 def _lines_for_amount(
@@ -251,6 +262,8 @@ def _finish_plan(
     deadline: str,
     mandate: dict[str, Any],
     now: datetime,
+    requested_product_id: str | None = None,
+    requested_category: Any = None,
 ) -> dict[str, Any]:
     total_cents = sum(line["lineTotal"]["cents"] for line in lines)
     plan = {
@@ -267,9 +280,18 @@ def _finish_plan(
             "unit": lines[0]["quantity"]["unit"],
         },
         "deadline": deadline,
-        "category": product.get("category"),
+        "category": requested_category if requested_category is not None else product.get("category"),
     }
-    result = check_plan(plan, mandate, now=now)
+    for line in lines:
+        line["isSubstitute"] = str(line.get("productId")) != str(requested_product_id or product.get("id", ""))
+    policy_plan = {
+        **plan,
+        "lines": [
+            {**line, "product": line.get("_product", product)}
+            for line in lines
+        ],
+    }
+    result = check_plan(policy_plan, mandate, now=now)
     plan["policy"] = {"light": result.light, "reasons": list(result.reasons)}
     plan["summary"] = _plan_summary(lines, total_cents)
     for line in lines:

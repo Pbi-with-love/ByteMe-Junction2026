@@ -12,9 +12,18 @@
     "description": "Lactose-free semi-skimmed milk for the hotel",
     "quantity": {"amount": 1000, "unit": "l"},
     "deadline": "2026-11-16T06:00:00+02:00",
-    "candidateProductIds": ["464306", "464401", "463335"],
+    "candidateProductIds": ["464306", "463335"],
     "primaryProductId": "464306"
   }],
+  "needsByPreset": {
+    "strict": [{
+      "description": "Lactose-free semi-skimmed milk for the hotel",
+      "quantity": {"amount": 1000, "unit": "l"},
+      "deadline": "2026-11-16T06:00:00+02:00",
+      "candidateProductIds": ["464306", "464401", "463335"],
+      "primaryProductId": "464306"
+    }]
+  },
   "hiddenRequirements": {"excludeAllergens": ["AP"]},
   "presets": {
     "strict": {"mandate": {"agentId": "kitchenbuyer-hotel-aurora", "issuedBy": {"name": "Anna Virtanen", "role": "Kitchen manager"}, "limits": {"perOrderEur": 200, "perWeekEur": 3000}, "substitution": "none", "lateDelivery": "none", "hardConstraints": {"excludeAllergens": ["AP"], "requireLabels": []}, "priorities": ["on_time", "price", "sustainability"], "validUntil": "2026-12-31T23:59:59+02:00"}},

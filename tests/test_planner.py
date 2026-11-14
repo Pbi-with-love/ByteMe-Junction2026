@@ -249,3 +249,22 @@ def test_equal_score_tie_breaks_by_comparison_price_then_reliability_then_produc
     prices[0]["productId"] = "z"
     prices[1]["productId"] = "a"
     assert winner(products, prices) == "a"
+
+
+def test_requested_candidate_is_not_substitute_and_other_products_are():
+    requested = product('requested', litres=1)
+    alternative = product('alternative', litres=1)
+    alternative['category'] = 'different-category'
+    result = build_plans(
+        products=[alternative, requested],
+        prices=[price('requested', 1), price('alternative', 1)],
+        availability=[stock('requested', line(5)), stock('alternative', line(10))],
+        need_amount=Decimal('10'), unit='l', deadline=DEADLINE,
+        mandate=mandate(), now=NOW, requested_product_id='requested',
+    )
+    alternative_single = next(plan for plan in result['plans'] if len(plan['lines']) == 1 and plan['lines'][0]['productId'] == 'alternative')
+    assert alternative_single['lines'][0]['isSubstitute'] is True
+    assert 'SUBSTITUTION_NOT_ALLOWED' in alternative_single['policy']['reasons']
+    split = next(plan for plan in result['plans'] if {line['productId'] for line in plan['lines']} == {'requested', 'alternative'})
+    assert next(line for line in split['lines'] if line['productId'] == 'requested')['isSubstitute'] is False
+    assert next(line for line in split['lines'] if line['productId'] == 'alternative')['isSubstitute'] is True

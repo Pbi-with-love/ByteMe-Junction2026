@@ -1,0 +1,720 @@
+{
+  "presets": {
+    "strict": {
+      "agentId": "kitchenbuyer-hotel-aurora",
+      "issuedBy": {
+        "name": "Anna Virtanen",
+        "role": "Kitchen manager"
+      },
+      "limits": {
+        "perOrderEur": 200,
+        "perWeekEur": 3000
+      },
+      "substitution": "none",
+      "lateDelivery": "none",
+      "hardConstraints": {
+        "excludeAllergens": [
+          "AP"
+        ],
+        "requireLabels": []
+      },
+      "priorities": [
+        "on_time",
+        "price",
+        "sustainability"
+      ],
+      "validUntil": "2026-12-31T23:59:59+02:00",
+      "mandateId": "preset_strict",
+      "customerId": "123",
+      "issuedAt": "2026-11-14T10:00:00+02:00",
+      "status": "ACTIVE",
+      "signature": {
+        "alg": "none",
+        "keyId": "preset",
+        "value": ""
+      },
+      "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €200 per order and €3000 per week."
+    },
+    "balanced": {
+      "agentId": "kitchenbuyer-hotel-aurora",
+      "issuedBy": {
+        "name": "Anna Virtanen",
+        "role": "Kitchen manager"
+      },
+      "limits": {
+        "perOrderEur": 500,
+        "perWeekEur": 3000
+      },
+      "substitution": "same_category",
+      "lateDelivery": "none",
+      "hardConstraints": {
+        "excludeAllergens": [
+          "AP"
+        ],
+        "requireLabels": []
+      },
+      "priorities": [
+        "on_time",
+        "price",
+        "sustainability"
+      ],
+      "validUntil": "2026-12-31T23:59:59+02:00",
+      "mandateId": "preset_balanced",
+      "customerId": "123",
+      "issuedAt": "2026-11-14T10:00:00+02:00",
+      "status": "ACTIVE",
+      "signature": {
+        "alg": "none",
+        "keyId": "preset",
+        "value": ""
+      },
+      "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €500 per order and €3000 per week."
+    },
+    "loose": {
+      "agentId": "kitchenbuyer-hotel-aurora",
+      "issuedBy": {
+        "name": "Anna Virtanen",
+        "role": "Kitchen manager"
+      },
+      "limits": {
+        "perOrderEur": 2000,
+        "perWeekEur": 3000
+      },
+      "substitution": "any",
+      "lateDelivery": "one_day",
+      "hardConstraints": {
+        "excludeAllergens": [
+          "AP"
+        ],
+        "requireLabels": []
+      },
+      "priorities": [
+        "price",
+        "on_time",
+        "sustainability"
+      ],
+      "validUntil": "2026-12-31T23:59:59+02:00",
+      "mandateId": "preset_loose",
+      "customerId": "123",
+      "issuedAt": "2026-11-14T10:00:00+02:00",
+      "status": "ACTIVE",
+      "signature": {
+        "alg": "none",
+        "keyId": "preset",
+        "value": ""
+      },
+      "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €2000 per order and €3000 per week."
+    }
+  },
+  "start": {
+    "sessionId": "ses_babc0c0e958b4ef19471424dc6e3819d",
+    "level": {
+      "levelId": "level1",
+      "title": "The Weekly Order",
+      "customer": {
+        "customerId": "123",
+        "name": "Hotel Aurora (fictional)",
+        "type": "hotel"
+      },
+      "brief": "1 000 l lactose-free semi-skimmed milk by Monday 06:00.",
+      "deadline": "2026-11-16T06:00:00+02:00",
+      "closingTime": "2026-11-14T14:00:00+02:00"
+    },
+    "clock": {
+      "start": "10:00",
+      "end": "14:00",
+      "realSecondsPerGameMinute": 0.25
+    },
+    "hearts": 3,
+    "tokens": {
+      "human": "jVAP41-jLeQqHCoI2wwM96b3AyhennxD8hQbs6iiPgk",
+      "agent": "np3cKHlQnlb7HvdUPoAcXbnpvijJF-nkO3BWIu8yHbk"
+    }
+  },
+  "session": {
+    "sessionId": "ses_babc0c0e958b4ef19471424dc6e3819d",
+    "status": "FINISHED",
+    "hearts": 2,
+    "gameTime": "10:28",
+    "orders": [
+      "ord_c8e50fa4509344c386bfec674bef3d8e",
+      "ord_38d78094ff64479db0b31242452fb038"
+    ],
+    "steps": [
+      {
+        "search": {
+          "results": [],
+          "total": 0
+        },
+        "quote": {
+          "status": "QUOTED",
+          "createdAt": "2026-11-14T10:00:02.411031+02:00",
+          "expiresAt": "2026-11-15T17:00:00+02:00",
+          "need": {
+            "description": "Lactose-free semi-skimmed milk for the hotel",
+            "quantity": {
+              "amount": 700.0,
+              "unit": "l"
+            },
+            "deadline": "2026-11-16T06:00:00+02:00",
+            "candidateProductIds": [
+              "464306"
+            ],
+            "primaryProductId": "464306"
+          },
+          "plans": [
+            {
+              "lines": [
+                {
+                  "productId": "464306",
+                  "quantity": {
+                    "amount": 700,
+                    "unit": "l"
+                  },
+                  "salesQuantity": {
+                    "amount": 700,
+                    "unit": "ST"
+                  },
+                  "unitPrice": {
+                    "cents": 115,
+                    "currency": "EUR"
+                  },
+                  "lineTotal": {
+                    "cents": 80500,
+                    "currency": "EUR"
+                  },
+                  "excess": {
+                    "amount": 0,
+                    "unit": "l"
+                  },
+                  "comparisonPrice": {
+                    "cents": 115,
+                    "currency": "EUR",
+                    "per": "l"
+                  },
+                  "availableDate": "2026-11-16",
+                  "isSubstitute": false
+                }
+              ],
+              "total": {
+                "cents": 80500,
+                "currency": "EUR"
+              },
+              "onTime": {
+                "amount": 700,
+                "unit": "l"
+              },
+              "deadline": "2026-11-16T06:00:00+02:00",
+              "category": "10400",
+              "policy": {
+                "light": "YELLOW",
+                "reasons": [
+                  "OVER_ORDER_LIMIT"
+                ]
+              },
+              "summary": "700 l Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free (Monday), €805,00",
+              "score": {
+                "total": 1.0,
+                "onTime": 1.0,
+                "price": 1.0,
+                "sustainability": 1.0,
+                "reliabilityPenalty": 0.0
+              },
+              "tier": "best",
+              "recommended": true,
+              "planId": "pln_1"
+            }
+          ],
+          "excludedProducts": [],
+          "evidence": [
+            {
+              "source": "valio:/api/price",
+              "requestId": "req_522deabc59ce45f99dc621e6b4d83fa6",
+              "at": "2026-11-14T10:00:02.411047+02:00"
+            },
+            {
+              "source": "valio:/api/availability",
+              "requestId": "req_522deabc59ce45f99dc621e6b4d83fa6",
+              "at": "2026-11-14T10:00:02.411052+02:00"
+            }
+          ],
+          "scenarioOverlay": false,
+          "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+          "customerId": "123",
+          "mandateId": "mdt_ef3e317c91844453a239d4bd6db65596",
+          "signature": {
+            "alg": "Ed25519",
+            "keyId": "valio-aimo-2026-11",
+            "value": "GEeplMV4x9zaIOwho0eWj71KnN2o3NGCz6+Iy4FqSJm3qLSop+Gl45oW7Fnt6TN2BuctqMAKP4eoFIwDk+dCCg=="
+          }
+        },
+        "order": {
+          "httpStatus": 202,
+          "body": {
+            "createdAt": "2026-11-14T10:00:03.480903+02:00",
+            "lines": [
+              {
+                "availableDate": "2026-11-16",
+                "comparisonPrice": {
+                  "cents": 115,
+                  "currency": "EUR",
+                  "per": "l"
+                },
+                "excess": {
+                  "amount": 0,
+                  "unit": "l"
+                },
+                "isSubstitute": false,
+                "lineTotal": {
+                  "cents": 80500,
+                  "currency": "EUR"
+                },
+                "productId": "464306",
+                "quantity": {
+                  "amount": 700,
+                  "unit": "l"
+                },
+                "salesQuantity": {
+                  "amount": 700,
+                  "unit": "ST"
+                },
+                "unitPrice": {
+                  "cents": 115,
+                  "currency": "EUR"
+                }
+              }
+            ],
+            "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
+            "planId": "pln_1",
+            "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+            "reasons": [
+              "OVER_ORDER_LIMIT"
+            ],
+            "status": "PENDING_APPROVAL",
+            "total": {
+              "cents": 80500,
+              "currency": "EUR"
+            },
+            "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1"
+          }
+        },
+        "approval": {
+          "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
+          "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
+          "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+          "status": "OPEN",
+          "reasons": [
+            "OVER_ORDER_LIMIT"
+          ],
+          "options": [
+            {
+              "planId": "pln_1",
+              "recommended": true,
+              "summary": "700 l Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free (Monday), €805,00",
+              "tier": "best"
+            }
+          ],
+          "agentExplanation": null,
+          "deadline": "2026-11-14T10:00:23.480903+02:00",
+          "createdAt": "2026-11-14T10:00:03.480903+02:00",
+          "heartsLeft": 2
+        },
+        "approvalEvent": {
+          "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
+          "deadline": "2026-11-14T10:00:23.480903+02:00",
+          "heartsLeft": 2
+        }
+      },
+      {
+        "search": {
+          "results": [],
+          "total": 0
+        },
+        "quote": {
+          "status": "QUOTED",
+          "createdAt": "2026-11-14T10:00:05.854040+02:00",
+          "expiresAt": "2026-11-15T17:00:00+02:00",
+          "need": {
+            "description": "Lactose-free semi-skimmed milk for the hotel",
+            "quantity": {
+              "amount": 300.0,
+              "unit": "l"
+            },
+            "deadline": "2026-11-16T06:00:00+02:00",
+            "candidateProductIds": [
+              "464306",
+              "463335"
+            ],
+            "primaryProductId": "464306"
+          },
+          "plans": [
+            {
+              "lines": [
+                {
+                  "productId": "464306",
+                  "quantity": {
+                    "amount": 300,
+                    "unit": "l"
+                  },
+                  "salesQuantity": {
+                    "amount": 300,
+                    "unit": "ST"
+                  },
+                  "unitPrice": {
+                    "cents": 115,
+                    "currency": "EUR"
+                  },
+                  "lineTotal": {
+                    "cents": 34500,
+                    "currency": "EUR"
+                  },
+                  "excess": {
+                    "amount": 0,
+                    "unit": "l"
+                  },
+                  "comparisonPrice": {
+                    "cents": 115,
+                    "currency": "EUR",
+                    "per": "l"
+                  },
+                  "availableDate": "2026-11-16",
+                  "isSubstitute": false
+                }
+              ],
+              "total": {
+                "cents": 34500,
+                "currency": "EUR"
+              },
+              "onTime": {
+                "amount": 300,
+                "unit": "l"
+              },
+              "deadline": "2026-11-16T06:00:00+02:00",
+              "category": "10400",
+              "policy": {
+                "light": "GREEN",
+                "reasons": [
+                  "WITHIN_MANDATE"
+                ]
+              },
+              "summary": "300 l Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free (Monday), €345,00",
+              "score": {
+                "total": 1.0,
+                "onTime": 1.0,
+                "price": 1.0,
+                "sustainability": 1.0,
+                "reliabilityPenalty": 0.0
+              },
+              "tier": "best",
+              "recommended": true,
+              "planId": "pln_1"
+            }
+          ],
+          "excludedProducts": [],
+          "evidence": [
+            {
+              "source": "valio:/api/price",
+              "requestId": "req_3a439d24c1d84efaa03f8cc435d5069f",
+              "at": "2026-11-14T10:00:05.854050+02:00"
+            },
+            {
+              "source": "valio:/api/availability",
+              "requestId": "req_3a439d24c1d84efaa03f8cc435d5069f",
+              "at": "2026-11-14T10:00:05.854055+02:00"
+            }
+          ],
+          "scenarioOverlay": false,
+          "quoteId": "qt_1e6376efd39c4f328fefed00b7f6139f",
+          "customerId": "123",
+          "mandateId": "mdt_ef3e317c91844453a239d4bd6db65596",
+          "signature": {
+            "alg": "Ed25519",
+            "keyId": "valio-aimo-2026-11",
+            "value": "lzPpmJ/TX1vNtajvGE0yWGt5a4XGEktGnMOOFD/XEAJXBBUxRvdZTUwiGi9QcbUrYdLcT4IcB9mmMBeQ9khoCg=="
+          }
+        },
+        "order": {
+          "httpStatus": 201,
+          "body": {
+            "quoteId": "qt_1e6376efd39c4f328fefed00b7f6139f",
+            "planId": "pln_1",
+            "status": "ORDERED",
+            "lines": [
+              {
+                "availableDate": "2026-11-16",
+                "comparisonPrice": {
+                  "cents": 115,
+                  "currency": "EUR",
+                  "per": "l"
+                },
+                "excess": {
+                  "amount": 0,
+                  "unit": "l"
+                },
+                "isSubstitute": false,
+                "lineTotal": {
+                  "cents": 34500,
+                  "currency": "EUR"
+                },
+                "productId": "464306",
+                "quantity": {
+                  "amount": 300,
+                  "unit": "l"
+                },
+                "salesQuantity": {
+                  "amount": 300,
+                  "unit": "ST"
+                },
+                "unitPrice": {
+                  "cents": 115,
+                  "currency": "EUR"
+                }
+              }
+            ],
+            "total": {
+              "cents": 34500,
+              "currency": "EUR"
+            },
+            "createdAt": "2026-11-14T10:00:07.049920+02:00",
+            "reasons": [
+              "WITHIN_MANDATE"
+            ],
+            "orderId": "ord_38d78094ff64479db0b31242452fb038"
+          }
+        },
+        "approval": null,
+        "approvalEvent": null
+      }
+    ],
+    "activity": "idle"
+  },
+  "approvalGet": {
+    "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
+    "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
+    "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+    "status": "OPEN",
+    "reasons": [
+      "OVER_ORDER_LIMIT"
+    ],
+    "options": [
+      {
+        "planId": "pln_1",
+        "recommended": true,
+        "summary": "700 l Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free (Monday), €805,00",
+        "tier": "best"
+      }
+    ],
+    "agentExplanation": null,
+    "deadline": "2026-11-14T10:00:23.480903+02:00",
+    "createdAt": "2026-11-14T10:00:03.480903+02:00",
+    "heartsLeft": 2,
+    "order": {
+      "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
+      "createdAt": "2026-11-14T10:00:03.480903+02:00",
+      "lines": [
+        {
+          "availableDate": "2026-11-16",
+          "comparisonPrice": {
+            "cents": 115,
+            "currency": "EUR",
+            "per": "l"
+          },
+          "excess": {
+            "amount": 0,
+            "unit": "l"
+          },
+          "isSubstitute": false,
+          "lineTotal": {
+            "cents": 80500,
+            "currency": "EUR"
+          },
+          "productId": "464306",
+          "quantity": {
+            "amount": 700,
+            "unit": "l"
+          },
+          "salesQuantity": {
+            "amount": 700,
+            "unit": "ST"
+          },
+          "unitPrice": {
+            "cents": 115,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
+      "planId": "pln_1",
+      "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+      "reasons": [
+        "OVER_ORDER_LIMIT"
+      ],
+      "status": "PENDING_APPROVAL",
+      "total": {
+        "cents": 80500,
+        "currency": "EUR"
+      }
+    }
+  },
+  "approvalDecision": {
+    "approval": {
+      "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
+      "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
+      "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+      "status": "APPROVED",
+      "reasons": [
+        "OVER_ORDER_LIMIT"
+      ],
+      "options": [
+        {
+          "planId": "pln_1",
+          "recommended": true,
+          "summary": "700 l Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free (Monday), €805,00",
+          "tier": "best"
+        }
+      ],
+      "agentExplanation": null,
+      "deadline": "2026-11-14T10:00:23.480903+02:00",
+      "createdAt": "2026-11-14T10:00:03.480903+02:00",
+      "heartsLeft": 2
+    },
+    "order": {
+      "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
+      "createdAt": "2026-11-14T10:00:03.480903+02:00",
+      "lines": [
+        {
+          "availableDate": "2026-11-16",
+          "comparisonPrice": {
+            "cents": 115,
+            "currency": "EUR",
+            "per": "l"
+          },
+          "excess": {
+            "amount": 0,
+            "unit": "l"
+          },
+          "isSubstitute": false,
+          "lineTotal": {
+            "cents": 80500,
+            "currency": "EUR"
+          },
+          "productId": "464306",
+          "quantity": {
+            "amount": 700,
+            "unit": "l"
+          },
+          "salesQuantity": {
+            "amount": 700,
+            "unit": "ST"
+          },
+          "unitPrice": {
+            "cents": 115,
+            "currency": "EUR"
+          },
+          "salesBlock": false
+        }
+      ],
+      "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
+      "planId": "pln_1",
+      "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+      "reasons": [
+        "OVER_ORDER_LIMIT"
+      ],
+      "status": "ORDERED",
+      "total": {
+        "cents": 80500,
+        "currency": "EUR"
+      }
+    }
+  },
+  "result": {
+    "kitchen": 100,
+    "wallet": 100,
+    "safety": 100,
+    "stars": 3,
+    "incident": null,
+    "approvalsAsked": 1,
+    "heartsUsed": 1,
+    "totalCost": {
+      "cents": 115000,
+      "currency": "EUR"
+    },
+    "logHeadHash": "sha256:b2fee9fe1615e41b672ffea5b1f8201cd35a0bbfd1476026f6f066d0ebda2424",
+    "receiptText": "Approved Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free for €805,00.",
+    "heartsLeft": 2
+  },
+  "compare": {
+    "levelId": "level1",
+    "presets": {
+      "strict": {
+        "kitchen": 70,
+        "wallet": 100,
+        "safety": 100,
+        "stars": 1,
+        "incident": null,
+        "approvalsAsked": 4,
+        "heartsUsed": 3,
+        "totalCost": {
+          "cents": 80500,
+          "currency": "EUR"
+        },
+        "logHeadHash": "sha256:43f44c00689cf750f0ef196c16e36449603887382d7bc8ffd993ac11cc6922ec",
+        "receiptText": "Approved Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free for €805,00. Rejected Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free. Rejected Valio Hyvä suomalainen Arki® Eila® skimmed milk drink 1 l lactose free. Expired unseen: no hearts left. 300 l did not arrive on time.",
+        "heartsLeft": 0
+      },
+      "balanced": {
+        "kitchen": 100,
+        "wallet": 100,
+        "safety": 100,
+        "stars": 3,
+        "incident": null,
+        "approvalsAsked": 1,
+        "heartsUsed": 1,
+        "totalCost": {
+          "cents": 115000,
+          "currency": "EUR"
+        },
+        "logHeadHash": "sha256:2dfb90baf4215800089a0e4820c4406e4dffb004637f1be7508d2f7595f83698",
+        "receiptText": "Approved Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free for €805,00.",
+        "heartsLeft": 2
+      },
+      "loose": {
+        "kitchen": 70,
+        "wallet": 100,
+        "safety": 100,
+        "stars": 1,
+        "incident": null,
+        "approvalsAsked": 0,
+        "heartsUsed": 0,
+        "totalCost": {
+          "cents": 115000,
+          "currency": "EUR"
+        },
+        "logHeadHash": "sha256:a58f2c6cf859028aadee7a61998aad57bc8287c73108777bfd92f02c29cf4920",
+        "receiptText": "300 l did not arrive on time.",
+        "heartsLeft": 3
+      }
+    }
+  },
+  "buyerLog": {
+    "error": {
+      "code": "VALIDATION_ERROR",
+      "message": "view must be buyer or valio.",
+      "requestId": "req_08ca2a35a4b943e1a40959228e49e734",
+      "details": {}
+    }
+  },
+  "valioLog": {
+    "error": {
+      "code": "VALIDATION_ERROR",
+      "message": "view must be buyer or valio.",
+      "requestId": "req_394fdf51e3614d65a58c7b402b4f6679",
+      "details": {}
+    }
+  },
+  "verify": {
+    "valid": true,
+    "events": 10,
+    "headHash": "sha256:b2fee9fe1615e41b672ffea5b1f8201cd35a0bbfd1476026f6f066d0ebda2424"
+  }
+}

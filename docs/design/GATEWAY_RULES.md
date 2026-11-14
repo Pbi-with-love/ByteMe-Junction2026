@@ -28,7 +28,20 @@ already exist in API_CONTRACT.md v1. Nothing here changes the contract.
 - Missing or ambiguous unit conversion leaves a product out of plans, not excludedProducts, and logs its productId in QUOTE_CREATED payload.unconvertible.
 - Missing, errored, or netPriceFound:false price leaves a product out of plans, not excludedProducts, and logs its productId in QUOTE_CREATED payload.priceUnavailable with PRICE_UNAVAILABLE in reasons.
 - Keep the best plan of each kind, sort by score.total descending, then quantity-weighted comparisonPrice ascending, minimum deliveryReliability descending (null lowest), and productId tuple ascending; assign best/better/good tiers and planIds after sorting.
+- The first id in need.candidateProductIds is the requested product; every plan line with a different productId is a substitute, including single-product plans and each non-requested line in a split.
 
 ## Log
 - Levels without an overlay emit no SCENARIO_OVERLAY event.
 - No new event types; use the v1 list.
+
+## Game layer
+- `GET /v1/game/levels/{levelId}/presets` returns unsigned scenario mandate templates; only signed mandates can authorize gateway calls.
+- Game session responses add `steps`, with each reported search, quote, order, approval snapshot and approval event.
+- Starting a level resets quotes, orders, approvals, mandates and log events, while issued tokens remain valid.
+- A session uses the newest ACTIVE mandate signed for its customer after that session starts.
+- The gateway clock starts at the scenario `now` and advances by real elapsed time; approval deadlines remain 20 real seconds.
+- Each session starts with three hearts; approvals one through three are shown and decrement hearts, while later approvals expire unseen with `ATTENTION_EXHAUSTED`.
+- Exhausted approvals return HTTP 202 with an order body whose status is `EXPIRED`.
+- Kitchen scores on-time delivered need quantity; Wallet scores against the cheapest compliant on-time quote plan; Safety scores allergens and low delivery reliability; stars follow the scoring thresholds in spec 016.
+- Headless compare runs use replay upstream data, a template explainer and the scenario's simulated human decisions in isolated gateway instances.
+- `GET /v1/events` remains unimplemented; clients poll `GET /v1/game/sessions/{sessionId}`.

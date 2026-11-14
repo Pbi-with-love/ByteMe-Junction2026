@@ -14,6 +14,7 @@ def test_runner_searches_quotes_and_orders_recommended_plan():
             return httpx.Response(201, json={"quoteId": "q1", "plans": [{"planId": "p1"}], "recommendedPlanId": "p1"})
         if request.url.path == "/v1/orders":
             return httpx.Response(201, json={"orderId": "o1", "status": "ORDERED"})
+        if request.url.path == "/v1/orders/o1": return httpx.Response(200, json={"status": "ORDERED"})
         raise AssertionError(request.url)
     async def scenario():
         async with httpx.AsyncClient(transport=httpx.MockTransport(handler), base_url="http://gateway") as client:
@@ -22,3 +23,26 @@ def test_runner_searches_quotes_and_orders_recommended_plan():
             assert len(steps) == 1
     anyio.run(scenario)
     assert [path for _, path in calls] == ["/v1/search", "/v1/quotes", "/v1/orders"]
+
+
+def test_runner_reports_explaining_activity_while_explainer_is_in_flight():
+    calls = []
+    async def handler(request):
+        if request.url.path == "/v1/search": return httpx.Response(200, json={"results": []})
+        if request.url.path == "/v1/quotes": return httpx.Response(201, json={"quoteId": "q1", "plans": [{"planId": "p1"}], "recommendedPlanId": "p1"})
+        if request.url.path == "/v1/orders": return httpx.Response(202, json={"orderId": "o1", "approvalId": "a1", "status": "PENDING_APPROVAL", "reasons": []})
+        if request.url.path.endswith("/explanation"): return httpx.Response(200, json={})
+        if request.url.path == "/v1/orders/o1": return httpx.Response(200, json={"status": "ORDERED"})
+        raise AssertionError(request.url)
+    async def scenario():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler), base_url="http://gateway") as client:
+            async def explain(**kwargs):
+                calls.append("explaining")
+                await asyncio.sleep(0)
+                assert activity[-1] == "explaining"
+                return "why"
+            async def set_activity(value): activity.append(value)
+            activity = []
+            await run_agent(client, agent_token="t", mandate_id="m", needs=[{"description":"milk", "quantity":{"amount":1,"unit":"l"}}], explain=explain, on_step=lambda _: None, poll_interval=0, on_activity=set_activity)
+    import asyncio
+    anyio.run(scenario)

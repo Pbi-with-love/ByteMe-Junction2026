@@ -42,6 +42,10 @@ class ApprovalStore:
     def close(self) -> None:
         self._connection.close()
 
+    def reset(self) -> None:
+        self._connection.execute("DELETE FROM approvals")
+        self._connection.commit()
+
     def create(
         self,
         *,

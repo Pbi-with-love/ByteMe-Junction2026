@@ -33,7 +33,12 @@ def test_scenarios_use_real_catalog_products_and_have_required_schema():
         assert set(scenario["expected"]) == expected_presets
         for need in scenario["needs"]:
             assert need["primaryProductId"] in need["candidateProductIds"]
+            assert need["primaryProductId"] == need["candidateProductIds"][0]
             assert set(need["candidateProductIds"]) <= catalog.keys()
+        for needs in scenario.get("needsByPreset", {}).values():
+            for need in needs:
+                assert need["primaryProductId"] == need["candidateProductIds"][0]
+                assert set(need["candidateProductIds"]) <= catalog.keys()
         recording = json.loads((ROOT / f"backend/fixtures/valio/recorded/level{level}.json").read_text())
         assert recording["customerId"] == scenario["customer"]["customerId"]
         for date, calls in recording["calls"].items():
@@ -55,7 +60,14 @@ def test_real_scenario_twists_use_recorded_prices_and_catalog_facts():
     l1_recording = json.loads((ROOT / "backend/fixtures/valio/recorded/level1.json").read_text())
     l1_prices = {row["productId"]: row for row in l1_recording["calls"]["2026-11-16"]["price"]["products"]}
     primary = l1["needs"][0]["primaryProductId"]
-    substitutes = [product_id for product_id in l1["needs"][0]["candidateProductIds"] if product_id != primary]
+    candidate_ids = set(l1["needs"][0]["candidateProductIds"])
+    candidate_ids.update(
+        product_id
+        for needs in l1.get("needsByPreset", {}).values()
+        for need in needs
+        for product_id in need["candidateProductIds"]
+    )
+    substitutes = [product_id for product_id in candidate_ids if product_id != primary]
     assert len(substitutes) >= 2
     assert all(products[item]["category"] == products[primary]["category"] for item in substitutes)
     assert all("FREE_FROM_LACTOSE" in _claims(products[item]) for item in [primary, *substitutes])
