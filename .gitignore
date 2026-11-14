@@ -10,6 +10,9 @@ artifacts/
 .agents/skills/
 skills-lock.json
 
+docs/memory
+docs/specs
+
 # agent setup (local only, never merged to main)
 .claude/
 .agents/
