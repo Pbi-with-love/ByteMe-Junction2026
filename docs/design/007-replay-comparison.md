@@ -1,180 +1,267 @@
-# Design Handoff — 007: Replay Comparison (The "Aha" Screen)
+# Design Handoff — 007: Replay Comparison (Pixel Scoreboard)
 
 > **Owner:** Antigravity (Argon) · **Implementer:** Codex (GPT-6 Luna)  
-> **Scope:** `docs/design/007-replay-comparison.md` only. Reuses shared tokens from `docs/design/002-mandate-screen.md`, `LightBadge` from `docs/design/003-agent-timeline.md`, and stars/hearts visuals from `docs/design/005-result-receipt.md` verbatim.
+> **Scope:** `docs/design/007-replay-comparison.md` only. Supersedes the prior web-style `007` handoff. Reuses `docs/design/010-game-world.md` (24-colour palette, `--px` type scale, `PixelPanel` kit, button/focus tokens, `stop` emote, `heart` icon), `LightBadge` / light tokens from `003`/`010`, and `star_on` / `star_off` sprites from `005` (`Stars`).  
+> **Domain framing:** Interactive simulation platform for trusted autonomous purchasing (*Valio Aimo Trust Gateway*). Never frame as a restaurant management game.
 
 ---
 
 ## 1. Design Decisions & Rationale
 
-1. **One-Screen Projector Verdict (`1920×1080` & `1366×768`, Zero Scroll):**  
-   The comparison screen is the visual climax of the pitch: the jury sees how **Strict**, **Balanced**, and **Loose** (or any 2–3 presets returned by `client.compare(levelId)`) trade off attention, cost, delivery, and safety at a glance. The entire view—`56px` core-message headline, level + three-promises sub-line, 9-row comparison table, and `"Back to levels"` button—fits inside `~790px` at `1920×1080` and `~626px` at `1366×768` with zero vertical or horizontal scrolling.
-2. **Dynamic Columns Driven Strictly by Gateway Data:**  
-   Column count and order come directly from `Object.entries(compare.presets)` (2 columns for Levels 2–3, 3 columns for Level 1). Using `table-layout: fixed` with a `26%` row-header column and equal-width preset columns (`37%` each for 2 presets, `24.6%` each for 3 presets) guarantees balanced alignment without hard-coding preset names.
+1. **Full-Screen Pixel Scoreboard in the Kitchen World Aesthetic (Zero `<canvas>`):**  
+   `Compare` is a dedicated full-screen HTML scoreboard (`screen === 'compare'`) that brings the `010` cold-room pixel kitchen aesthetic to the verdict screen without mounting a `<canvas>`:
+   - **Backdrop:** Subtle `010` checkerboard tile pattern (`#EEF4FA` / `#F8FAFC` with `#D6E3F0` grout) rendered purely in CSS `background-image` (`calc(16 * var(--px))` tile grid).
+   - **Scoreboard Frame:** Crisp `#FFFFFF` paper card with `calc(1 * var(--px)) solid #0B1B33` outer border, pixel-bevel inner highlight (`#FFFFFF` top/left, `#CBD5E1` bottom/right), `var(--shadow-pixel)` drop shadow, and `4×4` steel corner rivets (`corner_rivet` sprite).
+   - **Projector-Ready Zero Scroll:** Every element—headline, 3-promises sub-line, 9-row comparison table, and `"Back to levels"` button—fits inside both `1920×1080` (`--px: 6px`) and `1366×768` (`--px: 4px`) with zero vertical or horizontal scrolling.
+2. **Dynamic Columns in Exact Gateway Order:**  
+   Column count and order come directly from `Object.entries(compare.presets)` (e.g. 3 columns on Level 1, 2 columns on Levels 2–3). Using `table-layout: fixed` (`26%` metric row-header column + equal-width preset columns: `37%` each for 2 presets, `24.66%` each for 3 presets) guarantees balanced alignment without hard-coding preset keys.
 3. **Never Colour Alone for "Best" or "Incident":**  
-   - **Best column (`data-best="true"`):** Marked with a solid `--color-brand` (`#0052B4`) `"Best balance"` pill badge (with a star/award SVG) in the column header, a `3px` top `--color-brand` accent bar, and a subtle `--color-brand-subtle` tint—matching the `Recommended` plan card in Spec 003.
-   - **Per-row best cells (`data-best="true"`):** Marked with bold numeric weight, a `3px` left `--color-brand` accent bar, subtle `--color-brand-subtle` fill, and an `aria-hidden="true"` checkmark SVG icon beside the value. Keeping the icon `aria-hidden="true"` ensures `<td>` text content matches gateway values verbatim for AC5.
-   - **Safety-incident column (`data-incident="true"`):** Marked with the exact `RED` policy tokens from `LightBadge` (`--color-light-red`, `--color-light-red-bg`, `--color-light-red-border`) plus an octagon/X-circle SVG icon and explicit `"Safety incident: …"` / `"0 of 3 stars"` text so failure is unmistakable.
-4. **Honest, Calm Missing-Data States:**  
-   `"Not reported"` (absent optional fields) and `"Nothing ordered"` (`totalCost === null`) use `--color-ink-muted` (`#3B4E6B`) italicised or regular text—calm and non-alarming, visually distinct from `tabular-nums` metrics and never styled as an error.
+   - **Best column (`data-best="true"`, AC6):** Marked with a solid `--color-brand` (`#0052B4`) pixel `"Best balance"` ribbon tag featuring the `best_crown` (`10×8` pixel crown) sprite (`aria-hidden="true"`), a `calc(1.5 * var(--px))` top `--color-brand` cap with a `calc(0.5 * var(--px))` `--color-sky` (`#60A5FA`) inner highlight, `--color-brand-subtle` (`#E0F2FE`) header tint, and a subtle `#F8FAFC` column lane wash. If all columns tie on `stars`, no column receives `data-best="true"` or the tag.
+   - **Per-row best cells (`data-best="true"`, AC7):** Marked with bold `tabular-nums`, a `calc(1 * var(--px))` left `--color-brand` accent bar, `--color-brand-subtle` (`#E0F2FE`) fill, and an `aria-hidden="true"` `best_check` (`8×8` pixel checkmark) sprite beside the value so `<td>` text matches gateway values verbatim.
+   - **Safety-incident column (`data-incident="true"`, AC9):** Uses the shared `RED` policy light tokens (`--color-light-red` `#B91C1C`, `--color-light-red-bg` `#FEE2E2`)—no new colour values—paired with the `010` `stop` (`8×8` octagon `"X"`) pixel sprite (`aria-hidden="true"`), an `"Incident"` header tag, `"0 of 3 stars"` in bold `#B91C1C` with 3 `star_off` sprites, and `"Safety incident: {reason}"` text.
+4. **Calm, Honest Missing-Data States:**  
+   `"Not reported"` (absent optional fields) and `"Nothing ordered"` (`totalCost === null`) render in `--color-ink-muted` (`#475569`) regular weight—clearly distinct from `tabular-nums` metrics and never styled as an error.
 
 ---
 
-## 2. Shared Design Tokens (Reused from 002, 003 & 005)
+## 2. Tokens & Pixel Sprites
 
-Reuse the `@theme` tokens from `docs/design/002-mandate-screen.md` §2, `docs/design/003-agent-timeline.md` §2, and `docs/design/005-result-receipt.md` §2 **unchanged**. **No new colour tokens are required** for Spec 007.
+### 2.1 Reused `010` Palette & Tokens (`010-game-world.md` §2 & §7)
 
-| Token (Source) | Value | Usage in Spec 007 |
+| Token (`010`) | Hex / Value | Usage in `007` |
 |---|---|---|
-| `--color-canvas` (`002`) | `#F3F6FA` | Outer page background |
-| `--color-surface` (`002`) | `#FFFFFF` | Table card surface, default cells, secondary button |
-| `--color-surface-subtle` (`002`) | `#EBF1F8` | Table header row base, alternating/hover subtle row tint |
-| `--color-ink` (`002`) | `#0B1B33` | Headline, row headers, metric values |
-| `--color-ink-muted` (`002`) | `#3B4E6B` | Sub-line, `"Not reported"` / `"Nothing ordered"`, `"None"` |
-| `--color-brand` (`002`) | `#0052B4` | `"Best balance"` pill fill, best-column/cell accent bar & check icon |
-| `--color-brand-subtle` (`002`) | `#E0ECFA` | Best-column header tint, best-cell subtle highlight |
-| `--color-border` (`002`) | `#C9D6E8` | Table horizontal row dividers & outer card border |
-| `--color-border-strong` (`002`) | `#7C93B3` | `"Back to levels"` button border |
-| `--color-error-surface` (`002`) | `#FDF2F5` | `GatewayError` `role="alert"` banner fill |
-| `--color-error-ink` (`002`) | `#881337` | `GatewayError` `role="alert"` banner text & border |
-| `--color-light-red` (`002` / `LightBadge`) | `#B91C1C` | Incident cell text & icon, `0 of 3 stars` emphasis, incident header accent |
-| `--color-light-red-bg` (`002` / `LightBadge`) | `#FEE2E2` | Incident cell fill (`#FEE2E2`) |
-| `--color-light-red-border` (`003` / `LightBadge`) | `#FCA5A5` | Incident cell border & column top accent |
-| `--color-star-filled` (`005`) | `#D97706` | Filled star SVG fill |
-| `--color-star-empty` (`005`) | `#CBD5E1` | Empty star SVG fill |
-| `--color-heart-filled` (`005`) | `#B91C1C` | Filled heart SVG fill in `Hearts left` row |
-| `--shadow-focus` (`002`) | `0 0 0 2px #FFFFFF, 0 0 0 5px #0052B4` | Keyboard `:focus-visible` ring |
+| `--px` | `4px` (`768p`), `6px` (`1080p`) | All sizing, borders, shadows, and type |
+| `--color-canvas` | `#EEF4FA` (`f`) | Checkerboard tile A / page background |
+| `--color-surface` | `#FFFFFF` (`w`) | Scoreboard card surface, odd rows, `ghost` button |
+| `--color-surface-subtle` | `#D6E3F0` (`g`) | Tile grout, `<thead>` base, horizontal row dividers |
+| `--color-ink` | `#0B1B33` (`o`) | `<h1>`, row headers, metric values (`17.23:1` on `#FFFFFF`) |
+| `--color-ink-muted` | `#475569` (`k`) | Sub-line, `"Not reported"`, `"Nothing ordered"`, `"None"` (`7.5:1` on `#FFFFFF`) |
+| `--color-brand` | `#0052B4` (`b`) | `"Best balance"` tag fill, best-column/cell accent bar (`7.33:1` w/ `#FFFFFF`) |
+| `--color-brand-hover` | `#003E8A` (`d`) | Button hover state |
+| `--color-brand-subtle` | `#E0F2FE` (`2`) | Best-column header & best-cell fill (`14.9:1` w/ `#0B1B33`) |
+| `--color-sky` | `#60A5FA` (`s`) | Best-column top inner highlight line, header accent dot |
+| `--color-border` | `#94A3B8` (`m`) | Inner bevel shadow, subtle column dividers |
+| `--color-border-strong` | `#0B1B33` (`o`) | Outer scoreboard frame (`calc(1 * var(--px)) solid`), button border |
+| `--color-light-red` | `#B91C1C` (`R`) | Incident column top bar, incident cell text/border, `0 of 3 stars` (`5.30:1` on `#FEE2E2`) |
+| `--color-light-red-bg` | `#FEE2E2` (`4`) | Incident column header tint & incident cell fill |
+| `--color-error-surface` | `#FDF2F5` (`a`) | `GatewayError` `PixelPanel` (`alert`) background |
+| `--color-error-ink` | `#881337` (`e`) | `GatewayError` `PixelPanel` (`alert`) text & border (`8.74:1` on `#FDF2F5`) |
+| `--shadow-pixel` | `calc(1 * var(--px)) calc(1 * var(--px)) 0 #0B1B33` | Outer scoreboard card & `PixelPanel` drop shadow |
+| `--shadow-focus` | `0 0 0 calc(0.5 * var(--px)) #FFFFFF, 0 0 0 calc(1.25 * var(--px)) #0052B4` | Keyboard `:focus-visible` ring on `"Back to levels"` |
 
-### Contrast Verification Summary
-| Pair | Ratio | Standard |
-|---|---|---|
-| `--color-ink` (`#0B1B33`) on `--color-surface` (`#FFFFFF`) | **16.9:1** | Exceeds AAA (7:1) |
-| `--color-ink` (`#0B1B33`) on `--color-brand-subtle` (`#E0ECFA`) | **14.2:1** | Exceeds AAA (7:1) |
-| `--color-ink-muted` (`#3B4E6B`) on `--color-surface` (`#FFFFFF`) | **8.2:1** | Exceeds AAA (7:1) |
-| `#FFFFFF` on `--color-brand` (`#0052B4`) (`"Best balance"` pill) | **7.6:1** | Exceeds AAA (7:1) |
-| `--color-light-red` (`#B91C1C`) on `--color-light-red-bg` (`#FEE2E2`) | **5.30:1** | Passes AA (4.5:1) |
-| `--color-error-ink` (`#881337`) on `--color-error-surface` (`#FDF2F5`) | **9.7:1** | Exceeds AAA (7:1) |
+**Marked CSS Token Additions (using existing `010` §2 hexes `p` & `c`):**
+- `--color-floor-alt: #F8FAFC;` (`010` key `p`: checkerboard tile B, even-row zebra tint, best-column lane wash)
+- `--color-steel-light: #CBD5E1;` (`010` key `c`: scoreboard inner bottom/right bevel)
+
+### 2.2 Reused & Marked-Addition Pixel Sprites
+
+Every sprite uses `010` §2 palette keys only (`.` = transparent) and renders with `image-rendering: pixelated` and `aria-hidden="true"`:
+
+- **Reused from `005` (`Stars` / `PixelSprite`):** `star_on`, `star_off` (referenced by name; rendered at `calc(5 * var(--px))` = `30×30px` at 1080p, `20×20px` at 768p).
+- **Reused from `010` art kit:**
+  - `stop` (`8×8` octagon `"X"`, `010` §4.4, rendered at `calc(4 * var(--px))` = `24×24px` at 1080p, `16×16px` at 768p).
+  - `heart` icon (rendered at `calc(4 * var(--px))` in the `Hearts left` row). *Fallback addition if `010`/`004` does not yet export `heart` in `src/world/art.ts`:*
+    ```text
+    .oo..oo.
+    oRRoORRo
+    oRwRRRRo
+    oRRRRRRo
+    .oRRRRo.
+    ..oRRo..
+    ...oo...
+    ........
+    ```
+- **Marked Addition 1 — `best_crown` (`10×8`, for `"Best balance"` column tag; uses `o`, `s`, `w`, `b`):**  
+  Render at `calc(5 * var(--px))` × `calc(4 * var(--px))` (`30×24px` at 1080p, `20×16px` at 768p).
+  ```text
+  .o..oo..o.
+  osoossooso
+  osssssssso
+  oswwsswwso
+  obbbbbbbbo
+  osssssssso
+  .oooooooo.
+  ..........
+  ```
+- **Marked Addition 2 — `best_check` (`8×8`, for per-row `data-best="true"` cells; uses `o`, `b`, `w`):**  
+  Render at `calc(4 * var(--px))` (`24×24px` at 1080p, `16×16px` at 768p).
+  ```text
+  .oooooo.
+  obbbbbbo
+  obbbbwbo
+  obbwbwbo
+  obwbbwbo
+  obbbbbbo
+  obbbbbbo
+  .oooooo.
+  ```
+- **Marked Addition 3 — `arrow_back` (`8×8`, for `"Back to levels"` button; uses `o`, `b`, `s`):**  
+  Render at `calc(4 * var(--px))` (`24×24px` at 1080p, `16×16px` at 768p).
+  ```text
+  ...oo...
+  ..obo...
+  .obboooo
+  osbbbbbo
+  .obboooo
+  ..obo...
+  ...oo...
+  ........
+  ```
+- **Marked Addition 4 — `alert_triangle` (`10×9`, for `GatewayError` `PixelPanel` `alert` banner; uses `o`, `e`, `w`, `a`):**  
+  Render at `calc(5 * var(--px))` × `calc(4.5 * var(--px))` (`30×27px` at 1080p, `20×18px` at 768p).
+  ```text
+  ....oo....
+  ...oeeo...
+  ..oewweo..
+  ..oewweo..
+  .oeewweeo.
+  .oeeeeeoo.
+  oeewweeeeo
+  oeeeeeeeeo
+  oooooooooo
+  ```
+- **Marked Addition 5 — `corner_rivet` (`4×4`, decorative pixel rivets at the 4 corners of `.compare-frame`; uses `o`, `c`, `m`):**
+  ```text
+  oooo
+  ocmo
+  ommo
+  oooo
+  ```
 
 ---
 
-## 3. Type Scale & Spacing
+## 3. Responsive `--px` Scale & Typography
 
-| Role | `1920×1080` (`min-[1440px]:` / `xl:`) | `1366×768` (default `< 1440px`) | Weight / Tracking |
-|---|---|---|---|
-| Core-Message Headline (`<h1>`) | `56px` (`3.5rem`), LH `1.08` | `38px` (`2.375rem`), LH `1.12` | `700`, `-0.025em` |
-| Sub-line (Level + 3 promises) | `24px` (`1.5rem`), LH `1.35` | `18px` (`1.125rem`), LH `1.4` | `400` (`600` on level title) |
-| Preset Column Headers (`<th scope="col">`) | `26px` (`1.625rem`), LH `1.2` | `20px` (`1.25rem`), LH `1.25` | `700`, `-0.01em` |
-| Row Labels (`<th scope="row">`) & Cell Values (`<td>`) | `24px` (`1.5rem`), LH `1.25` | `18px` (`1.125rem`), LH `1.3` | `600` (row labels), `500`–`700` (values), `tabular-nums` |
-| `"Best balance"` Tag & Incident Badge | `16px` (`1rem`), LH `1.2` | `14px` (`0.875rem`), LH `1.2` | `700`, uppercase/title |
-| `"Back to levels"` Button | `20px` (`1.25rem`), LH `1.2` | `16px` (`1rem`), LH `1.2` | `600` |
-
-- **Outer container (`<main>`):** `max-width: 1680px` centred on `--color-canvas`; padding `24px 32px` at `1080p`, `16px 24px` at `768p`.
-- **Table cell padding:** `11px 20px` at `1080p` (`9px 14px` at `768p`) so all 9 rows + header fit cleanly above the fold.
-
----
-
-## 4. Layout Specification
-
-### 4.1 3-Column Comparison (`1920×1080`, e.g. Level 1)
-```text
-+-----------------------------------------------------------------------------------+
-| Agents don’t need a chatbot. They need a mandate.                                 |
-| Level 1: The Weekly Order · Mandate = buyer’s promise · Quote = Valio Aimo’s      |
-| promise · Log = proof both kept them                                              |
-+-----------------------------------------------------------------------------------+
-| Metric            | Strict           | ★ Best balance             | Loose         |
-|                   |                  | Balanced                   |               |
-|-------------------+------------------+----------------------------+---------------|
-| Approvals asked   | 4                | 1                          | [✓] 0         |
-| Hearts used       | 3                | 1                          | [✓] 0         |
-| Hearts left       | 0                | 2 ♥♥                       | [✓] 3 ♥♥♥     |
-| Cost              | €910,00          | [✓] €1 295,00              | €1 350,00     |
-| Kitchen           | 70 %             | [✓] 100 %                  | 70 %          |
-| Wallet            | 100              | 97                         | [✓] 100       |
-| Safety            | 100              | 100                        | 100           |
-| Stars             | ★☆☆  1 of 3 stars| ★★★  3 of 3 stars          | ★☆☆  1 of 3   |
-| Incident          | None             | None                       | None          |
-+-----------------------------------------------------------------------------------+
-| [← Back to levels]                                                                |
-+-----------------------------------------------------------------------------------+
+Ensure `:root` sets `--px: 4px` by default and upgrades to `6px` on `1080p` viewports:
+```css
+:root { --px: 4px; }
+@media (min-width: 1440px) and (min-height: 900px) {
+  :root { --px: 6px; }
+}
 ```
 
-### 4.2 2-Column Comparison (`1920×1080` & `1366×768`, e.g. Level 2 & Level 3)
-- Same `<table>` structure with 2 preset `<th scope="col">` columns (`26%` metric label + `37%` per preset column).
-- **Level 2 (equal stars):** Neither column receives `data-best="true"` or the `"Best balance"` tag. Per-row best cells (`Approvals asked`, `Hearts used`, `Hearts left`) still highlight the attention difference cleanly.
+| Role | Token / Size | `1920×1080` (`--px: 6px`) | `1366×768` (`--px: 4px`) | Font |
+|---|---|---|---|---|
+| Headline (`<h1>`) | `calc(6 * var(--px))` | `36px`, LH `1.2` | `24px`, LH `1.2` | `Press Start 2P`, `700` |
+| Sub-line (Level + 3 promises) | `calc(4 * var(--px))` | `24px`, LH `1.3` | `16px`, LH `1.3` | `Pixelify Sans`, `400` (`700` on level title) |
+| Preset Column Header (`<th scope="col">`) | `calc(5 * var(--px))` | `30px`, LH `1.15` | `20px`, LH `1.15` | `Pixelify Sans`, `700` |
+| Tag (`"Best balance"` / `"Incident"`) | `calc(4 * var(--px))` | `24px`, LH `1.1` | `16px`, LH `1.1` | `Pixelify Sans`, `700` |
+| Row Labels (`<th scope="row">`) & Values (`<td>`) | `calc(4 * var(--px))` | `24px`, LH `1.25` | `16px`, LH `1.25` | `Pixelify Sans`, `600` / `500–700`, `tabular-nums` |
+| `"Back to levels"` Button | `calc(4 * var(--px))` | `24px`, LH `1.1` | `16px`, LH `1.1` | `Pixelify Sans`, `700` |
+
+Every visible string is `≥ 4 * --px` (`16px` at 768p, `24px` at 1080p).
+
+---
+
+## 4. Layout Specification (Zero Scroll at Both Resolutions)
+
+### 4.1 3-Column Comparison (`1920×1080` & `1366×768`, e.g. Level 1)
+```text
++------------------------------------------------------------------------------------+
+| AGENTS DON’T NEED A CHATBOT. THEY NEED A MANDATE.                                  |
+| Level 1: The Weekly Order · Mandate = buyer’s promise · Quote = Valio Aimo’s       |
+| promise · Log = proof both kept them                                               |
++------------------------------------------------------------------------------------+
+| [■]              |                  | [👑 Best balance]        |               [■] |
+| Metric           | Strict           | Balanced                 | Loose             |
+|------------------+------------------+--------------------------+-------------------|
+| Approvals asked  | 4                | 1                        | [✓] 0             |
+| Hearts used      | 3                | 1                        | [✓] 0             |
+| Hearts left      | 0                | 2 ♥♥                     | [✓] 3 ♥♥♥         |
+| Cost             | €910,00          | [✓] €1 295,00            | €1 350,00         |
+| Kitchen          | 70 %             | [✓] 100 %                | 70 %              |
+| Wallet           | 100              | 97                       | [✓] 100           |
+| Safety           | 100              | 100                      | 100               |
+| Stars            | ★☆☆ 1 of 3 stars | ★★★ 3 of 3 stars         | ★☆☆ 1 of 3 stars  |
+| Incident         | None             | None                     | None              |
+| [■]              |                  |                          |               [■] |
++------------------------------------------------------------------------------------+
+| [← Back to levels]                                                                 |
++------------------------------------------------------------------------------------+
+```
+
+### 4.2 2-Column Comparison (e.g. Level 2 & Level 3)
+- Same `<table>` with 2 preset `<th scope="col">` columns (`26%` metric label + `37%` per preset column).
+- **Level 2 (equal `stars`):** Neither column gets `data-best="true"` or `"Best balance"`. Per-row `data-best="true"` cells (`Approvals asked`, `Hearts used`, `Hearts left`) still highlight the attention difference.
 - **Level 3 (Safety Incident on `allergen_off`):**
 ```text
-| Metric            | ★ Best balance             | [!] Incident                    |
-|                   | Allergen on                | Allergen off                    |
-|-------------------+----------------------------+---------------------------------|
-| ...               | ...                        | ...                             |
-| Stars             | ★★★  3 of 3 stars          | ☆☆☆  0 of 3 stars               |
-| Incident          | None                       | [✕] Safety incident: Contains   |
-|                   |                            |     egg (AE)                    |
-+-----------------------------------------------------------------------------------+
+| Metric           | [👑 Best balance]        | [X Incident]                    |
+|                  | Allergen on              | Allergen off                    |
+|------------------+--------------------------+---------------------------------|
+| ...              | ...                      | ...                             |
+| Stars            | ★★★ 3 of 3 stars         | ☆☆☆ 0 of 3 stars                |
+| Incident         | None                     | [X] Safety incident: Contains   |
+|                  |                          |     egg (AE)                    |
 ```
 
-### 4.3 Tailwind Class Guidance per Element
-- **Page wrapper (`<main>`):** `mx-auto max-w-[1680px] px-6 py-4 min-[1440px]:px-8 min-[1440px]:py-6`
-- **Headline (`<h1>`, `tabIndex={-1}`):** `m-0 text-[2.375rem] leading-[1.12] font-bold tracking-[-0.025em] text-ink min-[1440px]:text-[3.5rem] min-[1440px]:leading-[1.08]`
-- **Sub-line (`<p>`):** `mt-2 mb-5 text-lg text-ink-muted min-[1440px]:text-2xl`
-- **Table card shell:** `overflow-x-auto rounded-[var(--radius-card)] border border-border bg-surface shadow-sm`
-- **`<table>`:** `w-full table-fixed border-collapse text-left`
-- **`<th scope="col">` (Metric):** `w-[26%] border-b-2 border-border bg-surface-subtle px-3.5 py-3 text-lg font-semibold text-ink-muted min-[1440px]:px-5 min-[1440px]:py-3.5 min-[1440px]:text-2xl`
-- **`<th scope="col">` (Preset default):** `border-b-2 border-border bg-surface-subtle px-3.5 py-3 text-xl font-bold text-ink min-[1440px]:px-5 min-[1440px]:py-3.5 min-[1440px]:text-[1.625rem]`
-- **`<th scope="col" data-best="true">`:** Add `border-t-4 border-t-brand bg-brand-subtle/60`
-- **`<th scope="col" data-incident="true">`:** Add `border-t-4 border-t-light-red bg-light-red-bg/50`
-- **`<th scope="row">`:** `border-b border-border px-3.5 py-2.5 text-lg font-semibold text-ink min-[1440px]:px-5 min-[1440px]:py-3 min-[1440px]:text-2xl`
-- **`<td>` (default):** `border-b border-border px-3.5 py-2.5 text-lg font-medium text-ink tabular-nums min-[1440px]:px-5 min-[1440px]:py-3 min-[1440px]:text-2xl`
-- **`<td data-best="true">`:** Add `bg-brand-subtle/45 font-bold border-l-4 border-l-brand`
-- **`<td>` (muted: `"Not reported"` / `"Nothing ordered"` / `"None"`):** `text-ink-muted italic font-normal`
-- **`<td>` (Incident row when `incident !== null`):** `bg-light-red-bg text-light-red font-bold border-l-4 border-l-light-red`
-- **Footer `"Back to levels"` button:** `mt-5 inline-flex min-h-[48px] items-center gap-2 rounded-[var(--radius-control)] border-[1.5px] border-border-strong bg-surface px-6 text-base font-semibold text-ink hover:border-brand hover:bg-surface-subtle focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus)] min-[1440px]:min-h-[52px] min-[1440px]:text-xl`
+### 4.3 Height Budget Verification
+- **`1366×768` (`--px: 4px`):** Outer padding `32px` + header (2-line `<h1>` + sub-line) `107px` + table (`<thead>` `52px` + 9 rows × `36px` + frame `12px` = `388px`) + footer `56px` = **`583px` ≤ `768px`** (`185px` spare).
+- **`1920×1080` (`--px: 6px`):** Outer padding `60px` + header `157px` + table (`<thead>` `78px` + 9 rows × `53px` + frame `18px` = `573px`) + footer `84px` = **`874px` ≤ `1080px`** (`206px` spare).
+
+### 4.4 CSS / Tailwind Structure per Element
+- **Page wrapper (`<main aria-label="Preset comparison">`):**  
+  Checkerboard background (`#EEF4FA` / `#F8FAFC` at `calc(16 * var(--px))` tile size) + `mx-auto max-w-[calc(290*var(--px))] px-[calc(6*var(--px))] py-[calc(4*var(--px))] min-h-screen`
+- **Headline (`<h1>`, `tabIndex={-1}`):**  
+  `m-0 font-display text-[calc(6*var(--px))] leading-[1.2] text-ink`
+- **Sub-line (`<p>`):**  
+  `mt-[calc(2*var(--px))] mb-[calc(4*var(--px))] text-[calc(4*var(--px))] leading-[1.3] text-ink-muted` (wrap `{levelTitle}` in `<strong className="font-bold text-ink">`)
+- **Scoreboard Frame (`div.compare-frame`):**  
+  `relative overflow-x-auto rounded-none border-[calc(1*var(--px))] border-border-strong bg-surface shadow-[var(--shadow-pixel)]`  
+  Inner pixel bevel: `box-shadow: inset calc(0.5*var(--px)) calc(0.5*var(--px)) 0 #FFFFFF, inset calc(-0.5*var(--px)) calc(-0.5*var(--px)) 0 #CBD5E1, var(--shadow-pixel);`  
+  Optional 4 `corner_rivet` sprites (`aria-hidden="true"`) anchored `calc(1 * var(--px))` from each corner.
+- **`<table aria-labelledby="compare-heading">`:**  
+  `w-full table-fixed border-collapse text-left`
+- **`<th scope="col">` (Metric):**  
+  `w-[26%] border-b-[calc(0.5*var(--px))] border-border-strong bg-surface-subtle px-[calc(3*var(--px))] py-[calc(2*var(--px))] align-bottom text-[calc(4*var(--px))] font-bold text-ink-muted`
+- **`<th scope="col">` (Preset default):**  
+  `border-b-[calc(0.5*var(--px))] border-border-strong bg-surface-subtle px-[calc(3*var(--px))] py-[calc(2*var(--px))] align-bottom text-[calc(5*var(--px))] leading-[1.15] font-bold text-ink`
+- **`<th scope="col" data-best="true">`:**  
+  Add `border-t-[calc(1.5*var(--px))] border-t-brand bg-brand-subtle` + `box-shadow: inset 0 calc(0.5*var(--px)) 0 #60A5FA;`
+- **`<th scope="col" data-incident="true">`:**  
+  Add `border-t-[calc(1.5*var(--px))] border-t-light-red bg-light-red-bg`
+- **Tag pill (`"Best balance"` / `"Incident"`):**  
+  `mb-[calc(1*var(--px))] inline-flex items-center gap-[calc(1.5*var(--px))] rounded-none border-[calc(0.5*var(--px))] border-border-strong px-[calc(2*var(--px))] py-[calc(0.5*var(--px))] text-[calc(4*var(--px))] leading-[1.1] font-bold shadow-[calc(0.5*var(--px))_calc(0.5*var(--px))_0_#0B1B33]` (`bg-brand text-surface` for Best; `bg-light-red text-surface` for Incident).
+- **Zebra rows (`tbody tr:nth-child(even)`):**  
+  `bg-[#F8FAFC]`, hover: `hover:bg-canvas`.
+- **`<th scope="row">`:**  
+  `border-b border-surface-subtle px-[calc(3*var(--px))] py-[calc(1.75*var(--px))] text-[calc(4*var(--px))] leading-[1.25] font-bold text-ink`
+- **`<td>` (default):**  
+  `border-b border-surface-subtle px-[calc(3*var(--px))] py-[calc(1.75*var(--px))] text-[calc(4*var(--px))] leading-[1.25] font-medium text-ink tabular-nums`
+- **`<td data-best="true">`:**  
+  Add `border-l-[calc(1*var(--px))] border-l-brand bg-brand-subtle font-bold` + inline `best_check` sprite (`aria-hidden="true"`).
+- **`<td>` (muted: `"Not reported"`, `"Nothing ordered"`, `"None"`):**  
+  `text-ink-muted font-normal`
+- **`<td>` (Incident row when `incident !== null`):**  
+  `border-l-[calc(1*var(--px))] border-l-light-red bg-light-red-bg font-bold text-light-red` + inline `stop` sprite (`aria-hidden="true"`).
 
 ---
 
-## 5. Component & Cell States
+## 5. Interactive States, Micro-Animations & Accessibility
 
-1. **Loading State (`client.compare` pending):**  
-   Centred in `<main>` on `--color-canvas`: `"Loading comparison…"` (`24px` at `1080p`, `18px` at `768p`, `--color-ink-muted`), accompanied by the `"Back to levels"` button so the user is never trapped.
-2. **Error State (`GatewayError`):**  
-   Render **no `<table>`**. Show a `role="alert"` banner matching `002` §5.4 (`--color-error-surface` `#FDF2F5`, `border: 1.5px solid --color-error-ink`, `border-left: 5px solid --color-error-ink`, warning triangle SVG `aria-hidden="true"`, bold `"Error:"` prefix + `error.message`) and the `"Back to levels"` button below it.
-3. **`Hearts left` Cell:**  
-   Renders the integer (`{heartsLeft}`) followed by `heartsLeft` filled heart SVGs (`20px × 20px` at `1080p`, `16px × 16px` at `768p`, `aria-hidden="true"`, `--color-heart-filled` `#B91C1C`). When `heartsLeft === 0`, renders `"0"` with no filled hearts (optionally muted empty outline or just `"0"` so text stays exact).
-4. **`Stars` Cell:**  
-   Renders 3 star SVGs (`22px × 22px` at `1080p`, `18px × 18px` at `768p`, `aria-hidden="true"`; filled = `--color-star-filled` `#D97706`, empty = `--color-star-empty` `#CBD5E1`) + visible text `"{stars} of 3 stars"`. For `0` stars, all 3 stars are `--color-star-empty` and text `"0 of 3 stars"` is styled in `--color-light-red` (`#B91C1C`) `font-bold`.
-5. **`Incident` Cell:**  
-   - When `incident === null`: `"None"` (`--color-ink-muted`).
-   - When `incident !== null`: Uses `RED` tokens from `LightBadge` (`--color-light-red-bg` `#FEE2E2`, `--color-light-red` `#B91C1C`, `--color-light-red-border` `#FCA5A5`), octagon/X-circle SVG (`18px × 18px`, `aria-hidden="true"`), and exact text `"Safety incident: " + incident.reason`.
-
----
-
-## 6. Reveal Animation & Reduced Motion (`motion/react`)
-
-Wrap with `MotionConfig reducedMotion="user"` and read `useReducedMotion()` (consistent with Specs 002 and 005):
-
-- **Animate the table card wrapper** (never animate `<tr>`/`<td>` display properties so native table layout stays intact):
-  - **Full Motion (`shouldReduce === false`):** `initial={{ opacity: 0, y: 10 }}`, `animate={{ opacity: 1, y: 0 }}`, `transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}`.
-  - **Reduced Motion (`shouldReduce === true`):** `initial={{ opacity: 1, y: 0 }}`, `animate={{ opacity: 1, y: 0 }}`, `transition={{ duration: 0 }}` (instant appearance, no translate).
-
----
-
-## 7. Accessibility & Keyboard Navigation
-
-1. **Landmarks & Focus:**  
-   - `<main aria-label="Preset comparison">`
-   - `<h1>` (`tabIndex={-1}`) programmatically focused when comparison data resolves (or when error renders).
-2. **Real `<table>` Semantics:**  
-   - `<table aria-labelledby="compare-heading">` (or `<caption className="sr-only">Comparison of preset runs for {levelTitle}</caption>`).
-   - Every column header uses `<th scope="col">` in `<thead>`.
-   - Every metric row header uses `<th scope="row">` in `<tbody>`.
-   - All decorative icons (best-cell checkmark, `"Best balance"` star, hearts, stars, incident octagon) carry `aria-hidden="true"`.
-3. **Keyboard & Focus:**  
-   - `"Back to levels"` is a native `<button type="button">` reachable via `Tab` and activated with `Enter` or `Space`, displaying `--shadow-focus` on `:focus-visible`.
+1. **Button States (`"Back to levels"`, `010` `ghost` button):**
+   - `default`: `#FFFFFF` bg, `#0052B4` text, `calc(0.5 * var(--px)) solid #0B1B33` border, `shadow-[calc(0.75*var(--px))_calc(0.75*var(--px))_0_#0B1B33]`, `min-height: calc(10 * var(--px))`, `arrow_back` sprite (`aria-hidden="true"`).
+   - `hover`: `bg-brand-subtle` (`#E0F2FE`), `text-brand-hover` (`#003E8A`).
+   - `active` (pressed): `translate-x-[calc(0.5*var(--px))] translate-y-[calc(0.5*var(--px))] shadow-[calc(0.25*var(--px))_calc(0.25*var(--px))_0_#0B1B33]`.
+   - `focus-visible`: `outline-none shadow-[var(--shadow-focus)]`.
+   - `disabled`: `opacity-65 cursor-not-allowed`.
+2. **Loading (`client.compare` pending):**  
+   Centred `PixelPanel` (`notice` variant: `#FFFFFF` surface, `calc(1.5 * var(--px))` `#0052B4` top bar, `calc(1 * var(--px)) solid #0B1B33` border, `var(--shadow-pixel)`) with `role="status"` text `"Loading comparison…"` and `"Back to levels"` button.
+3. **Error (`GatewayError`):**  
+   Render **no `<table>`**. Render `010` `PixelPanel` (`alert` variant: `role="alert"`, `#FDF2F5` bg, `#881337` text & `calc(1 * var(--px))` border, `calc(2 * var(--px))` left accent, `alert_triangle` sprite `aria-hidden="true"`, `error.message`) and `"Back to levels"` button.
+4. **Stars & Hearts:**  
+   - `Stars` (`005`): `star_on` / `star_off` sprites + visible text `"{stars} of 3 stars"`. For `0` stars, 3 `star_off` sprites + `"0 of 3 stars"` in `text-light-red font-bold`.
+   - `Hearts left`: integer `{heartsLeft}` + `heartsLeft` `heart` sprites (`aria-hidden="true"`). When `0`, renders `"0"` with no heart sprites.
+5. **Micro-Animations & Reduced Motion (`motion/react` + CSS):**  
+   - **Scoreboard Entrance:** Wrap `div.compare-frame` in `MotionConfig reducedMotion="user"`: `initial={{ opacity: 0, y: 8 }}` → `animate={{ opacity: 1, y: 0 }}` (`duration: 0.24s`, `ease: [0.22, 1, 0.36, 1]`). Under `useReducedMotion()`, `duration: 0, y: 0`.
+   - **Best-Column Crown Bob:** 2-frame pixel bob (`translateY(0)` → `translateY(calc(-0.5 * var(--px)))` every `1.6s`, `steps(2, end)`) on `best_crown` only; disabled under `@media (prefers-reduced-motion: reduce)`.
+6. **Keyboard & Landmarks:**  
+   - `<main aria-label="Preset comparison">`, `<h1>` (`tabIndex={-1}`) focused when data/error settles.
+   - Real `<table>` with `<th scope="col">` and `<th scope="row">`; all decorative pixel sprites carry `aria-hidden="true"`.
+   - `"Back to levels"` is a native `<button type="button">` reachable via `Tab` and activated with `Enter` or `Space`.
 
 ---
 
-## 8. Final UI Copy (English, Typographic Quotes & Apostrophes)
+## 6. Final UI Copy (English, Typographic Quotes & Apostrophes)
 
 | Element | Exact Copy |
 |---|---|
@@ -183,15 +270,8 @@ Wrap with `MotionConfig reducedMotion="user"` and read `useReducedMotion()` (con
 | Loading state | `Loading comparison…` |
 | Metric column header | `Metric` |
 | Best column tag | `Best balance` |
-| Row 1 header | `Approvals asked` |
-| Row 2 header | `Hearts used` |
-| Row 3 header | `Hearts left` |
-| Row 4 header | `Cost` |
-| Row 5 header | `Kitchen` |
-| Row 6 header | `Wallet` |
-| Row 7 header | `Safety` |
-| Row 8 header | `Stars` |
-| Row 9 header | `Incident` |
+| Incident column tag | `Incident` |
+| Row 1–9 headers | `Approvals asked`, `Hearts used`, `Hearts left`, `Cost`, `Kitchen`, `Wallet`, `Safety`, `Stars`, `Incident` |
 | Absent optional field | `Not reported` |
 | Null `totalCost` | `Nothing ordered` |
 | Null `incident` | `None` |
