@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
 import level1 from '../../mocks/level1.json';
 import { ReplayGatewayClient } from '../api/replay';
 import type { GameResult, LogResponse, LogVerify } from '../api/schemas';
@@ -34,6 +35,17 @@ describe('ResultPanel', () => {
     expect(await screen.findByLabelText('3 of 3 stars')).toBeInTheDocument();
     expect(screen.queryByText('Safety incident')).not.toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('Log does not match this result');
+  });
+
+  it('renders the verification hash in a consistent monospace face', async () => {
+    const result = level1.presets.balanced.result as GameResult;
+    const client = stub(result);
+    render(<ResultPanel client={client as never} sessionId="s" startHearts={3} onPlayAgain={() => {}} />);
+    const hash = await screen.findByTestId('result-hash-value');
+    expect(hash.tagName).toBe('CODE');
+    expect(hash).toHaveTextContent(level1.presets.balanced.verify.headHash);
+    const css = readFileSync('src/index.css', 'utf8');
+    expect(css).toMatch(/\.result-hash-code\s*\{[^}]*font-family:\s*ui-monospace[^}]*monospace/s);
   });
 
   it('shows incident reason and product, with incident panel variant', async () => {

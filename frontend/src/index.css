@@ -499,3 +499,4 @@ button:focus-visible, select:focus-visible, input:focus-visible {
   .heart-break svg { animation: none; }
 }
 /* 011 heart-break end */
+.result-hash-code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .9em; font-variant-numeric: tabular-nums; }

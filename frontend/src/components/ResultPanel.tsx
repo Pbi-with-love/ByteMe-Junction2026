@@ -67,7 +67,7 @@ function HashBadge({ result, verify, error }: { result: GameResult; verify: LogV
   if (!verify) return <div className="result-hash" role="status">Verifying log…</div>;
   if (!verify.valid) return <div className="result-hash result-hash-bad" role="status"><BadgeIcon state="tampered" />Log tampered: chain broken at event #{verify.brokenAtSeq}</div>;
   if (verify.headHash !== result.logHeadHash) return <div className="result-hash result-hash-bad" role="status"><BadgeIcon state="mismatch" />Log does not match this result</div>;
-  return <div className="result-hash result-hash-good" role="status"><BadgeIcon state="verified" />Log verified · {verify.headHash} · {verify.events} events</div>;
+  return <div className="result-hash result-hash-good" role="status"><BadgeIcon state="verified" />Log verified · <code className="result-hash-code" data-testid="result-hash-value">{verify.headHash}</code> · {verify.events} events</div>;
 }
 
 function Score({ name, value, incident }: { name: string; value: number; incident: boolean }) {
