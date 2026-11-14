@@ -40,3 +40,7 @@ Return one consolidated report containing:
 3. Exact test and Playwright commands with results
 4. Screenshot paths for UI work
 5. Assumptions, blockers, and open issues
+
+## Scope rule (all agents)
+
+Work **only inside `frontend/`**. Do not create, edit or delete anything in `backend/`, `gateway/`, `agent/` or the repo root. The gateway is called over HTTP per `docs/design/API.md`; mock it inside `frontend/` if it is not up. Only exception: the docs your role already owns (`docs/specs/*`, `docs/design/*`, `docs/memory/*`).

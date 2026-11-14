@@ -25,3 +25,7 @@ Report:
 2. Tokens, layout, typography, responsive behavior, and interaction/accessibility states as applicable
 3. Artifacts or files changed (if permitted by the spec)
 4. Open questions or assumptions for implementation
+
+## Scope rule (all agents)
+
+Work **only inside `frontend/`**. Do not create, edit or delete anything in `backend/`, `gateway/`, `agent/` or the repo root. The gateway is called over HTTP per `docs/design/API.md`; mock it inside `frontend/` if it is not up. Only exception: the docs your role already owns (`docs/specs/*`, `docs/design/*`, `docs/memory/*`).
