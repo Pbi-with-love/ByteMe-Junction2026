@@ -35,14 +35,25 @@ describe('ReplayGatewayClient', () => {
     expect(await client.getLog('buyer', { since: 1, limit: 1 })).toEqual({ events: mock.tamperedDemo!.log.filter((event) => event.seq > 1).slice(0, 1) });
   });
 
-  it('returns NOT_FOUND before a session, for absent log data, and for Valio view', async () => {
+  it('returns NOT_FOUND before a session or for absent log data', async () => {
     const client = new ReplayGatewayClient();
     await expect(client.getLog('buyer')).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
     await expect(client.verifyLog()).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
-    await expect(client.getLog('valio')).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
     const start = await client.startLevel('level1', 'balanced');
-    await expect(client.getLog('valio')).rejects.toMatchObject({ code: 'NOT_FOUND', httpStatus: 404 });
+    expect(await client.getLog('valio')).toEqual({ events: level1.presets.balanced.valioLog });
     expect(start.sessionId).toBeTruthy();
+  });
+
+  it('returns the recorded Valio log and probe without deriving it from buyer events', async () => {
+    const client = new ReplayGatewayClient();
+    for (const mock of mocks) for (const [preset, recording] of Object.entries(mock.presets)) {
+      await client.startLevel(mock.start.level.levelId, preset);
+      expect(await client.getLog('valio')).toEqual({ events: recording.valioLog });
+    }
+    const probeClient = createGatewayClient({ VITE_GATEWAY_MODE: 'replay', VITE_REPLAY_PROBE: '1' });
+    await probeClient.startLevel(level1.start.level.levelId, level1.dataBoundaryDemo!.preset);
+    expect(await probeClient.getLog('valio')).toEqual({ events: level1.dataBoundaryDemo!.valioLog });
+    expect(await probeClient.getLog('buyer')).toEqual({ events: level1.presets.balanced.log });
   });
   it('looks up starts, steps, results, comparisons, and discovery directly from mocks', async () => {
     const client = new ReplayGatewayClient();

@@ -8,12 +8,12 @@ import { DiscoverySchema, LevelMockSchema, type AgentStep, type LevelMock, type 
 
 const levels: LevelMock[] = [level1, level2, level3].map((mock) => LevelMockSchema.parse(mock));
 const discovery = DiscoverySchema.parse(discoveryData.response);
-type Session = { recording: LevelMock['presets'][string]; cursor: number; tampered?: { log: LogResponse['events']; verify: LogVerify } };
+type Session = { recording: LevelMock['presets'][string]; cursor: number; tampered?: { log: LogResponse['events']; verify: LogVerify }; valioLog?: LogResponse['events'] };
 
 export class ReplayGatewayClient implements GatewayClient {
   private readonly sessions = new Map<string, Session>();
 
-  constructor(private readonly options: { tamperLog?: boolean } = {}) {}
+  constructor(private readonly options: { tamperLog?: boolean; dataBoundaryDemo?: boolean } = {}) {}
 
   async discovery() {
     return discovery;
@@ -27,7 +27,7 @@ export class ReplayGatewayClient implements GatewayClient {
     const tampered = this.options.tamperLog && level.tamperedDemo?.preset === preset
       ? { log: level.tamperedDemo.log, verify: level.tamperedDemo.verify }
       : undefined;
-    this.sessions.set(level.start.sessionId, { recording, cursor: 0, tampered });
+    this.sessions.set(level.start.sessionId, { recording, cursor: 0, tampered, valioLog: this.options.dataBoundaryDemo && level.dataBoundaryDemo?.preset === preset ? level.dataBoundaryDemo.valioLog : undefined });
     return level.start;
   }
 
@@ -60,10 +60,10 @@ export class ReplayGatewayClient implements GatewayClient {
   }
 
   async getLog(view: 'buyer' | 'valio', opts: { since?: number; limit?: number } = {}): Promise<LogResponse> {
-    if (view !== 'buyer') throw new GatewayError('NOT_FOUND', 'Not found', 404);
     const session = this.latestSession();
-    if (!session || !session.recording.log && !session.tampered) throw new GatewayError('NOT_FOUND', 'Not found', 404);
-    const events = session.tampered?.log ?? session.recording.log!;
+    if (!session) throw new GatewayError('NOT_FOUND', 'Not found', 404);
+    const events = view === 'valio' ? session.valioLog ?? session.recording.valioLog : session.tampered?.log ?? session.recording.log;
+    if (!events) throw new GatewayError('NOT_FOUND', 'Not found', 404);
     const filtered = events.filter(({ seq }) => opts.since === undefined || seq > opts.since);
     return { events: opts.limit === undefined ? filtered : filtered.slice(0, opts.limit) };
   }

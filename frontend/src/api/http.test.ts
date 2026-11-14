@@ -28,6 +28,26 @@ describe('HttpGatewayClient', () => {
     expect(await client.verifyLog()).toEqual(verify);
     expect(fetchMock.mock.calls[2]![0]).toBe('http://gw.test/v1/log/verify');
   });
+  it('uses a cached operator token for Valio logs while buyer logs keep the human token', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(response(level1.start))
+      .mockResolvedValueOnce(response({ token: 'operator-secret' }))
+      .mockResolvedValueOnce(response({ events: level1.presets.balanced.valioLog }))
+      .mockResolvedValueOnce(response({ events: level1.presets.balanced.log }));
+    vi.stubGlobal('fetch', fetchMock);
+    const client = new HttpGatewayClient('http://gw.test');
+    await client.startLevel(level1.start.level.levelId, 'balanced');
+    await client.getLog('valio'); await client.getLog('buyer');
+    expect(fetchMock.mock.calls[1]![0]).toBe('http://gw.test/v1/auth/tokens');
+    expect(fetchMock.mock.calls[1]![1]).toMatchObject({ method: 'POST', body: JSON.stringify({ role: 'operator' }) });
+    expect(fetchMock.mock.calls[2]![1]?.headers).toMatchObject({ Authorization: 'Bearer operator-secret' });
+    expect(fetchMock.mock.calls[3]![1]?.headers).toMatchObject({ Authorization: `Bearer ${level1.start.tokens.human}` });
+  });
+  it('does not request a Valio log when operator token creation fails', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(response({ error: { code: 'UNAUTHENTICATED', message: 'operator unavailable' } }, 401));
+    vi.stubGlobal('fetch', fetchMock);
+    await expect(new HttpGatewayClient('http://gw.test').getLog('valio')).rejects.toMatchObject({ code: 'UNAUTHENTICATED', message: 'operator unavailable' });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
   afterEach(() => vi.unstubAllGlobals());
 
   it('uses discovery and start URLs, request method, body, and token behavior', async () => {

@@ -139,9 +139,14 @@ export type AgentStep = z.infer<typeof AgentStepSchema>;
 export const LevelMockSchema = z.object({
   start: GameStartSchema,
   presets: z.record(text, z.object({
-    mandate: MandateSchema, steps: z.array(AgentStepSchema), result: GameResultSchema, log: z.array(LogEventSchema).optional(), verify: LogVerifySchema.optional(),
+    mandate: MandateSchema, steps: z.array(AgentStepSchema), result: GameResultSchema, log: z.array(LogEventSchema).optional(), verify: LogVerifySchema.optional(), valioLog: z.array(LogEventSchema).optional(),
   })),
+  dataBoundaryDemo: z.object({ preset: text, log: z.array(LogEventSchema), valioLog: z.array(LogEventSchema), verify: LogVerifySchema }).optional(),
   tamperedDemo: z.object({ preset: text, log: z.array(LogEventSchema), verify: LogVerifySchema }).optional(),
   compare: CompareSchema,
 });
 export type LevelMock = z.infer<typeof LevelMockSchema>;
+
+// 006 Valio view additions: logs stay lookup-only and probe data is an explicit recording.
+export const TokenResponseSchema = z.object({ token: text });
+export type TokenResponse = z.infer<typeof TokenResponseSchema>;
