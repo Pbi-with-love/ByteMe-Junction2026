@@ -4,7 +4,7 @@ import { MAP, MAP_ORIGIN, ROBOT_START, STATIONS, accessPoint, stationRect, type 
 import { PALETTE } from './palette';
 import { LOGICAL_H, LOGICAL_W, TILE } from './scale';
 import { bobOffset, frameAt, robotLook, robotSprite, type Anim, type RobotState } from './robot';
-import { MANAGER_TILE, COURIER_TILE, PLANT_TILES, CRATE_TILE, SHELF_TILES, managerAnim, courierAnim } from './actors';
+import { MANAGER_TILE, COURIER_TILE, PLANT_TILES, CRATE_TILE, SHELF_TILES, DECOR, managerAnim, courierAnim } from './actors';
 import { particlesAt, type Particle } from './effects';
 import type { BurstKind, WorldController } from './controller';
 import { tweenAt, tweenMs } from './tween';
@@ -31,17 +31,20 @@ export async function createPixiWorld(host: HTMLElement, opts: { reducedMotion: 
   for (const [name, grid] of Object.entries(ART)) { const graphic = new Graphics(); drawGrid(graphic,grid,0,0); textures.set(name,app.renderer.generateTexture(graphic)); graphic.destroy(); }
   const texture = (name:string) => {const found=textures.get(name);if(!found)throw new Error(`Missing pixel art texture: ${name}`);return found;};
   const world = new Container(); app.stage.addChild(world);
-  const floor = new Container(), propsStations = new Container(), actors = new Container(), robot = new Container(), particles = new Container(), overlay = new Container();
-  world.addChild(floor,propsStations,actors,robot,overlay,particles);
+  const floor = new Container(), propsStations = new Container(), actors = new Container(), robot = new Container(), overhead = new Container(), particles = new Container(), overlay = new Container();
+  world.addChild(floor,propsStations,actors,robot,overhead,overlay,particles);
   const tile = (layer:Container,name:string,x:number,y:number) => {const sprite=new Sprite(texture(name));sprite.x=x;sprite.y=y;layer.addChild(sprite);return sprite;};
   for(let y=0;y<MAP.length;y++) for(let x=0;x<MAP[y]!.length;x++) {
     const cell=MAP[y]![x]!, px=x*TILE, py=MAP_ORIGIN.y+y*TILE;
     if(cell==='#') tile(floor,SHELF_TILES.some(p=>sameTile(p,{x,y}))?'wall_shelf':'wall',px,py);
-    else if(cell==='C') tile(floor,'counter',px,py);
+    else if(cell==='C') tile(floor,(x+y)%2===0?'floor_a':'floor_b',px,py);
     else tile(floor,(x+y)%2===0?'floor_a':'floor_b',px,py);
   }
+  for(const d of DECOR) if(d.layer==='floor') tile(floor,d.sprite,d.at.x,d.at.y);
   for(const p of PLANT_TILES)tile(propsStations,'plant',p.x*TILE,MAP_ORIGIN.y+p.y*TILE);
   tile(propsStations,'crate_stack',CRATE_TILE.x*TILE,MAP_ORIGIN.y+CRATE_TILE.y*TILE);
+  const decorAnimations=DECOR.filter(d=>d.anim).map(d=>({def:d,sprite:tile(d.layer==='overhead'?overhead:propsStations,d.sprite,d.at.x,d.at.y)}));
+  for(const d of DECOR) if(d.layer!=='floor'&&!d.anim) tile(d.layer==='overhead'?overhead:propsStations,d.sprite,d.at.x,d.at.y);
   const phoneRect=stationRect('phone');
   const phoneStation=tile(propsStations,'phone',phoneRect.x,phoneRect.y);
   for(const id of (Object.keys(STATIONS) as StationId[]).filter(id=>id!=='phone')){const r=stationRect(id);tile(propsStations,id,r.x,r.y);}
@@ -74,7 +77,7 @@ export async function createPixiWorld(host: HTMLElement, opts: { reducedMotion: 
     highlightGraphic.clear();if(selected){const r=stationRect(selected);highlightGraphic.rect(r.x,r.y,r.w,r.h).stroke({color:colour('s'),width:1});}if(ringing&&opts.reducedMotion)highlightGraphic.rect(phoneRect.x-1,phoneRect.y-1,phoneRect.w+2,phoneRect.h+2).stroke({color:colour('Y'),width:1});
     updateParticles();
   };
-  const ticker=()=>{time+=app.ticker.deltaMS;phoneStation.x=phoneRect.x+(ringing&&!opts.reducedMotion&&Math.floor(time/100)%2===0?1:ringing&&!opts.reducedMotion?-1:0);if(moving){elapsed+=app.ticker.deltaMS;if(route){const at=pathAt(route,elapsed);position=at.p;segmentStep={dx:at.dx,dy:at.dy};emitMove();if(elapsed>=routeDuration)finishWalk();}else{position=tweenAt(start,target,elapsed);segmentStep={dx:Math.sign(target.x-start.x) as -1|0|1,dy:Math.sign(target.y-start.y) as -1|0|1};emitMove();if(elapsed>=tweenMs(start,target))finishWalk();}}redraw();};
+  const ticker=()=>{time+=app.ticker.deltaMS;for(const item of decorAnimations)item.sprite.texture=texture(frameAt(item.def.anim!,time,opts.reducedMotion));phoneStation.x=phoneRect.x+(ringing&&!opts.reducedMotion&&Math.floor(time/100)%2===0?1:ringing&&!opts.reducedMotion?-1:0);if(moving){elapsed+=app.ticker.deltaMS;if(route){const at=pathAt(route,elapsed);position=at.p;segmentStep={dx:at.dx,dy:at.dy};emitMove();if(elapsed>=routeDuration)finishWalk();}else{position=tweenAt(start,target,elapsed);segmentStep={dx:Math.sign(target.x-start.x) as -1|0|1,dy:Math.sign(target.y-start.y) as -1|0|1};emitMove();if(elapsed>=tweenMs(start,target))finishWalk();}}redraw();};
   let route:Point[]|null=null,routeDuration=0,walkResolve:(()=>void)|null=null,walkTarget:StationId|null=null;
   const finishWalk=()=>{if(!walkTarget)return;const id=walkTarget;moving=false;position={...target};segmentStep=null;currentStation=id;walkTarget=null;const resolve=walkResolve;walkResolve=null;emitMove();arrivalListeners.forEach(cb=>cb(id));resolve?.();};
   app.ticker.add(ticker);

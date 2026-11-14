@@ -23,3 +23,5 @@ test('parses key, name, and hex values from palette tables', () => {
   const markdown = '| Key | Name | Hex | Usage |\n|---|---|---|---|\n| `a` | Amber | `#AABBCC` | lamp |';
   assert.deepEqual(parsePaletteTable(markdown), [{ key: 'a', name: 'Amber', hex: '#AABBCC', usage: 'lamp' }]);
 });
+
+test('prefers heading names over one-character palette keys in description', () => { const md=['#### `prep_island` (`32×32`)','herbs (`q`/`v`)','```text','ab','ab','```'].join('\n'); const [grid]=extractGrids(md); assert.equal(grid.name,'prep_island'); assert.deepEqual(grid.statedSize,{width:32,height:32}); });

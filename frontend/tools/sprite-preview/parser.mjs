@@ -6,6 +6,7 @@ function labelBefore(lines, fenceIndex) {
   for (let i = fenceIndex - 1; i >= start; i--) {
     const line = lines[i].trim();
     let match = line.match(/(?:\*\*)?`([A-Za-z][A-Za-z0-9_.-]*)`/);
+    if (match && match[1].length === 1) match = null;
     if (match) return { name: match[1], lineIndex: i, text: line };
     match = line.match(/\*\*([A-Za-z][A-Za-z0-9_.-]*)\b/);
     if (match) return { name: match[1], lineIndex: i, text: line };
