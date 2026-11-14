@@ -1,0 +1,21 @@
+services:
+  gateway:
+    build: {context: ., target: gateway}
+    env_file: .env
+    environment:
+      VALIO_MODE: replay
+      APPROVAL_TIMEOUT_SECONDS: "60"
+    volumes:
+      - gateway_data:/app/data/valio
+    restart: unless-stopped
+  caddy:
+    build: {context: ., target: caddy}
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+volumes:
+  gateway_data:
+  caddy_data:
+  caddy_config:

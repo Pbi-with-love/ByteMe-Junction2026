@@ -16,10 +16,11 @@ import tempfile
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from backend.app.config import Settings
+from backend.app.config import ROOT, Settings
 from backend.app.valio_client import ValioClient
 from backend.app.valio_data import ValioDataCache
 from backend.app.eventlog import EventLog
@@ -128,6 +129,9 @@ def stub_response(request: Request, endpoint: str) -> JSONResponse:
 @asynccontextmanager
 async def lifespan(application: FastAPI):
     settings = Settings.from_env()
+    frontend_dist = ROOT / "frontend" / "dist"
+    if frontend_dist.is_dir():  # mounted at startup so every API route registered before it wins
+        application.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
     fixture_root = Path(__file__).resolve().parents[1] / "fixtures" / "valio"
     catalog_directory = fixture_root / "catalog"
     if os.getenv("VALIO_MODE", "live").lower() == "replay":

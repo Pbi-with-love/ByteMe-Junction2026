@@ -1,0 +1,15 @@
+bytemegaming.tech {
+	encode gzip
+	reverse_proxy gateway:8000
+}
+
+www.bytemegaming.tech {
+	redir https://bytemegaming.tech{uri} permanent
+}
+
+play.bytemegaming.tech {
+	encode gzip
+	root * /srv/play
+	try_files {path} /index.html
+	file_server
+}
