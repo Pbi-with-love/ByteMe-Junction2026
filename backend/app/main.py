@@ -5,6 +5,9 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
+import json
+import os
+from pathlib import Path
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Request
@@ -23,6 +26,7 @@ from backend.app.planner import build_milk_plans
 from backend.app.quote_store import QuoteError, QuoteStore, quote_expiry
 from backend.app.valio_data import extract_allergen_data
 from backend.app.valio_client import ValioUpstreamError
+from backend.app.valio_replay import OverlayValioClient, ReplayValioClient
 from backend.app.order_store import IdempotencyConflict, OrderStore
 from backend.app.approval_store import ApprovalStore
 from backend.app.policy import PolicyResult, check_plan
@@ -102,16 +106,41 @@ def stub_response(request: Request, endpoint: str) -> JSONResponse:
 @asynccontextmanager
 async def lifespan(application: FastAPI):
     settings = Settings.from_env()
-    client = ValioClient(settings)
+    fixture_root = Path(__file__).resolve().parents[1] / "fixtures" / "valio"
+    catalog_directory = fixture_root / "catalog"
+    if os.getenv("VALIO_MODE", "live").lower() == "replay":
+        client = ReplayValioClient(catalog_directory, fixture_root / "recorded")
+        scenario_level = os.getenv("VALIO_SCENARIO_LEVEL", "")
+        if scenario_level in {"level1", "level2", "level3"}:
+            scenario_path = Path(__file__).resolve().parent / "scenarios" / f"{scenario_level}.json"
+            scenario = json.loads(scenario_path.read_text(encoding="utf-8"))
+            client = OverlayValioClient(client, scenario.get("overlay"))
+    else:
+        client = ValioClient(settings)
     try:
         application.state.valio_data = ValioDataCache(
             client,
             settings.valio_cache_directory,
+            fallback_directory=catalog_directory,
         )
         application.state.valio_client = client
-        await application.state.valio_data.refresh()
-        application.state.catalog_search = CatalogSearch.from_cache(
-            settings.valio_cache_directory
+        products = application.state.valio_data.load("products")
+        reliability_rows = application.state.valio_data.load("delivery-reliability")
+        carbon_rows = application.state.valio_data.load("carbon-footprint")
+        application.state.catalog_search = CatalogSearch(
+            products,
+            {
+                str(row["productId"]): float(row["deliveryReliability"])
+                for row in reliability_rows
+                if row.get("productId") is not None
+                and _is_number(row.get("deliveryReliability"))
+            },
+            {
+                str(row["productId"]): float(row["AVG kg CO2-eq/kg"])
+                for row in carbon_rows
+                if row.get("productId") is not None
+                and _is_number(row.get("AVG kg CO2-eq/kg"))
+            },
         )
         yield
     finally:

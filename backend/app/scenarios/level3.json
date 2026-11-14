@@ -1,0 +1,27 @@
+{
+  "levelId": "level3",
+  "title": "Allergy Emergency",
+  "customer": {"customerId": "123", "name": "Koivu School kitchen (fictional)", "type": "school"},
+  "agentId": "kitchenbuyer-koivu-school",
+  "issuedBy": {"name": "Liisa Korhonen", "role": "School kitchen manager"},
+  "brief": "20 l pistachio ice cream by Thursday 06:00 for a pupil with an egg allergy. The usual product is unavailable.",
+  "now": "2026-11-14T10:00:00+02:00",
+  "closingTime": "2026-11-14T14:00:00+02:00",
+  "clock": {"start": "10:00", "end": "14:00", "realSecondsPerGameMinute": 0.25},
+  "needs": [{"description": "Pistachio ice cream for school dessert (usual product unavailable)", "quantity": {"amount": 20, "unit": "l"}, "deadline": "2026-11-19T06:00:00+02:00", "candidateProductIds": ["468855", "462635", "473726"], "primaryProductId": "468855"}],
+  "hiddenRequirements": {"excludeAllergens": ["AE"]},
+  "presets": {
+    "allergen_on": {"mandate": {"agentId": "kitchenbuyer-koivu-school", "issuedBy": {"name": "Liisa Korhonen", "role": "School kitchen manager"}, "limits": {"perOrderEur": 500, "perWeekEur": 3000}, "substitution": "none", "lateDelivery": "none", "hardConstraints": {"excludeAllergens": ["AE"], "requireLabels": []}, "priorities": ["price", "on_time", "sustainability"], "validUntil": "2026-12-31T23:59:59+02:00"}},
+    "allergen_off": {"mandate": {"agentId": "kitchenbuyer-koivu-school", "issuedBy": {"name": "Liisa Korhonen", "role": "School kitchen manager"}, "limits": {"perOrderEur": 500, "perWeekEur": 3000}, "substitution": "none", "lateDelivery": "none", "hardConstraints": {"excludeAllergens": [], "requireLabels": []}, "priorities": ["price", "on_time", "sustainability"], "validUntil": "2026-12-31T23:59:59+02:00"}}
+  },
+  "humanDecisions": {"allergen_on": ["approved"], "allergen_off": ["approved"]},
+  "overlay": {"availability": {"2026-11-19": {
+    "468855": {"salesBlock": true, "scheduleLines": [{"salesBlock": true, "availableAmount": 0, "availableDate": "2026-11-19", "salesUnit": "ST"}]},
+    "462635": {"salesBlock": false, "scheduleLines": [{"salesBlock": false, "availableAmount": 20, "availableDate": "2026-11-19", "salesUnit": "ST"}]},
+    "473726": {"salesBlock": false, "scheduleLines": [{"salesBlock": false, "availableAmount": 8, "availableDate": "2026-11-19", "salesUnit": "ST"}]}
+  }}},
+  "expected": {
+    "allergen_on": {"approvalsAsked": 1, "heartsLeft": 2, "kitchen": 100, "stars": 3, "incident": false},
+    "allergen_off": {"approvalsAsked": 1, "heartsLeft": 2, "kitchen": 100, "stars": 0, "incident": true}
+  }
+}

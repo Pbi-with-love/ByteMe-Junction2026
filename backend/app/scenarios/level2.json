@@ -1,0 +1,29 @@
+{
+  "levelId": "level2",
+  "title": "The Stock-out",
+  "customer": {"customerId": "123", "name": "Ravintola Kivi (fictional)", "type": "restaurant"},
+  "agentId": "kitchenbuyer-ravintola-kivi",
+  "issuedBy": {"name": "Mikko Laine", "role": "Head chef"},
+  "brief": "Standing order: 120 l lactose-free semi-skimmed milk by Wednesday 06:00 and 120 l by Friday 06:00.",
+  "now": "2026-11-14T10:00:00+02:00",
+  "closingTime": "2026-11-14T14:00:00+02:00",
+  "clock": {"start": "10:00", "end": "14:00", "realSecondsPerGameMinute": 0.25},
+  "needs": [
+    {"description": "Standing order: 120 l lactose-free milk, Wednesday delivery", "quantity": {"amount": 120, "unit": "l"}, "deadline": "2026-11-18T06:00:00+02:00", "candidateProductIds": ["464306", "464401"], "primaryProductId": "464306"},
+    {"description": "Standing order: 120 l lactose-free milk, Friday delivery", "quantity": {"amount": 120, "unit": "l"}, "deadline": "2026-11-20T06:00:00+02:00", "candidateProductIds": ["464306", "464401"], "primaryProductId": "464306"}
+  ],
+  "hiddenRequirements": {"excludeAllergens": []},
+  "presets": {
+    "strict": {"mandate": {"agentId": "kitchenbuyer-ravintola-kivi", "issuedBy": {"name": "Mikko Laine", "role": "Head chef"}, "limits": {"perOrderEur": 500, "perWeekEur": 3000}, "substitution": "none", "lateDelivery": "none", "hardConstraints": {"excludeAllergens": [], "requireLabels": []}, "priorities": ["on_time", "price", "sustainability"], "validUntil": "2026-12-31T23:59:59+02:00"}},
+    "balanced": {"mandate": {"agentId": "kitchenbuyer-ravintola-kivi", "issuedBy": {"name": "Mikko Laine", "role": "Head chef"}, "limits": {"perOrderEur": 500, "perWeekEur": 3000}, "substitution": "same_category", "lateDelivery": "none", "hardConstraints": {"excludeAllergens": [], "requireLabels": []}, "priorities": ["on_time", "price", "sustainability"], "validUntil": "2026-12-31T23:59:59+02:00"}}
+  },
+  "humanDecisions": {"strict": ["approved", "approved"], "balanced": []},
+  "overlay": {"availability": {
+    "2026-11-18": {"464306": {"salesBlock": true, "scheduleLines": [{"salesBlock": true, "availableAmount": 0, "availableDate": "2026-11-18", "salesUnit": "ST"}]}, "464401": {"salesBlock": false, "scheduleLines": [{"salesBlock": false, "availableAmount": 120, "availableDate": "2026-11-18", "salesUnit": "ST"}]}},
+    "2026-11-20": {"464306": {"salesBlock": true, "scheduleLines": [{"salesBlock": true, "availableAmount": 0, "availableDate": "2026-11-20", "salesUnit": "ST"}]}, "464401": {"salesBlock": false, "scheduleLines": [{"salesBlock": false, "availableAmount": 120, "availableDate": "2026-11-20", "salesUnit": "ST"}]}}
+  }},
+  "expected": {
+    "strict": {"approvalsAsked": 2, "heartsLeft": 1, "kitchen": 100, "stars": 3, "incident": false},
+    "balanced": {"approvalsAsked": 0, "heartsLeft": 3, "kitchen": 100, "stars": 3, "incident": false}
+  }
+}

@@ -78,9 +78,16 @@ def extract_allergen_data(product: dict[str, Any]) -> dict[str, Any]:
 
 
 class ValioDataCache:
-    def __init__(self, client: ValioClient, directory: Path) -> None:
+    def __init__(
+        self,
+        client: ValioClient,
+        directory: Path,
+        *,
+        fallback_directory: Path | None = None,
+    ) -> None:
         self._client = client
         self._directory = directory
+        self._fallback_directory = fallback_directory
 
     async def refresh(self) -> dict[str, list[dict[str, Any]]]:
         self._directory.mkdir(parents=True, exist_ok=True)
@@ -99,6 +106,8 @@ class ValioDataCache:
         if name not in DOWNLOADS:
             raise ValueError(f"Unknown Valio dataset: {name}")
         path = self._directory / f"{name}.json"
+        if not path.exists() and self._fallback_directory is not None:
+            path = self._fallback_directory / f"{name}.json"
         if not path.exists():
             raise FileNotFoundError(f"Valio dataset is not cached: {name}")
         value = json.loads(path.read_text(encoding="utf-8"))
