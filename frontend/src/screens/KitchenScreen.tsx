@@ -19,8 +19,8 @@ import type { GameResult } from '../api/schemas';
 import type { WorldController } from '../world/controller';
 import type { StationId } from '../world/map';
 
-type Props = { client: GatewayClient; start: GameStart; presets: Record<string, Mandate>; discovery: Discovery; onExit: () => void; onPlayAgain?:()=>void; onValioView?:()=>void; onCompare?:()=>void };
-export default function KitchenScreen({ client, start, presets, discovery, onExit, onPlayAgain,onValioView,onCompare }: Props) {
+type Props = { client: GatewayClient; start: GameStart; presets: Record<string, Mandate>; discovery: Discovery; onExit: () => void; onPlayAgain?:()=>void; onValioView?:()=>void; onCompare?:()=>void; holdMs?:(milliseconds:number)=>Promise<void> };
+export default function KitchenScreen({ client, start, presets, discovery, onExit, onPlayAgain,onValioView,onCompare,holdMs }: Props) {
   const [panel, setPanel] = useState<'closed' | 'brief' | 'mandate' | 'terminal' | 'done' | 'error' | 'phone' | 'result'>('closed');
   const [signed, setSigned] = useState<Mandate | null>(null);
   const [running, setRunning] = useState(false);
@@ -40,13 +40,13 @@ export default function KitchenScreen({ client, start, presets, discovery, onExi
     const entry = toTimelineEntries(step, stepIndex).find(item => item.kind === kind);
     if (entry) { setEntries(current => [...current, entry]); clock.raiseTo(entry.at); }
   }, [clock.raiseTo]);
-  const onSettled=useCallback((value:Approval|ApprovalDecision)=>{const id=value.approvalId;if(settledIds.current.has(id))return;settledIds.current.add(id);world?.ring(false);setActiveApproval(value);setPanel('phone');const resolve=settleWaiters.current.get(id);void (async()=>{if(world)await playCommands(world,directDecision(value),{signal:abort.current?.signal});resolve?.(value);settleWaiters.current.delete(id);})();},[world]);
+  const onSettled=useCallback((value:Approval|ApprovalDecision)=>{const id=value.approvalId;if(settledIds.current.has(id))return;settledIds.current.add(id);world?.ring(false);setActiveApproval(value);setPanel('phone');const resolve=settleWaiters.current.get(id);void (async()=>{if(world)await playCommands(world,directDecision(value),{signal:abort.current?.signal,holdMs});resolve?.(value);settleWaiters.current.delete(id);})();},[world,holdMs]);
   const onApprovalNeeded=useCallback((approval:Approval,step:import('../api/schemas').AgentStep)=>new Promise<void>(resolve=>{setActiveApproval(approval);setApprovalStep(step);setPhoneHidden(false);setPanel('phone');settledIds.current.delete(approval.approvalId);settleWaiters.current.set(approval.approvalId,()=>{resolve();});world?.ring(approval.status==='OPEN');}),[world]);
   async function send() {
     if (!world || running) return;
     setPanel('closed'); setRunning(true); clock.start();
     const controller = new AbortController(); abort.current = controller;
-    try { const result = await runAgent({ client, sessionId: start.sessionId, world, signal: controller.signal, onMark,onApprovalNeeded }); if (result === 'finished') { clock.stop(); setRunning(false); setPanel('done'); } }
+    try { const result = await runAgent({ client, sessionId: start.sessionId, world, signal: controller.signal, onMark,onApprovalNeeded,holdMs }); if (result === 'finished') { clock.stop(); setRunning(false); setPanel('done'); } }
     catch (reason) { clock.stop(); setRunning(false); setError(reason instanceof Error ? reason.message : String(reason)); setPanel('error'); }
   }
   useEffect(() => () => clock.stop(), [clock.stop]);

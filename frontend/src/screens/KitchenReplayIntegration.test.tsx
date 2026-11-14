@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import level1 from '../../mocks/level1.json';
 import level2 from '../../mocks/level2.json';
@@ -15,14 +15,14 @@ const cases = levels.flatMap(level => Object.entries(level.presets).map(([preset
 const labelFor = (preset: string) => preset.replaceAll('_', ' ').replace(/^./, value => value.toUpperCase());
 
 describe('KitchenScreen replay integration', () => {
-  afterEach(() => vi.useRealTimers());
   it.each(cases)('$level.start.level.levelId / $preset reveals mock steps at director marks', async ({ level, preset, recording }) => {
     resetFakeWorld();
     const client = new ReplayGatewayClient();
     const startLevel = vi.spyOn(client, 'startLevel');
     const start = await client.startLevel(level.start.level.levelId, preset);
     const presets = Object.fromEntries(Object.entries(level.presets).map(([key, value]) => [key, value.mandate])) as Record<string, Mandate>;
-    render(<KitchenScreen client={client} start={start} presets={presets} discovery={discovery.response as Discovery} onExit={() => {}} onPlayAgain={() => {}} />);
+    const holdMs = vi.fn(async () => {});
+    render(<KitchenScreen client={client} start={start} presets={presets} discovery={discovery.response as Discovery} onExit={() => {}} onPlayAgain={() => {}} holdMs={holdMs} />);
     fireEvent.click(await screen.findByRole('button', { name: 'Manager Desk' }));
     fireEvent.click(screen.getByRole('button', { name: 'Write the mandate' }));
     fireEvent.click(screen.getByRole('button', { name: labelFor(preset) }));
@@ -46,15 +46,13 @@ describe('KitchenScreen replay integration', () => {
       const badge = cards[index]!.querySelector('button [data-light]');
       expect(badge?.getAttribute('data-light') ?? null).toBe(entry.light);
     }
-    vi.useFakeTimers();
     const finalTime = screen.getByRole('timer', { name: 'Game clock' }).textContent;
     expect(finalTime).not.toBe(start.clock.start);
-    await act(async () => { await vi.advanceTimersByTimeAsync(10_000); });
+    expect(holdMs).toHaveBeenCalled();
     expect(screen.getByRole('timer', { name: 'Game clock' })).toHaveTextContent(finalTime ?? '');
     if (level.start.level.levelId === 'level2' && recording.steps.length === 2) {
       expect(cards[2]!.getAttribute('data-entry-id')).toBe('0-order');
       expect(cards[3]!.getAttribute('data-entry-id')).toBe('1-search');
     }
-    vi.useRealTimers();
-  },30000);
+  });
 });

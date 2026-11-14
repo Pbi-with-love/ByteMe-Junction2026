@@ -5,6 +5,9 @@ import { LEVELS, LEVEL_MOCKS } from './game/levels';
 import discoveryData from '../mocks/discovery.json';
 import type { GatewayClient } from './api/gateway';
 import type { Discovery } from './api/schemas';
+import { ReplayGatewayClient } from './api/replay';
+import { createPixiWorld } from './world/pixiWorld';
+import { fakeWorld } from './world/fakeWorld';
 
 function makeClient(discovery: () => Promise<Discovery>): GatewayClient {
   return {
@@ -88,4 +91,54 @@ describe('level shell', () => {
     await waitFor(()=>expect(client.startLevel).toHaveBeenCalledTimes(2));
     expect(client.startLevel).toHaveBeenLastCalledWith('level1','balanced');
   });
+
+  async function openFirstResult(client: ReplayGatewayClient) {
+    vi.mocked(createPixiWorld).mockImplementation(async (host) => {
+      host.appendChild(document.createElement('canvas'));
+      return fakeWorld;
+    });
+    const presets = await client.presets('level1');
+    const start = await client.startLevel('level1', Object.keys(presets)[0]!);
+    const replay = vi.spyOn(client, 'startLevel').mockResolvedValue(start);
+    const fastClient = client;
+    render(<App client={fastClient} />);
+    fireEvent.click((await screen.findAllByRole('button', { name: 'Start level' }))[0]!);
+    await waitFor(() => expect(replay).toHaveBeenCalled());
+    fireEvent.click(await screen.findByRole('button', { name: 'Manager Desk' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Write the mandate' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Loose' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Sign mandate' }));
+    fireEvent.keyDown(document, { key: 'Escape' });
+    fireEvent.click(await screen.findByRole('button', { name: 'Order Terminal' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Send to agent' }));
+    await screen.findByRole('dialog', { name: 'The agent is done.' }, { timeout: 15000 });
+    fireEvent.click(screen.getByRole('button', { name: 'See result' }));
+    await screen.findByText('Receipt');
+  }
+
+  it('opens Valio view and restores the same result without refetching', async () => {
+    const client = new ReplayGatewayClient();
+    const getResult = vi.spyOn(client, 'getResult');
+    await openFirstResult(client);
+    const resultPanel = screen.getByText('Receipt').closest('[role="dialog"]');
+    fireEvent.click(await screen.findByRole('button', { name: 'See it from Valio Aimo’s side' }));
+    expect(await screen.findByRole('heading', { name: 'Valio Aimo view' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Kitchen', hidden: true }).parentElement).toHaveAttribute('hidden');
+    fireEvent.click(screen.getByRole('button', { name: 'Back to results' }));
+    expect(await screen.findByText('Receipt')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Kitchen' }).parentElement).not.toHaveAttribute('hidden');
+    expect(screen.getByText('Receipt').closest('[role="dialog"]')).toBe(resultPanel);
+    expect(getResult).toHaveBeenCalledTimes(1);
+    expect(document.querySelectorAll('canvas')).toHaveLength(1);
+  }, 30000);
+
+  it('opens comparison through the result action and returns to levels', async () => {
+    const client = new ReplayGatewayClient();
+    await openFirstResult(client);
+    fireEvent.click(await screen.findByRole('button', { name: 'Compare presets' }));
+    expect(await screen.findByRole('heading', { name: 'Agents don’t need a chatbot. They need a mandate.' })).toBeInTheDocument();
+    expect(document.querySelectorAll('canvas')).toHaveLength(0);
+    fireEvent.click(screen.getByRole('button', { name: 'Back to levels' }));
+    expect(await screen.findByRole('heading', { name: 'Agent Kitchen' })).toBeInTheDocument();
+  }, 30000);
 });
