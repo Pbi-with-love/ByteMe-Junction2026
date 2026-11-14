@@ -4,6 +4,7 @@ import json
 from fastapi.testclient import TestClient
 
 from backend.app.auth import AuthStore
+from backend.app.approval_store import ApprovalStore
 from backend.app.eventlog import EventLog
 from backend.app.main import app
 from backend.app.order_store import OrderStore
@@ -51,6 +52,7 @@ def _environment(
     auth = AuthStore(database, document_signer)
     quotes = QuoteStore(database, document_signer)
     orders = OrderStore(database)
+    approvals = ApprovalStore(database)
     log = EventLog(database)
     human_token = auth.issue_token(role="human", customer_id="customer-1")
     human = auth.authenticate(human_token)
@@ -104,9 +106,10 @@ def _environment(
     app.state.auth_store = auth
     app.state.quote_store = quotes
     app.state.order_store = orders
+    app.state.approval_store = approvals
     app.state.event_log = log
     app.state.valio_data = _Data(sales_block=sales_block)
-    return agent_token, mandate, quote, auth, quotes, orders, log
+    return agent_token, mandate, quote, auth, quotes, orders, approvals, log
 
 
 def _close(values):
@@ -115,7 +118,7 @@ def _close(values):
 
 
 def test_limit_controls_pending_vs_ordered_and_idempotency(tmp_path):
-    agent, _, quote, auth, quotes, orders, log = _environment(tmp_path)
+    agent, _, quote, auth, quotes, orders, approvals, log = _environment(tmp_path)
     try:
         request = {
             "quoteId": quote["quoteId"],
@@ -143,11 +146,11 @@ def test_limit_controls_pending_vs_ordered_and_idempotency(tmp_path):
         )
         assert conflict.status_code == 409
     finally:
-        _close((auth, quotes, orders, log))
+        _close((auth, quotes, orders, approvals, log))
 
 
 def test_higher_limit_orders_and_get_is_customer_scoped(tmp_path):
-    agent, _, quote, auth, quotes, orders, log = _environment(tmp_path, limit=1000)
+    agent, _, quote, auth, quotes, orders, approvals, log = _environment(tmp_path, limit=1000)
     try:
         response = TestClient(app).post(
             "/v1/orders",
@@ -164,11 +167,11 @@ def test_higher_limit_orders_and_get_is_customer_scoped(tmp_path):
         assert fetched.status_code == 200
         assert fetched.json()["orderId"] == order_id
     finally:
-        _close((auth, quotes, orders, log))
+        _close((auth, quotes, orders, approvals, log))
 
 
 def test_red_plan_creates_no_order(tmp_path):
-    agent, _, quote, auth, quotes, orders, log = _environment(
+    agent, _, quote, auth, quotes, orders, approvals, log = _environment(
         tmp_path, limit=1000, sales_block=True
     )
     try:
@@ -181,11 +184,11 @@ def test_red_plan_creates_no_order(tmp_path):
         assert response.json()["error"]["code"] == "POLICY_BLOCKED"
         assert orders.count("customer-1") == 0
     finally:
-        _close((auth, quotes, orders, log))
+        _close((auth, quotes, orders, approvals, log))
 
 
 def test_expired_quote_and_revoked_mandate_are_refused(tmp_path):
-    expired, mandate, quote, auth, quotes, orders, log = _environment(
+    expired, mandate, quote, auth, quotes, orders, approvals, log = _environment(
         tmp_path,
         expires_at=(datetime.now(timezone.utc) - timedelta(minutes=1)).isoformat(),
     )
@@ -198,11 +201,11 @@ def test_expired_quote_and_revoked_mandate_are_refused(tmp_path):
         assert response.status_code == 409
         assert response.json()["error"]["code"] == "QUOTE_EXPIRED"
     finally:
-        _close((auth, quotes, orders, log))
+        _close((auth, quotes, orders, approvals, log))
 
 
 def test_pending_spend_is_counted_against_week_limit(tmp_path):
-    agent, mandate, quote, auth, quotes, orders, log = _environment(
+    agent, mandate, quote, auth, quotes, orders, approvals, log = _environment(
         tmp_path, week_limit=1000
     )
     try:
@@ -245,11 +248,11 @@ def test_pending_spend_is_counted_against_week_limit(tmp_path):
         assert second.status_code == 202
         assert "OVER_WEEK_LIMIT" in second.json()["reasons"]
     finally:
-        _close((auth, quotes, orders, log))
+        _close((auth, quotes, orders, approvals, log))
 
 
 def test_tampered_quote_is_rejected(tmp_path):
-    agent, _, quote, auth, quotes, orders, log = _environment(tmp_path, limit=1000)
+    agent, _, quote, auth, quotes, orders, approvals, log = _environment(tmp_path, limit=1000)
     try:
         row = quotes._connection.execute(
             "SELECT document FROM quotes WHERE quote_id = ?",
@@ -270,9 +273,9 @@ def test_tampered_quote_is_rejected(tmp_path):
         assert response.status_code == 403
         assert orders.count("customer-1") == 0
     finally:
-        _close((auth, quotes, orders, log))
+        _close((auth, quotes, orders, approvals, log))
 
-    agent, mandate, quote, auth, quotes, orders, log = _environment(tmp_path / "revoked")
+    agent, mandate, quote, auth, quotes, orders, approvals, log = _environment(tmp_path / "revoked")
     try:
         auth.revoke_mandate(mandate["mandateId"], "customer-1")
         response = TestClient(app).post(
@@ -283,4 +286,4 @@ def test_tampered_quote_is_rejected(tmp_path):
         assert response.status_code == 403
         assert response.json()["error"]["code"] == "MANDATE_INVALID"
     finally:
-        _close((auth, quotes, orders, log))
+        _close((auth, quotes, orders, approvals, log))

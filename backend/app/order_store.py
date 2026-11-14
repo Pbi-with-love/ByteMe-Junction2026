@@ -132,17 +132,62 @@ class OrderStore:
         ).fetchone()
         return int(row["count"])
 
-    def week_total_cents(self, customer_id: str, *, now: datetime) -> int:
+    def update(
+        self,
+        order_id: str,
+        customer_id: str,
+        *,
+        status: str,
+        total_cents: int | None = None,
+        response_updates: dict[str, Any] | None = None,
+    ) -> dict[str, Any] | None:
+        row = self._connection.execute(
+            """
+            SELECT response, total_cents FROM orders
+            WHERE order_id = ? AND customer_id = ?
+            """,
+            (order_id, customer_id),
+        ).fetchone()
+        if row is None:
+            return None
+        response = json.loads(row["response"])
+        response.update(response_updates or {})
+        self._connection.execute(
+            """
+            UPDATE orders
+            SET status = ?, total_cents = ?, response = ?
+            WHERE order_id = ? AND customer_id = ?
+            """,
+            (
+                status,
+                row["total_cents"] if total_cents is None else total_cents,
+                json.dumps(response, ensure_ascii=False, sort_keys=True),
+                order_id,
+                customer_id,
+            ),
+        )
+        self._connection.commit()
+        return response
+
+    def week_total_cents(
+        self,
+        customer_id: str,
+        *,
+        now: datetime,
+        exclude_order_id: str | None = None,
+    ) -> int:
         week = now.date().isocalendar()
         rows = self._connection.execute(
             """
-            SELECT total_cents, created_at FROM orders
+            SELECT order_id, total_cents, created_at FROM orders
             WHERE customer_id = ? AND status IN ('PENDING_APPROVAL', 'ORDERED', 'CONFIRMED')
             """,
             (customer_id,),
         ).fetchall()
         total = 0
         for row in rows:
+            if row["order_id"] == exclude_order_id:
+                continue
             created = datetime.fromisoformat(row["created_at"])
             created_week = created.date().isocalendar()
             if (created_week.year, created_week.week) == (week.year, week.week):
