@@ -16,6 +16,7 @@ describe('Finnish formatters', () => {
     expect(formatAllergen('AW')).toBe('wheat (AW)');
     expect(formatAllergen('AP')).toBe('peanut (AP)');
     expect(formatAllergen('XX')).toBe('XX');
+    expect(formatAllergen('UW')).toBe('UW (allergen code)');
   });
 
   it('uses Helsinki date and time parts', () => {

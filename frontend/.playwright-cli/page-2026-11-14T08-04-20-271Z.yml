@@ -1,0 +1,23 @@
+- generic [ref=e2]:
+  - generic [ref=e3]: Replay mode
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - heading "Agent Kitchen" [level=1] [ref=e7]
+        - paragraph [ref=e8]: Agents don’t need a chatbot. They need a mandate.
+        - paragraph [ref=e9]: Valio Aimo (mock)
+        - button "Run demo" [ref=e10] [cursor=pointer]
+        - paragraph [ref=e11]: Plays Level 1 with a Balanced mandate, then the comparison.
+      - region "Levels" [ref=e12]:
+        - article [ref=e13]:
+          - generic [aria-hidden] [ref=e14]: "01"
+          - heading "The Weekly Order" [level=2] [ref=e15]
+          - button "Start level" [ref=e16] [cursor=pointer]
+        - article [ref=e17]:
+          - generic [aria-hidden] [ref=e18]: "02"
+          - heading "The Stock-out" [level=2] [ref=e19]
+          - button "Start level" [ref=e20] [cursor=pointer]
+        - article [ref=e21]:
+          - generic [aria-hidden] [ref=e22]: "03"
+          - heading "Allergy Emergency" [level=2] [ref=e23]
+          - button "Start level" [ref=e24] [cursor=pointer]

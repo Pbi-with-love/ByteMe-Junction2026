@@ -22,7 +22,7 @@ export default function GameWorld({stations,onStation,onReady,onExit,panelOpen=f
        <div className="world-overlay-hud" data-area="hud">{hud}</div>
        <div className="world-children" data-area="center">{children}</div>
        <div className="world-overlay-side" data-area="side">{side}</div>
-       {speech&&<div role="status" className="speech-bubble" style={{left:`clamp(calc(8 * var(--px)), ${robot.x*scale}px, calc(312 * var(--px)))`,top:(robot.y-12)*scale}}>{speech}</div>}
+       {speech&&<div role="status" className={`speech-bubble ${robot.y < 54 ? 'speech-bubble-below' : ''}`} style={{left:`clamp(calc(70 * var(--px)), ${robot.x*scale}px, calc(250 * var(--px)))`,top:(robot.y+(robot.y < 54 ? 12 : -12))*scale}}>{speech}</div>}
      </div>
    </div>
    {status==='loading'&&<div className="world-loading" role="progressbar">Loading kitchen…</div>}

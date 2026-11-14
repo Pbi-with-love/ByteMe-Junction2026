@@ -1,0 +1,4 @@
+- generic [ref=e2]:
+  - generic [ref=e3]: Live gateway
+  - main [ref=e4]:
+    - alert [ref=e6]: NETWORK_ERROR

@@ -44,7 +44,7 @@ export function formatDateTime(input: string): string {
 
 export function formatAllergen(code: string): string {
   const names: Record<string, string> = { AE: 'egg', AM: 'milk', AW: 'wheat', AP: 'peanut' };
-  return names[code] ? `${names[code]} (${code})` : code;
+  return names[code] ? `${names[code]} (${code})` : code === 'UW' ? `${code} (allergen code)` : code;
 }
 
 export function formatEuroLimit(eur: number): string {

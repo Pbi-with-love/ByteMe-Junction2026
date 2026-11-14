@@ -5,7 +5,7 @@ import level2 from '../../mocks/level2.json';
 import level3 from '../../mocks/level3.json';
 import discovery from '../../mocks/discovery.json';
 import type { LevelMock, Discovery, Mandate } from '../api/schemas';
-import { ReplayGatewayClient } from '../api/replay';
+import { decisionKey, ReplayGatewayClient } from '../api/replay';
 import { toTimelineEntries } from '../game/timeline';
 import { fakeWorld, resetFakeWorld } from '../world/fakeWorld';
 import KitchenScreen from './KitchenScreen';
@@ -54,5 +54,39 @@ describe('KitchenScreen replay integration', () => {
       expect(cards[2]!.getAttribute('data-entry-id')).toBe('0-order');
       expect(cards[3]!.getAttribute('data-entry-id')).toBe('1-search');
     }
-  });
+  }, 30_000);
+
+  it('replays the disclosed late delivery trap and records its penalty outcome', async () => {
+    resetFakeWorld();
+    const preset = level1.presets.balanced as unknown as LevelMock['presets'][string] & { traps: Record<string, Record<string, string>> };
+    const approval = preset.steps.find((step) => step.approval?.status === 'OPEN')!.approval!;
+    const planId = Object.keys(preset.traps[approval.approvalId]!)[0]!;
+    const path = `alternative:${planId}`;
+    const expected = (preset.outcomes as Record<string, { result: typeof preset.result }>)[decisionKey([path])]!;
+    expect(preset.traps[approval.approvalId]![planId]).toBe('late');
+    expect(expected.result.kitchen).toBe(70);
+    expect(expected.result.kitchen).toBeLessThan(preset.result.kitchen);
+
+    const client = new ReplayGatewayClient();
+    const start = await client.startLevel('level1', 'balanced');
+    const presets = Object.fromEntries(Object.entries(level1.presets).map(([key, value]) => [key, value.mandate])) as Record<string, Mandate>;
+    render(<KitchenScreen client={client} start={start} presets={presets} discovery={discovery.response as Discovery} onExit={() => {}} holdMs={async () => {}} />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Manager Desk' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Write the mandate' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Balanced' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sign mandate' }));
+    await screen.findByText(preset.mandate.summaryText);
+    fireEvent.keyDown(document, { key: 'Escape' });
+    fireEvent.click(screen.getByRole('button', { name: 'Order Terminal' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Send to agent' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Choose other' }));
+    expect((await screen.findAllByText(/arrives .* after the deadline/)).length).toBeGreaterThan(0);
+    const summary = approval.options.find((item) => item.planId === planId)!.summary;
+    const option = await screen.findByRole('button', { name: (_, element) => element?.textContent?.includes(summary) ?? false });
+    fireEvent.click(option);
+    fireEvent.click(await screen.findByRole('button', { name: 'See result' }, { timeout: 15000 }));
+    expect(await screen.findByRole('meter', { name: 'Kitchen' })).toHaveAttribute('aria-valuenow', String(expected.result.kitchen));
+    expect(screen.getByText(`${expected.result.stars} of 3 stars`)).toBeInTheDocument();
+    expect(screen.getByLabelText('Receipt').querySelector('.result-receipt-copy')?.textContent).toBe(expected.result.receiptText);
+  }, 30000);
 });

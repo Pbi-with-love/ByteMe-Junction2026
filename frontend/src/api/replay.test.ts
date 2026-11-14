@@ -77,6 +77,16 @@ describe('ReplayGatewayClient', () => {
     expect(await probeClient.getLog('valio')).toEqual({ events: level1.dataBoundaryDemo!.valioLog });
     expect(await probeClient.getLog('buyer')).toEqual({ events: level1.presets.balanced.log });
   });
+  it('uses top-level recorded data for presets with no open approvals', async () => {
+    const client = new ReplayGatewayClient();
+    const recording = level1.presets.loose;
+    const start = await client.startLevel('level1', 'loose');
+    for (const _step of recording.steps) await client.nextStep(start.sessionId);
+    expect(await client.getResult(start.sessionId)).toEqual(recording.result);
+    expect(await client.getLog('buyer')).toEqual({ events: recording.log });
+    expect(await client.verifyLog()).toEqual(recording.verify);
+  });
+
   it('looks up starts, steps, results, comparisons, and discovery directly from mocks', async () => {
     const client = new ReplayGatewayClient();
     expect(await client.discovery()).toEqual(discovery.response);
