@@ -1,0 +1,674 @@
+{
+  "_note": "FAKE mock data shaped by docs/design/API_CONTRACT.md v1. Not real Valio data; replace once docs/data-notes.md exists.",
+  "start": {
+    "sessionId": "ses_level3",
+    "level": {
+      "levelId": "level3",
+      "title": "Allergy Emergency",
+      "customer": {
+        "customerId": "789",
+        "name": "Koivu School kitchen (fictional)",
+        "type": "school"
+      },
+      "brief": "60 packs of spread by Thursday 06:00. Usual product unavailable.",
+      "deadline": "2026-11-19T06:00:00+02:00",
+      "closingTime": "2026-11-14T14:00:00+02:00"
+    },
+    "clock": {
+      "start": "10:00",
+      "end": "14:00",
+      "realSecondsPerGameMinute": 0.25
+    },
+    "hearts": 3,
+    "tokens": {
+      "human": "mock-human-token",
+      "agent": "mock-agent-token"
+    }
+  },
+  "presets": {
+    "allergen_on": {
+      "mandate": {
+        "mandateId": "mdt_l3_allergen_on",
+        "customerId": "789",
+        "agentId": "kitchenbuyer-koivu-school",
+        "issuedBy": {
+          "name": "Liisa Korhonen",
+          "role": "School kitchen manager"
+        },
+        "limits": {
+          "perOrderEur": 500,
+          "perWeekEur": 3000
+        },
+        "substitution": "same_category",
+        "lateDelivery": "none",
+        "hardConstraints": {
+          "excludeAllergens": [
+            "peanut"
+          ],
+          "requireLabels": []
+        },
+        "priorities": [
+          "price",
+          "on_time",
+          "sustainability"
+        ],
+        "validUntil": "2026-12-31T23:59:59+02:00",
+        "issuedAt": "2026-11-14T10:01:00+02:00",
+        "status": "ACTIVE",
+        "signature": {
+          "alg": "Ed25519",
+          "keyId": "valio-aimo-2026-11",
+          "value": "bW9jay1zaWduYXR1cmU="
+        },
+        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing peanut."
+      },
+      "steps": [
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "610001",
+                "name": "Plant-based spread 400 g (mock)",
+                "brand": "Valio",
+                "category": "spreads",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "pack"
+                },
+                "labels": [],
+                "allergens": [],
+                "carbonCategory": {
+                  "category": "spreads",
+                  "kgCo2ePerKg": {
+                    "min": 2.0,
+                    "max": 3.5
+                  }
+                },
+                "deliveryReliability": 0.94,
+                "excluded": {
+                  "light": "RED",
+                  "reason": "SALES_BLOCKED"
+                }
+              },
+              {
+                "productId": "610022",
+                "name": "Sunflower spread 400 g (mock)",
+                "brand": "Nordlakt",
+                "category": "spreads",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "pack"
+                },
+                "labels": [],
+                "allergens": [],
+                "carbonCategory": {
+                  "category": "spreads",
+                  "kgCo2ePerKg": {
+                    "min": 2.0,
+                    "max": 3.5
+                  }
+                },
+                "deliveryReliability": 0.94,
+                "excluded": null
+              },
+              {
+                "productId": "610035",
+                "name": "Peanut & oat spread 400 g (mock)",
+                "brand": "Pohjola Farm",
+                "category": "spreads",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "pack"
+                },
+                "labels": [],
+                "allergens": [
+                  "peanut"
+                ],
+                "carbonCategory": {
+                  "category": "spreads",
+                  "kgCo2ePerKg": {
+                    "min": 2.0,
+                    "max": 3.5
+                  }
+                },
+                "deliveryReliability": 0.94,
+                "excluded": {
+                  "light": "RED",
+                  "reason": "ALLERGEN_EXCLUDED"
+                }
+              }
+            ],
+            "total": 3
+          },
+          "quote": {
+            "quoteId": "qt_l3_allergen_on",
+            "customerId": "789",
+            "mandateId": "mdt_l3_allergen_on",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:05:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Spread for school breakfast (usual product unavailable)",
+              "quantity": {
+                "amount": 60,
+                "unit": "pack"
+              },
+              "deadline": "2026-11-19T06:00:00+02:00",
+              "candidateProductIds": [
+                "610001",
+                "610022",
+                "610035"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_safe",
+                "lines": [
+                  {
+                    "productId": "610022",
+                    "quantity": {
+                      "amount": 60,
+                      "unit": "pack"
+                    },
+                    "salesQuantity": {
+                      "amount": 60,
+                      "unit": "PCE"
+                    },
+                    "unitPrice": {
+                      "cents": 420,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 1050,
+                      "currency": "EUR",
+                      "per": "pack"
+                    },
+                    "lineTotal": {
+                      "cents": 25200,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-19",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 25200,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 60,
+                  "unit": "pack"
+                },
+                "policy": {
+                  "light": "BLUE",
+                  "reasons": [
+                    "SUBSTITUTION_ALLOWED"
+                  ]
+                },
+                "summary": "60 packs sunflower spread, Thursday, €252,00",
+                "score": {
+                  "total": 0.8,
+                  "onTime": 1.0,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              }
+            ],
+            "excludedProducts": [
+              {
+                "productId": "610001",
+                "light": "RED",
+                "reason": "SALES_BLOCKED"
+              },
+              {
+                "productId": "610035",
+                "light": "RED",
+                "reason": "ALLERGEN_EXCLUDED"
+              }
+            ],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l3_allergen_on_p",
+                "at": "2026-11-14T10:05:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l3_allergen_on_a",
+                "at": "2026-11-14T10:05:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 201,
+            "body": {
+              "orderId": "ord_l3_allergen_on",
+              "quoteId": "qt_l3_allergen_on",
+              "planId": "pln_safe",
+              "status": "ORDERED",
+              "lines": [
+                {
+                  "productId": "610022",
+                  "quantity": {
+                    "amount": 60,
+                    "unit": "pack"
+                  },
+                  "salesQuantity": {
+                    "amount": 60,
+                    "unit": "PCE"
+                  },
+                  "unitPrice": {
+                    "cents": 420,
+                    "currency": "EUR"
+                  },
+                  "comparisonPrice": {
+                    "cents": 1050,
+                    "currency": "EUR",
+                    "per": "pack"
+                  },
+                  "lineTotal": {
+                    "cents": 25200,
+                    "currency": "EUR"
+                  },
+                  "availableDate": "2026-11-19",
+                  "isSubstitute": true
+                }
+              ],
+              "total": {
+                "cents": 25200,
+                "currency": "EUR"
+              },
+              "createdAt": "2026-11-14T10:06:00+02:00"
+            }
+          },
+          "approval": null
+        }
+      ],
+      "result": {
+        "kitchen": 100,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 3,
+        "stars": 3,
+        "incident": null,
+        "receiptText": "The cheapest spread contains peanut, so the gateway blocked it. Your agent bought 60 packs of sunflower spread instead.",
+        "logHeadHash": "sha256:9872442a548d7282",
+        "approvalsAsked": 0
+      }
+    },
+    "allergen_off": {
+      "mandate": {
+        "mandateId": "mdt_l3_allergen_off",
+        "customerId": "789",
+        "agentId": "kitchenbuyer-koivu-school",
+        "issuedBy": {
+          "name": "Liisa Korhonen",
+          "role": "School kitchen manager"
+        },
+        "limits": {
+          "perOrderEur": 500,
+          "perWeekEur": 3000
+        },
+        "substitution": "same_category",
+        "lateDelivery": "none",
+        "hardConstraints": {
+          "excludeAllergens": [],
+          "requireLabels": []
+        },
+        "priorities": [
+          "price",
+          "on_time",
+          "sustainability"
+        ],
+        "validUntil": "2026-12-31T23:59:59+02:00",
+        "issuedAt": "2026-11-14T10:01:00+02:00",
+        "status": "ACTIVE",
+        "signature": {
+          "alg": "Ed25519",
+          "keyId": "valio-aimo-2026-11",
+          "value": "bW9jay1zaWduYXR1cmU="
+        },
+        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with substitutes in the same category and no late deliveries."
+      },
+      "steps": [
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "610001",
+                "name": "Plant-based spread 400 g (mock)",
+                "brand": "Valio",
+                "category": "spreads",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "pack"
+                },
+                "labels": [],
+                "allergens": [],
+                "carbonCategory": {
+                  "category": "spreads",
+                  "kgCo2ePerKg": {
+                    "min": 2.0,
+                    "max": 3.5
+                  }
+                },
+                "deliveryReliability": 0.94,
+                "excluded": {
+                  "light": "RED",
+                  "reason": "SALES_BLOCKED"
+                }
+              },
+              {
+                "productId": "610022",
+                "name": "Sunflower spread 400 g (mock)",
+                "brand": "Nordlakt",
+                "category": "spreads",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "pack"
+                },
+                "labels": [],
+                "allergens": [],
+                "carbonCategory": {
+                  "category": "spreads",
+                  "kgCo2ePerKg": {
+                    "min": 2.0,
+                    "max": 3.5
+                  }
+                },
+                "deliveryReliability": 0.94,
+                "excluded": null
+              },
+              {
+                "productId": "610035",
+                "name": "Peanut & oat spread 400 g (mock)",
+                "brand": "Pohjola Farm",
+                "category": "spreads",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "pack"
+                },
+                "labels": [],
+                "allergens": [
+                  "peanut"
+                ],
+                "carbonCategory": {
+                  "category": "spreads",
+                  "kgCo2ePerKg": {
+                    "min": 2.0,
+                    "max": 3.5
+                  }
+                },
+                "deliveryReliability": 0.94,
+                "excluded": null
+              }
+            ],
+            "total": 3
+          },
+          "quote": {
+            "quoteId": "qt_l3_allergen_off",
+            "customerId": "789",
+            "mandateId": "mdt_l3_allergen_off",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:05:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Spread for school breakfast (usual product unavailable)",
+              "quantity": {
+                "amount": 60,
+                "unit": "pack"
+              },
+              "deadline": "2026-11-19T06:00:00+02:00",
+              "candidateProductIds": [
+                "610001",
+                "610022",
+                "610035"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_nut",
+                "lines": [
+                  {
+                    "productId": "610035",
+                    "quantity": {
+                      "amount": 60,
+                      "unit": "pack"
+                    },
+                    "salesQuantity": {
+                      "amount": 60,
+                      "unit": "PCE"
+                    },
+                    "unitPrice": {
+                      "cents": 310,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 775,
+                      "currency": "EUR",
+                      "per": "pack"
+                    },
+                    "lineTotal": {
+                      "cents": 18600,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-19",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 18600,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 60,
+                  "unit": "pack"
+                },
+                "policy": {
+                  "light": "BLUE",
+                  "reasons": [
+                    "SUBSTITUTION_ALLOWED"
+                  ]
+                },
+                "summary": "60 packs peanut & oat spread, Thursday, €186,00",
+                "score": {
+                  "total": 0.8,
+                  "onTime": 1.0,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              },
+              {
+                "planId": "pln_safe",
+                "lines": [
+                  {
+                    "productId": "610022",
+                    "quantity": {
+                      "amount": 60,
+                      "unit": "pack"
+                    },
+                    "salesQuantity": {
+                      "amount": 60,
+                      "unit": "PCE"
+                    },
+                    "unitPrice": {
+                      "cents": 420,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 1050,
+                      "currency": "EUR",
+                      "per": "pack"
+                    },
+                    "lineTotal": {
+                      "cents": 25200,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-19",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 25200,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 60,
+                  "unit": "pack"
+                },
+                "policy": {
+                  "light": "BLUE",
+                  "reasons": [
+                    "SUBSTITUTION_ALLOWED"
+                  ]
+                },
+                "summary": "60 packs sunflower spread, Thursday, €252,00",
+                "score": {
+                  "total": 0.669,
+                  "onTime": 1.0,
+                  "price": 0.738,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "better",
+                "recommended": false
+              }
+            ],
+            "excludedProducts": [
+              {
+                "productId": "610001",
+                "light": "RED",
+                "reason": "SALES_BLOCKED"
+              }
+            ],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l3_allergen_off_p",
+                "at": "2026-11-14T10:05:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l3_allergen_off_a",
+                "at": "2026-11-14T10:05:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 201,
+            "body": {
+              "orderId": "ord_l3_allergen_off",
+              "quoteId": "qt_l3_allergen_off",
+              "planId": "pln_nut",
+              "status": "ORDERED",
+              "lines": [
+                {
+                  "productId": "610035",
+                  "quantity": {
+                    "amount": 60,
+                    "unit": "pack"
+                  },
+                  "salesQuantity": {
+                    "amount": 60,
+                    "unit": "PCE"
+                  },
+                  "unitPrice": {
+                    "cents": 310,
+                    "currency": "EUR"
+                  },
+                  "comparisonPrice": {
+                    "cents": 775,
+                    "currency": "EUR",
+                    "per": "pack"
+                  },
+                  "lineTotal": {
+                    "cents": 18600,
+                    "currency": "EUR"
+                  },
+                  "availableDate": "2026-11-19",
+                  "isSubstitute": true
+                }
+              ],
+              "total": {
+                "cents": 18600,
+                "currency": "EUR"
+              },
+              "createdAt": "2026-11-14T10:06:00+02:00"
+            }
+          },
+          "approval": null
+        }
+      ],
+      "result": {
+        "kitchen": 100,
+        "wallet": 100,
+        "safety": 0,
+        "heartsLeft": 3,
+        "stars": 0,
+        "incident": {
+          "type": "SAFETY",
+          "productId": "610035",
+          "reason": "Contains peanut"
+        },
+        "receiptText": "Your agent bought 60 packs of Peanut & oat spread because it was cheapest. Nothing stopped it: the allergen rule was off.",
+        "logHeadHash": "sha256:e7888d86975376f9",
+        "approvalsAsked": 0
+      }
+    }
+  },
+  "compare": {
+    "levelId": "level3",
+    "presets": {
+      "allergen_on": {
+        "kitchen": 100,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 3,
+        "stars": 3,
+        "incident": null,
+        "receiptText": "The cheapest spread contains peanut, so the gateway blocked it. Your agent bought 60 packs of sunflower spread instead.",
+        "logHeadHash": "sha256:9872442a548d7282",
+        "approvalsAsked": 0
+      },
+      "allergen_off": {
+        "kitchen": 100,
+        "wallet": 100,
+        "safety": 0,
+        "heartsLeft": 3,
+        "stars": 0,
+        "incident": {
+          "type": "SAFETY",
+          "productId": "610035",
+          "reason": "Contains peanut"
+        },
+        "receiptText": "Your agent bought 60 packs of Peanut & oat spread because it was cheapest. Nothing stopped it: the allergen rule was off.",
+        "logHeadHash": "sha256:e7888d86975376f9",
+        "approvalsAsked": 0
+      }
+    }
+  }
+}

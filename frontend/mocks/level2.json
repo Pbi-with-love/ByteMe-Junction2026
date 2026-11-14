@@ -1,0 +1,943 @@
+{
+  "_note": "FAKE mock data shaped by docs/design/API_CONTRACT.md v1. Not real Valio data; replace once docs/data-notes.md exists.",
+  "start": {
+    "sessionId": "ses_level2",
+    "level": {
+      "levelId": "level2",
+      "title": "The Stock-out",
+      "customer": {
+        "customerId": "456",
+        "name": "Ravintola Kivi (fictional)",
+        "type": "restaurant"
+      },
+      "brief": "Standing order: 40 kg Edam by Wednesday 06:00 and 40 kg by Friday 06:00.",
+      "deadline": "2026-11-20T06:00:00+02:00",
+      "closingTime": "2026-11-14T14:00:00+02:00"
+    },
+    "clock": {
+      "start": "10:00",
+      "end": "14:00",
+      "realSecondsPerGameMinute": 0.25
+    },
+    "hearts": 3,
+    "tokens": {
+      "human": "mock-human-token",
+      "agent": "mock-agent-token"
+    }
+  },
+  "presets": {
+    "strict": {
+      "mandate": {
+        "mandateId": "mdt_l2_strict",
+        "customerId": "456",
+        "agentId": "kitchenbuyer-ravintola-kivi",
+        "issuedBy": {
+          "name": "Mikko Laine",
+          "role": "Head chef"
+        },
+        "limits": {
+          "perOrderEur": 500,
+          "perWeekEur": 3000
+        },
+        "substitution": "none",
+        "lateDelivery": "none",
+        "hardConstraints": {
+          "excludeAllergens": [],
+          "requireLabels": []
+        },
+        "priorities": [
+          "on_time",
+          "price",
+          "sustainability"
+        ],
+        "validUntil": "2026-12-31T23:59:59+02:00",
+        "issuedAt": "2026-11-14T10:01:00+02:00",
+        "status": "ACTIVE",
+        "signature": {
+          "alg": "Ed25519",
+          "keyId": "valio-aimo-2026-11",
+          "value": "bW9jay1zaWduYXR1cmU="
+        },
+        "summaryText": "Mikko Laine authorises kitchenbuyer-ravintola-kivi to order up to €500 per order, with no substitutes and no late deliveries."
+      },
+      "steps": [
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "520101",
+                "name": "Edam cheese 1 kg block (mock)",
+                "brand": "Valio",
+                "category": "cheese",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "kg"
+                },
+                "labels": [],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "cheese",
+                  "kgCo2ePerKg": {
+                    "min": 8.0,
+                    "max": 13.0
+                  }
+                },
+                "deliveryReliability": 0.95,
+                "excluded": {
+                  "light": "RED",
+                  "reason": "SALES_BLOCKED"
+                }
+              },
+              {
+                "productId": "520144",
+                "name": "Gouda cheese 1 kg block (mock)",
+                "brand": "Valio",
+                "category": "cheese",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "kg"
+                },
+                "labels": [],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "cheese",
+                  "kgCo2ePerKg": {
+                    "min": 8.0,
+                    "max": 13.0
+                  }
+                },
+                "deliveryReliability": 0.96,
+                "excluded": null
+              }
+            ],
+            "total": 2
+          },
+          "quote": {
+            "quoteId": "qt_l2_strict_1",
+            "customerId": "456",
+            "mandateId": "mdt_l2_strict",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:06:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Standing order: Edam cheese, delivery 1 of 2",
+              "quantity": {
+                "amount": 40,
+                "unit": "kg"
+              },
+              "deadline": "2026-11-18T06:00:00+02:00",
+              "candidateProductIds": [
+                "520101",
+                "520144"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_a",
+                "lines": [
+                  {
+                    "productId": "520144",
+                    "quantity": {
+                      "amount": 40,
+                      "unit": "kg"
+                    },
+                    "salesQuantity": {
+                      "amount": 40,
+                      "unit": "PCE"
+                    },
+                    "unitPrice": {
+                      "cents": 1240,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 1240,
+                      "currency": "EUR",
+                      "per": "kg"
+                    },
+                    "lineTotal": {
+                      "cents": 49600,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-18",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 49600,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 40,
+                  "unit": "kg"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "SUBSTITUTION_NOT_ALLOWED"
+                  ]
+                },
+                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "score": {
+                  "total": 0.8,
+                  "onTime": 1.0,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              }
+            ],
+            "excludedProducts": [
+              {
+                "productId": "520101",
+                "light": "RED",
+                "reason": "SALES_BLOCKED"
+              }
+            ],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l2_strict_1_p",
+                "at": "2026-11-14T10:06:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l2_strict_1_a",
+                "at": "2026-11-14T10:06:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 202,
+            "body": {
+              "orderId": "ord_l2_strict_1",
+              "status": "PENDING_APPROVAL",
+              "approvalId": "apr_l2_strict_1",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ]
+            }
+          },
+          "approval": {
+            "approvalId": "apr_l2_strict_1",
+            "orderId": "ord_l2_strict_1",
+            "quoteId": "qt_l2_strict_1",
+            "status": "OPEN",
+            "reasons": [
+              "SUBSTITUTION_NOT_ALLOWED"
+            ],
+            "reasonText": "Gouda is a substitute, and your mandate allows no substitutes.",
+            "options": [
+              {
+                "planId": "pln_a",
+                "tier": "best",
+                "recommended": true,
+                "summary": "40 kg Gouda instead of Edam, €496,00"
+              }
+            ],
+            "agentExplanation": "Edam is blocked from sale this week. Gouda is the closest cheese, €0,50/kg more.",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "createdAt": "2026-11-14T10:06:00+02:00"
+          }
+        },
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "520101",
+                "name": "Edam cheese 1 kg block (mock)",
+                "brand": "Valio",
+                "category": "cheese",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "kg"
+                },
+                "labels": [],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "cheese",
+                  "kgCo2ePerKg": {
+                    "min": 8.0,
+                    "max": 13.0
+                  }
+                },
+                "deliveryReliability": 0.95,
+                "excluded": {
+                  "light": "RED",
+                  "reason": "SALES_BLOCKED"
+                }
+              },
+              {
+                "productId": "520144",
+                "name": "Gouda cheese 1 kg block (mock)",
+                "brand": "Valio",
+                "category": "cheese",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "kg"
+                },
+                "labels": [],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "cheese",
+                  "kgCo2ePerKg": {
+                    "min": 8.0,
+                    "max": 13.0
+                  }
+                },
+                "deliveryReliability": 0.96,
+                "excluded": null
+              }
+            ],
+            "total": 2
+          },
+          "quote": {
+            "quoteId": "qt_l2_strict_2",
+            "customerId": "456",
+            "mandateId": "mdt_l2_strict",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:30:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Standing order: Edam cheese, delivery 2 of 2",
+              "quantity": {
+                "amount": 40,
+                "unit": "kg"
+              },
+              "deadline": "2026-11-20T06:00:00+02:00",
+              "candidateProductIds": [
+                "520101",
+                "520144"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_a",
+                "lines": [
+                  {
+                    "productId": "520144",
+                    "quantity": {
+                      "amount": 40,
+                      "unit": "kg"
+                    },
+                    "salesQuantity": {
+                      "amount": 40,
+                      "unit": "PCE"
+                    },
+                    "unitPrice": {
+                      "cents": 1240,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 1240,
+                      "currency": "EUR",
+                      "per": "kg"
+                    },
+                    "lineTotal": {
+                      "cents": 49600,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-20",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 49600,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 40,
+                  "unit": "kg"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "SUBSTITUTION_NOT_ALLOWED"
+                  ]
+                },
+                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "score": {
+                  "total": 0.8,
+                  "onTime": 1.0,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              }
+            ],
+            "excludedProducts": [
+              {
+                "productId": "520101",
+                "light": "RED",
+                "reason": "SALES_BLOCKED"
+              }
+            ],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l2_strict_2_p",
+                "at": "2026-11-14T10:30:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l2_strict_2_a",
+                "at": "2026-11-14T10:30:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 202,
+            "body": {
+              "orderId": "ord_l2_strict_2",
+              "status": "PENDING_APPROVAL",
+              "approvalId": "apr_l2_strict_2",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ]
+            }
+          },
+          "approval": {
+            "approvalId": "apr_l2_strict_2",
+            "orderId": "ord_l2_strict_2",
+            "quoteId": "qt_l2_strict_2",
+            "status": "OPEN",
+            "reasons": [
+              "SUBSTITUTION_NOT_ALLOWED"
+            ],
+            "reasonText": "Gouda is a substitute, and your mandate allows no substitutes.",
+            "options": [
+              {
+                "planId": "pln_a",
+                "tier": "best",
+                "recommended": true,
+                "summary": "40 kg Gouda instead of Edam, €496,00"
+              }
+            ],
+            "agentExplanation": "Edam is blocked from sale this week. Gouda is the closest cheese, €0,50/kg more.",
+            "deadline": "2026-11-14T10:30:20+02:00",
+            "createdAt": "2026-11-14T10:30:00+02:00"
+          }
+        }
+      ],
+      "result": {
+        "kitchen": 100,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 1,
+        "stars": 3,
+        "incident": null,
+        "receiptText": "Edam was blocked from sale all week. Your agent had to ask you before each delivery (Wednesday and Friday) to switch to Gouda; you approved both.",
+        "logHeadHash": "sha256:4c49ad6e469aaf84",
+        "approvalsAsked": 2
+      }
+    },
+    "balanced": {
+      "mandate": {
+        "mandateId": "mdt_l2_balanced",
+        "customerId": "456",
+        "agentId": "kitchenbuyer-ravintola-kivi",
+        "issuedBy": {
+          "name": "Mikko Laine",
+          "role": "Head chef"
+        },
+        "limits": {
+          "perOrderEur": 500,
+          "perWeekEur": 3000
+        },
+        "substitution": "same_category",
+        "lateDelivery": "none",
+        "hardConstraints": {
+          "excludeAllergens": [],
+          "requireLabels": []
+        },
+        "priorities": [
+          "on_time",
+          "price",
+          "sustainability"
+        ],
+        "validUntil": "2026-12-31T23:59:59+02:00",
+        "issuedAt": "2026-11-14T10:01:00+02:00",
+        "status": "ACTIVE",
+        "signature": {
+          "alg": "Ed25519",
+          "keyId": "valio-aimo-2026-11",
+          "value": "bW9jay1zaWduYXR1cmU="
+        },
+        "summaryText": "Mikko Laine authorises kitchenbuyer-ravintola-kivi to order up to €500 per order, with substitutes in the same category and no late deliveries."
+      },
+      "steps": [
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "520101",
+                "name": "Edam cheese 1 kg block (mock)",
+                "brand": "Valio",
+                "category": "cheese",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "kg"
+                },
+                "labels": [],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "cheese",
+                  "kgCo2ePerKg": {
+                    "min": 8.0,
+                    "max": 13.0
+                  }
+                },
+                "deliveryReliability": 0.95,
+                "excluded": {
+                  "light": "RED",
+                  "reason": "SALES_BLOCKED"
+                }
+              },
+              {
+                "productId": "520144",
+                "name": "Gouda cheese 1 kg block (mock)",
+                "brand": "Valio",
+                "category": "cheese",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "kg"
+                },
+                "labels": [],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "cheese",
+                  "kgCo2ePerKg": {
+                    "min": 8.0,
+                    "max": 13.0
+                  }
+                },
+                "deliveryReliability": 0.96,
+                "excluded": null
+              }
+            ],
+            "total": 2
+          },
+          "quote": {
+            "quoteId": "qt_l2_balanced_1",
+            "customerId": "456",
+            "mandateId": "mdt_l2_balanced",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:06:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Standing order: Edam cheese, delivery 1 of 2",
+              "quantity": {
+                "amount": 40,
+                "unit": "kg"
+              },
+              "deadline": "2026-11-18T06:00:00+02:00",
+              "candidateProductIds": [
+                "520101",
+                "520144"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_a",
+                "lines": [
+                  {
+                    "productId": "520144",
+                    "quantity": {
+                      "amount": 40,
+                      "unit": "kg"
+                    },
+                    "salesQuantity": {
+                      "amount": 40,
+                      "unit": "PCE"
+                    },
+                    "unitPrice": {
+                      "cents": 1240,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 1240,
+                      "currency": "EUR",
+                      "per": "kg"
+                    },
+                    "lineTotal": {
+                      "cents": 49600,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-18",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 49600,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 40,
+                  "unit": "kg"
+                },
+                "policy": {
+                  "light": "BLUE",
+                  "reasons": [
+                    "SUBSTITUTION_ALLOWED"
+                  ]
+                },
+                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "score": {
+                  "total": 0.8,
+                  "onTime": 1.0,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              }
+            ],
+            "excludedProducts": [
+              {
+                "productId": "520101",
+                "light": "RED",
+                "reason": "SALES_BLOCKED"
+              }
+            ],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l2_balanced_1_p",
+                "at": "2026-11-14T10:06:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l2_balanced_1_a",
+                "at": "2026-11-14T10:06:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 201,
+            "body": {
+              "orderId": "ord_l2_balanced_1",
+              "quoteId": "qt_l2_balanced_1",
+              "planId": "pln_a",
+              "status": "ORDERED",
+              "lines": [
+                {
+                  "productId": "520144",
+                  "quantity": {
+                    "amount": 40,
+                    "unit": "kg"
+                  },
+                  "salesQuantity": {
+                    "amount": 40,
+                    "unit": "PCE"
+                  },
+                  "unitPrice": {
+                    "cents": 1240,
+                    "currency": "EUR"
+                  },
+                  "comparisonPrice": {
+                    "cents": 1240,
+                    "currency": "EUR",
+                    "per": "kg"
+                  },
+                  "lineTotal": {
+                    "cents": 49600,
+                    "currency": "EUR"
+                  },
+                  "availableDate": "2026-11-18",
+                  "isSubstitute": true
+                }
+              ],
+              "total": {
+                "cents": 49600,
+                "currency": "EUR"
+              },
+              "createdAt": "2026-11-14T10:06:00+02:00"
+            }
+          },
+          "approval": null
+        },
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "520101",
+                "name": "Edam cheese 1 kg block (mock)",
+                "brand": "Valio",
+                "category": "cheese",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "kg"
+                },
+                "labels": [],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "cheese",
+                  "kgCo2ePerKg": {
+                    "min": 8.0,
+                    "max": 13.0
+                  }
+                },
+                "deliveryReliability": 0.95,
+                "excluded": {
+                  "light": "RED",
+                  "reason": "SALES_BLOCKED"
+                }
+              },
+              {
+                "productId": "520144",
+                "name": "Gouda cheese 1 kg block (mock)",
+                "brand": "Valio",
+                "category": "cheese",
+                "salesUnit": "PCE",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "kg"
+                },
+                "labels": [],
+                "allergens": [
+                  "milk"
+                ],
+                "carbonCategory": {
+                  "category": "cheese",
+                  "kgCo2ePerKg": {
+                    "min": 8.0,
+                    "max": 13.0
+                  }
+                },
+                "deliveryReliability": 0.96,
+                "excluded": null
+              }
+            ],
+            "total": 2
+          },
+          "quote": {
+            "quoteId": "qt_l2_balanced_2",
+            "customerId": "456",
+            "mandateId": "mdt_l2_balanced",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:30:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Standing order: Edam cheese, delivery 2 of 2",
+              "quantity": {
+                "amount": 40,
+                "unit": "kg"
+              },
+              "deadline": "2026-11-20T06:00:00+02:00",
+              "candidateProductIds": [
+                "520101",
+                "520144"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_a",
+                "lines": [
+                  {
+                    "productId": "520144",
+                    "quantity": {
+                      "amount": 40,
+                      "unit": "kg"
+                    },
+                    "salesQuantity": {
+                      "amount": 40,
+                      "unit": "PCE"
+                    },
+                    "unitPrice": {
+                      "cents": 1240,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 1240,
+                      "currency": "EUR",
+                      "per": "kg"
+                    },
+                    "lineTotal": {
+                      "cents": 49600,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-20",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 49600,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 40,
+                  "unit": "kg"
+                },
+                "policy": {
+                  "light": "BLUE",
+                  "reasons": [
+                    "SUBSTITUTION_ALLOWED"
+                  ]
+                },
+                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "score": {
+                  "total": 0.8,
+                  "onTime": 1.0,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              }
+            ],
+            "excludedProducts": [
+              {
+                "productId": "520101",
+                "light": "RED",
+                "reason": "SALES_BLOCKED"
+              }
+            ],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l2_balanced_2_p",
+                "at": "2026-11-14T10:30:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l2_balanced_2_a",
+                "at": "2026-11-14T10:30:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 201,
+            "body": {
+              "orderId": "ord_l2_balanced_2",
+              "quoteId": "qt_l2_balanced_2",
+              "planId": "pln_a",
+              "status": "ORDERED",
+              "lines": [
+                {
+                  "productId": "520144",
+                  "quantity": {
+                    "amount": 40,
+                    "unit": "kg"
+                  },
+                  "salesQuantity": {
+                    "amount": 40,
+                    "unit": "PCE"
+                  },
+                  "unitPrice": {
+                    "cents": 1240,
+                    "currency": "EUR"
+                  },
+                  "comparisonPrice": {
+                    "cents": 1240,
+                    "currency": "EUR",
+                    "per": "kg"
+                  },
+                  "lineTotal": {
+                    "cents": 49600,
+                    "currency": "EUR"
+                  },
+                  "availableDate": "2026-11-20",
+                  "isSubstitute": true
+                }
+              ],
+              "total": {
+                "cents": 49600,
+                "currency": "EUR"
+              },
+              "createdAt": "2026-11-14T10:30:00+02:00"
+            }
+          },
+          "approval": null
+        }
+      ],
+      "result": {
+        "kitchen": 100,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 3,
+        "stars": 3,
+        "incident": null,
+        "receiptText": "Edam was blocked from sale all week. Your agent switched both deliveries to Gouda in the same category (+€0,50/kg) and told you without asking.",
+        "logHeadHash": "sha256:cc259e5435f76acf",
+        "approvalsAsked": 0
+      }
+    }
+  },
+  "compare": {
+    "levelId": "level2",
+    "presets": {
+      "strict": {
+        "kitchen": 100,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 1,
+        "stars": 3,
+        "incident": null,
+        "receiptText": "Edam was blocked from sale all week. Your agent had to ask you before each delivery (Wednesday and Friday) to switch to Gouda; you approved both.",
+        "logHeadHash": "sha256:4c49ad6e469aaf84",
+        "approvalsAsked": 2
+      },
+      "balanced": {
+        "kitchen": 100,
+        "wallet": 100,
+        "safety": 100,
+        "heartsLeft": 3,
+        "stars": 3,
+        "incident": null,
+        "receiptText": "Edam was blocked from sale all week. Your agent switched both deliveries to Gouda in the same category (+€0,50/kg) and told you without asking.",
+        "logHeadHash": "sha256:cc259e5435f76acf",
+        "approvalsAsked": 0
+      }
+    }
+  }
+}

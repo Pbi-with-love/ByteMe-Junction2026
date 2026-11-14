@@ -18,3 +18,7 @@ AGENTS.md
 CLAUDE.md
 CODEX.md
 GEMINI.md
+
+# keep the template, ignore downloaded Valio data
+!.env.example
+data/
