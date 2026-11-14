@@ -59,6 +59,15 @@ describe('level shell', () => {
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
 
+  it('shows no agent activity box on the title screen while the demo runs', async () => {
+    window.localStorage.setItem('agentKitchen.howToPlaySeen', '1');
+    const startLevel = vi.fn(() => new Promise<never>(() => {}));
+    render(<App client={{ ...makeClient(async () => ({ provider: 'Mock Gateway' } as Discovery)), startLevel }} />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Run demo' }));
+    expect(await screen.findByRole('button', { name: 'Running demo…' })).toBeInTheDocument();
+    expect(screen.queryByText('Agent is working…')).not.toBeInTheDocument();
+  });
+
   it('shows start errors without the brief and returns to levels on Back to levels', async () => {
     const client = makeClient(async () => ({ provider: 'Mock Gateway' } as Discovery));
     client.presets = async () => { throw new Error('presets offline'); };

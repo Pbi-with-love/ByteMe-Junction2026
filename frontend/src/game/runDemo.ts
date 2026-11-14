@@ -96,7 +96,11 @@ export async function runDemo(opts: Options): Promise<'done' | 'aborted' | 'stuc
       await screenHold();
       if (!await narratedClick(3, () => target(root, 'Manager Desk'))) return stop() ?? 'stuck';
       if (!await plainClick(() => target(root, 'Write the mandate'))) return stop() ?? 'stuck';
-      if (!await narratedClick(4, () => target(root, opts.presetLabel(script.presetKey)))) return stop() ?? 'stuck';
+      // Act first, explain once the form really shows the preset's values.
+      const preset = () => target(root, opts.presetLabel(script.presetKey));
+      if (!await plainClick(preset)) return stop() ?? 'stuck';
+      if (!await find(() => { const el = preset(); return el?.getAttribute('aria-pressed') === 'true' ? el : null; })) return stop() ?? 'stuck';
+      await show(4);
       if (!await narratedClick(5, () => target(root, 'Sign mandate'))) return stop() ?? 'stuck';
       if (!await plainClick(() => target(root, 'Order Terminal'))) return stop() ?? 'stuck';
       if (!await narratedClick(6, () => target(root, 'Send to agent'))) return stop() ?? 'stuck';

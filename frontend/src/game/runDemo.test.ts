@@ -36,12 +36,13 @@ describe('runDemo', () => {
     const root = document.createElement('div'); document.body.append(root);
     const article = document.createElement('article'), heading = document.createElement('h2'); heading.textContent = 'Level One'; article.append(heading); root.append(article);
     const clickedAt = new Map<string, number>();
-    const button = (name: string, parent: HTMLElement = root) => { const element = document.createElement('button'); element.textContent = name; element.onclick = () => { expect(element).toHaveClass('demo-spotlight'); clickedAt.set(name, Date.now()); }; parent.append(element); return element; };
+    const button = (name: string, parent: HTMLElement = root) => { const element = document.createElement('button'); element.textContent = name; element.onclick = () => { expect(element).toHaveClass('demo-spotlight'); clickedAt.set(name, Date.now()); }; element.addEventListener('click', () => element.setAttribute('aria-pressed', 'true')); parent.append(element); return element; };
     button('Start level', article);
     for (const name of ['Go to the kitchen', 'Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent', 'Approve', 'See result', 'See it from Valio Aimo’s side', 'Back to results', 'Compare presets']) button(name);
     let approvalAt = 0; let firstSpotlightAt = 0;
     const controller = new AbortController();
     const promise = runDemo({ root, script: { levelId: 'level1', presetKey: 'balanced', decisions: ['approved'] }, signal: controller.signal, levelTitle: 'Level One', presetLabel: () => 'Balanced', beatMs: 10, waitMs: 100, values: () => ({ stars: '3', compareLoaded: 'true', activity_search: 'true', activity_quote: 'true', activity_order: 'true', approvalDeadline: new Date(Date.now() + 20_000).toISOString() }), spotlight: (element) => { if (element.textContent === 'Start level') firstSpotlightAt = Date.now(); element.classList.add('demo-spotlight'); }, present: (card, step, holdMs) => {
+      if (step === 5) { expect(clickedAt.has('Balanced'), 'Balanced is clicked before its card').toBe(true); expect(clickedAt.has('Sign mandate')).toBe(false); }
       if (step === 9) { approvalAt = Date.now(); expect(card.pauseDisabled).toBe(true); expect(holdMs).toBe(20_000 - DEMO_APPROVAL_MARGIN_MS); return new Promise<void>((resolve) => setTimeout(resolve, holdMs)); }
       return Promise.resolve();
     } });
@@ -69,7 +70,7 @@ describe('runDemo', () => {
     const root = document.createElement('div'); document.body.append(root);
     const article = document.createElement('article'), heading = document.createElement('h2'); heading.textContent = 'Level One'; article.append(heading); root.append(article);
     const names = ['Go to the kitchen', 'Manager Desk', 'Write the mandate', 'Balanced', 'Sign mandate', 'Order Terminal', 'Send to agent', 'Approve', 'See result', 'See it from Valio Aimo’s side', 'Back to results', 'Compare presets'];
-    const addButton = (name: string, parent: HTMLElement = root) => { const button = document.createElement('button'); button.textContent = name; parent.append(button); return button; };
+    const addButton = (name: string, parent: HTMLElement = root) => { const button = document.createElement('button'); button.textContent = name; button.addEventListener('click', () => button.setAttribute('aria-pressed', 'true')); parent.append(button); return button; };
     addButton('Start level', article); names.forEach((name) => addButton(name));
     const values: Record<string, string | undefined> = { stars: '3', compareLoaded: 'true', approvalDeadline: new Date(Date.now() + 20_000).toISOString() };
     const presented: number[] = []; let workingGate: Promise<void> | undefined;
