@@ -107,7 +107,7 @@
     }
   },
   "start": {
-    "sessionId": "ses_babc0c0e958b4ef19471424dc6e3819d",
+    "sessionId": "ses_3014f8d9032d4a27a840818d5592c0b8",
     "level": {
       "levelId": "level1",
       "title": "The Weekly Order",
@@ -127,18 +127,18 @@
     },
     "hearts": 3,
     "tokens": {
-      "human": "jVAP41-jLeQqHCoI2wwM96b3AyhennxD8hQbs6iiPgk",
-      "agent": "np3cKHlQnlb7HvdUPoAcXbnpvijJF-nkO3BWIu8yHbk"
+      "human": "BXmDUKecu4ePcqzGPcPJ_zAzgdQrYe9Ti7FYmxHlYO0",
+      "agent": "P8BA6Zc1dq08vHOXRZjn0BCLYHeVKlTloUeeoNFUzqo"
     }
   },
   "session": {
-    "sessionId": "ses_babc0c0e958b4ef19471424dc6e3819d",
+    "sessionId": "ses_3014f8d9032d4a27a840818d5592c0b8",
     "status": "FINISHED",
     "hearts": 2,
-    "gameTime": "10:28",
+    "gameTime": "10:25",
     "orders": [
-      "ord_c8e50fa4509344c386bfec674bef3d8e",
-      "ord_38d78094ff64479db0b31242452fb038"
+      "ord_747b1cbf8fb24f3d83cfc5c241b58371",
+      "ord_c204c839303a46879eed69961782a1d1"
     ],
     "steps": [
       {
@@ -148,7 +148,7 @@
         },
         "quote": {
           "status": "QUOTED",
-          "createdAt": "2026-11-14T10:00:02.411031+02:00",
+          "createdAt": "2026-11-14T10:00:01.970758+02:00",
           "expiresAt": "2026-11-15T17:00:00+02:00",
           "need": {
             "description": "Lactose-free semi-skimmed milk for the hotel",
@@ -229,29 +229,29 @@
           "evidence": [
             {
               "source": "valio:/api/price",
-              "requestId": "req_522deabc59ce45f99dc621e6b4d83fa6",
-              "at": "2026-11-14T10:00:02.411047+02:00"
+              "requestId": "req_bbe5780baaf44790836dea993a3297e6",
+              "at": "2026-11-14T10:00:01.970766+02:00"
             },
             {
               "source": "valio:/api/availability",
-              "requestId": "req_522deabc59ce45f99dc621e6b4d83fa6",
-              "at": "2026-11-14T10:00:02.411052+02:00"
+              "requestId": "req_bbe5780baaf44790836dea993a3297e6",
+              "at": "2026-11-14T10:00:01.970771+02:00"
             }
           ],
           "scenarioOverlay": false,
-          "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+          "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54",
           "customerId": "123",
-          "mandateId": "mdt_ef3e317c91844453a239d4bd6db65596",
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad",
           "signature": {
             "alg": "Ed25519",
             "keyId": "valio-aimo-2026-11",
-            "value": "GEeplMV4x9zaIOwho0eWj71KnN2o3NGCz6+Iy4FqSJm3qLSop+Gl45oW7Fnt6TN2BuctqMAKP4eoFIwDk+dCCg=="
+            "value": "5EWjTx6lfYFy41ivjp3WweEGl4s+lnOjDx1b9jCdlGJjPcsNWG43nBBVdx2yM0s1H17PQPC4KDBdjIOXhFn+BQ=="
           }
         },
         "order": {
           "httpStatus": 202,
           "body": {
-            "createdAt": "2026-11-14T10:00:03.480903+02:00",
+            "createdAt": "2026-11-14T10:00:02.911297+02:00",
             "lines": [
               {
                 "availableDate": "2026-11-16",
@@ -284,9 +284,9 @@
                 }
               }
             ],
-            "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
+            "orderId": "ord_747b1cbf8fb24f3d83cfc5c241b58371",
             "planId": "pln_1",
-            "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+            "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54",
             "reasons": [
               "OVER_ORDER_LIMIT"
             ],
@@ -295,13 +295,13 @@
               "cents": 80500,
               "currency": "EUR"
             },
-            "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1"
+            "approvalId": "apr_ca3223a612da4302b4e33917c6975df9"
           }
         },
         "approval": {
-          "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
-          "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
-          "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+          "approvalId": "apr_ca3223a612da4302b4e33917c6975df9",
+          "orderId": "ord_747b1cbf8fb24f3d83cfc5c241b58371",
+          "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54",
           "status": "OPEN",
           "reasons": [
             "OVER_ORDER_LIMIT"
@@ -315,13 +315,13 @@
             }
           ],
           "agentExplanation": null,
-          "deadline": "2026-11-14T10:00:23.480903+02:00",
-          "createdAt": "2026-11-14T10:00:03.480903+02:00",
+          "deadline": "2026-11-14T10:00:22.911297+02:00",
+          "createdAt": "2026-11-14T10:00:02.911297+02:00",
           "heartsLeft": 2
         },
         "approvalEvent": {
-          "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
-          "deadline": "2026-11-14T10:00:23.480903+02:00",
+          "approvalId": "apr_ca3223a612da4302b4e33917c6975df9",
+          "deadline": "2026-11-14T10:00:22.911297+02:00",
           "heartsLeft": 2
         }
       },
@@ -332,7 +332,7 @@
         },
         "quote": {
           "status": "QUOTED",
-          "createdAt": "2026-11-14T10:00:05.854040+02:00",
+          "createdAt": "2026-11-14T10:00:05.126461+02:00",
           "expiresAt": "2026-11-15T17:00:00+02:00",
           "need": {
             "description": "Lactose-free semi-skimmed milk for the hotel",
@@ -414,29 +414,29 @@
           "evidence": [
             {
               "source": "valio:/api/price",
-              "requestId": "req_3a439d24c1d84efaa03f8cc435d5069f",
-              "at": "2026-11-14T10:00:05.854050+02:00"
+              "requestId": "req_16e827b03dd041a6b38689b394eb8a0b",
+              "at": "2026-11-14T10:00:05.126468+02:00"
             },
             {
               "source": "valio:/api/availability",
-              "requestId": "req_3a439d24c1d84efaa03f8cc435d5069f",
-              "at": "2026-11-14T10:00:05.854055+02:00"
+              "requestId": "req_16e827b03dd041a6b38689b394eb8a0b",
+              "at": "2026-11-14T10:00:05.126473+02:00"
             }
           ],
           "scenarioOverlay": false,
-          "quoteId": "qt_1e6376efd39c4f328fefed00b7f6139f",
+          "quoteId": "qt_39ff26675a814ccda98aae1fb81e0fd5",
           "customerId": "123",
-          "mandateId": "mdt_ef3e317c91844453a239d4bd6db65596",
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad",
           "signature": {
             "alg": "Ed25519",
             "keyId": "valio-aimo-2026-11",
-            "value": "lzPpmJ/TX1vNtajvGE0yWGt5a4XGEktGnMOOFD/XEAJXBBUxRvdZTUwiGi9QcbUrYdLcT4IcB9mmMBeQ9khoCg=="
+            "value": "Rmtz3OQ7Dz7wm1FryTWOSr4DQEv3O7oh3l+3OCGQtAEJOTFmjqRWqmJ9kFYCzo36GqEr42mUw11isAIeaOECCA=="
           }
         },
         "order": {
           "httpStatus": 201,
           "body": {
-            "quoteId": "qt_1e6376efd39c4f328fefed00b7f6139f",
+            "quoteId": "qt_39ff26675a814ccda98aae1fb81e0fd5",
             "planId": "pln_1",
             "status": "ORDERED",
             "lines": [
@@ -475,11 +475,11 @@
               "cents": 34500,
               "currency": "EUR"
             },
-            "createdAt": "2026-11-14T10:00:07.049920+02:00",
+            "createdAt": "2026-11-14T10:00:06.224635+02:00",
             "reasons": [
               "WITHIN_MANDATE"
             ],
-            "orderId": "ord_38d78094ff64479db0b31242452fb038"
+            "orderId": "ord_c204c839303a46879eed69961782a1d1"
           }
         },
         "approval": null,
@@ -489,9 +489,9 @@
     "activity": "idle"
   },
   "approvalGet": {
-    "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
-    "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
-    "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+    "approvalId": "apr_ca3223a612da4302b4e33917c6975df9",
+    "orderId": "ord_747b1cbf8fb24f3d83cfc5c241b58371",
+    "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54",
     "status": "OPEN",
     "reasons": [
       "OVER_ORDER_LIMIT"
@@ -505,12 +505,12 @@
       }
     ],
     "agentExplanation": null,
-    "deadline": "2026-11-14T10:00:23.480903+02:00",
-    "createdAt": "2026-11-14T10:00:03.480903+02:00",
+    "deadline": "2026-11-14T10:00:22.911297+02:00",
+    "createdAt": "2026-11-14T10:00:02.911297+02:00",
     "heartsLeft": 2,
     "order": {
-      "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
-      "createdAt": "2026-11-14T10:00:03.480903+02:00",
+      "approvalId": "apr_ca3223a612da4302b4e33917c6975df9",
+      "createdAt": "2026-11-14T10:00:02.911297+02:00",
       "lines": [
         {
           "availableDate": "2026-11-16",
@@ -543,9 +543,9 @@
           }
         }
       ],
-      "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
+      "orderId": "ord_747b1cbf8fb24f3d83cfc5c241b58371",
       "planId": "pln_1",
-      "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+      "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54",
       "reasons": [
         "OVER_ORDER_LIMIT"
       ],
@@ -558,9 +558,9 @@
   },
   "approvalDecision": {
     "approval": {
-      "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
-      "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
-      "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+      "approvalId": "apr_ca3223a612da4302b4e33917c6975df9",
+      "orderId": "ord_747b1cbf8fb24f3d83cfc5c241b58371",
+      "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54",
       "status": "APPROVED",
       "reasons": [
         "OVER_ORDER_LIMIT"
@@ -574,13 +574,13 @@
         }
       ],
       "agentExplanation": null,
-      "deadline": "2026-11-14T10:00:23.480903+02:00",
-      "createdAt": "2026-11-14T10:00:03.480903+02:00",
+      "deadline": "2026-11-14T10:00:22.911297+02:00",
+      "createdAt": "2026-11-14T10:00:02.911297+02:00",
       "heartsLeft": 2
     },
     "order": {
-      "approvalId": "apr_c2e086983a044c179edd4201ea01c7b1",
-      "createdAt": "2026-11-14T10:00:03.480903+02:00",
+      "approvalId": "apr_ca3223a612da4302b4e33917c6975df9",
+      "createdAt": "2026-11-14T10:00:02.911297+02:00",
       "lines": [
         {
           "availableDate": "2026-11-16",
@@ -614,9 +614,9 @@
           "salesBlock": false
         }
       ],
-      "orderId": "ord_c8e50fa4509344c386bfec674bef3d8e",
+      "orderId": "ord_747b1cbf8fb24f3d83cfc5c241b58371",
       "planId": "pln_1",
-      "quoteId": "qt_6087408204e84ec0b323eda39e1503eb",
+      "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54",
       "reasons": [
         "OVER_ORDER_LIMIT"
       ],
@@ -639,7 +639,7 @@
       "cents": 115000,
       "currency": "EUR"
     },
-    "logHeadHash": "sha256:b2fee9fe1615e41b672ffea5b1f8201cd35a0bbfd1476026f6f066d0ebda2424",
+    "logHeadHash": "sha256:7c9d2cd1c4eb3f0e21376d73befb04fb80f5799e087d641f6566e9392a3c5abf",
     "receiptText": "Approved Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free for €805,00.",
     "heartsLeft": 2
   },
@@ -658,7 +658,7 @@
           "cents": 80500,
           "currency": "EUR"
         },
-        "logHeadHash": "sha256:43f44c00689cf750f0ef196c16e36449603887382d7bc8ffd993ac11cc6922ec",
+        "logHeadHash": "sha256:6dd965d92b0ec127cce2a9e857641d8e626114dcc8f691d1f936211bceae2a05",
         "receiptText": "Approved Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free for €805,00. Rejected Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free. Rejected Valio Hyvä suomalainen Arki® Eila® skimmed milk drink 1 l lactose free. Expired unseen: no hearts left. 300 l did not arrive on time.",
         "heartsLeft": 0
       },
@@ -674,7 +674,7 @@
           "cents": 115000,
           "currency": "EUR"
         },
-        "logHeadHash": "sha256:2dfb90baf4215800089a0e4820c4406e4dffb004637f1be7508d2f7595f83698",
+        "logHeadHash": "sha256:df297a5551ba804aaf8cad7b9cf3bdae6d4f21cec82921b366fa212552131452",
         "receiptText": "Approved Valio Hyvä suomalainen Arki® Eila® semi skimmed milk drink 1 l lactose free for €805,00.",
         "heartsLeft": 2
       },
@@ -690,31 +690,635 @@
           "cents": 115000,
           "currency": "EUR"
         },
-        "logHeadHash": "sha256:a58f2c6cf859028aadee7a61998aad57bc8287c73108777bfd92f02c29cf4920",
+        "logHeadHash": "sha256:12319d0d2d5d658fbea4c54ba51b3bef2e6f256170bd77f195aeafbf94f5602d",
         "receiptText": "300 l did not arrive on time.",
         "heartsLeft": 3
       }
     }
   },
   "buyerLog": {
-    "error": {
-      "code": "VALIDATION_ERROR",
-      "message": "view must be buyer or valio.",
-      "requestId": "req_08ca2a35a4b943e1a40959228e49e734",
-      "details": {}
-    }
+    "events": [
+      {
+        "seq": 1,
+        "eventId": "evt_6c9b7a21f571462bb695285e680d9297",
+        "at": "2026-11-14T10:00:00.003670+02:00",
+        "actor": "scenario",
+        "type": "SCENARIO_OVERLAY",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_2c413db567b14e7980f79fbb982c1bab",
+        "light": null,
+        "reasons": [],
+        "summary": "Scenario overlay applied for level1.",
+        "refs": {},
+        "payload": {},
+        "prevHash": "",
+        "hash": "sha256:b3429eb5bba3983956d40de62149da283ac44e12a3df7dec6886d230bc3aaa7a"
+      },
+      {
+        "seq": 2,
+        "eventId": "evt_b0ef7fb164654999bb0eafbe99dc2e89",
+        "at": "2026-11-14T10:00:00.005950+02:00",
+        "actor": "human",
+        "type": "MANDATE_SIGNED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_978510fc86674ce49b57731ae1192bcc",
+        "light": null,
+        "reasons": [],
+        "summary": "Mandate mdt_de3ca547d995408eaa401c8a5f4635ad signed.",
+        "refs": {
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad"
+        },
+        "payload": {},
+        "prevHash": "sha256:b3429eb5bba3983956d40de62149da283ac44e12a3df7dec6886d230bc3aaa7a",
+        "hash": "sha256:baf0e8caebf14db3609487ef0972066388a6178d8106374cdb4195fd2816cf8d"
+      },
+      {
+        "seq": 3,
+        "eventId": "evt_226e4f6c0c2b4ebcb2a6518ec44b741d",
+        "at": "2026-11-14T10:00:00.013137+02:00",
+        "actor": "agent",
+        "type": "SEARCH",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_8e550f94ab8a427b950dc09897bca590",
+        "light": null,
+        "reasons": [],
+        "summary": "Search returned 0 matching products.",
+        "refs": {
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad"
+        },
+        "payload": {
+          "excludedCount": 0,
+          "filters": {},
+          "query": "Lactose-free semi-skimmed milk for the hotel",
+          "resultCount": 0
+        },
+        "prevHash": "sha256:baf0e8caebf14db3609487ef0972066388a6178d8106374cdb4195fd2816cf8d",
+        "hash": "sha256:76ec9c22daaa4a285b2ce6ba602eb99ac35ad4c70b144bb03d56332ff381732d"
+      },
+      {
+        "seq": 4,
+        "eventId": "evt_a9cd153b3da9459296420efdf5aa9f86",
+        "at": "2026-11-14T10:00:01.041578+02:00",
+        "actor": "agent",
+        "type": "QUOTE_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_71f2d75c374e4a518a2662b84106047d",
+        "light": null,
+        "reasons": [],
+        "summary": "Quote qt_7f7c61a2b9fc4d409c3911f699110110 created.",
+        "refs": {
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad",
+          "quoteId": "qt_7f7c61a2b9fc4d409c3911f699110110"
+        },
+        "payload": {
+          "planCount": 2,
+          "priceUnavailable": [],
+          "unconvertible": []
+        },
+        "prevHash": "sha256:76ec9c22daaa4a285b2ce6ba602eb99ac35ad4c70b144bb03d56332ff381732d",
+        "hash": "sha256:50cabab34797266ed78de5d5d212bd5425d7885303e4b54aad4fa6fe32837cab"
+      },
+      {
+        "seq": 5,
+        "eventId": "evt_448dd4bb34364ea8ac43884edff84cb6",
+        "at": "2026-11-14T10:00:01.974846+02:00",
+        "actor": "agent",
+        "type": "QUOTE_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_bbe5780baaf44790836dea993a3297e6",
+        "light": null,
+        "reasons": [],
+        "summary": "Quote qt_6b9d6f03fb56488e9ab23f08a0832c54 created.",
+        "refs": {
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad",
+          "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54"
+        },
+        "payload": {
+          "planCount": 1,
+          "priceUnavailable": [],
+          "unconvertible": []
+        },
+        "prevHash": "sha256:50cabab34797266ed78de5d5d212bd5425d7885303e4b54aad4fa6fe32837cab",
+        "hash": "sha256:3b2e5e24a7899ef50b875b36e26d89e8237817d8f0bbe0afb56062170fff71d9"
+      },
+      {
+        "seq": 6,
+        "eventId": "evt_635228ee65a84cc59b035cd3486f7c94",
+        "at": "2026-11-14T10:00:02.912785+02:00",
+        "actor": "gateway",
+        "type": "APPROVAL_SHOWN",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_3dbcd22e6d794e1bbebabadd344b1f64",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Approval apr_ca3223a612da4302b4e33917c6975df9 opened.",
+        "refs": {
+          "approvalId": "apr_ca3223a612da4302b4e33917c6975df9",
+          "orderId": "ord_747b1cbf8fb24f3d83cfc5c241b58371",
+          "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54"
+        },
+        "payload": {},
+        "prevHash": "sha256:3b2e5e24a7899ef50b875b36e26d89e8237817d8f0bbe0afb56062170fff71d9",
+        "hash": "sha256:5c268a61336e3d1b3894613ec6af9d7eb1cbf6f5814181d997560d6c21e84bf6"
+      },
+      {
+        "seq": 7,
+        "eventId": "evt_66b28f7c38a04311ac316847ecbc23f9",
+        "at": "2026-11-14T10:00:02.913129+02:00",
+        "actor": "agent",
+        "type": "ORDER_PENDING_APPROVAL",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_3dbcd22e6d794e1bbebabadd344b1f64",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Order plan pln_1 evaluated as YELLOW.",
+        "refs": {
+          "planId": "pln_1",
+          "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54"
+        },
+        "payload": {},
+        "prevHash": "sha256:5c268a61336e3d1b3894613ec6af9d7eb1cbf6f5814181d997560d6c21e84bf6",
+        "hash": "sha256:67f63a158aca0535d5b3cdda6e7fa05de6339e58bc1d9fdddf8e26f37ddc8f00"
+      },
+      {
+        "seq": 8,
+        "eventId": "evt_d6ca4d8b9f99477f8623a0ff46b95d15",
+        "at": "2026-11-14T10:00:04.029814+02:00",
+        "actor": "human",
+        "type": "APPROVAL_DECIDED",
+        "customerId": "123",
+        "agentId": null,
+        "requestId": "req_0dffff50179f4ebc8fe9b506cecd2f62",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Approval apr_ca3223a612da4302b4e33917c6975df9 decision: approved.",
+        "refs": {
+          "approvalId": "apr_ca3223a612da4302b4e33917c6975df9",
+          "orderId": "ord_747b1cbf8fb24f3d83cfc5c241b58371"
+        },
+        "payload": {},
+        "prevHash": "sha256:67f63a158aca0535d5b3cdda6e7fa05de6339e58bc1d9fdddf8e26f37ddc8f00",
+        "hash": "sha256:37ce17ff6f405640263abc44cba3ef8ca7b54b624aa3d1aee3ccd2eefc319dbb"
+      },
+      {
+        "seq": 9,
+        "eventId": "evt_fd223beb8ec04ee28e66a4738293d321",
+        "at": "2026-11-14T10:00:05.127325+02:00",
+        "actor": "agent",
+        "type": "QUOTE_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_16e827b03dd041a6b38689b394eb8a0b",
+        "light": null,
+        "reasons": [],
+        "summary": "Quote qt_39ff26675a814ccda98aae1fb81e0fd5 created.",
+        "refs": {
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad",
+          "quoteId": "qt_39ff26675a814ccda98aae1fb81e0fd5"
+        },
+        "payload": {
+          "planCount": 1,
+          "priceUnavailable": [],
+          "unconvertible": []
+        },
+        "prevHash": "sha256:37ce17ff6f405640263abc44cba3ef8ca7b54b624aa3d1aee3ccd2eefc319dbb",
+        "hash": "sha256:b2333e05cf0b3428f4ee76ebf3e0173a73224fb9c883678a4bc08e95ca4f5c21"
+      },
+      {
+        "seq": 10,
+        "eventId": "evt_66087c26eb1f451d9391a104fdd5fc52",
+        "at": "2026-11-14T10:00:06.225787+02:00",
+        "actor": "agent",
+        "type": "ORDER_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_7de23b48d22b4a6cb4c92b9c40557756",
+        "light": "GREEN",
+        "reasons": [
+          "WITHIN_MANDATE"
+        ],
+        "summary": "Order plan pln_1 evaluated as GREEN.",
+        "refs": {
+          "planId": "pln_1",
+          "quoteId": "qt_39ff26675a814ccda98aae1fb81e0fd5"
+        },
+        "payload": {},
+        "prevHash": "sha256:b2333e05cf0b3428f4ee76ebf3e0173a73224fb9c883678a4bc08e95ca4f5c21",
+        "hash": "sha256:7c9d2cd1c4eb3f0e21376d73befb04fb80f5799e087d641f6566e9392a3c5abf"
+      }
+    ]
   },
   "valioLog": {
-    "error": {
-      "code": "VALIDATION_ERROR",
-      "message": "view must be buyer or valio.",
-      "requestId": "req_394fdf51e3614d65a58c7b402b4f6679",
-      "details": {}
-    }
+    "events": [
+      {
+        "seq": 1,
+        "eventId": "evt_6c9b7a21f571462bb695285e680d9297",
+        "at": "2026-11-14T10:00:00.003670+02:00",
+        "actor": "scenario",
+        "type": "SCENARIO_OVERLAY",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_2c413db567b14e7980f79fbb982c1bab",
+        "light": null,
+        "reasons": [],
+        "summary": "Scenario overlay applied for level1.",
+        "refs": {},
+        "payload": {},
+        "prevHash": "",
+        "hash": "sha256:b3429eb5bba3983956d40de62149da283ac44e12a3df7dec6886d230bc3aaa7a",
+        "disclosure": {
+          "returnedToAgent": [
+            "catalog",
+            "labels",
+            "certificates",
+            "categoryCarbon",
+            "netPrice",
+            "availability",
+            "closingTime"
+          ],
+          "withheld": [
+            "purchasePrice",
+            "margin",
+            "otherCustomers",
+            "supplierContracts"
+          ]
+        }
+      },
+      {
+        "seq": 2,
+        "eventId": "evt_b0ef7fb164654999bb0eafbe99dc2e89",
+        "at": "2026-11-14T10:00:00.005950+02:00",
+        "actor": "human",
+        "type": "MANDATE_SIGNED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_978510fc86674ce49b57731ae1192bcc",
+        "light": null,
+        "reasons": [],
+        "summary": "Mandate mdt_de3ca547d995408eaa401c8a5f4635ad signed.",
+        "refs": {
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad"
+        },
+        "payload": {},
+        "prevHash": "sha256:b3429eb5bba3983956d40de62149da283ac44e12a3df7dec6886d230bc3aaa7a",
+        "hash": "sha256:baf0e8caebf14db3609487ef0972066388a6178d8106374cdb4195fd2816cf8d",
+        "disclosure": {
+          "returnedToAgent": [
+            "catalog",
+            "labels",
+            "certificates",
+            "categoryCarbon",
+            "netPrice",
+            "availability",
+            "closingTime"
+          ],
+          "withheld": [
+            "purchasePrice",
+            "margin",
+            "otherCustomers",
+            "supplierContracts"
+          ]
+        }
+      },
+      {
+        "seq": 3,
+        "eventId": "evt_226e4f6c0c2b4ebcb2a6518ec44b741d",
+        "at": "2026-11-14T10:00:00.013137+02:00",
+        "actor": "agent",
+        "type": "SEARCH",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_8e550f94ab8a427b950dc09897bca590",
+        "light": null,
+        "reasons": [],
+        "summary": "Search returned 0 matching products.",
+        "refs": {
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad"
+        },
+        "payload": {
+          "excludedCount": 0,
+          "filters": {},
+          "query": "Lactose-free semi-skimmed milk for the hotel",
+          "resultCount": 0
+        },
+        "prevHash": "sha256:baf0e8caebf14db3609487ef0972066388a6178d8106374cdb4195fd2816cf8d",
+        "hash": "sha256:76ec9c22daaa4a285b2ce6ba602eb99ac35ad4c70b144bb03d56332ff381732d",
+        "disclosure": {
+          "returnedToAgent": [
+            "catalog",
+            "labels",
+            "certificates",
+            "categoryCarbon",
+            "netPrice",
+            "availability",
+            "closingTime"
+          ],
+          "withheld": [
+            "purchasePrice",
+            "margin",
+            "otherCustomers",
+            "supplierContracts"
+          ]
+        }
+      },
+      {
+        "seq": 4,
+        "eventId": "evt_a9cd153b3da9459296420efdf5aa9f86",
+        "at": "2026-11-14T10:00:01.041578+02:00",
+        "actor": "agent",
+        "type": "QUOTE_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_71f2d75c374e4a518a2662b84106047d",
+        "light": null,
+        "reasons": [],
+        "summary": "Quote qt_7f7c61a2b9fc4d409c3911f699110110 created.",
+        "refs": {
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad",
+          "quoteId": "qt_7f7c61a2b9fc4d409c3911f699110110"
+        },
+        "payload": {
+          "planCount": 2,
+          "priceUnavailable": [],
+          "unconvertible": []
+        },
+        "prevHash": "sha256:76ec9c22daaa4a285b2ce6ba602eb99ac35ad4c70b144bb03d56332ff381732d",
+        "hash": "sha256:50cabab34797266ed78de5d5d212bd5425d7885303e4b54aad4fa6fe32837cab",
+        "disclosure": {
+          "returnedToAgent": [
+            "catalog",
+            "labels",
+            "certificates",
+            "categoryCarbon",
+            "netPrice",
+            "availability",
+            "closingTime"
+          ],
+          "withheld": [
+            "purchasePrice",
+            "margin",
+            "otherCustomers",
+            "supplierContracts"
+          ]
+        }
+      },
+      {
+        "seq": 5,
+        "eventId": "evt_448dd4bb34364ea8ac43884edff84cb6",
+        "at": "2026-11-14T10:00:01.974846+02:00",
+        "actor": "agent",
+        "type": "QUOTE_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_bbe5780baaf44790836dea993a3297e6",
+        "light": null,
+        "reasons": [],
+        "summary": "Quote qt_6b9d6f03fb56488e9ab23f08a0832c54 created.",
+        "refs": {
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad",
+          "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54"
+        },
+        "payload": {
+          "planCount": 1,
+          "priceUnavailable": [],
+          "unconvertible": []
+        },
+        "prevHash": "sha256:50cabab34797266ed78de5d5d212bd5425d7885303e4b54aad4fa6fe32837cab",
+        "hash": "sha256:3b2e5e24a7899ef50b875b36e26d89e8237817d8f0bbe0afb56062170fff71d9",
+        "disclosure": {
+          "returnedToAgent": [
+            "catalog",
+            "labels",
+            "certificates",
+            "categoryCarbon",
+            "netPrice",
+            "availability",
+            "closingTime"
+          ],
+          "withheld": [
+            "purchasePrice",
+            "margin",
+            "otherCustomers",
+            "supplierContracts"
+          ]
+        }
+      },
+      {
+        "seq": 6,
+        "eventId": "evt_635228ee65a84cc59b035cd3486f7c94",
+        "at": "2026-11-14T10:00:02.912785+02:00",
+        "actor": "gateway",
+        "type": "APPROVAL_SHOWN",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_3dbcd22e6d794e1bbebabadd344b1f64",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Approval apr_ca3223a612da4302b4e33917c6975df9 opened.",
+        "refs": {
+          "approvalId": "apr_ca3223a612da4302b4e33917c6975df9",
+          "orderId": "ord_747b1cbf8fb24f3d83cfc5c241b58371",
+          "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54"
+        },
+        "payload": {},
+        "prevHash": "sha256:3b2e5e24a7899ef50b875b36e26d89e8237817d8f0bbe0afb56062170fff71d9",
+        "hash": "sha256:5c268a61336e3d1b3894613ec6af9d7eb1cbf6f5814181d997560d6c21e84bf6",
+        "disclosure": {
+          "returnedToAgent": [
+            "catalog",
+            "labels",
+            "certificates",
+            "categoryCarbon",
+            "netPrice",
+            "availability",
+            "closingTime"
+          ],
+          "withheld": [
+            "purchasePrice",
+            "margin",
+            "otherCustomers",
+            "supplierContracts"
+          ]
+        }
+      },
+      {
+        "seq": 7,
+        "eventId": "evt_66b28f7c38a04311ac316847ecbc23f9",
+        "at": "2026-11-14T10:00:02.913129+02:00",
+        "actor": "agent",
+        "type": "ORDER_PENDING_APPROVAL",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_3dbcd22e6d794e1bbebabadd344b1f64",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Order plan pln_1 evaluated as YELLOW.",
+        "refs": {
+          "planId": "pln_1",
+          "quoteId": "qt_6b9d6f03fb56488e9ab23f08a0832c54"
+        },
+        "payload": {},
+        "prevHash": "sha256:5c268a61336e3d1b3894613ec6af9d7eb1cbf6f5814181d997560d6c21e84bf6",
+        "hash": "sha256:67f63a158aca0535d5b3cdda6e7fa05de6339e58bc1d9fdddf8e26f37ddc8f00",
+        "disclosure": {
+          "returnedToAgent": [
+            "catalog",
+            "labels",
+            "certificates",
+            "categoryCarbon",
+            "netPrice",
+            "availability",
+            "closingTime"
+          ],
+          "withheld": [
+            "purchasePrice",
+            "margin",
+            "otherCustomers",
+            "supplierContracts"
+          ]
+        }
+      },
+      {
+        "seq": 8,
+        "eventId": "evt_d6ca4d8b9f99477f8623a0ff46b95d15",
+        "at": "2026-11-14T10:00:04.029814+02:00",
+        "actor": "human",
+        "type": "APPROVAL_DECIDED",
+        "customerId": "123",
+        "agentId": null,
+        "requestId": "req_0dffff50179f4ebc8fe9b506cecd2f62",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Approval apr_ca3223a612da4302b4e33917c6975df9 decision: approved.",
+        "refs": {
+          "approvalId": "apr_ca3223a612da4302b4e33917c6975df9",
+          "orderId": "ord_747b1cbf8fb24f3d83cfc5c241b58371"
+        },
+        "payload": {},
+        "prevHash": "sha256:67f63a158aca0535d5b3cdda6e7fa05de6339e58bc1d9fdddf8e26f37ddc8f00",
+        "hash": "sha256:37ce17ff6f405640263abc44cba3ef8ca7b54b624aa3d1aee3ccd2eefc319dbb",
+        "disclosure": {
+          "returnedToAgent": [
+            "catalog",
+            "labels",
+            "certificates",
+            "categoryCarbon",
+            "netPrice",
+            "availability",
+            "closingTime"
+          ],
+          "withheld": [
+            "purchasePrice",
+            "margin",
+            "otherCustomers",
+            "supplierContracts"
+          ]
+        }
+      },
+      {
+        "seq": 9,
+        "eventId": "evt_fd223beb8ec04ee28e66a4738293d321",
+        "at": "2026-11-14T10:00:05.127325+02:00",
+        "actor": "agent",
+        "type": "QUOTE_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_16e827b03dd041a6b38689b394eb8a0b",
+        "light": null,
+        "reasons": [],
+        "summary": "Quote qt_39ff26675a814ccda98aae1fb81e0fd5 created.",
+        "refs": {
+          "mandateId": "mdt_de3ca547d995408eaa401c8a5f4635ad",
+          "quoteId": "qt_39ff26675a814ccda98aae1fb81e0fd5"
+        },
+        "payload": {
+          "planCount": 1,
+          "priceUnavailable": [],
+          "unconvertible": []
+        },
+        "prevHash": "sha256:37ce17ff6f405640263abc44cba3ef8ca7b54b624aa3d1aee3ccd2eefc319dbb",
+        "hash": "sha256:b2333e05cf0b3428f4ee76ebf3e0173a73224fb9c883678a4bc08e95ca4f5c21",
+        "disclosure": {
+          "returnedToAgent": [
+            "catalog",
+            "labels",
+            "certificates",
+            "categoryCarbon",
+            "netPrice",
+            "availability",
+            "closingTime"
+          ],
+          "withheld": [
+            "purchasePrice",
+            "margin",
+            "otherCustomers",
+            "supplierContracts"
+          ]
+        }
+      },
+      {
+        "seq": 10,
+        "eventId": "evt_66087c26eb1f451d9391a104fdd5fc52",
+        "at": "2026-11-14T10:00:06.225787+02:00",
+        "actor": "agent",
+        "type": "ORDER_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_7de23b48d22b4a6cb4c92b9c40557756",
+        "light": "GREEN",
+        "reasons": [
+          "WITHIN_MANDATE"
+        ],
+        "summary": "Order plan pln_1 evaluated as GREEN.",
+        "refs": {
+          "planId": "pln_1",
+          "quoteId": "qt_39ff26675a814ccda98aae1fb81e0fd5"
+        },
+        "payload": {},
+        "prevHash": "sha256:b2333e05cf0b3428f4ee76ebf3e0173a73224fb9c883678a4bc08e95ca4f5c21",
+        "hash": "sha256:7c9d2cd1c4eb3f0e21376d73befb04fb80f5799e087d641f6566e9392a3c5abf",
+        "disclosure": {
+          "returnedToAgent": [
+            "catalog",
+            "labels",
+            "certificates",
+            "categoryCarbon",
+            "netPrice",
+            "availability",
+            "closingTime"
+          ],
+          "withheld": [
+            "purchasePrice",
+            "margin",
+            "otherCustomers",
+            "supplierContracts"
+          ]
+        }
+      }
+    ]
   },
   "verify": {
     "valid": true,
     "events": 10,
-    "headHash": "sha256:b2fee9fe1615e41b672ffea5b1f8201cd35a0bbfd1476026f6f066d0ebda2424"
+    "headHash": "sha256:7c9d2cd1c4eb3f0e21376d73befb04fb80f5799e087d641f6566e9392a3c5abf"
   }
 }
