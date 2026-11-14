@@ -5,6 +5,7 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 import asyncio
 import json
+import logging
 from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from uuid import uuid4
@@ -32,6 +33,7 @@ from backend.app.policy import PolicyResult, check_plan
 
 
 REQUEST_ID_HEADER = "X-Request-Id"
+logger = logging.getLogger(__name__)
 
 
 def error_body(
@@ -113,7 +115,20 @@ async def lifespan(application: FastAPI):
             settings.valio_cache_directory,
         )
         application.state.valio_client = client
-        await application.state.valio_data.refresh()
+        try:
+            await asyncio.wait_for(application.state.valio_data.refresh(), timeout=10)
+        except (ValioUpstreamError, ValueError, asyncio.TimeoutError) as exc:
+            try:
+                for dataset in ("products", "delivery-reliability", "carbon-footprint"):
+                    application.state.valio_data.load(dataset)
+            except (FileNotFoundError, ValueError) as cache_exc:
+                raise RuntimeError(
+                    "Valio upstream is unavailable and the local catalog cache is incomplete."
+                ) from cache_exc
+            logger.warning(
+                "Valio refresh failed; serving the existing local catalog cache: %s",
+                exc,
+            )
         application.state.catalog_search = CatalogSearch.from_cache(
             settings.valio_cache_directory
         )
