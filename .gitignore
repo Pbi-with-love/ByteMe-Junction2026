@@ -27,3 +27,4 @@ CLAUDE.md
 # keep the template, ignore downloaded Valio data
 !.env.example
 data/
+orca.yaml
