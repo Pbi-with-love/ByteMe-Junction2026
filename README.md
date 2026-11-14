@@ -328,9 +328,12 @@ MVP = Levels 1-3. Build them on the same gateway and policy engine, never as sep
 
 ### Level 3: Allergy Emergency (School kitchen)
 - Need: substitute for an unavailable item; cheapest substitute contains an allergen.
-- Allergen rule ON → gateway blocks the product (RED, no approve button), agent picks a
-  safe option → good score.
-- Allergen rule OFF → agent buys the cheaper unsafe item → **Safety incident**.
+- The mandate allows no substitution, so the agent must ask before buying a substitute
+  (1 approval, costs 1 heart).
+- Allergen rule ON → gateway blocks the egg product (RED, no approve button); the card only
+  offers safe options → good score.
+- Allergen rule OFF → the cheaper egg product appears on the approval card with its allergen
+  disclosed (trap option, §10.8); approving it → **Safety incident**.
 - Lesson: some rules must never be left to a hurried human approval.
 - Pitch note: a real deployment would default these rules ON; the toggle exists to teach.
 
