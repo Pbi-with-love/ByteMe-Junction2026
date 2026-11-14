@@ -77,8 +77,8 @@ describe('Run demo App flow', () => {
     await playDemoByHand();
     expect(automated.calls).toEqual(manual.calls);
     expect(automated.calls.filter(([method]) => method === 'decideApproval')).toHaveLength(DEMO.decisions.length);
-    expect(DEMO_BEAT_MS).toBe(1500);
-    expect(DEMO_RESULT_HOLD_MS).toBe(8000);
+    expect(DEMO_BEAT_MS).toBe(250);
+    expect(DEMO_RESULT_HOLD_MS).toBe(1000);
   }, 30_000);
 
   it('aborts on Back to levels and can run again afterward', async () => {

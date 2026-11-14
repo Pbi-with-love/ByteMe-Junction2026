@@ -1,30 +1,35 @@
-import { CompareSchema, DiscoverySchema, ErrorEnvelopeSchema, GameResultSchema, GameStartSchema, LogResponseSchema, LogVerifySchema, MandateSchema, TokenResponseSchema } from './schemas';
+import { AgentStepSchema, CompareSchema, DiscoverySchema, ErrorEnvelopeSchema, GameResultSchema, GameStartSchema, LogResponseSchema, LogVerifySchema, MandateSchema, TokenResponseSchema } from './schemas';
 import { ApprovalDecisionSchema, ApprovalSchema } from './schemas';
 import { GatewayError, type GatewayClient } from './gateway';
 import type { AgentStep, Compare, Discovery, GameResult, GameStart, Mandate } from './schemas';
 import type { MandateDraft } from './gateway';
+import type { AgentActivity } from '../components/AgentWorking';
 import { z, type ZodType } from 'zod';
 
 const ApprovalDecisionResponseSchema = z.object({ approval: ApprovalSchema, order: z.object({ status: z.string() }).passthrough() });
+const SessionSchema = z.object({ status: z.enum(['CREATED', 'RUNNING', 'FINISHED', 'FAILED']), steps: z.array(AgentStepSchema), error: z.string().optional(), activity: z.enum(['idle', 'searching', 'quoting', 'ordering', 'explaining']).optional() });
 
 export class HttpGatewayClient implements GatewayClient {
   private token: string | undefined;
   private operatorToken: string | undefined;
+  private readonly runStarted = new Set<string>();
+  private readonly cursors = new Map<string, number>();
+  private readonly activities = new Map<string, AgentActivity>();
 
-  constructor(private readonly baseUrl: string) {}
+  constructor(private readonly baseUrl: string, private readonly upstreamMode = 'replay', private readonly pollIntervalMs = 500) {}
 
-  private async request<T>(path: string, schema: ZodType<T>, init: RequestInit = {}): Promise<T> {
+  private async request<T>(path: string, schema: ZodType<T>, init: RequestInit = {}, includeHumanToken = true): Promise<T> {
     let response: Response;
     try {
       response = await fetch(`${this.baseUrl}${path}`, {
         ...init,
         headers: {
-          ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
+          ...(includeHumanToken && this.token ? { Authorization: `Bearer ${this.token}` } : {}),
           ...init.headers,
         },
       });
     } catch {
-      throw new GatewayError('NETWORK_ERROR');
+      throw new GatewayError('NETWORK_ERROR', `Cannot reach the gateway at ${this.baseUrl}. Start the backend or set VITE_GATEWAY_MODE=replay.`);
     }
 
     let body: unknown;
@@ -54,13 +59,18 @@ export class HttpGatewayClient implements GatewayClient {
     const start = await this.request(`/v1/game/levels/${encodeURIComponent(levelId)}/start`, GameStartSchema, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ preset, mode: 'live' }),
+      body: JSON.stringify({ preset, mode: this.upstreamMode }),
     });
     this.token = start.tokens.human;
+    this.runStarted.delete(start.sessionId);
+    this.cursors.set(start.sessionId, 0);
+    this.activities.set(start.sessionId, 'idle');
     return start;
   }
 
-  async presets(_levelId: string): Promise<Record<string, Mandate>> { throw new GatewayError('NOT_IMPLEMENTED'); }
+  async presets(levelId: string): Promise<Record<string, Mandate>> {
+    return this.request(`/v1/game/levels/${encodeURIComponent(levelId)}/presets`, z.record(z.string(), MandateSchema), {}, false);
+  }
 
   signMandate(_sessionId: string, draft: MandateDraft): Promise<Mandate> {
     return this.request('/v1/mandates', MandateSchema, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(draft) });
@@ -80,8 +90,34 @@ export class HttpGatewayClient implements GatewayClient {
     return this.request(`/v1/approvals/${encodeURIComponent(approvalId)}`, ApprovalSchema);
   }
 
-  async nextStep(_sessionId: string): Promise<AgentStep | null> {
-    throw new GatewayError('NOT_IMPLEMENTED');
+  activity(sessionId: string): AgentActivity { return this.activities.get(sessionId) ?? 'idle'; }
+
+  async nextStep(sessionId: string): Promise<AgentStep | null> {
+    const sessionPath = `/v1/game/sessions/${encodeURIComponent(sessionId)}`;
+    if (!this.runStarted.has(sessionId)) {
+      try {
+        await this.request(`/v1/game/sessions/${encodeURIComponent(sessionId)}/run`, z.unknown(), { method: 'POST' });
+      } catch (error) {
+        if (!(error instanceof GatewayError) || error.httpStatus !== 409 || error.code !== 'INVALID_STATE') throw error;
+        const current = await this.request(sessionPath, SessionSchema);
+        if (current.status !== 'RUNNING' && current.status !== 'FINISHED') throw error;
+      }
+      this.runStarted.add(sessionId);
+    }
+
+    while (true) {
+      const session = await this.request(sessionPath, SessionSchema);
+      this.activities.set(sessionId, session.activity ?? (session.status === 'RUNNING' ? 'searching' : 'idle'));
+      if (session.status === 'FAILED') throw new GatewayError('AGENT_FAILED', session.error ?? 'Agent failed');
+      const cursor = this.cursors.get(sessionId) ?? 0;
+      const step = session.steps[cursor];
+      if (step) {
+        this.cursors.set(sessionId, cursor + 1);
+        return step;
+      }
+      if (session.status === 'FINISHED') { this.activities.set(sessionId, 'idle'); return null; }
+      await new Promise((resolve) => setTimeout(resolve, this.pollIntervalMs));
+    }
   }
 
   getResult(sessionId: string): Promise<GameResult> {

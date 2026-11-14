@@ -8,6 +8,7 @@ import type { Discovery } from './api/schemas';
 import { ReplayGatewayClient } from './api/replay';
 import { createPixiWorld } from './world/pixiWorld';
 import { fakeWorld } from './world/fakeWorld';
+import { HttpGatewayClient } from './api/http';
 
 function makeClient(discovery: () => Promise<Discovery>): GatewayClient {
   return {
@@ -63,6 +64,15 @@ describe('level shell', () => {
     render(<App client={makeClient(async () => { throw new Error('offline'); })} />);
     expect(await screen.findByRole('alert')).toHaveTextContent('offline');
     expect(screen.queryByRole('article')).toBeNull();
+  });
+
+  it('shows the actionable gateway URL message when the live backend is unavailable', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('connection refused')));
+    render(<App client={new HttpGatewayClient('http://localhost:8000')} />);
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Cannot reach the gateway at http://localhost:8000. Start the backend or set VITE_GATEWAY_MODE=replay.',
+    );
+    vi.unstubAllGlobals();
   });
 
   it('keeps the title heading and opens a kitchen after preset and level start', async () => {

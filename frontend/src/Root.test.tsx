@@ -11,7 +11,7 @@ vi.mock('./App', () => ({ default: () => {
 
 describe('Root', () => {
   it.each([
-    [{}, 'Replay mode', 'replay'],
+    [{}, 'Live gateway', 'live'],
     [{ VITE_GATEWAY_MODE: 'live' }, 'Live gateway', 'live'],
   ] as const)('shows the %s mode badge', (env, label, mode) => {
     render(<Root env={env} />);
@@ -27,7 +27,7 @@ describe('Root', () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     appState.shouldCrash = true;
     appState.renders = 0;
-    render(<Root env={{}} />);
+    render(<Root env={{ VITE_GATEWAY_MODE: 'replay' }} />);
     expect(screen.getByRole('alert')).toHaveTextContent('test render crash');
     expect(screen.getByText('Replay mode')).toBeInTheDocument();
     const rendersBeforeReset = appState.renders;

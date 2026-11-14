@@ -20,7 +20,7 @@ describe('HttpGatewayClient', () => {
     const verify = level1.presets.balanced.verify;
     const fetchMock = vi.fn().mockResolvedValueOnce(response(level1.start)).mockResolvedValueOnce(response(log)).mockResolvedValueOnce(response(verify));
     vi.stubGlobal('fetch', fetchMock);
-    const client = new HttpGatewayClient('http://gw.test');
+    const client = new HttpGatewayClient('http://gw.test', 'live');
     await client.startLevel(level1.start.level.levelId, 'balanced');
     expect(await client.getLog('buyer', { since: 3, limit: 10 })).toEqual(log);
     expect(fetchMock.mock.calls[1]![0]).toBe('http://gw.test/v1/log?view=buyer&since=3&limit=10');
@@ -57,7 +57,7 @@ describe('HttpGatewayClient', () => {
       .mockResolvedValueOnce(response(level1.presets.strict.result))
       .mockResolvedValueOnce(response(level1.compare));
     vi.stubGlobal('fetch', fetchMock);
-    const client = new HttpGatewayClient('http://gw.test');
+    const client = new HttpGatewayClient('http://gw.test', 'live');
 
     await client.discovery();
     expect(fetchMock.mock.calls[0][0]).toBe('http://gw.test/.well-known/agent-commerce.json');
@@ -79,8 +79,8 @@ describe('HttpGatewayClient', () => {
   });
 
 
-  it('posts only the mandate draft with the human bearer token and rejects presets without fetch', async () => {
-    const fetchMock = vi.fn().mockResolvedValueOnce(response(level1.start)).mockResolvedValueOnce(response(Object.values(level1.presets)[0].mandate, 201));
+  it('posts the mandate draft with the human bearer token and gets presets without auth', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(response(level1.start)).mockResolvedValueOnce(response(Object.values(level1.presets)[0].mandate, 201)).mockResolvedValueOnce(response({ balanced: Object.values(level1.presets)[0].mandate }));
     vi.stubGlobal('fetch', fetchMock);
     const client = new HttpGatewayClient('http://gw.test');
     await client.startLevel(level1.start.level.levelId, Object.keys(level1.presets)[0]);
@@ -89,9 +89,9 @@ describe('HttpGatewayClient', () => {
     await client.signMandate(level1.start.sessionId, draft);
     expect(fetchMock.mock.calls[1][0]).toBe('http://gw.test/v1/mandates');
     expect(fetchMock.mock.calls[1][1]).toMatchObject({ method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${level1.start.tokens.human}` }, body: JSON.stringify(draft) });
-    const count = fetchMock.mock.calls.length;
-    await expect(client.presets(level1.start.level.levelId)).rejects.toMatchObject({ code: 'NOT_IMPLEMENTED' });
-    expect(fetchMock).toHaveBeenCalledTimes(count);
+    expect(await client.presets(level1.start.level.levelId)).toHaveProperty('balanced');
+    expect(fetchMock.mock.calls[2]?.[0]).toBe(`http://gw.test/v1/game/levels/${level1.start.level.levelId}/presets`);
+    expect(fetchMock.mock.calls[2]?.[1]?.headers).not.toHaveProperty('Authorization');
   });
 
   it('posts and gets approval decisions with the human bearer token and validates alternatives', async () => {
@@ -137,7 +137,6 @@ describe('HttpGatewayClient', () => {
     await expect(client.discovery()).rejects.toMatchObject({ code: 'HTTP_ERROR', httpStatus: 503 });
     await expect(client.discovery()).rejects.toMatchObject({ code: 'NETWORK_ERROR' });
     await expect(client.discovery()).rejects.toMatchObject({ code: 'INVALID_RESPONSE' });
-    await expect(client.nextStep('s')).rejects.toBeInstanceOf(GatewayError);
-    await expect(client.nextStep('s')).rejects.toMatchObject({ code: 'NOT_IMPLEMENTED' });
+    // nextStep requires a started session and is covered by the live polling tests.
   });
 });

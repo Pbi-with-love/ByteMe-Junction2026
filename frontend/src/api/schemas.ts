@@ -76,9 +76,9 @@ export const RecordedOrderSchema = z.discriminatedUnion('httpStatus', [
 ]);
 export type RecordedOrder = z.infer<typeof RecordedOrderSchema>;
 export const ApprovalSchema = z.object({
-  approvalId: text, orderId: text, quoteId: text, status: z.enum(['OPEN','APPROVED','REJECTED','EXPIRED']), reasons: z.array(ReasonCodeSchema), reasonText: text,
+  approvalId: text, orderId: text, quoteId: text, status: z.enum(['OPEN','APPROVED','REJECTED','EXPIRED']), reasons: z.array(ReasonCodeSchema), reasonText: text.optional(),
   options: z.array(z.object({ planId: text, tier: optionalText, recommended: z.boolean().optional(), summary: text })),
-  agentExplanation: text.optional(), deadline: dateTime, createdAt: dateTime,
+  agentExplanation: text.nullable().optional(), deadline: dateTime, createdAt: dateTime,
 }).passthrough();
 export type Approval = z.infer<typeof ApprovalSchema>;
 export const ApprovalDecisionSchema = ApprovalSchema.extend({ decision: text, orderStatus: text });
@@ -135,7 +135,7 @@ export const ErrorEnvelopeSchema = z.object({
 export type ErrorEnvelope = z.infer<typeof ErrorEnvelopeSchema>;
 export const AgentStepSchema = z.object({
   search: SearchResponseSchema, quote: QuoteSchema, order: RecordedOrderSchema, approval: ApprovalSchema.nullable(),
-  approvalEvent: z.object({ approvalId: text, deadline: dateTime, heartsLeft: z.number().int() }).optional(),
+  approvalEvent: z.object({ approvalId: text, deadline: dateTime, heartsLeft: z.number().int() }).nullable().optional(),
 });
 export type AgentStep = z.infer<typeof AgentStepSchema>;
 export const LevelMockSchema = z.object({

@@ -36,10 +36,10 @@ export default function KitchenScreen({ client, start, presets, discovery, onExi
   const abort = useRef<AbortController | null>(null);
   useEffect(() => () => abort.current?.abort(), []);
   useEffect(() => {
-    if (!running || waiting) return;
+    if (!running) return;
     const timer = window.setInterval(() => setActivity(client.activity?.(start.sessionId) ?? 'idle'), 150);
     return () => window.clearInterval(timer);
-  }, [client, running, start.sessionId, waiting]);
+  }, [client, running, start.sessionId]);
   const hint = running ? 'The agent is working.' : signed ? 'Click the Order Terminal to send the request.' : 'Click the Manager Desk to read the brief and sign the mandate.';
   function closePanel() { const prior = panel; setPanel('closed'); requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`button[aria-label="${prior === 'terminal' ? 'Order Terminal' : 'Manager Desk'}"]`)?.focus()); }
   function station(id: StationId) { if (id === 'desk') setPanel('brief'); if (id === 'terminal' && signed && !running) setPanel('terminal'); }
