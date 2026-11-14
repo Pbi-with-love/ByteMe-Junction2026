@@ -35,8 +35,8 @@ export default function ActivityLog({ entries }: { entries: TimelineEntry[] }) {
           {entry.kind === 'quote' && summary && <span className="entry-summary">{summary}</span>}
           {entry.kind === 'quote' && quote.scenarioOverlay && <span className="scenario-tag">Scenario adjustment</span>}
           {entry.kind === 'quote' && nonValioBrands(quote, step.search).length > 0 && <span>Recommended plan uses another brand: {nonValioBrands(quote, step.search).join(', ')}.</span>}
-          {entry.status === 'PENDING_APPROVAL' && <span className="order-pending">Approval requested</span>}
-          {entry.status === 'ORDERED' && <span>Ordered {order.body.orderId}</span>}
+          {entry.status === 'PENDING_APPROVAL' && <span className="order-pending">{order.body.status}</span>}
+          {entry.status === 'ORDERED' && <span>{order.body.status}</span>}
           {entry.status === 'BLOCKED' && <span className="order-blocked">Order blocked</span>}
           {errorOrder && <span className="order-error">{order.body.error.code}: {order.body.error.message}</span>}
         </button>

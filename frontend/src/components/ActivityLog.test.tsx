@@ -22,6 +22,22 @@ describe('ActivityLog', () => {
     expect(screen.getByText(/quoteId/)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /approve/i })).not.toBeInTheDocument();
   });
+  it('renders an ordered order id once in the activity entry', () => {
+    const orderedStep = (level1 as LevelMock).presets.loose!.steps.find(item => item.order.httpStatus === 201)!;
+    const orderId = orderedStep.order.httpStatus === 201 ? orderedStep.order.body.orderId : '';
+    const entry = toTimelineEntries(orderedStep, 1)[2]!;
+    render(<ActivityLog entries={[entry]} />);
+    const orderButton = screen.getByRole('button');
+    expect(orderButton.textContent?.match(new RegExp(`Ordered ${orderId}`, 'g'))).toHaveLength(1);
+  });
+  it('renders pending approval once and shows the gateway order status', () => {
+    const pendingStep = (level1 as LevelMock).presets.balanced!.steps[0]!;
+    const entry = toTimelineEntries(pendingStep, 1)[2]!;
+    render(<ActivityLog entries={[entry]} />);
+    const orderButton = screen.getByRole('button');
+    expect(orderButton.textContent?.match(/Approval requested/g)).toHaveLength(1);
+    expect(orderButton).toHaveTextContent('PENDING_APPROVAL');
+  });
   it('renders an empty quote without inventing a recommended plan', () => {
     const emptyQuoteStep = structuredClone(step);
     emptyQuoteStep.quote.plans = [];
