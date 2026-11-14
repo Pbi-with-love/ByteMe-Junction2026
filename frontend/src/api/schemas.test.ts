@@ -9,6 +9,8 @@ import {
   PlanSchema,
   QuoteSchema,
   ReasonCodeSchema,
+  LogResponseSchema,
+  LogVerifySchema,
 } from './schemas';
 
 const mocks = import.meta.glob('../../mocks/*.json', {
@@ -17,6 +19,13 @@ const mocks = import.meta.glob('../../mocks/*.json', {
 }) as Record<string, unknown>;
 
 describe('gateway schemas', () => {
+  it('validates log envelopes and both verification states', () => {
+    expect(LogResponseSchema.safeParse({ events: [] }).success).toBe(true);
+    expect(LogResponseSchema.safeParse({ events: 'x' }).success).toBe(false);
+    expect(LogVerifySchema.safeParse({ valid: true, events: 0, headHash: 'h' }).success).toBe(true);
+    expect(LogVerifySchema.safeParse({ valid: false, brokenAtSeq: 2 }).success).toBe(true);
+    expect(LogVerifySchema.safeParse({ valid: false }).success).toBe(false);
+  });
   it('parses every bundled mock', () => {
     for (const [path, value] of Object.entries(mocks)) {
       if (path.endsWith('discovery.json')) {

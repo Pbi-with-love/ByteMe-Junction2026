@@ -90,6 +90,13 @@ export const LogEventSchema = z.object({
   prevHash: text, hash: text, disclosure: z.object({ returnedToAgent: z.array(text), withheld: z.array(text) }).optional(),
 });
 export type LogEvent = z.infer<typeof LogEventSchema>;
+export const LogResponseSchema = z.object({ events: z.array(LogEventSchema) });
+export type LogResponse = z.infer<typeof LogResponseSchema>;
+export const LogVerifySchema = z.discriminatedUnion('valid', [
+  z.object({ valid: z.literal(true), events: z.number().int(), headHash: text }),
+  z.object({ valid: z.literal(false), brokenAtSeq: z.number().int() }),
+]);
+export type LogVerify = z.infer<typeof LogVerifySchema>;
 export const LevelInfoSchema = z.object({
   levelId: text, title: text, customer: z.object({ customerId: text, name: text, type: text }), brief: text,
   deadline: dateTime, closingTime: dateTime,
@@ -132,8 +139,9 @@ export type AgentStep = z.infer<typeof AgentStepSchema>;
 export const LevelMockSchema = z.object({
   start: GameStartSchema,
   presets: z.record(text, z.object({
-    mandate: MandateSchema, steps: z.array(AgentStepSchema), result: GameResultSchema, log: z.array(LogEventSchema).optional(),
+    mandate: MandateSchema, steps: z.array(AgentStepSchema), result: GameResultSchema, log: z.array(LogEventSchema).optional(), verify: LogVerifySchema.optional(),
   })),
+  tamperedDemo: z.object({ preset: text, log: z.array(LogEventSchema), verify: LogVerifySchema }).optional(),
   compare: CompareSchema,
 });
 export type LevelMock = z.infer<typeof LevelMockSchema>;
