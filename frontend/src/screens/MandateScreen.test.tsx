@@ -25,10 +25,26 @@ describe('mandate screen', () => {
     const presets = Object.fromEntries(presetEntries) as Record<string, Mandate>;
     await client.startLevel(level1.start.level.levelId, presetEntries[0][0]);
     render(<MandateScreen client={client} sessionId={level1.start.sessionId} presets={presets} discovery={discovery.response as Discovery} level={level1.start.level} onBack={() => {}} />);
-    expect(screen.getByRole('heading', { name: 'Valtakirja' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Mandate terms' })).toBeInTheDocument();
     expect(screen.getByRole('combobox', { name: /per-order limit/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /priority/i })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'on-time delivery' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'lowest price' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Sign mandate' }));
     await screen.findByText(presetEntries[0][1].summaryText);
+  });
+
+  it('treats a priority-only replay mismatch as custom and reports the sign error', async () => {
+    const client = new ReplayGatewayClient();
+    const entries = Object.entries(level1.presets);
+    const presets = Object.fromEntries(entries.map(([key, recording]) => [key, recording.mandate])) as Record<string, Mandate>;
+    await client.startLevel(level1.start.level.levelId, entries[0][0]);
+    render(<MandateScreen client={client} sessionId={level1.start.sessionId} presets={presets} discovery={discovery.response as Discovery} level={level1.start.level} onBack={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Balanced' }));
+    fireEvent.change(screen.getByRole('combobox', { name: /priority/i }), { target: { value: 'price' } });
+    expect(screen.getByText('Custom')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Sign mandate' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Replay has no recorded mandate');
   });
 
 

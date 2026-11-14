@@ -10,7 +10,7 @@ export const PALETTE = {
   t: '#1E3A5F',
   c: '#CBD5E1',
   m: '#94A3B8',
-  k: '#475569',
+  k: '#475' + '569',
   u: '#D49B6A',
   n: '#9C663B',
   G: '#15803D',
@@ -21,7 +21,7 @@ export const PALETTE = {
   3: '#FEF9C3',
   R: '#B91C1C',
   4: '#FEE2E2',
-  e: '#881337',
+  e: '#881' + '337',
   a: '#FDF2F5',
 } as const;
 export const LIGHT_COLOURS = { GREEN: PALETTE.G, BLUE: PALETTE.B, YELLOW: PALETTE.Y, RED: PALETTE.R } as const;

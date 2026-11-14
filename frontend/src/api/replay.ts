@@ -36,10 +36,7 @@ export class ReplayGatewayClient implements GatewayClient {
     const session = this.sessions.get(sessionId);
     if (!session) throw new GatewayError('NOT_FOUND', 'Not found', 404);
     const level = levels.find((item) => item.start.sessionId === sessionId)!;
-    const match = Object.values(level.presets).find(({ mandate }) => sameControls(controlsOf(mandate), {
-      perOrderEur: draft.limits.perOrderEur, substitution: draft.substitution, lateDelivery: draft.lateDelivery,
-      excludeAllergens: draft.hardConstraints.excludeAllergens,
-    }));
+    const match = Object.values(level.presets).find(({ mandate }) => sameControls(controlsOf(mandate), controlsOf(draft)));
     if (!match) throw new GatewayError('NO_RECORDING', 'Replay has no recorded mandate for these values. Pick a preset, or use a live gateway.', 404);
     this.sessions.set(sessionId, { recording: match, cursor: 0 });
     return match.mandate;
