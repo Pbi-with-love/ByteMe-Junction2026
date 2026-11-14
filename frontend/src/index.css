@@ -500,3 +500,8 @@ button:focus-visible, select:focus-visible, input:focus-visible {
 }
 /* 011 heart-break end */
 .result-hash-code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .9em; font-variant-numeric: tabular-nums; }
+
+.agent-working { display: flex; align-items: center; gap: calc(2 * var(--px)); width: fit-content; padding: calc(2 * var(--px)) calc(3 * var(--px)); border: calc(1 * var(--px)) solid #0B1B33; background: #FFF7D6; box-shadow: var(--shadow-pixel); color: #0B1B33; font-size: calc(3.5 * var(--px)); }
+.agent-working svg { width: calc(12 * var(--px)); height: calc(12 * var(--px)); flex: none; }
+.agent-working span { display: grid; gap: calc(1 * var(--px)); }
+.agent-working small { font-size: .85em; }

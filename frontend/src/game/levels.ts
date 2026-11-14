@@ -5,7 +5,7 @@ import level3 from '../../mocks/level3.json';
 export const LEVELS = [
   { levelId: 'level1', title: 'The Weekly Order' },
   { levelId: 'level2', title: 'The Stock-out' },
-  { levelId: 'level3', title: 'Allergy Emergency' },
+  { levelId: 'level3', title: 'The Pistachio Order' },
 ] as const;
 
 export const LEVEL_MOCKS = [level1, level2, level3];

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import level1 from '../../mocks/level1.json';
 import discovery from '../../mocks/discovery.json';
 import MandateScreen from './MandateScreen';
@@ -65,6 +65,21 @@ describe('mandate screen', () => {
     expect(screen.getByRole('checkbox')).toBeEnabled();
   });
 
+  it('shows signing copy while the mandate request is pending', async () => {
+    const client = new ReplayGatewayClient();
+    const entries = Object.entries(level1.presets);
+    const presets = Object.fromEntries(entries.map(([key, value]) => [key, value.mandate])) as Record<string, Mandate>;
+    await client.startLevel(level1.start.level.levelId, entries[0]![0]);
+    let finish!: (mandate: Mandate) => void;
+    vi.spyOn(client, 'signMandate').mockImplementation(() => new Promise((resolve) => { finish = resolve; }));
+    render(<MandateScreen client={client} sessionId={level1.start.sessionId} presets={presets} discovery={discovery.response as Discovery} level={level1.start.level} onBack={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Sign mandate' }));
+    expect(await screen.findByRole('status')).toHaveTextContent('Signing the mandate…');
+    expect(screen.getByRole('status')).not.toHaveTextContent('Placing the order…');
+    finish(entries[0]![1].mandate as Mandate);
+    await screen.findByText(entries[0]![1].mandate.summaryText);
+  });
+
   it('renders the exact recorded summary after signing every level one preset', async () => {
     const client = new ReplayGatewayClient();
     for (const [key, recording] of Object.entries(level1.presets)) {
@@ -75,7 +90,7 @@ describe('mandate screen', () => {
       fireEvent.click(screen.getByRole('button', { name: label }));
       fireEvent.click(screen.getByRole('button', { name: 'Sign mandate' }));
       expect(await screen.findByText(recording.mandate.summaryText)).toBeInTheDocument();
-      expect(screen.getByRole('heading', { name: 'Mandate signed' })).toHaveFocus();
+      await waitFor(() => expect(screen.getByRole('heading', { name: 'Mandate signed' })).toHaveFocus());
       unmount(); cleanup();
     }
   });

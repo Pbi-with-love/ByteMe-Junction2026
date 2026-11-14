@@ -3,7 +3,9 @@ import { ApprovalDecisionSchema, ApprovalSchema } from './schemas';
 import { GatewayError, type GatewayClient } from './gateway';
 import type { AgentStep, Compare, Discovery, GameResult, GameStart, Mandate } from './schemas';
 import type { MandateDraft } from './gateway';
-import type { ZodType } from 'zod';
+import { z, type ZodType } from 'zod';
+
+const ApprovalDecisionResponseSchema = z.object({ approval: ApprovalSchema, order: z.object({ status: z.string() }).passthrough() });
 
 export class HttpGatewayClient implements GatewayClient {
   private token: string | undefined;
@@ -67,7 +69,11 @@ export class HttpGatewayClient implements GatewayClient {
   decideApproval(approvalId: string, decision: 'approved' | 'rejected' | 'alternative', planId?: string) {
     if (decision === 'alternative' && !planId) return Promise.reject(new GatewayError('VALIDATION_ERROR', 'planId is required for an alternative decision', 400));
     const body = decision === 'alternative' ? { decision, planId } : { decision };
-    return this.request(`/v1/approvals/${encodeURIComponent(approvalId)}`, ApprovalDecisionSchema, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    return this.request(`/v1/approvals/${encodeURIComponent(approvalId)}`, ApprovalDecisionResponseSchema, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then((wrapped) => {
+      const response = wrapped;
+      const selectedDecision = response.approval.decision ?? (decision === 'alternative' ? `alternative:${planId}` : decision);
+      return ApprovalDecisionSchema.parse({ ...response.approval, decision: selectedDecision, orderStatus: response.order.status });
+    });
   }
 
   getApproval(approvalId: string) {

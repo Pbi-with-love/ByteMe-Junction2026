@@ -46,6 +46,19 @@ describe('level shell', () => {
     expect(screen.getAllByRole('article')).toHaveLength(3);
   });
 
+  it('shows level-specific loading copy while startLevel is pending', async () => {
+    const client = makeClient(async () => discoveryData.response as Discovery);
+    client.presets = async () => ({ balanced: Object.values(LEVEL_MOCKS[0].presets)[0]!.mandate });
+    let finish!: (value: Awaited<ReturnType<GatewayClient['startLevel']>>) => void;
+    const pendingStart = new Promise<Awaited<ReturnType<GatewayClient['startLevel']>>>((resolve) => { finish = resolve; });
+    client.startLevel = vi.fn(() => pendingStart);
+    render(<App client={client} />);
+    fireEvent.click((await screen.findAllByRole('button', { name: 'Start level' }))[0]);
+    expect(await screen.findByRole('status')).toHaveTextContent('Starting the level…');
+    finish(LEVEL_MOCKS[0].start);
+    await waitFor(() => expect(screen.getByRole('region', { name: 'Kitchen' })).toBeInTheDocument());
+  });
+
   it('shows discovery errors without cards', async () => {
     render(<App client={makeClient(async () => { throw new Error('offline'); })} />);
     expect(await screen.findByRole('alert')).toHaveTextContent('offline');

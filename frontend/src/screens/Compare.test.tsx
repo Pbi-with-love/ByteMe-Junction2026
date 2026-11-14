@@ -16,7 +16,7 @@ describe('Compare', () => {
   it('loads compare on a fresh replay client without starting a level', async () => {
     const client = new ReplayGatewayClient();
     render(<Compare client={client} levelId="level1" onBack={() => {}} />);
-    expect(screen.getByRole('status')).toHaveTextContent('Loading comparison…');
+    expect(screen.getByRole('status')).toHaveTextContent('Agent is working…Comparing mandates…');
     expect(await screen.findByRole('heading', { name: 'Agents don’t need a chatbot. They need a mandate.' })).toBeInTheDocument();
     expect(screen.getAllByRole('columnheader').map((item) => item.textContent?.includes('Balanced') ? 'Balanced' : item.textContent)).toEqual(['Metric', 'Strict', 'Balanced', 'Loose']);
   });

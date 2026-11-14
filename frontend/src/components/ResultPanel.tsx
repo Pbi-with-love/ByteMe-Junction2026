@@ -4,6 +4,7 @@ import type { GatewayClient } from '../api/gateway';
 import type { GameResult, Light, LogEvent, LogVerify } from '../api/schemas';
 import { formatTime } from '../lib/format';
 import PixelPanel from './PixelPanel';
+import AgentWorking from './AgentWorking';
 
 type Props = {
   client: GatewayClient;
@@ -107,7 +108,7 @@ export default function ResultPanel({ client, sessionId, startHearts, onLoaded, 
 
   const incident = result?.incident !== null && result?.incident !== undefined;
   return <MotionConfig reducedMotion="user"><PixelPanel variant={incident ? 'incident' : 'notice'} title={incident ? 'Safety incident' : 'Result'}>
-    {!result && !resultError && <p>Loading result…</p>}
+    {!result && !resultError && <AgentWorking activity="explaining" message="Loading result…" />}
     {resultError && <><div className="result-error" role="alert">{resultError}</div><footer className="result-actions"><button className="button button-primary" type="button" onClick={onPlayAgain}>Play again</button></footer></>}
     {result && <>
       {incident && <div className="result-incident-detail"><p>{result.incident!.reason}</p><span>Product ID</span> <strong>{result.incident!.productId}</strong></div>}

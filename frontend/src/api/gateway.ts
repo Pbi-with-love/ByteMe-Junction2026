@@ -1,4 +1,5 @@
 import type { AgentStep, Approval, ApprovalDecision, Compare, Discovery, GameResult, GameStart, Mandate } from './schemas';
+import type { AgentActivity } from '../components/AgentWorking';
 
 export type MandateDraft = Omit<Mandate, 'mandateId' | 'customerId' | 'issuedAt' | 'status' | 'signature' | 'summaryText'>;
 import { HttpGatewayClient } from './http';
@@ -8,6 +9,7 @@ export interface GatewayClient {
   discovery(): Promise<Discovery>;
   startLevel(levelId: string, preset: string): Promise<GameStart>;
   nextStep(sessionId: string): Promise<AgentStep | null>;
+  activity?(sessionId: string): AgentActivity;
   getResult(sessionId: string): Promise<GameResult>;
   getLog(view: 'buyer' | 'valio', opts?: { since?: number; limit?: number }): Promise<import('./schemas').LogResponse>;
   verifyLog(): Promise<import('./schemas').LogVerify>;
