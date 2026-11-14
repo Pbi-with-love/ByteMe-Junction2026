@@ -28,6 +28,11 @@ Pack and unit information is represented by:
 - `synkkaData.unitConversions[]`, which can contain net/gross weight and volume.
 
 There is no top-level `packSize` field in the downloaded catalog.
+For litre needs, the safe conversion path is one `units[]` entry matching
+`salesUnit` plus one `synkkaData.unitConversions[]` volume in `LTR`. The sales
+quantity is rounded up to a whole unit. Product `463038` has no verified litre
+volume in its conversion data and must be excluded as `UNIT_UNCONVERTIBLE`; the
+other inspected milk candidates have an unambiguous volume path.
 
 ## Allergens, lactose, labels, and certificates
 
@@ -84,6 +89,13 @@ The catalog contains real lactose-free milk products in category `10400`, includ
 The sample availability request for 2026-11-16 returned all five products as
 available and not sales-blocked. It did not produce the Level 1 partial-availability
 twist, so that twist will require a scenario overlay or a later requested date.
+
+For the peanut exclusion used by the Allergy level, one of the five Level 1 milk
+candidates (`464179`) has `AP: FREE_FROM`; the other four have neither `AP` in
+`allergen` nor `nonAllergen` and therefore produce `RED` as missing data. Across all
+91 non-deleted products in category `10400`, 15 have `AP: FREE_FROM`, none list `AP`
+as a risk, and 76 have no `AP` classification. The demo must use the verified
+`464179` product as its safe candidate rather than treating missing data as safe.
 
 ## Replay fixtures
 

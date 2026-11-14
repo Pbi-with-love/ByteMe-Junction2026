@@ -3,6 +3,8 @@ node_modules/
 .env
 .env.*
 .DS_Store
+__pycache__/
+*.py[cod]
 artifacts/
 .claude/settings.local.json
 
