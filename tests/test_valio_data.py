@@ -2,6 +2,7 @@ import json
 
 import httpx
 import pytest
+from fastapi.testclient import TestClient
 
 from backend.app.config import Settings
 from backend.app.valio_client import ValioClient
@@ -85,3 +86,29 @@ async def test_refresh_writes_raw_and_normalized_cache(tmp_path) -> None:
     assert cache.load("delivery-reliability") == [
         {"productId": "p1", "reliability": "0.97"}
     ]
+
+
+def test_app_startup_uses_committed_catalog_without_downloading(monkeypatch, tmp_path) -> None:
+    from backend.app import main
+
+    async def unexpected_download(self, name):
+        raise AssertionError("startup attempted a Valio download")
+
+    monkeypatch.setattr(ValioClient, "download", unexpected_download)
+    monkeypatch.setattr(
+        main.Settings,
+        "from_env",
+        lambda: Settings("https://valio.test", "test-key", valio_cache_directory=tmp_path),
+    )
+    with TestClient(main.app):
+        result = main.app.state.catalog_search.search(
+            query="Valio Eila semi skimmed lactose free",
+            filters={},
+            limit=10,
+            mandate={
+                "status": "ACTIVE",
+                "validUntil": "2099-01-01T00:00:00+00:00",
+                "hardConstraints": {"excludeAllergens": [], "requireLabels": []},
+            },
+        )
+    assert result["total"] > 0

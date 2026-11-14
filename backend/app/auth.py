@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import secrets
 import sqlite3
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from uuid import uuid4
 
 from backend.app.signing import DocumentSigner
@@ -29,12 +30,13 @@ class MandateError(ValueError):
 
 
 class AuthStore:
-    def __init__(self, path: str | Path, signer: DocumentSigner | None = None) -> None:
+    def __init__(self, path: str | Path, signer: DocumentSigner | None = None, *, clock: Callable[[], datetime] | None = None) -> None:
         if str(path) != ":memory:":
             Path(path).parent.mkdir(parents=True, exist_ok=True)
         self._connection = sqlite3.connect(path, check_same_thread=False)
         self._connection.row_factory = sqlite3.Row
         self._signer = signer
+        self._clock = clock or (lambda: datetime.now().astimezone())
         self._connection.executescript(
             """
             CREATE TABLE IF NOT EXISTS tokens (
@@ -60,6 +62,10 @@ class AuthStore:
     def close(self) -> None:
         self._connection.close()
 
+    def reset_mandates(self) -> None:
+        self._connection.execute("DELETE FROM mandates")
+        self._connection.commit()
+
     def issue_token(
         self,
         *,
@@ -78,7 +84,7 @@ class AuthStore:
                 role,
                 customer_id,
                 agent_id,
-                datetime.now().astimezone().isoformat(),
+                self._clock().isoformat(),
             ),
         )
         self._connection.commit()
@@ -108,17 +114,44 @@ class AuthStore:
     ) -> dict[str, Any]:
         if self._signer is None:
             raise RuntimeError("Mandate signing is not configured.")
+        if request_data.get("substitution") not in {"none", "same_category", "any"}:
+            raise ValueError("substitution is invalid.")
+        if request_data.get("lateDelivery") not in {"none", "one_day"}:
+            raise ValueError("lateDelivery is invalid.")
+        priorities = request_data.get("priorities")
+        if not isinstance(priorities, list) or len(priorities) != 3 or not all(isinstance(item, str) for item in priorities) or set(priorities) != {"on_time", "price", "sustainability"}:
+            raise ValueError("priorities must be a permutation of on_time, price, sustainability.")
+        limits = request_data.get("limits")
+        if not isinstance(limits, dict) or any(
+            not isinstance(limits.get(key), (int, float)) or isinstance(limits.get(key), bool) or not math.isfinite(limits[key]) or limits[key] < 0
+            for key in ("perOrderEur", "perWeekEur")
+        ):
+            raise ValueError("limits must include non-negative perOrderEur and perWeekEur.")
         valid_until = request_data.get("validUntil")
         if not isinstance(valid_until, str):
             raise ValueError("validUntil is required.")
+        try:
+            datetime.fromisoformat(valid_until)
+        except ValueError as exc:
+            raise ValueError("validUntil must be an ISO 8601 datetime.") from exc
+        issued_by = request_data.get("issuedBy")
+        if not isinstance(issued_by, dict) or not isinstance(issued_by.get("name"), str) or not isinstance(request_data.get("agentId"), str):
+            raise ValueError("agentId and issuedBy.name are required.")
+        hard = request_data.get("hardConstraints")
+        if not isinstance(hard, dict) or not all(isinstance(hard.get(k, []), list) and all(isinstance(v, str) for v in hard.get(k, [])) for k in ("excludeAllergens", "requireLabels")):
+            raise ValueError("hardConstraints must contain string lists.")
         mandate_id = f"mdt_{uuid4().hex}"
         document = {
             **request_data,
             "mandateId": mandate_id,
             "customerId": principal.customer_id,
-            "issuedAt": datetime.now().astimezone().isoformat(),
+            "issuedAt": self._clock().isoformat(),
             "status": "ACTIVE",
         }
+        document["summaryText"] = (
+            f"{issued_by['name']} authorises {request_data['agentId']} to order up to "
+            f"€{limits['perOrderEur']} per order and €{limits['perWeekEur']} per week."
+        )
         signature = self._signer.sign(document)
         self._connection.execute(
             """
@@ -182,7 +215,7 @@ class AuthStore:
             expires_at = datetime.fromisoformat(mandate["validUntil"])
         except (KeyError, TypeError, ValueError) as exc:
             raise MandateError("MANDATE_INVALID", "Mandate has an invalid expiry.") from exc
-        if datetime.now(expires_at.tzinfo) > expires_at:
+        if self._clock().astimezone(expires_at.tzinfo) > expires_at:
             raise MandateError("MANDATE_EXPIRED", "Mandate has expired.")
         if self._signer is None:
             raise MandateError("MANDATE_INVALID", "Mandate signing is not configured.")

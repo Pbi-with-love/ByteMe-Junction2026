@@ -1,90 +1,94 @@
 # Valio upstream data notes
 
-Status: **verified from live mock API on 2026-11-14**
+Status: **verified from Valio responses and downloads on 2026-11-14**. The probe's negotiated
+header was `X-API-Key`; the key itself is stored only in root `.env` and is never recorded here.
+The three full files are kept in gitignored `data/valio/`. The committed catalog contains only
+rows referenced by the Level 1–3 scenarios.
 
-The probe uses `X-API-Key`, follows the API's redirects, and stores the raw downloads
-under the gitignored `data/valio/` directory. The configured sample customer is `123`.
+## Downloaded files and verified keys
 
-## Downloads
+| Dataset | Format and rows | File keys / columns | Keying |
+|---|---|---|---|
+| Products | JSON array, 17,546 rows | `id`, `salesUnitGtin`, `salesUnit`, `baseUnit`, `category`, `allowedLotSize`, `deleted`, `temperatureCondition`, `vendorName`, `countryOfOrigin`, `synkkaData`, `units`, `deposits`, `substitutions` | `id` is the product identifier |
+| Delivery reliability | CSV, 4,425 rows | `productId`, `deliveryReliability` | `productId` |
+| Carbon footprint | CSV, 11,033 rows | `productId`, `AVG kg CO2-eq/kg` | `productId` |
 
-| Dataset | Format | Rows | Columns |
-|---|---:|---:|---|
-| Products | JSON array | 17,546 | `id`, `salesUnitGtin`, `salesUnit`, `baseUnit`, `category`, `allowedLotSize`, `deleted`, `temperatureCondition`, `vendorName`, `countryOfOrigin`, `synkkaData`, `units`, `deposits` |
-| Delivery reliability | CSV | 17,545 | `productId`, `deliveryReliability` |
-| Carbon footprint | CSV | 17,545 | `productId`, `AVG kg CO2-eq/kg` |
+The reliability and carbon files do not key on supplier or category. A missing row means the
+upstream file did not provide a value for that product. The catalog's `synkkaData` object has
+these keys: `gtin`, `lastUpdated`, `mediasLastUpdated`, `countriesOfOrigin`, `names`,
+`materialAdditionalDescriptions`, `marketingTexts`, `keyIngredients`, `storageInstructions`,
+`preparationInstructions`, `disposalInformations`, `usageInstructions`, `classifications`,
+`nutritionalContent`, `unitConversions`, `producers`, `medias`, `minTemperature`,
+`maxTemperature`, `variableUnit`, `vatCode`, `brand`, `ingredients`, `fishingReports`, and
+`safetyData`. Not every product populates every optional key. Each `unitConversions[]` row has
+`synkkaPackagingType` and may have `width`, `length`, `height`, `volume`, `netWeight`, and
+`grossWeight`; measurements use nested `{unit, value}` objects. Classification rows use
+`type`, `name`, and `values`; values use `id`, `unit`, `value`, and/or `synkkaId`.
 
-The reliability and carbon files are keyed by `productId`, not supplier or category.
+## Product attributes and units
 
-## Product attributes
+The English display name is `synkkaData.names[]` where `language` is `en`. `vendorName` gives
+the supplier and `category` is the source's category code. The product's `salesUnit` is the
+unit charged and returned in availability. `baseUnit` identifies the each/base product unit;
+`units[]` maps `unitId` to `sizeInBaseUnits` (and often a GTIN). For example, product `464306`
+has `salesUnit: ST`, `baseUnit: ST`, a one-base-unit `ST` each, plus 20 eaches in a `KI` case.
+Its `synkkaData.unitConversions[]` says that each base item has `volume: {unit: LTR, value: 1}`
+and `netWeight: {unit: GRM, value: 1025}`. Product `462635` has a 5 L each with 3,000 g net
+weight; `473623` has a 2.5 L each with 1,950 g net weight.
 
-The product display name is in `synkkaData.names[]`, selected by `language` (English
-values are available). Supplier information is in `vendorName`; product category is a
-numeric code in `category`.
+Use `units[]` to understand case/each pack relationships and use a conversion matching the
+requested measurement from `synkkaData.unitConversions[]` to convert the base item: `volume`
+with `unit: LTR` for litres, `netWeight` with `unit: GRM` divided by 1,000 for kg, and the
+base each (`baseUnit`/matching `units[]` entry) for piece counts when the catalog identifies
+one each. Availability `availableAmount` and price `quantity` are in the returned/requested
+sales unit, so multiply by `sizeInBaseUnits` before interpreting a case quantity. These paths
+must be present and unambiguous; do not infer a pack amount from the display name.
 
-Pack and unit information is represented by:
+## Allergens, labels, and certificates
 
-- `salesUnit` and `baseUnit` on the product.
-- `units[]`, with `unitId`, `gtin`, and `sizeInBaseUnits`.
-- `synkkaData.unitConversions[]`, which can contain net/gross weight and volume.
+Allergen classes live at `synkkaData.classifications[]` with `name: allergen`; values use an
+allergen code such as `AE` and a `unit` such as `CONTAINS`, `MAY_CONTAIN`, or `UNDECLARED`.
+`nonAllergen` values under the same classifications array carry `unit: FREE_FROM`. A
+`MAY_CONTAIN` value is a risk just like `CONTAINS`; absence of a code is not a verified
+free-from claim. Product labels live under `name: packagingMarkedLabel`; nutrition or dietary
+claims such as `FREE_FROM_LACTOSE` live under `name: nutritionalClaim`. The downloaded catalog
+has no separate `certificate` classification. Some packaging label values are certification-like
+(for example `EU_ECO_LABEL`, `RAINFOREST_ALLIANCE`, and `UTZ_CERTIFIED`), but remain source labels
+and are not relabeled as certificates.
 
-There is no top-level `packSize` field in the downloaded catalog.
-For litre needs, the safe conversion path is one `units[]` entry matching
-`salesUnit` plus one `synkkaData.unitConversions[]` volume in `LTR`. The sales
-quantity is rounded up to a whole unit. Product `463038` has no verified litre
-volume in its conversion data and must be excluded as `UNIT_UNCONVERTIBLE`; the
-other inspected milk candidates have an unambiguous volume path.
+## Scenario customers, prices, and timestamps
 
-## Allergens, lactose, labels, and certificates
+The all-catalog price scan on 2026-11-19 for customer `123` returned 231 products with
+`netPriceFound: true` and `error: false` out of 17,546 products; 17,315 had no net price and one
+row had an error. Customer `123` returns verified net prices for every selected scenario
+product/date, and all committed scenario price rows are checked for both `netPriceFound: true`
+and `error: false`. A small earlier probe of customers `123`, `456`, and `789` with products
+`464201`, `464398`, `463038`, and `463989` found a net price only for `464398` for each of those
+customers; scenario rows therefore use customer `123`, which has the required coverage. The
+chosen price values (`catalogPrice.value` and `priceWithTax.value`) plus comparison values are:
 
-`synkkaData.classifications[]` contains these verified classification names:
+| Level | Product | `catalogPrice.value` | `priceWithTax.value` | `comparisonPrice.valueWithTax` | Basis |
+|---|---|---:|---:|---:|---|
+| 1 and 2 | `464306` Valio Hyvä suomalainen Arki® Eila® semi-skimmed milk drink, 1 l lactose-free | €1.01 | €1.15 | €1.15 | per L |
+| 1 and 2 | `464401` Valio Hyvä suomalainen Arki® Eila® skimmed milk drink, 1 l lactose-free | €1.10 | €1.25 | €1.25 | per L |
+| 1 | `463335` Valio Eila® 3% milk drink, 1 l lactose-free | €1.40 | €1.59 | €1.59 | per L |
+| 3 | `468855` GelatoLAB-Espoo 5 L Pistachio lactose-free ice cream | €36.21 | €41.10 | €8.22 | per L |
+| 3 | `462635` GelatoLAB-Espoo 5 L Cookies Cream ice cream | €28.29 | €32.11 | €6.42 | per L |
+| 3 | `473726` GelatoLAB-Espoo 2.5 L Pistachio lactose-free ice cream | €18.58 | €21.09 | €8.43 | per L |
 
-- `allergen`, with values such as `id: AE` and `unit: CONTAINS`.
-- `nonAllergen`, with values such as `unit: FREE_FROM`.
-- `packagingMarkedLabel`, including values such as `GOODS_FROM_FINLAND_BLUE_SWAN`.
-- `nutritionalClaim`, including `FREE_FROM_LACTOSE` and `LOW_LACTOSE`.
+The response includes both pre-tax/catalog values and customer `priceWithTax`; the existing
+scenario convention and game budget use the tax-inclusive `priceWithTax` amount. Prices are
+never overlaid. Requested and upstream timestamps use ISO 8601 offsets without a colon in
+Valio's raw responses, for example `2026-11-19T00:00:00+0200` and
+`2026-11-14T11:26:56+0200`.
 
-No separate `certificate` classification was found in the inspected catalog. Some
-certification-like values exist under `packagingMarkedLabel`, including
-`EU_ECO_LABEL`, `RAINFOREST_ALLIANCE`, and `UTZ_CERTIFIED`; the gateway must preserve
-the source classification rather than treating every label as a certificate.
+## Scenario products and twists
 
-Allergen values use source codes and a `unit` such as `CONTAINS`, `MAY_CONTAIN`, or
-`UNDECLARED`. The code `AP` is verified as peanut: product `460428` is named
-“Taffel Pähkinä salted peanuts 300g” and has `AP: CONTAINS`. The policy maps the
-mandate value `peanut` to `AP`; any other unmapped human allergen name is treated as
-unknown and produces `RED` rather than being guessed.
-
-## Price response
-
-`POST /api/price` returns a customer-scoped object with `customerId`, `currency`,
-`pricingDate`, and `products[]`. Each product includes `productId`, `quantity`,
-`catalogPrice`, `priceWithTax`, `comparisonPrice`, `comparisonUnit`, `tax`,
-`listPrice`, `netPriceFound`, and `error`.
-
-Price values are decimal euros in the upstream response and include `validFrom`,
-`validTo`, and `currency`. Gateway code must convert money to integer cents and must
-not expose `listPrice` as a margin or purchase-price field.
-
-## Availability response
-
-`POST /api/availability` returns `timeNow`, `requestedDate`, and `products[]`. Each
-product includes `productId`, `closingTime`, `salesBlock`, `logisticModel`, and
-`scheduleLines[]`.
-
-Each schedule line contains `salesBlock`, `availableAmount`, `availableDate`, and
-`salesUnit`. Availability amounts are expressed in the returned sales unit.
-
-## Level 1 candidates
-
-The catalog contains real lactose-free milk products in category `10400`, including:
-
-| Product | Supplier | Sales/base unit |
+| Level | Primary, substitutes, and trap | Verified reason and overlay |
 |---|---|---|
-| `463038` Valio Eila semi skimmed milk drink 10 l novobox lactose free | VALIO OY TUORE | `KI` / `ST` |
-| `463335` Valio Eila 3% milk drink 1 l lactose free | VALIO OY TUORE | `ST` / `ST` |
-| `464073` Valio whole milk 1 l lactose free UHT | VALIO OY TUORE | `ST` / `ST` |
-| `462775` Arla Milkdrink 1L lactose free fat free UHT Suomesta | ARLA OY | `ST` / `ST` |
-| `464179` Arla 10 L Novobox semi skimmed lactose free milk drink | ARLA OY | `ST` / `ST` |
+| 1 | Primary `464306`; substitutes `464401` (€1.25/L) and `463335` (€1.59/L) | All are category `10400` and have `FREE_FROM_LACTOSE`. The primary costs €1.15/L. With the overlay's 700 L Monday stock, the requested-product split costs €1,150 total (700 L Monday + 300 L Tuesday). A 1,000 L on-time order of `464401` costs €1,250 and wins Loose if included, while `463335` costs €1,590 and lets the price-first Loose score select the cheaper late Valio split. Level 1 therefore uses `[464306, 463335]` for Balanced and Loose; Strict adds `464401` in its preset-specific need list so its rejection/top-up sequence can still exhaust hearts. Every list keeps `464306` first as the requested product. |
+| 2 | Primary `464306`; substitute `464401` on Wednesday and Friday | Both products are category `10400` and lactose-free. On each need date, the availability overlay blocks the primary and supplies 120 L of the substitute on time. Recorded price rows are unchanged. |
+| 3 | Usual primary `468855`; AE trap `462635`; safe option `473726` | Category `41820` has verified allergen rows for all three. `462635` contains `AE` and has the lowest selected-candidate comparison price (€6.42/L); `473726` has no AE risk, costs €8.43/L, and shares the primary's category and `FREE_FROM_GLUTEN` / `FREE_FROM_LACTOSE` claims. The usual product is verified AE-free but is sales-blocked by the availability overlay. The need is 20 L of school-kitchen pistachio ice cream; the safe product's 2.5 L each and the trap's 5 L each cover that quantity. |
 
 The sample availability request for 2026-11-16 returned all five products as
 available and not sales-blocked. It did not produce the Level 1 partial-availability
@@ -129,3 +133,8 @@ compatibility, but currently scopes replay and live delivery by the authenticate
 customer because game sessions are not implemented yet. Clients should send
 `since` or use the `Last-Event-ID` header when reconnecting; the latter replays
 only events with a newer log sequence.
+
+Scenario recordings are raw `/api/price` and `/api/availability` response objects grouped by
+customer and `requestedDate` in `backend/fixtures/valio/recorded/`. Their product values are not
+rewritten. Only the scenario overlay changes `salesBlock`, `scheduleLines`, or `closingTime` in
+availability; those overlay values are explicit scenario data, not upstream claims.

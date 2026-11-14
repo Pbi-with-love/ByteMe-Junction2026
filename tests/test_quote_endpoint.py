@@ -87,6 +87,7 @@ def _configure(tmp_path):
         principal=human_principal,
         request_data={
             "agentId": "agent-1",
+            "issuedBy": {"name": "Test Buyer", "role": "Kitchen manager"},
             "limits": {"perOrderEur": 500, "perWeekEur": 3000},
             "substitution": "same_category",
             "lateDelivery": "none",
@@ -122,8 +123,8 @@ def test_quote_endpoint_runs_auth_data_planner_signing_storage_and_log(tmp_path)
                     "description": "milk",
                     "quantity": {"amount": 100, "unit": "l"},
                     "deadline": "2026-11-16T06:00:00+02:00",
+                    "candidateProductIds": ["milk-1"],
                 },
-                "candidateProductIds": ["milk-1"],
             },
         )
 
@@ -131,8 +132,13 @@ def test_quote_endpoint_runs_auth_data_planner_signing_storage_and_log(tmp_path)
         quote = response.json()
         assert quote["status"] == "QUOTED"
         assert quote["plans"][0]["total"]["cents"] == 2500
+        assert [entry["source"] for entry in quote["evidence"]] == ["valio:/api/price", "valio:/api/availability"]
+        assert all(entry["requestId"] for entry in quote["evidence"])
         assert quotes.get(quote["quoteId"], "customer-1") is not None
-        assert log.list(since=0, limit=100)[-1]["type"] == "QUOTE_CREATED"
+        event = log.list(since=0, limit=100)[-1]
+        assert event["type"] == "QUOTE_CREATED"
+        assert event["payload"]["unconvertible"] == []
+        assert event["payload"]["priceUnavailable"] == []
     finally:
         quotes.close()
         log.close()
@@ -158,6 +164,75 @@ def test_quote_endpoint_hides_foreign_mandate(tmp_path):
 
         assert response.status_code == 404
         assert response.json()["error"]["code"] == "NOT_FOUND"
+    finally:
+        quotes.close()
+        log.close()
+        app.state.auth_store.close()
+
+
+def test_quote_endpoint_logs_price_unavailable_and_still_returns_201(tmp_path):
+    agent, mandate_id, quotes, log = _configure(tmp_path)
+
+    class UnpricedValio(_Valio):
+        async def price(self, **kwargs):
+            response = await super().price(**kwargs)
+            response["products"][0]["netPriceFound"] = False
+            return response
+
+    app.state.valio_client = UnpricedValio()
+    try:
+        response = TestClient(app).post(
+            "/v1/quotes",
+            headers={"Authorization": f"Bearer {agent}"},
+            json={
+                "mandateId": mandate_id,
+                "need": {
+                    "description": "milk",
+                    "quantity": {"amount": 100, "unit": "l"},
+                    "deadline": "2026-11-16T06:00:00+02:00",
+                    "candidateProductIds": ["milk-1"],
+                },
+            },
+        )
+        assert response.status_code == 201
+        assert response.json()["plans"] == []
+        assert response.json()["excludedProducts"] == []
+        event = log.list(since=0, limit=100)[-1]
+        assert event["payload"]["priceUnavailable"] == ["milk-1"]
+        assert "PRICE_UNAVAILABLE" in event["reasons"]
+    finally:
+        quotes.close()
+        log.close()
+        app.state.auth_store.close()
+
+
+def test_quote_endpoint_returns_201_with_empty_plans_and_policy_exclusions(tmp_path):
+    agent, mandate_id, quotes, log = _configure(tmp_path)
+
+    class BlockedData(_Data):
+        def load(self, name):
+            if name == "products":
+                return [{**_product("milk-1"), "salesBlock": True}]
+            return super().load(name)
+
+    app.state.valio_data = BlockedData()
+    try:
+        response = TestClient(app).post(
+            "/v1/quotes",
+            headers={"Authorization": f"Bearer {agent}"},
+            json={
+                "mandateId": mandate_id,
+                "need": {
+                    "description": "milk",
+                    "quantity": {"amount": 100, "unit": "l"},
+                    "deadline": "2026-11-16T06:00:00+02:00",
+                    "candidateProductIds": ["milk-1"],
+                },
+            },
+        )
+        assert response.status_code == 201
+        assert response.json()["plans"] == []
+        assert response.json()["excludedProducts"][0]["reason"] == "SALES_BLOCKED"
     finally:
         quotes.close()
         log.close()

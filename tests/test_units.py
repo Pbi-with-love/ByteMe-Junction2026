@@ -53,9 +53,36 @@ def test_multiple_volume_paths_are_ambiguous() -> None:
 
 
 def test_non_litre_need_is_rejected_until_supported() -> None:
-    with pytest.raises(UnitConversionError, match="Unsupported"):
+    result = convert_need_to_sales_units(
+        milk_product(conversions=[{"netWeight": {"unit": "GRM", "value": 500}}]),
+        amount=Decimal("1.1"),
+        unit="kg",
+    )
+    assert result.sales_quantity == 3
+    assert result.delivered_amount == Decimal("1.5")
+
+
+def test_pieces_use_unambiguous_base_each_and_pack_size() -> None:
+    result = convert_need_to_sales_units(
+        milk_product(
+            sales_unit="KI",
+            unit_entries=[
+                {"unitId": "ST", "sizeInBaseUnits": 1},
+                {"unitId": "KI", "sizeInBaseUnits": 6},
+            ],
+            conversions=[],
+        ),
+        amount=Decimal("13"),
+        unit="pcs",
+    )
+    assert result.sales_quantity == 3
+    assert result.delivered_amount == Decimal("18")
+
+
+def test_piece_conversion_requires_one_base_each_entry() -> None:
+    with pytest.raises(UnitConversionError, match="ambiguous"):
         convert_need_to_sales_units(
-            milk_product(),
+            milk_product(unit_entries=[{"unitId": "ST", "sizeInBaseUnits": 2}], conversions=[]),
             amount=Decimal("1"),
-            unit="kg",
+            unit="pcs",
         )

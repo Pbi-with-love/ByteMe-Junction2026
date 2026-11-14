@@ -139,6 +139,22 @@ def test_unknown_allergen_name_is_red() -> None:
     assert result.reasons == ("ALLERGEN_EXCLUDED",)
 
 
+def test_catalog_allergen_code_is_used_as_is() -> None:
+    result = check_product(
+        {"allergens": ["AE"], "allergenDataVerified": True},
+        mandate(hardConstraints={"excludeAllergens": ["AE"], "requireLabels": []}),
+    )
+    assert result.reasons == ("ALLERGEN_EXCLUDED",)
+
+
+def test_catalog_allergen_code_does_not_exclude_other_allergens() -> None:
+    result = check_product(
+        {"allergens": ["AP"], "allergenDataVerified": True},
+        mandate(hardConstraints={"excludeAllergens": ["AE"], "requireLabels": []}),
+    )
+    assert result.light == "GREEN"
+
+
 def test_mandate_problems_are_checked_first() -> None:
     result = check_plan(plan(), {"status": "REVOKED"}, now=NOW)
 

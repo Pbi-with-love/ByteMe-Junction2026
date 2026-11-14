@@ -1,0 +1,31 @@
+- generic [active] [ref=e1]:
+  - generic:
+    - generic [ref=e3]: Replay mode
+    - region "Kitchen" [ref=e25]:
+      - generic [ref=e26]:
+        - generic:
+          - button "Manager Desk" [ref=e29] [cursor=pointer]
+          - button "Order Terminal" [disabled] [ref=e31]:
+            - generic [ref=e33]: Sign the mandate at the Manager Desk first.
+          - button "Phone Station" [disabled] [ref=e34]:
+            - generic [ref=e36]: No approval request right now.
+          - generic [ref=e37]:
+            - generic [ref=e38]:
+              - heading "The Weekly Order" [level=1] [ref=e39]
+              - generic [ref=e40]: Hotel Aurora (fictional)
+            - status [ref=e41]: Click the Manager Desk to read the brief and sign the mandate.
+            - timer "Game clock" [ref=e42]:
+              - generic [aria-hidden] [ref=e43]: ◷
+              - generic [ref=e44]: 10:00
+            - 'img "Attention: 3 of 3 hearts left" [ref=e46]':
+              - generic [aria-hidden] [ref=e47]: ♥
+              - generic [aria-hidden] [ref=e48]: ♥
+              - generic [aria-hidden] [ref=e49]: ♥
+              - generic [ref=e50]: 3 of 3
+            - button "Back to levels" [ref=e51] [cursor=pointer]
+          - region "Activity log panel" [ref=e52]:
+            - generic [ref=e53]:
+              - heading "Activity log" [level=2] [ref=e54]
+              - generic [ref=e55]: "0"
+            - log "Activity log" [ref=e56]:
+              - paragraph [ref=e57]: No agent activity yet.

@@ -4,13 +4,13 @@
     "sessionId": "ses_level3",
     "level": {
       "levelId": "level3",
-      "title": "Allergy Emergency",
+      "title": "The Pistachio Order",
       "customer": {
         "customerId": "789",
         "name": "Koivu School kitchen (fictional)",
         "type": "school"
       },
-      "brief": "60 packs of spread by Thursday 06:00. Usual product unavailable.",
+      "brief": "20 l pistachio ice cream by 2026-11-19 06:00+02:00",
       "deadline": "2026-11-19T06:00:00+02:00",
       "closingTime": "2026-11-14T14:00:00+02:00"
     },
@@ -24,6 +24,11 @@
       "human": "mock-human-token",
       "agent": "mock-agent-token"
     }
+  },
+  "hiddenRequirements": {
+    "excludeAllergens": [
+      "AE"
+    ]
   },
   "presets": {
     "allergen_on": {
@@ -39,11 +44,11 @@
           "perOrderEur": 500,
           "perWeekEur": 3000
         },
-        "substitution": "same_category",
+        "substitution": "none",
         "lateDelivery": "none",
         "hardConstraints": {
           "excludeAllergens": [
-            "peanut"
+            "AE"
           ],
           "requireLabels": []
         },
@@ -60,81 +65,91 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing peanut."
+        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with no substitutes and no late deliveries, never products containing egg (AE)."
       },
       "steps": [
         {
           "search": {
             "results": [
               {
-                "productId": "610001",
-                "name": "Plant-based spread 400 g (mock)",
-                "brand": "Valio",
-                "category": "spreads",
-                "salesUnit": "PCE",
+                "productId": "468855",
+                "name": "GelatoLAB-Espoo Pistachio lactose-free ice cream, 5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pack"
+                  "amount": 5,
+                  "unit": "l"
                 },
-                "labels": [],
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
+                ],
                 "allergens": [],
                 "carbonCategory": {
-                  "category": "spreads",
+                  "category": "41820",
                   "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
+                    "min": 1.0,
+                    "max": 1.6
                   }
                 },
-                "deliveryReliability": 0.94,
+                "deliveryReliability": null,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "610022",
-                "name": "Sunflower spread 400 g (mock)",
-                "brand": "Nordlakt",
-                "category": "spreads",
-                "salesUnit": "PCE",
+                "productId": "473726",
+                "name": "GelatoLAB-Espoo Pistachio lactose-free ice cream, 2.5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pack"
+                  "amount": 2.5,
+                  "unit": "l"
                 },
-                "labels": [],
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
+                ],
                 "allergens": [],
                 "carbonCategory": {
-                  "category": "spreads",
+                  "category": "41820",
                   "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
+                    "min": 1.0,
+                    "max": 1.6
                   }
                 },
-                "deliveryReliability": 0.94,
+                "deliveryReliability": null,
                 "excluded": null
               },
               {
-                "productId": "610035",
-                "name": "Peanut & oat spread 400 g (mock)",
-                "brand": "Pohjola Farm",
-                "category": "spreads",
-                "salesUnit": "PCE",
+                "productId": "462635",
+                "name": "GelatoLAB-Espoo Cookies Cream ice cream, 5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pack"
+                  "amount": 5,
+                  "unit": "l"
                 },
-                "labels": [],
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
+                ],
                 "allergens": [
-                  "peanut"
+                  "AE",
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "spreads",
+                  "category": "41820",
                   "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
+                    "min": 1.0,
+                    "max": 1.6
                   }
                 },
-                "deliveryReliability": 0.94,
+                "deliveryReliability": null,
                 "excluded": {
                   "light": "RED",
                   "reason": "ALLERGEN_EXCLUDED"
@@ -151,16 +166,16 @@
             "createdAt": "2026-11-14T10:05:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Spread for school breakfast (usual product unavailable)",
+              "description": "Pistachio ice cream for school kitchen (usual product unavailable)",
               "quantity": {
-                "amount": 60,
-                "unit": "pack"
+                "amount": 20,
+                "unit": "l"
               },
               "deadline": "2026-11-19T06:00:00+02:00",
               "candidateProductIds": [
-                "610001",
-                "610022",
-                "610035"
+                "468855",
+                "473726",
+                "462635"
               ]
             },
             "plans": [
@@ -168,26 +183,26 @@
                 "planId": "pln_safe",
                 "lines": [
                   {
-                    "productId": "610022",
+                    "productId": "473726",
                     "quantity": {
-                      "amount": 60,
-                      "unit": "pack"
+                      "amount": 20,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 60,
-                      "unit": "PCE"
+                      "amount": 8,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 420,
+                      "cents": 2109,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1050,
+                      "cents": 843,
                       "currency": "EUR",
-                      "per": "pack"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 25200,
+                      "cents": 16872,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-19",
@@ -195,26 +210,26 @@
                   }
                 ],
                 "total": {
-                  "cents": 25200,
+                  "cents": 16872,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 60,
-                  "unit": "pack"
+                  "amount": 20,
+                  "unit": "l"
                 },
                 "policy": {
-                  "light": "BLUE",
+                  "light": "YELLOW",
                   "reasons": [
-                    "SUBSTITUTION_ALLOWED"
+                    "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "60 packs sunflower spread, Thursday, €252,00",
+                "summary": "20 l pistachio ice cream, Thursday, €168,72",
                 "score": {
-                  "total": 0.8,
+                  "total": 0.75,
                   "onTime": 1.0,
                   "price": 1.0,
                   "sustainability": 0.0,
-                  "reliabilityPenalty": 0.0
+                  "reliabilityPenalty": 0.05
                 },
                 "tier": "best",
                 "recommended": true
@@ -222,12 +237,12 @@
             ],
             "excludedProducts": [
               {
-                "productId": "610001",
+                "productId": "468855",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               },
               {
-                "productId": "610035",
+                "productId": "462635",
                 "light": "RED",
                 "reason": "ALLERGEN_EXCLUDED"
               }
@@ -244,7 +259,7 @@
                 "at": "2026-11-14T10:05:00+02:00"
               }
             ],
-            "scenarioOverlay": false,
+            "scenarioOverlay": true,
             "signature": {
               "alg": "Ed25519",
               "keyId": "valio-aimo-2026-11",
@@ -252,61 +267,1530 @@
             }
           },
           "order": {
-            "httpStatus": 201,
+            "httpStatus": 202,
             "body": {
               "orderId": "ord_l3_allergen_on",
-              "quoteId": "qt_l3_allergen_on",
-              "planId": "pln_safe",
-              "status": "ORDERED",
-              "lines": [
-                {
-                  "productId": "610022",
-                  "quantity": {
-                    "amount": 60,
-                    "unit": "pack"
-                  },
-                  "salesQuantity": {
-                    "amount": 60,
-                    "unit": "PCE"
-                  },
-                  "unitPrice": {
-                    "cents": 420,
-                    "currency": "EUR"
-                  },
-                  "comparisonPrice": {
-                    "cents": 1050,
-                    "currency": "EUR",
-                    "per": "pack"
-                  },
-                  "lineTotal": {
-                    "cents": 25200,
-                    "currency": "EUR"
-                  },
-                  "availableDate": "2026-11-19",
-                  "isSubstitute": true
-                }
-              ],
-              "total": {
-                "cents": 25200,
-                "currency": "EUR"
-              },
-              "createdAt": "2026-11-14T10:06:00+02:00"
+              "status": "PENDING_APPROVAL",
+              "approvalId": "apr_l3_allergen_on",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ]
             }
           },
-          "approval": null
+          "approval": {
+            "approvalId": "apr_l3_allergen_on",
+            "orderId": "ord_l3_allergen_on",
+            "quoteId": "qt_l3_allergen_on",
+            "status": "OPEN",
+            "reasons": [
+              "SUBSTITUTION_NOT_ALLOWED"
+            ],
+            "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
+            "options": [
+              {
+                "planId": "pln_safe",
+                "tier": "best",
+                "recommended": true,
+                "summary": "20 l pistachio ice cream, Thursday, €168,72"
+              }
+            ],
+            "agentExplanation": "The usual pistachio ice cream is blocked. The gateway blocked the Cookies Cream ice cream, so the 2.5 l pistachio tubs are the only option.",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "createdAt": "2026-11-14T10:06:00+02:00"
+          },
+          "approvalEvent": {
+            "approvalId": "apr_l3_allergen_on",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "heartsLeft": 2
+          }
         }
       ],
       "result": {
         "kitchen": 100,
         "wallet": 100,
         "safety": 100,
-        "heartsLeft": 3,
+        "heartsLeft": 2,
         "stars": 3,
         "incident": null,
-        "receiptText": "The cheapest spread contains peanut, so the gateway blocked it. Your agent bought 60 packs of sunflower spread instead.",
-        "logHeadHash": "sha256:9872442a548d7282",
-        "approvalsAsked": 0
-      }
+        "receiptText": "The cheapest ice cream contains egg, so the gateway blocked it. Your agent asked to buy 20 l of pistachio ice cream instead, and you approved.",
+        "logHeadHash": "sha256:52f196a4aeb9c25a",
+        "approvalsAsked": 1,
+        "totalCost": {
+          "cents": 16872,
+          "currency": "EUR"
+        },
+        "heartsUsed": 1
+      },
+      "decisions": {
+        "apr_l3_allergen_on": {
+          "approved": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_on",
+              "orderId": "ord_l3_allergen_on",
+              "quoteId": "qt_l3_allergen_on",
+              "status": "APPROVED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_safe",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
+                }
+              ],
+              "agentExplanation": "The usual pistachio ice cream is blocked. The gateway blocked the Cookies Cream ice cream, so the 2.5 l pistachio tubs are the only option.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "approved",
+              "orderStatus": "CONFIRMED"
+            }
+          },
+          "rejected": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_on",
+              "orderId": "ord_l3_allergen_on",
+              "quoteId": "qt_l3_allergen_on",
+              "status": "REJECTED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_safe",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
+                }
+              ],
+              "agentExplanation": "The usual pistachio ice cream is blocked. The gateway blocked the Cookies Cream ice cream, so the 2.5 l pistachio tubs are the only option.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "rejected",
+              "orderStatus": "REJECTED"
+            }
+          },
+          "alternative": {},
+          "expired": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_on",
+              "orderId": "ord_l3_allergen_on",
+              "quoteId": "qt_l3_allergen_on",
+              "status": "EXPIRED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_safe",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
+                }
+              ],
+              "agentExplanation": "The usual pistachio ice cream is blocked. The gateway blocked the Cookies Cream ice cream, so the 2.5 l pistachio tubs are the only option.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "expired",
+              "orderStatus": "EXPIRED"
+            }
+          },
+          "conflict": {
+            "httpStatus": 409,
+            "body": {
+              "error": {
+                "code": "INVALID_STATE",
+                "message": "Approval apr_l3_allergen_on is already closed.",
+                "requestId": "req_apr_l3_allergen_on_409",
+                "details": {
+                  "approvalId": "apr_l3_allergen_on"
+                }
+              }
+            }
+          }
+        }
+      },
+      "log": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:3abc58a30964e4bd"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+          "refs": {
+            "mandateId": "mdt_l3_allergen_on"
+          },
+          "prevHash": "sha256:3abc58a30964e4bd",
+          "hash": "sha256:aba6a1b32ae6670c"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED",
+            "ALLERGEN_EXCLUDED"
+          ],
+          "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
+          "refs": {},
+          "prevHash": "sha256:aba6a1b32ae6670c",
+          "hash": "sha256:b8576ed40c991ba5"
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_004",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on"
+          },
+          "prevHash": "sha256:b8576ed40c991ba5",
+          "hash": "sha256:44e5149bb6fb8bcd"
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_005",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on",
+            "orderId": "ord_l3_allergen_on",
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:44e5149bb6fb8bcd",
+          "hash": "sha256:e6f3fb3f73873d04"
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:e6f3fb3f73873d04",
+          "hash": "sha256:1cc111f1ef3155f2"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_safe.",
+          "refs": {
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:1cc111f1ef3155f2",
+          "hash": "sha256:8c6f0111bddbd3e8"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (473726).",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on",
+            "orderId": "ord_l3_allergen_on",
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:8c6f0111bddbd3e8",
+          "hash": "sha256:52f196a4aeb9c25a"
+        }
+      ],
+      "valioLog": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:3abc58a30964e4bd"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+          "refs": {
+            "mandateId": "mdt_l3_allergen_on"
+          },
+          "prevHash": "sha256:3abc58a30964e4bd",
+          "hash": "sha256:aba6a1b32ae6670c"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED",
+            "ALLERGEN_EXCLUDED"
+          ],
+          "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
+          "refs": {},
+          "prevHash": "sha256:aba6a1b32ae6670c",
+          "hash": "sha256:b8576ed40c991ba5",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_004",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on"
+          },
+          "prevHash": "sha256:b8576ed40c991ba5",
+          "hash": "sha256:44e5149bb6fb8bcd",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_005",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on",
+            "orderId": "ord_l3_allergen_on",
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:44e5149bb6fb8bcd",
+          "hash": "sha256:e6f3fb3f73873d04",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:e6f3fb3f73873d04",
+          "hash": "sha256:1cc111f1ef3155f2"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_safe.",
+          "refs": {
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:1cc111f1ef3155f2",
+          "hash": "sha256:8c6f0111bddbd3e8"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (473726).",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on",
+            "orderId": "ord_l3_allergen_on",
+            "approvalId": "apr_l3_allergen_on"
+          },
+          "prevHash": "sha256:8c6f0111bddbd3e8",
+          "hash": "sha256:52f196a4aeb9c25a",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        }
+      ],
+      "verify": {
+        "valid": true,
+        "events": 8,
+        "headHash": "sha256:52f196a4aeb9c25a"
+      },
+      "demoPath": {
+        "apr_l3_allergen_on": "approved"
+      },
+      "outcomes": {
+        "approved": {
+          "result": {
+            "kitchen": 100,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 3,
+            "incident": null,
+            "receiptText": "The cheapest ice cream contains egg, so the gateway blocked it. Your agent asked to buy 20 l of pistachio ice cream instead, and you approved.",
+            "logHeadHash": "sha256:52f196a4aeb9c25a",
+            "approvalsAsked": 1,
+            "totalCost": {
+              "cents": 16872,
+              "currency": "EUR"
+            },
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
+              "refs": {},
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_safe.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:8c6f0111bddbd3e8"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (473726).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:8c6f0111bddbd3e8",
+              "hash": "sha256:52f196a4aeb9c25a"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
+              "refs": {},
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_safe.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:8c6f0111bddbd3e8"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (473726).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:8c6f0111bddbd3e8",
+              "hash": "sha256:52f196a4aeb9c25a",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 8,
+            "headHash": "sha256:52f196a4aeb9c25a"
+          }
+        },
+        "rejected": {
+          "result": {
+            "kitchen": 0,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "You rejected a request; nothing was ordered for it. 20 l did not arrive on time.",
+            "logHeadHash": "sha256:8ad86812a5acd91d",
+            "approvalsAsked": 1,
+            "totalCost": null,
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
+              "refs": {},
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l3_allergen_on REJECTED.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:8ad86812a5acd91d"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
+              "refs": {},
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l3_allergen_on REJECTED.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:8ad86812a5acd91d"
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 7,
+            "headHash": "sha256:8ad86812a5acd91d"
+          }
+        },
+        "expired": {
+          "result": {
+            "kitchen": 0,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "A request expired before you answered; nothing was ordered for it. 20 l did not arrive on time.",
+            "logHeadHash": "sha256:4135bac4ab5802f7",
+            "approvalsAsked": 1,
+            "totalCost": null,
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
+              "refs": {},
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l3_allergen_on expired: no answer in time. Order ord_l3_allergen_on EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:4135bac4ab5802f7"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_on"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:aba6a1b32ae6670c"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED",
+                "ALLERGEN_EXCLUDED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855, 462635.",
+              "refs": {},
+              "prevHash": "sha256:aba6a1b32ae6670c",
+              "hash": "sha256:b8576ed40c991ba5",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_on: 1 plan, best €168,72.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on"
+              },
+              "prevHash": "sha256:b8576ed40c991ba5",
+              "hash": "sha256:44e5149bb6fb8bcd",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_on needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:44e5149bb6fb8bcd",
+              "hash": "sha256:e6f3fb3f73873d04",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:e6f3fb3f73873d04",
+              "hash": "sha256:1cc111f1ef3155f2"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l3_allergen_on expired: no answer in time. Order ord_l3_allergen_on EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_on",
+                "orderId": "ord_l3_allergen_on",
+                "approvalId": "apr_l3_allergen_on"
+              },
+              "prevHash": "sha256:1cc111f1ef3155f2",
+              "hash": "sha256:4135bac4ab5802f7"
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 7,
+            "headHash": "sha256:4135bac4ab5802f7"
+          }
+        }
+      },
+      "traps": {}
     },
     "allergen_off": {
       "mandate": {
@@ -321,7 +1805,7 @@
           "perOrderEur": 500,
           "perWeekEur": 3000
         },
-        "substitution": "same_category",
+        "substitution": "none",
         "lateDelivery": "none",
         "hardConstraints": {
           "excludeAllergens": [],
@@ -340,81 +1824,91 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with substitutes in the same category and no late deliveries."
+        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with no substitutes and no late deliveries."
       },
       "steps": [
         {
           "search": {
             "results": [
               {
-                "productId": "610001",
-                "name": "Plant-based spread 400 g (mock)",
-                "brand": "Valio",
-                "category": "spreads",
-                "salesUnit": "PCE",
+                "productId": "468855",
+                "name": "GelatoLAB-Espoo Pistachio lactose-free ice cream, 5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pack"
+                  "amount": 5,
+                  "unit": "l"
                 },
-                "labels": [],
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
+                ],
                 "allergens": [],
                 "carbonCategory": {
-                  "category": "spreads",
+                  "category": "41820",
                   "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
+                    "min": 1.0,
+                    "max": 1.6
                   }
                 },
-                "deliveryReliability": 0.94,
+                "deliveryReliability": null,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "610022",
-                "name": "Sunflower spread 400 g (mock)",
-                "brand": "Nordlakt",
-                "category": "spreads",
-                "salesUnit": "PCE",
+                "productId": "473726",
+                "name": "GelatoLAB-Espoo Pistachio lactose-free ice cream, 2.5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pack"
+                  "amount": 2.5,
+                  "unit": "l"
                 },
-                "labels": [],
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
+                ],
                 "allergens": [],
                 "carbonCategory": {
-                  "category": "spreads",
+                  "category": "41820",
                   "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
+                    "min": 1.0,
+                    "max": 1.6
                   }
                 },
-                "deliveryReliability": 0.94,
+                "deliveryReliability": null,
                 "excluded": null
               },
               {
-                "productId": "610035",
-                "name": "Peanut & oat spread 400 g (mock)",
-                "brand": "Pohjola Farm",
-                "category": "spreads",
-                "salesUnit": "PCE",
+                "productId": "462635",
+                "name": "GelatoLAB-Espoo Cookies Cream ice cream, 5 L",
+                "brand": "GelatoLAB-Espoo",
+                "category": "ice cream",
+                "salesUnit": "ST",
                 "packSize": {
-                  "amount": 1,
-                  "unit": "pack"
+                  "amount": 5,
+                  "unit": "l"
                 },
-                "labels": [],
+                "labels": [
+                  "FREE_FROM_GLUTEN",
+                  "FREE_FROM_LACTOSE"
+                ],
                 "allergens": [
-                  "peanut"
+                  "AE",
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "spreads",
+                  "category": "41820",
                   "kgCo2ePerKg": {
-                    "min": 2.0,
-                    "max": 3.5
+                    "min": 1.0,
+                    "max": 1.6
                   }
                 },
-                "deliveryReliability": 0.94,
+                "deliveryReliability": null,
                 "excluded": null
               }
             ],
@@ -428,16 +1922,16 @@
             "createdAt": "2026-11-14T10:05:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Spread for school breakfast (usual product unavailable)",
+              "description": "Pistachio ice cream for school kitchen (usual product unavailable)",
               "quantity": {
-                "amount": 60,
-                "unit": "pack"
+                "amount": 20,
+                "unit": "l"
               },
               "deadline": "2026-11-19T06:00:00+02:00",
               "candidateProductIds": [
-                "610001",
-                "610022",
-                "610035"
+                "468855",
+                "473726",
+                "462635"
               ]
             },
             "plans": [
@@ -445,26 +1939,26 @@
                 "planId": "pln_nut",
                 "lines": [
                   {
-                    "productId": "610035",
+                    "productId": "462635",
                     "quantity": {
-                      "amount": 60,
-                      "unit": "pack"
+                      "amount": 20,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 60,
-                      "unit": "PCE"
+                      "amount": 4,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 310,
+                      "cents": 3211,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 775,
+                      "cents": 642,
                       "currency": "EUR",
-                      "per": "pack"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 18600,
+                      "cents": 12844,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-19",
@@ -472,26 +1966,26 @@
                   }
                 ],
                 "total": {
-                  "cents": 18600,
+                  "cents": 12844,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 60,
-                  "unit": "pack"
+                  "amount": 20,
+                  "unit": "l"
                 },
                 "policy": {
-                  "light": "BLUE",
+                  "light": "YELLOW",
                   "reasons": [
-                    "SUBSTITUTION_ALLOWED"
+                    "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "60 packs peanut & oat spread, Thursday, €186,00",
+                "summary": "20 l Cookies Cream ice cream, Thursday, €128,44",
                 "score": {
-                  "total": 0.8,
+                  "total": 0.75,
                   "onTime": 1.0,
                   "price": 1.0,
                   "sustainability": 0.0,
-                  "reliabilityPenalty": 0.0
+                  "reliabilityPenalty": 0.05
                 },
                 "tier": "best",
                 "recommended": true
@@ -500,26 +1994,26 @@
                 "planId": "pln_safe",
                 "lines": [
                   {
-                    "productId": "610022",
+                    "productId": "473726",
                     "quantity": {
-                      "amount": 60,
-                      "unit": "pack"
+                      "amount": 20,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 60,
-                      "unit": "PCE"
+                      "amount": 8,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 420,
+                      "cents": 2109,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1050,
+                      "cents": 843,
                       "currency": "EUR",
-                      "per": "pack"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 25200,
+                      "cents": 16872,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-19",
@@ -527,26 +2021,26 @@
                   }
                 ],
                 "total": {
-                  "cents": 25200,
+                  "cents": 16872,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 60,
-                  "unit": "pack"
+                  "amount": 20,
+                  "unit": "l"
                 },
                 "policy": {
-                  "light": "BLUE",
+                  "light": "YELLOW",
                   "reasons": [
-                    "SUBSTITUTION_ALLOWED"
+                    "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "60 packs sunflower spread, Thursday, €252,00",
+                "summary": "20 l pistachio ice cream, Thursday, €168,72",
                 "score": {
-                  "total": 0.669,
+                  "total": 0.63,
                   "onTime": 1.0,
-                  "price": 0.738,
+                  "price": 0.761,
                   "sustainability": 0.0,
-                  "reliabilityPenalty": 0.0
+                  "reliabilityPenalty": 0.05
                 },
                 "tier": "better",
                 "recommended": false
@@ -554,7 +2048,7 @@
             ],
             "excludedProducts": [
               {
-                "productId": "610001",
+                "productId": "468855",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               }
@@ -571,7 +2065,7 @@
                 "at": "2026-11-14T10:05:00+02:00"
               }
             ],
-            "scenarioOverlay": false,
+            "scenarioOverlay": true,
             "signature": {
               "alg": "Ed25519",
               "keyId": "valio-aimo-2026-11",
@@ -579,64 +2073,1957 @@
             }
           },
           "order": {
-            "httpStatus": 201,
+            "httpStatus": 202,
             "body": {
               "orderId": "ord_l3_allergen_off",
-              "quoteId": "qt_l3_allergen_off",
-              "planId": "pln_nut",
-              "status": "ORDERED",
-              "lines": [
-                {
-                  "productId": "610035",
-                  "quantity": {
-                    "amount": 60,
-                    "unit": "pack"
-                  },
-                  "salesQuantity": {
-                    "amount": 60,
-                    "unit": "PCE"
-                  },
-                  "unitPrice": {
-                    "cents": 310,
-                    "currency": "EUR"
-                  },
-                  "comparisonPrice": {
-                    "cents": 775,
-                    "currency": "EUR",
-                    "per": "pack"
-                  },
-                  "lineTotal": {
-                    "cents": 18600,
-                    "currency": "EUR"
-                  },
-                  "availableDate": "2026-11-19",
-                  "isSubstitute": true
-                }
-              ],
-              "total": {
-                "cents": 18600,
-                "currency": "EUR"
-              },
-              "createdAt": "2026-11-14T10:06:00+02:00"
+              "status": "PENDING_APPROVAL",
+              "approvalId": "apr_l3_allergen_off",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ]
             }
           },
-          "approval": null
+          "approval": {
+            "approvalId": "apr_l3_allergen_off",
+            "orderId": "ord_l3_allergen_off",
+            "quoteId": "qt_l3_allergen_off",
+            "status": "OPEN",
+            "reasons": [
+              "SUBSTITUTION_NOT_ALLOWED"
+            ],
+            "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
+            "options": [
+              {
+                "planId": "pln_nut",
+                "tier": "best",
+                "recommended": true,
+                "summary": "20 l Cookies Cream ice cream, Thursday, €128,44"
+              },
+              {
+                "planId": "pln_safe",
+                "tier": "better",
+                "recommended": false,
+                "summary": "20 l pistachio ice cream, Thursday, €168,72"
+              }
+            ],
+            "agentExplanation": "The usual pistachio ice cream is blocked. Cookies Cream is cheapest at €6,42/l; pistachio costs €8,43/l.",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "createdAt": "2026-11-14T10:06:00+02:00"
+          },
+          "approvalEvent": {
+            "approvalId": "apr_l3_allergen_off",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "heartsLeft": 2
+          }
         }
       ],
       "result": {
         "kitchen": 100,
         "wallet": 100,
         "safety": 0,
-        "heartsLeft": 3,
+        "heartsLeft": 2,
         "stars": 0,
         "incident": {
           "type": "SAFETY",
-          "productId": "610035",
-          "reason": "Contains peanut"
+          "productId": "462635",
+          "reason": "Contains egg (AE)"
         },
-        "receiptText": "Your agent bought 60 packs of Peanut & oat spread because it was cheapest. Nothing stopped it: the allergen rule was off.",
-        "logHeadHash": "sha256:e7888d86975376f9",
-        "approvalsAsked": 0
+        "receiptText": "Your agent asked to buy 20 l of Cookies Cream ice cream because it was cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
+        "logHeadHash": "sha256:b2a0d8f0d0f4fbd4",
+        "approvalsAsked": 1,
+        "totalCost": {
+          "cents": 12844,
+          "currency": "EUR"
+        },
+        "heartsUsed": 1
+      },
+      "decisions": {
+        "apr_l3_allergen_off": {
+          "approved": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_off",
+              "orderId": "ord_l3_allergen_off",
+              "quoteId": "qt_l3_allergen_off",
+              "status": "APPROVED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_nut",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "20 l Cookies Cream ice cream, Thursday, €128,44"
+                },
+                {
+                  "planId": "pln_safe",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
+                }
+              ],
+              "agentExplanation": "The usual pistachio ice cream is blocked. Cookies Cream is cheapest at €6,42/l; pistachio costs €8,43/l.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "approved",
+              "orderStatus": "CONFIRMED"
+            }
+          },
+          "rejected": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_off",
+              "orderId": "ord_l3_allergen_off",
+              "quoteId": "qt_l3_allergen_off",
+              "status": "REJECTED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_nut",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "20 l Cookies Cream ice cream, Thursday, €128,44"
+                },
+                {
+                  "planId": "pln_safe",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
+                }
+              ],
+              "agentExplanation": "The usual pistachio ice cream is blocked. Cookies Cream is cheapest at €6,42/l; pistachio costs €8,43/l.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "rejected",
+              "orderStatus": "REJECTED"
+            }
+          },
+          "alternative": {
+            "pln_safe": {
+              "httpStatus": 200,
+              "body": {
+                "approvalId": "apr_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "quoteId": "qt_l3_allergen_off",
+                "status": "APPROVED",
+                "reasons": [
+                  "SUBSTITUTION_NOT_ALLOWED"
+                ],
+                "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
+                "options": [
+                  {
+                    "planId": "pln_nut",
+                    "tier": "best",
+                    "recommended": true,
+                    "summary": "20 l Cookies Cream ice cream, Thursday, €128,44"
+                  },
+                  {
+                    "planId": "pln_safe",
+                    "tier": "better",
+                    "recommended": false,
+                    "summary": "20 l pistachio ice cream, Thursday, €168,72"
+                  }
+                ],
+                "agentExplanation": "The usual pistachio ice cream is blocked. Cookies Cream is cheapest at €6,42/l; pistachio costs €8,43/l.",
+                "deadline": "2026-11-14T10:06:20+02:00",
+                "createdAt": "2026-11-14T10:06:00+02:00",
+                "decision": "alternative:pln_safe",
+                "orderStatus": "CONFIRMED"
+              }
+            }
+          },
+          "expired": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l3_allergen_off",
+              "orderId": "ord_l3_allergen_off",
+              "quoteId": "qt_l3_allergen_off",
+              "status": "EXPIRED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_nut",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "20 l Cookies Cream ice cream, Thursday, €128,44"
+                },
+                {
+                  "planId": "pln_safe",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "20 l pistachio ice cream, Thursday, €168,72"
+                }
+              ],
+              "agentExplanation": "The usual pistachio ice cream is blocked. Cookies Cream is cheapest at €6,42/l; pistachio costs €8,43/l.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "expired",
+              "orderStatus": "EXPIRED"
+            }
+          },
+          "conflict": {
+            "httpStatus": 409,
+            "body": {
+              "error": {
+                "code": "INVALID_STATE",
+                "message": "Approval apr_l3_allergen_off is already closed.",
+                "requestId": "req_apr_l3_allergen_off_409",
+                "details": {
+                  "approvalId": "apr_l3_allergen_off"
+                }
+              }
+            }
+          }
+        }
+      },
+      "log": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:3abc58a30964e4bd"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+          "refs": {
+            "mandateId": "mdt_l3_allergen_off"
+          },
+          "prevHash": "sha256:3abc58a30964e4bd",
+          "hash": "sha256:0fb7a9ae10578386"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 3 products, excluded 468855.",
+          "refs": {},
+          "prevHash": "sha256:0fb7a9ae10578386",
+          "hash": "sha256:7129654a3d08e60c"
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_004",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off"
+          },
+          "prevHash": "sha256:7129654a3d08e60c",
+          "hash": "sha256:2a0b5b598e700252"
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_005",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off",
+            "orderId": "ord_l3_allergen_off",
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:2a0b5b598e700252",
+          "hash": "sha256:63d8d0f235a4203c"
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:63d8d0f235a4203c",
+          "hash": "sha256:6d7a40eec431dabb"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_nut.",
+          "refs": {
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:6d7a40eec431dabb",
+          "hash": "sha256:767da412c28989b8"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (462635).",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off",
+            "orderId": "ord_l3_allergen_off",
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:767da412c28989b8",
+          "hash": "sha256:b2a0d8f0d0f4fbd4"
+        }
+      ],
+      "valioLog": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:3abc58a30964e4bd"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+          "refs": {
+            "mandateId": "mdt_l3_allergen_off"
+          },
+          "prevHash": "sha256:3abc58a30964e4bd",
+          "hash": "sha256:0fb7a9ae10578386"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 3 products, excluded 468855.",
+          "refs": {},
+          "prevHash": "sha256:0fb7a9ae10578386",
+          "hash": "sha256:7129654a3d08e60c",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_004",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off"
+          },
+          "prevHash": "sha256:7129654a3d08e60c",
+          "hash": "sha256:2a0b5b598e700252",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_005",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off",
+            "orderId": "ord_l3_allergen_off",
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:2a0b5b598e700252",
+          "hash": "sha256:63d8d0f235a4203c",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:63d8d0f235a4203c",
+          "hash": "sha256:6d7a40eec431dabb"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_nut.",
+          "refs": {
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:6d7a40eec431dabb",
+          "hash": "sha256:767da412c28989b8"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (462635).",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off",
+            "orderId": "ord_l3_allergen_off",
+            "approvalId": "apr_l3_allergen_off"
+          },
+          "prevHash": "sha256:767da412c28989b8",
+          "hash": "sha256:b2a0d8f0d0f4fbd4",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        }
+      ],
+      "verify": {
+        "valid": true,
+        "events": 8,
+        "headHash": "sha256:b2a0d8f0d0f4fbd4"
+      },
+      "demoPath": {
+        "apr_l3_allergen_off": "approved"
+      },
+      "outcomes": {
+        "approved": {
+          "result": {
+            "kitchen": 100,
+            "wallet": 100,
+            "safety": 0,
+            "heartsLeft": 2,
+            "stars": 0,
+            "incident": {
+              "type": "SAFETY",
+              "productId": "462635",
+              "reason": "Contains egg (AE)"
+            },
+            "receiptText": "Your agent asked to buy 20 l of Cookies Cream ice cream because it was cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
+            "logHeadHash": "sha256:b2a0d8f0d0f4fbd4",
+            "approvalsAsked": 1,
+            "totalCost": {
+              "cents": 12844,
+              "currency": "EUR"
+            },
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
+              "refs": {},
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_nut.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:767da412c28989b8"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (462635).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:767da412c28989b8",
+              "hash": "sha256:b2a0d8f0d0f4fbd4"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
+              "refs": {},
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_nut.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:767da412c28989b8"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (462635).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:767da412c28989b8",
+              "hash": "sha256:b2a0d8f0d0f4fbd4",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 8,
+            "headHash": "sha256:b2a0d8f0d0f4fbd4"
+          }
+        },
+        "rejected": {
+          "result": {
+            "kitchen": 0,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "You rejected a request; nothing was ordered for it. 20 l did not arrive on time.",
+            "logHeadHash": "sha256:0fbd37d831183130",
+            "approvalsAsked": 1,
+            "totalCost": null,
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
+              "refs": {},
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l3_allergen_off REJECTED.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:0fbd37d831183130"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
+              "refs": {},
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l3_allergen_off REJECTED.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:0fbd37d831183130"
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 7,
+            "headHash": "sha256:0fbd37d831183130"
+          }
+        },
+        "expired": {
+          "result": {
+            "kitchen": 0,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "A request expired before you answered; nothing was ordered for it. 20 l did not arrive on time.",
+            "logHeadHash": "sha256:51ee58ba4944c933",
+            "approvalsAsked": 1,
+            "totalCost": null,
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
+              "refs": {},
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l3_allergen_off expired: no answer in time. Order ord_l3_allergen_off EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:51ee58ba4944c933"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
+              "refs": {},
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l3_allergen_off expired: no answer in time. Order ord_l3_allergen_off EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:51ee58ba4944c933"
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 7,
+            "headHash": "sha256:51ee58ba4944c933"
+          }
+        },
+        "alternative:pln_safe": {
+          "result": {
+            "kitchen": 100,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 2,
+            "stars": 3,
+            "incident": null,
+            "receiptText": "You chose 20 l pistachio ice cream, Thursday, €168,72.",
+            "logHeadHash": "sha256:a9ddaac4e68ad3c7",
+            "approvalsAsked": 1,
+            "totalCost": {
+              "cents": 16872,
+              "currency": "EUR"
+            },
+            "heartsUsed": 1
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
+              "refs": {},
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager chose plan pln_safe.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:087863aa40f2026e"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_safe (473726).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:087863aa40f2026e",
+              "hash": "sha256:a9ddaac4e68ad3c7"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario adjustment: usual pistachio ice cream 468855 set to sales-blocked.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3abc58a30964e4bd"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+              "refs": {
+                "mandateId": "mdt_l3_allergen_off"
+              },
+              "prevHash": "sha256:3abc58a30964e4bd",
+              "hash": "sha256:0fb7a9ae10578386"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 3 products, excluded 468855.",
+              "refs": {},
+              "prevHash": "sha256:0fb7a9ae10578386",
+              "hash": "sha256:7129654a3d08e60c",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:05:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l3_allergen_off: 2 plans, best €128,44.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off"
+              },
+              "prevHash": "sha256:7129654a3d08e60c",
+              "hash": "sha256:2a0b5b598e700252",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l3_allergen_off needs approval: Every ice cream option is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:2a0b5b598e700252",
+              "hash": "sha256:63d8d0f235a4203c",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:63d8d0f235a4203c",
+              "hash": "sha256:6d7a40eec431dabb"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager chose plan pln_safe.",
+              "refs": {
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:6d7a40eec431dabb",
+              "hash": "sha256:087863aa40f2026e"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "789",
+              "agentId": "kitchenbuyer-koivu-school",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_safe (473726).",
+              "refs": {
+                "quoteId": "qt_l3_allergen_off",
+                "orderId": "ord_l3_allergen_off",
+                "approvalId": "apr_l3_allergen_off"
+              },
+              "prevHash": "sha256:087863aa40f2026e",
+              "hash": "sha256:a9ddaac4e68ad3c7",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 8,
+            "headHash": "sha256:a9ddaac4e68ad3c7"
+          }
+        }
+      },
+      "traps": {
+        "apr_l3_allergen_off": {
+          "pln_nut": "allergen"
+        }
       }
     }
   },
@@ -647,27 +4034,37 @@
         "kitchen": 100,
         "wallet": 100,
         "safety": 100,
-        "heartsLeft": 3,
+        "heartsLeft": 2,
         "stars": 3,
         "incident": null,
-        "receiptText": "The cheapest spread contains peanut, so the gateway blocked it. Your agent bought 60 packs of sunflower spread instead.",
-        "logHeadHash": "sha256:9872442a548d7282",
-        "approvalsAsked": 0
+        "receiptText": "The cheapest ice cream contains egg, so the gateway blocked it. Your agent asked to buy 20 l of pistachio ice cream instead, and you approved.",
+        "logHeadHash": "sha256:52f196a4aeb9c25a",
+        "approvalsAsked": 1,
+        "totalCost": {
+          "cents": 16872,
+          "currency": "EUR"
+        },
+        "heartsUsed": 1
       },
       "allergen_off": {
         "kitchen": 100,
         "wallet": 100,
         "safety": 0,
-        "heartsLeft": 3,
+        "heartsLeft": 2,
         "stars": 0,
         "incident": {
           "type": "SAFETY",
-          "productId": "610035",
-          "reason": "Contains peanut"
+          "productId": "462635",
+          "reason": "Contains egg (AE)"
         },
-        "receiptText": "Your agent bought 60 packs of Peanut & oat spread because it was cheapest. Nothing stopped it: the allergen rule was off.",
-        "logHeadHash": "sha256:e7888d86975376f9",
-        "approvalsAsked": 0
+        "receiptText": "Your agent asked to buy 20 l of Cookies Cream ice cream because it was cheapest, and you approved. The card listed egg; the allergen rule was off, so nothing else could stop it.",
+        "logHeadHash": "sha256:b2a0d8f0d0f4fbd4",
+        "approvalsAsked": 1,
+        "totalCost": {
+          "cents": 12844,
+          "currency": "EUR"
+        },
+        "heartsUsed": 1
       }
     }
   }

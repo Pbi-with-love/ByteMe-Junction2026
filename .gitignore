@@ -30,3 +30,7 @@ CLAUDE.md
 !.env.example
 data/
 orca.yaml
+
+# playwright-cli session data
+.playwright-cli/
+.codegraph/

@@ -34,9 +34,17 @@ class ApprovalStore:
             """
         )
         self._connection.commit()
+        columns = {row["name"] for row in self._connection.execute("PRAGMA table_info(approvals)")}
+        if "expired_logged" not in columns:
+            self._connection.execute("ALTER TABLE approvals ADD COLUMN expired_logged INTEGER NOT NULL DEFAULT 0")
+            self._connection.commit()
 
     def close(self) -> None:
         self._connection.close()
+
+    def reset(self) -> None:
+        self._connection.execute("DELETE FROM approvals")
+        self._connection.commit()
 
     def create(
         self,
@@ -187,6 +195,18 @@ class ApprovalStore:
             if current is not None and current["status"] == "EXPIRED":
                 expired.append(_approval(current))
         return expired
+
+    def claim_expired_log(self, approval_id: str, customer_id: str) -> bool:
+        cursor = self._connection.execute(
+            "UPDATE approvals SET expired_logged = 1 WHERE approval_id = ? AND customer_id = ? AND status = 'EXPIRED' AND expired_logged = 0",
+            (approval_id, customer_id),
+        )
+        self._connection.commit()
+        return cursor.rowcount == 1
+
+    def count(self, customer_id: str) -> int:
+        row = self._connection.execute("SELECT COUNT(*) AS count FROM approvals WHERE customer_id = ?", (customer_id,)).fetchone()
+        return int(row["count"])
 
 
 def _approval(row: sqlite3.Row) -> dict[str, Any]:

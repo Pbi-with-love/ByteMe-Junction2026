@@ -1,0 +1,46 @@
+import type { AgentStep, Approval, ApprovalDecision, Compare, Discovery, GameResult, GameStart, Mandate } from './schemas';
+import type { AgentActivity } from '../components/AgentWorking';
+
+export type MandateDraft = Omit<Mandate, 'mandateId' | 'customerId' | 'issuedAt' | 'status' | 'signature' | 'summaryText'>;
+import { HttpGatewayClient } from './http';
+import { ReplayGatewayClient } from './replay';
+
+export interface GatewayClient {
+  discovery(): Promise<Discovery>;
+  startLevel(levelId: string, preset: string): Promise<GameStart>;
+  nextStep(sessionId: string): Promise<AgentStep | null>;
+  activity?(sessionId: string): AgentActivity;
+  getResult(sessionId: string): Promise<GameResult>;
+  getLog(view: 'buyer' | 'valio', opts?: { since?: number; limit?: number }): Promise<import('./schemas').LogResponse>;
+  verifyLog(): Promise<import('./schemas').LogVerify>;
+  compare(levelId: string): Promise<Compare>;
+  presets(levelId: string): Promise<Record<string, Mandate>>;
+  signMandate(sessionId: string, draft: MandateDraft): Promise<Mandate>;
+  decideApproval(approvalId: string, decision: 'approved' | 'rejected' | 'alternative', planId?: string): Promise<ApprovalDecision>;
+  getApproval(approvalId: string): Promise<Approval>;
+}
+
+export class GatewayError extends Error {
+  constructor(
+    public code: string,
+    message = code,
+    public httpStatus?: number,
+    public requestId?: string,
+    public details?: unknown,
+  ) {
+    super(message);
+    this.name = 'GatewayError';
+  }
+}
+
+export function createGatewayClient(env: Record<string, string | undefined>, mode = gatewayMode(env)): GatewayClient {
+  if (mode === 'replay') return new ReplayGatewayClient({ tamperLog: env.VITE_REPLAY_TAMPER === '1', dataBoundaryDemo: env.VITE_REPLAY_PROBE === '1' });
+  return new HttpGatewayClient(env.VITE_GATEWAY_URL ?? 'http://127.0.0.1:8000', env.VITE_UPSTREAM_MODE ?? 'replay');
+}
+
+export function gatewayMode(env: Record<string, string | undefined>): 'replay' | 'live' {
+  const mode = env.VITE_GATEWAY_MODE;
+  if (!mode || mode === 'live') return 'live';
+  if (mode === 'replay') return 'replay';
+  throw new Error(`Unknown VITE_GATEWAY_MODE: ${mode}`);
+}

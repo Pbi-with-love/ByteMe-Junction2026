@@ -53,6 +53,8 @@ def test_mandate_is_signed_and_revocation_invalidates_it(tmp_path) -> None:
             principal=principal,
             request_data=mandate_data(),
         )
+        assert "authorises kitchenbuyer" in mandate["summaryText"]
+        assert store.require_mandate(mandate["mandateId"], "customer-1")["summaryText"] == mandate["summaryText"]
         assert store.require_mandate(mandate["mandateId"], "customer-1")["status"] == "ACTIVE"
         store.revoke_mandate(mandate["mandateId"], "customer-1")
         try:

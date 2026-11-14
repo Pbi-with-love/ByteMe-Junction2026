@@ -23,7 +23,7 @@ class ValioClient:
     ) -> None:
         settings.require_valio_credentials()
         self._settings = settings
-        self._client = client or httpx.AsyncClient(timeout=30.0)
+        self._client = client or httpx.AsyncClient(timeout=5.0)
         self._owns_client = client is None
 
     async def close(self) -> None:

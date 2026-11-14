@@ -10,7 +10,7 @@
         "name": "Ravintola Kivi (fictional)",
         "type": "restaurant"
       },
-      "brief": "Standing order: 40 kg Edam by Wednesday 06:00 and 40 kg by Friday 06:00.",
+      "brief": "Standing order: 120 l semi-skimmed milk by Wednesday 06:00 and 120 l by Friday 06:00.",
       "deadline": "2026-11-20T06:00:00+02:00",
       "closingTime": "2026-11-14T14:00:00+02:00"
     },
@@ -65,54 +65,54 @@
           "search": {
             "results": [
               {
-                "productId": "520101",
-                "name": "Edam cheese 1 kg block (mock)",
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.95,
+                "deliveryReliability": 1.0,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "520144",
-                "name": "Gouda cheese 1 kg block (mock)",
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.96,
+                "deliveryReliability": 1.0,
                 "excluded": null
               }
             ],
@@ -126,15 +126,15 @@
             "createdAt": "2026-11-14T10:06:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Standing order: Edam cheese, delivery 1 of 2",
+              "description": "Standing order: semi-skimmed milk, delivery 1 of 2",
               "quantity": {
-                "amount": 40,
-                "unit": "kg"
+                "amount": 120,
+                "unit": "l"
               },
               "deadline": "2026-11-18T06:00:00+02:00",
               "candidateProductIds": [
-                "520101",
-                "520144"
+                "464201",
+                "464398"
               ]
             },
             "plans": [
@@ -142,26 +142,26 @@
                 "planId": "pln_a",
                 "lines": [
                   {
-                    "productId": "520144",
+                    "productId": "464398",
                     "quantity": {
-                      "amount": 40,
-                      "unit": "kg"
+                      "amount": 120,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 40,
-                      "unit": "PCE"
+                      "amount": 120,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR",
-                      "per": "kg"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 49600,
+                      "cents": 16200,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-18",
@@ -169,12 +169,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 49600,
+                  "cents": 16200,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 40,
-                  "unit": "kg"
+                  "amount": 120,
+                  "unit": "l"
                 },
                 "policy": {
                   "light": "YELLOW",
@@ -182,7 +182,7 @@
                     "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00",
                 "score": {
                   "total": 0.8,
                   "onTime": 1.0,
@@ -196,7 +196,7 @@
             ],
             "excludedProducts": [
               {
-                "productId": "520101",
+                "productId": "464201",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               }
@@ -213,7 +213,7 @@
                 "at": "2026-11-14T10:06:00+02:00"
               }
             ],
-            "scenarioOverlay": false,
+            "scenarioOverlay": true,
             "signature": {
               "alg": "Ed25519",
               "keyId": "valio-aimo-2026-11",
@@ -239,72 +239,77 @@
             "reasons": [
               "SUBSTITUTION_NOT_ALLOWED"
             ],
-            "reasonText": "Gouda is a substitute, and your mandate allows no substitutes.",
+            "reasonText": "Valio Eila is a substitute, and your mandate allows no substitutes.",
             "options": [
               {
                 "planId": "pln_a",
                 "tier": "best",
                 "recommended": true,
-                "summary": "40 kg Gouda instead of Edam, €496,00"
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00"
               }
             ],
-            "agentExplanation": "Edam is blocked from sale this week. Gouda is the closest cheese, €0,50/kg more.",
+            "agentExplanation": "Valio semi-skimmed has no stock this week. Valio Eila is the closest milk, €0,06/l more.",
             "deadline": "2026-11-14T10:06:20+02:00",
             "createdAt": "2026-11-14T10:06:00+02:00"
+          },
+          "approvalEvent": {
+            "approvalId": "apr_l2_strict_1",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "heartsLeft": 2
           }
         },
         {
           "search": {
             "results": [
               {
-                "productId": "520101",
-                "name": "Edam cheese 1 kg block (mock)",
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.95,
+                "deliveryReliability": 1.0,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "520144",
-                "name": "Gouda cheese 1 kg block (mock)",
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.96,
+                "deliveryReliability": 1.0,
                 "excluded": null
               }
             ],
@@ -318,15 +323,15 @@
             "createdAt": "2026-11-14T10:30:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Standing order: Edam cheese, delivery 2 of 2",
+              "description": "Standing order: semi-skimmed milk, delivery 2 of 2",
               "quantity": {
-                "amount": 40,
-                "unit": "kg"
+                "amount": 120,
+                "unit": "l"
               },
               "deadline": "2026-11-20T06:00:00+02:00",
               "candidateProductIds": [
-                "520101",
-                "520144"
+                "464201",
+                "464398"
               ]
             },
             "plans": [
@@ -334,26 +339,26 @@
                 "planId": "pln_a",
                 "lines": [
                   {
-                    "productId": "520144",
+                    "productId": "464398",
                     "quantity": {
-                      "amount": 40,
-                      "unit": "kg"
+                      "amount": 120,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 40,
-                      "unit": "PCE"
+                      "amount": 120,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR",
-                      "per": "kg"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 49600,
+                      "cents": 16200,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-20",
@@ -361,12 +366,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 49600,
+                  "cents": 16200,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 40,
-                  "unit": "kg"
+                  "amount": 120,
+                  "unit": "l"
                 },
                 "policy": {
                   "light": "YELLOW",
@@ -374,7 +379,7 @@
                     "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00",
                 "score": {
                   "total": 0.8,
                   "onTime": 1.0,
@@ -388,7 +393,7 @@
             ],
             "excludedProducts": [
               {
-                "productId": "520101",
+                "productId": "464201",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               }
@@ -405,7 +410,7 @@
                 "at": "2026-11-14T10:30:00+02:00"
               }
             ],
-            "scenarioOverlay": false,
+            "scenarioOverlay": true,
             "signature": {
               "alg": "Ed25519",
               "keyId": "valio-aimo-2026-11",
@@ -431,18 +436,23 @@
             "reasons": [
               "SUBSTITUTION_NOT_ALLOWED"
             ],
-            "reasonText": "Gouda is a substitute, and your mandate allows no substitutes.",
+            "reasonText": "Valio Eila is a substitute, and your mandate allows no substitutes.",
             "options": [
               {
                 "planId": "pln_a",
                 "tier": "best",
                 "recommended": true,
-                "summary": "40 kg Gouda instead of Edam, €496,00"
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00"
               }
             ],
-            "agentExplanation": "Edam is blocked from sale this week. Gouda is the closest cheese, €0,50/kg more.",
+            "agentExplanation": "Valio semi-skimmed has no stock this week. Valio Eila is the closest milk, €0,06/l more.",
             "deadline": "2026-11-14T10:30:20+02:00",
             "createdAt": "2026-11-14T10:30:00+02:00"
+          },
+          "approvalEvent": {
+            "approvalId": "apr_l2_strict_2",
+            "deadline": "2026-11-14T10:30:20+02:00",
+            "heartsLeft": 1
           }
         }
       ],
@@ -453,10 +463,3860 @@
         "heartsLeft": 1,
         "stars": 3,
         "incident": null,
-        "receiptText": "Edam was blocked from sale all week. Your agent had to ask you before each delivery (Wednesday and Friday) to switch to Gouda; you approved both.",
-        "logHeadHash": "sha256:4c49ad6e469aaf84",
-        "approvalsAsked": 2
-      }
+        "receiptText": "Valio semi-skimmed had no stock all week. Your agent had to ask you before each delivery (Wednesday and Friday) to switch to Valio Eila; you approved both.",
+        "logHeadHash": "sha256:de91375ec34444ae",
+        "approvalsAsked": 2,
+        "totalCost": {
+          "cents": 32400,
+          "currency": "EUR"
+        },
+        "heartsUsed": 2
+      },
+      "decisions": {
+        "apr_l2_strict_1": {
+          "approved": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l2_strict_1",
+              "orderId": "ord_l2_strict_1",
+              "quoteId": "qt_l2_strict_1",
+              "status": "APPROVED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00"
+                }
+              ],
+              "agentExplanation": "Valio semi-skimmed has no stock this week. Valio Eila is the closest milk, €0,06/l more.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "approved",
+              "orderStatus": "CONFIRMED"
+            }
+          },
+          "rejected": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l2_strict_1",
+              "orderId": "ord_l2_strict_1",
+              "quoteId": "qt_l2_strict_1",
+              "status": "REJECTED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00"
+                }
+              ],
+              "agentExplanation": "Valio semi-skimmed has no stock this week. Valio Eila is the closest milk, €0,06/l more.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "rejected",
+              "orderStatus": "REJECTED"
+            }
+          },
+          "alternative": {},
+          "expired": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l2_strict_1",
+              "orderId": "ord_l2_strict_1",
+              "quoteId": "qt_l2_strict_1",
+              "status": "EXPIRED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00"
+                }
+              ],
+              "agentExplanation": "Valio semi-skimmed has no stock this week. Valio Eila is the closest milk, €0,06/l more.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "expired",
+              "orderStatus": "EXPIRED"
+            }
+          },
+          "conflict": {
+            "httpStatus": 409,
+            "body": {
+              "error": {
+                "code": "INVALID_STATE",
+                "message": "Approval apr_l2_strict_1 is already closed.",
+                "requestId": "req_apr_l2_strict_1_409",
+                "details": {
+                  "approvalId": "apr_l2_strict_1"
+                }
+              }
+            }
+          }
+        },
+        "apr_l2_strict_2": {
+          "approved": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l2_strict_2",
+              "orderId": "ord_l2_strict_2",
+              "quoteId": "qt_l2_strict_2",
+              "status": "APPROVED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00"
+                }
+              ],
+              "agentExplanation": "Valio semi-skimmed has no stock this week. Valio Eila is the closest milk, €0,06/l more.",
+              "deadline": "2026-11-14T10:30:20+02:00",
+              "createdAt": "2026-11-14T10:30:00+02:00",
+              "decision": "approved",
+              "orderStatus": "CONFIRMED"
+            }
+          },
+          "rejected": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l2_strict_2",
+              "orderId": "ord_l2_strict_2",
+              "quoteId": "qt_l2_strict_2",
+              "status": "REJECTED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00"
+                }
+              ],
+              "agentExplanation": "Valio semi-skimmed has no stock this week. Valio Eila is the closest milk, €0,06/l more.",
+              "deadline": "2026-11-14T10:30:20+02:00",
+              "createdAt": "2026-11-14T10:30:00+02:00",
+              "decision": "rejected",
+              "orderStatus": "REJECTED"
+            }
+          },
+          "alternative": {},
+          "expired": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l2_strict_2",
+              "orderId": "ord_l2_strict_2",
+              "quoteId": "qt_l2_strict_2",
+              "status": "EXPIRED",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00"
+                }
+              ],
+              "agentExplanation": "Valio semi-skimmed has no stock this week. Valio Eila is the closest milk, €0,06/l more.",
+              "deadline": "2026-11-14T10:30:20+02:00",
+              "createdAt": "2026-11-14T10:30:00+02:00",
+              "decision": "expired",
+              "orderStatus": "EXPIRED"
+            }
+          },
+          "conflict": {
+            "httpStatus": 409,
+            "body": {
+              "error": {
+                "code": "INVALID_STATE",
+                "message": "Approval apr_l2_strict_2 is already closed.",
+                "requestId": "req_apr_l2_strict_2_409",
+                "details": {
+                  "approvalId": "apr_l2_strict_2"
+                }
+              }
+            }
+          }
+        }
+      },
+      "log": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario overlay.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:3e34922f977f631a"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+          "refs": {
+            "mandateId": "mdt_l2_strict"
+          },
+          "prevHash": "sha256:3e34922f977f631a",
+          "hash": "sha256:6713ace1870d45ae"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 2 products, excluded 464201.",
+          "refs": {},
+          "prevHash": "sha256:6713ace1870d45ae",
+          "hash": "sha256:94b8bb9f0fbdd809"
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_004",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+          "refs": {
+            "quoteId": "qt_l2_strict_1"
+          },
+          "prevHash": "sha256:94b8bb9f0fbdd809",
+          "hash": "sha256:e99147805fee0c44"
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_005",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l2_strict_1",
+            "orderId": "ord_l2_strict_1",
+            "approvalId": "apr_l2_strict_1"
+          },
+          "prevHash": "sha256:e99147805fee0c44",
+          "hash": "sha256:664fa9d19d165934"
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l2_strict_1"
+          },
+          "prevHash": "sha256:664fa9d19d165934",
+          "hash": "sha256:8774acd0bfe02fb7"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_a.",
+          "refs": {
+            "approvalId": "apr_l2_strict_1"
+          },
+          "prevHash": "sha256:8774acd0bfe02fb7",
+          "hash": "sha256:c202f59112678153"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l2_strict_1 ORDERED → CONFIRMED: plan pln_a (464398).",
+          "refs": {
+            "quoteId": "qt_l2_strict_1",
+            "orderId": "ord_l2_strict_1",
+            "approvalId": "apr_l2_strict_1"
+          },
+          "prevHash": "sha256:c202f59112678153",
+          "hash": "sha256:e3249b707a439b1b"
+        },
+        {
+          "seq": 9,
+          "eventId": "evt_9",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_009",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 2 products, excluded 464201.",
+          "refs": {},
+          "prevHash": "sha256:e3249b707a439b1b",
+          "hash": "sha256:d357810f4a6f6cbe"
+        },
+        {
+          "seq": 10,
+          "eventId": "evt_10",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_010",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+          "refs": {
+            "quoteId": "qt_l2_strict_2"
+          },
+          "prevHash": "sha256:d357810f4a6f6cbe",
+          "hash": "sha256:e44031520880e0eb"
+        },
+        {
+          "seq": 11,
+          "eventId": "evt_11",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_011",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l2_strict_2",
+            "orderId": "ord_l2_strict_2",
+            "approvalId": "apr_l2_strict_2"
+          },
+          "prevHash": "sha256:e44031520880e0eb",
+          "hash": "sha256:cfbe53bce31f3cb2"
+        },
+        {
+          "seq": 12,
+          "eventId": "evt_12",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_012",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (1 heart left).",
+          "refs": {
+            "approvalId": "apr_l2_strict_2"
+          },
+          "prevHash": "sha256:cfbe53bce31f3cb2",
+          "hash": "sha256:d6374e3c8dd32a29"
+        },
+        {
+          "seq": 13,
+          "eventId": "evt_13",
+          "at": "2026-11-14T10:31:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_013",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_a.",
+          "refs": {
+            "approvalId": "apr_l2_strict_2"
+          },
+          "prevHash": "sha256:d6374e3c8dd32a29",
+          "hash": "sha256:95bcda8ff5d4e651"
+        },
+        {
+          "seq": 14,
+          "eventId": "evt_14",
+          "at": "2026-11-14T10:31:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_014",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l2_strict_2 ORDERED → CONFIRMED: plan pln_a (464398).",
+          "refs": {
+            "quoteId": "qt_l2_strict_2",
+            "orderId": "ord_l2_strict_2",
+            "approvalId": "apr_l2_strict_2"
+          },
+          "prevHash": "sha256:95bcda8ff5d4e651",
+          "hash": "sha256:de91375ec34444ae"
+        }
+      ],
+      "valioLog": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario overlay.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:3e34922f977f631a"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+          "refs": {
+            "mandateId": "mdt_l2_strict"
+          },
+          "prevHash": "sha256:3e34922f977f631a",
+          "hash": "sha256:6713ace1870d45ae"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 2 products, excluded 464201.",
+          "refs": {},
+          "prevHash": "sha256:6713ace1870d45ae",
+          "hash": "sha256:94b8bb9f0fbdd809",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_004",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+          "refs": {
+            "quoteId": "qt_l2_strict_1"
+          },
+          "prevHash": "sha256:94b8bb9f0fbdd809",
+          "hash": "sha256:e99147805fee0c44",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_005",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l2_strict_1",
+            "orderId": "ord_l2_strict_1",
+            "approvalId": "apr_l2_strict_1"
+          },
+          "prevHash": "sha256:e99147805fee0c44",
+          "hash": "sha256:664fa9d19d165934",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l2_strict_1"
+          },
+          "prevHash": "sha256:664fa9d19d165934",
+          "hash": "sha256:8774acd0bfe02fb7"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_a.",
+          "refs": {
+            "approvalId": "apr_l2_strict_1"
+          },
+          "prevHash": "sha256:8774acd0bfe02fb7",
+          "hash": "sha256:c202f59112678153"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l2_strict_1 ORDERED → CONFIRMED: plan pln_a (464398).",
+          "refs": {
+            "quoteId": "qt_l2_strict_1",
+            "orderId": "ord_l2_strict_1",
+            "approvalId": "apr_l2_strict_1"
+          },
+          "prevHash": "sha256:c202f59112678153",
+          "hash": "sha256:e3249b707a439b1b",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 9,
+          "eventId": "evt_9",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_009",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 2 products, excluded 464201.",
+          "refs": {},
+          "prevHash": "sha256:e3249b707a439b1b",
+          "hash": "sha256:d357810f4a6f6cbe",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 10,
+          "eventId": "evt_10",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_010",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+          "refs": {
+            "quoteId": "qt_l2_strict_2"
+          },
+          "prevHash": "sha256:d357810f4a6f6cbe",
+          "hash": "sha256:e44031520880e0eb",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 11,
+          "eventId": "evt_11",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_011",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+          "refs": {
+            "quoteId": "qt_l2_strict_2",
+            "orderId": "ord_l2_strict_2",
+            "approvalId": "apr_l2_strict_2"
+          },
+          "prevHash": "sha256:e44031520880e0eb",
+          "hash": "sha256:cfbe53bce31f3cb2",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 12,
+          "eventId": "evt_12",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_012",
+          "light": "YELLOW",
+          "reasons": [
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (1 heart left).",
+          "refs": {
+            "approvalId": "apr_l2_strict_2"
+          },
+          "prevHash": "sha256:cfbe53bce31f3cb2",
+          "hash": "sha256:d6374e3c8dd32a29"
+        },
+        {
+          "seq": 13,
+          "eventId": "evt_13",
+          "at": "2026-11-14T10:31:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_013",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_a.",
+          "refs": {
+            "approvalId": "apr_l2_strict_2"
+          },
+          "prevHash": "sha256:d6374e3c8dd32a29",
+          "hash": "sha256:95bcda8ff5d4e651"
+        },
+        {
+          "seq": 14,
+          "eventId": "evt_14",
+          "at": "2026-11-14T10:31:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_014",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l2_strict_2 ORDERED → CONFIRMED: plan pln_a (464398).",
+          "refs": {
+            "quoteId": "qt_l2_strict_2",
+            "orderId": "ord_l2_strict_2",
+            "approvalId": "apr_l2_strict_2"
+          },
+          "prevHash": "sha256:95bcda8ff5d4e651",
+          "hash": "sha256:de91375ec34444ae",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        }
+      ],
+      "verify": {
+        "valid": true,
+        "events": 14,
+        "headHash": "sha256:de91375ec34444ae"
+      },
+      "demoPath": {
+        "apr_l2_strict_1": "approved",
+        "apr_l2_strict_2": "approved"
+      },
+      "outcomes": {
+        "approved,approved": {
+          "result": {
+            "kitchen": 100,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 1,
+            "stars": 3,
+            "incident": null,
+            "receiptText": "Valio semi-skimmed had no stock all week. Your agent had to ask you before each delivery (Wednesday and Friday) to switch to Valio Eila; you approved both.",
+            "logHeadHash": "sha256:de91375ec34444ae",
+            "approvalsAsked": 2,
+            "totalCost": {
+              "cents": 32400,
+              "currency": "EUR"
+            },
+            "heartsUsed": 2
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario overlay.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3e34922f977f631a"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+              "refs": {
+                "mandateId": "mdt_l2_strict"
+              },
+              "prevHash": "sha256:3e34922f977f631a",
+              "hash": "sha256:6713ace1870d45ae"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:6713ace1870d45ae",
+              "hash": "sha256:94b8bb9f0fbdd809"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1"
+              },
+              "prevHash": "sha256:94b8bb9f0fbdd809",
+              "hash": "sha256:e99147805fee0c44"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:e99147805fee0c44",
+              "hash": "sha256:664fa9d19d165934"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:664fa9d19d165934",
+              "hash": "sha256:8774acd0bfe02fb7"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:8774acd0bfe02fb7",
+              "hash": "sha256:c202f59112678153"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_1 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:c202f59112678153",
+              "hash": "sha256:e3249b707a439b1b"
+            },
+            {
+              "seq": 9,
+              "eventId": "evt_9",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_009",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:e3249b707a439b1b",
+              "hash": "sha256:d357810f4a6f6cbe"
+            },
+            {
+              "seq": 10,
+              "eventId": "evt_10",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_010",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2"
+              },
+              "prevHash": "sha256:d357810f4a6f6cbe",
+              "hash": "sha256:e44031520880e0eb"
+            },
+            {
+              "seq": 11,
+              "eventId": "evt_11",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_011",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:e44031520880e0eb",
+              "hash": "sha256:cfbe53bce31f3cb2"
+            },
+            {
+              "seq": 12,
+              "eventId": "evt_12",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_012",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (1 heart left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:cfbe53bce31f3cb2",
+              "hash": "sha256:d6374e3c8dd32a29"
+            },
+            {
+              "seq": 13,
+              "eventId": "evt_13",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_013",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:d6374e3c8dd32a29",
+              "hash": "sha256:95bcda8ff5d4e651"
+            },
+            {
+              "seq": 14,
+              "eventId": "evt_14",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_014",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_2 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:95bcda8ff5d4e651",
+              "hash": "sha256:de91375ec34444ae"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario overlay.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3e34922f977f631a"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+              "refs": {
+                "mandateId": "mdt_l2_strict"
+              },
+              "prevHash": "sha256:3e34922f977f631a",
+              "hash": "sha256:6713ace1870d45ae"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:6713ace1870d45ae",
+              "hash": "sha256:94b8bb9f0fbdd809",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1"
+              },
+              "prevHash": "sha256:94b8bb9f0fbdd809",
+              "hash": "sha256:e99147805fee0c44",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:e99147805fee0c44",
+              "hash": "sha256:664fa9d19d165934",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:664fa9d19d165934",
+              "hash": "sha256:8774acd0bfe02fb7"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:8774acd0bfe02fb7",
+              "hash": "sha256:c202f59112678153"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_1 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:c202f59112678153",
+              "hash": "sha256:e3249b707a439b1b",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 9,
+              "eventId": "evt_9",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_009",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:e3249b707a439b1b",
+              "hash": "sha256:d357810f4a6f6cbe",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 10,
+              "eventId": "evt_10",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_010",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2"
+              },
+              "prevHash": "sha256:d357810f4a6f6cbe",
+              "hash": "sha256:e44031520880e0eb",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 11,
+              "eventId": "evt_11",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_011",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:e44031520880e0eb",
+              "hash": "sha256:cfbe53bce31f3cb2",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 12,
+              "eventId": "evt_12",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_012",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (1 heart left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:cfbe53bce31f3cb2",
+              "hash": "sha256:d6374e3c8dd32a29"
+            },
+            {
+              "seq": 13,
+              "eventId": "evt_13",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_013",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:d6374e3c8dd32a29",
+              "hash": "sha256:95bcda8ff5d4e651"
+            },
+            {
+              "seq": 14,
+              "eventId": "evt_14",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_014",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_2 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:95bcda8ff5d4e651",
+              "hash": "sha256:de91375ec34444ae",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 14,
+            "headHash": "sha256:de91375ec34444ae"
+          }
+        },
+        "rejected,approved": {
+          "result": {
+            "kitchen": 50,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 1,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "You rejected a request; nothing was ordered for it. You approved 120 l Valio Eila instead of Valio semi-skimmed, €162,00. 120 l did not arrive on time.",
+            "logHeadHash": "sha256:d2260c41813e9200",
+            "approvalsAsked": 2,
+            "totalCost": {
+              "cents": 16200,
+              "currency": "EUR"
+            },
+            "heartsUsed": 2
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario overlay.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3e34922f977f631a"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+              "refs": {
+                "mandateId": "mdt_l2_strict"
+              },
+              "prevHash": "sha256:3e34922f977f631a",
+              "hash": "sha256:6713ace1870d45ae"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:6713ace1870d45ae",
+              "hash": "sha256:94b8bb9f0fbdd809"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1"
+              },
+              "prevHash": "sha256:94b8bb9f0fbdd809",
+              "hash": "sha256:e99147805fee0c44"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:e99147805fee0c44",
+              "hash": "sha256:664fa9d19d165934"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:664fa9d19d165934",
+              "hash": "sha256:8774acd0bfe02fb7"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l2_strict_1 REJECTED.",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:8774acd0bfe02fb7",
+              "hash": "sha256:19d9ed6572a147a0"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_008",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:19d9ed6572a147a0",
+              "hash": "sha256:72d933fd3e80f7be"
+            },
+            {
+              "seq": 9,
+              "eventId": "evt_9",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_009",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2"
+              },
+              "prevHash": "sha256:72d933fd3e80f7be",
+              "hash": "sha256:a57c9cd72b71fa4c"
+            },
+            {
+              "seq": 10,
+              "eventId": "evt_10",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_010",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:a57c9cd72b71fa4c",
+              "hash": "sha256:050e39f827e88047"
+            },
+            {
+              "seq": 11,
+              "eventId": "evt_11",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_011",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (1 heart left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:050e39f827e88047",
+              "hash": "sha256:3990921dfc8c4882"
+            },
+            {
+              "seq": 12,
+              "eventId": "evt_12",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_012",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:3990921dfc8c4882",
+              "hash": "sha256:17e14275635f3129"
+            },
+            {
+              "seq": 13,
+              "eventId": "evt_13",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_013",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_2 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:17e14275635f3129",
+              "hash": "sha256:d2260c41813e9200"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario overlay.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3e34922f977f631a"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+              "refs": {
+                "mandateId": "mdt_l2_strict"
+              },
+              "prevHash": "sha256:3e34922f977f631a",
+              "hash": "sha256:6713ace1870d45ae"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:6713ace1870d45ae",
+              "hash": "sha256:94b8bb9f0fbdd809",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1"
+              },
+              "prevHash": "sha256:94b8bb9f0fbdd809",
+              "hash": "sha256:e99147805fee0c44",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:e99147805fee0c44",
+              "hash": "sha256:664fa9d19d165934",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:664fa9d19d165934",
+              "hash": "sha256:8774acd0bfe02fb7"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l2_strict_1 REJECTED.",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:8774acd0bfe02fb7",
+              "hash": "sha256:19d9ed6572a147a0"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_008",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:19d9ed6572a147a0",
+              "hash": "sha256:72d933fd3e80f7be",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 9,
+              "eventId": "evt_9",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_009",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2"
+              },
+              "prevHash": "sha256:72d933fd3e80f7be",
+              "hash": "sha256:a57c9cd72b71fa4c",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 10,
+              "eventId": "evt_10",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_010",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:a57c9cd72b71fa4c",
+              "hash": "sha256:050e39f827e88047",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 11,
+              "eventId": "evt_11",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_011",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (1 heart left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:050e39f827e88047",
+              "hash": "sha256:3990921dfc8c4882"
+            },
+            {
+              "seq": 12,
+              "eventId": "evt_12",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_012",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:3990921dfc8c4882",
+              "hash": "sha256:17e14275635f3129"
+            },
+            {
+              "seq": 13,
+              "eventId": "evt_13",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_013",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_2 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:17e14275635f3129",
+              "hash": "sha256:d2260c41813e9200",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 13,
+            "headHash": "sha256:d2260c41813e9200"
+          }
+        },
+        "expired,approved": {
+          "result": {
+            "kitchen": 50,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 1,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "A request expired before you answered; nothing was ordered for it. You approved 120 l Valio Eila instead of Valio semi-skimmed, €162,00. 120 l did not arrive on time.",
+            "logHeadHash": "sha256:bb24ba03c9544c15",
+            "approvalsAsked": 2,
+            "totalCost": {
+              "cents": 16200,
+              "currency": "EUR"
+            },
+            "heartsUsed": 2
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario overlay.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3e34922f977f631a"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+              "refs": {
+                "mandateId": "mdt_l2_strict"
+              },
+              "prevHash": "sha256:3e34922f977f631a",
+              "hash": "sha256:6713ace1870d45ae"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:6713ace1870d45ae",
+              "hash": "sha256:94b8bb9f0fbdd809"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1"
+              },
+              "prevHash": "sha256:94b8bb9f0fbdd809",
+              "hash": "sha256:e99147805fee0c44"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:e99147805fee0c44",
+              "hash": "sha256:664fa9d19d165934"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:664fa9d19d165934",
+              "hash": "sha256:8774acd0bfe02fb7"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l2_strict_1 expired: no answer in time. Order ord_l2_strict_1 EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:8774acd0bfe02fb7",
+              "hash": "sha256:9a83a544356c84a8"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_008",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:9a83a544356c84a8",
+              "hash": "sha256:fc2943d483ff5072"
+            },
+            {
+              "seq": 9,
+              "eventId": "evt_9",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_009",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2"
+              },
+              "prevHash": "sha256:fc2943d483ff5072",
+              "hash": "sha256:3100241ac93fda72"
+            },
+            {
+              "seq": 10,
+              "eventId": "evt_10",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_010",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:3100241ac93fda72",
+              "hash": "sha256:d1c7dfa77c98a28a"
+            },
+            {
+              "seq": 11,
+              "eventId": "evt_11",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_011",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (1 heart left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:d1c7dfa77c98a28a",
+              "hash": "sha256:9a6677d4c1eb2226"
+            },
+            {
+              "seq": 12,
+              "eventId": "evt_12",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_012",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:9a6677d4c1eb2226",
+              "hash": "sha256:5cadc1892ae52146"
+            },
+            {
+              "seq": 13,
+              "eventId": "evt_13",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_013",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_2 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:5cadc1892ae52146",
+              "hash": "sha256:bb24ba03c9544c15"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario overlay.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3e34922f977f631a"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+              "refs": {
+                "mandateId": "mdt_l2_strict"
+              },
+              "prevHash": "sha256:3e34922f977f631a",
+              "hash": "sha256:6713ace1870d45ae"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:6713ace1870d45ae",
+              "hash": "sha256:94b8bb9f0fbdd809",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1"
+              },
+              "prevHash": "sha256:94b8bb9f0fbdd809",
+              "hash": "sha256:e99147805fee0c44",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:e99147805fee0c44",
+              "hash": "sha256:664fa9d19d165934",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:664fa9d19d165934",
+              "hash": "sha256:8774acd0bfe02fb7"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l2_strict_1 expired: no answer in time. Order ord_l2_strict_1 EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:8774acd0bfe02fb7",
+              "hash": "sha256:9a83a544356c84a8"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_008",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:9a83a544356c84a8",
+              "hash": "sha256:fc2943d483ff5072",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 9,
+              "eventId": "evt_9",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_009",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2"
+              },
+              "prevHash": "sha256:fc2943d483ff5072",
+              "hash": "sha256:3100241ac93fda72",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 10,
+              "eventId": "evt_10",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_010",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:3100241ac93fda72",
+              "hash": "sha256:d1c7dfa77c98a28a",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 11,
+              "eventId": "evt_11",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_011",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (1 heart left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:d1c7dfa77c98a28a",
+              "hash": "sha256:9a6677d4c1eb2226"
+            },
+            {
+              "seq": 12,
+              "eventId": "evt_12",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_012",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:9a6677d4c1eb2226",
+              "hash": "sha256:5cadc1892ae52146"
+            },
+            {
+              "seq": 13,
+              "eventId": "evt_13",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_013",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_2 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:5cadc1892ae52146",
+              "hash": "sha256:bb24ba03c9544c15",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 13,
+            "headHash": "sha256:bb24ba03c9544c15"
+          }
+        },
+        "approved,rejected": {
+          "result": {
+            "kitchen": 50,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 1,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "You approved 120 l Valio Eila instead of Valio semi-skimmed, €162,00. You rejected a request; nothing was ordered for it. 120 l did not arrive on time.",
+            "logHeadHash": "sha256:59cfec5d5a398f4d",
+            "approvalsAsked": 2,
+            "totalCost": {
+              "cents": 16200,
+              "currency": "EUR"
+            },
+            "heartsUsed": 2
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario overlay.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3e34922f977f631a"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+              "refs": {
+                "mandateId": "mdt_l2_strict"
+              },
+              "prevHash": "sha256:3e34922f977f631a",
+              "hash": "sha256:6713ace1870d45ae"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:6713ace1870d45ae",
+              "hash": "sha256:94b8bb9f0fbdd809"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1"
+              },
+              "prevHash": "sha256:94b8bb9f0fbdd809",
+              "hash": "sha256:e99147805fee0c44"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:e99147805fee0c44",
+              "hash": "sha256:664fa9d19d165934"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:664fa9d19d165934",
+              "hash": "sha256:8774acd0bfe02fb7"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:8774acd0bfe02fb7",
+              "hash": "sha256:c202f59112678153"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_1 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:c202f59112678153",
+              "hash": "sha256:e3249b707a439b1b"
+            },
+            {
+              "seq": 9,
+              "eventId": "evt_9",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_009",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:e3249b707a439b1b",
+              "hash": "sha256:d357810f4a6f6cbe"
+            },
+            {
+              "seq": 10,
+              "eventId": "evt_10",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_010",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2"
+              },
+              "prevHash": "sha256:d357810f4a6f6cbe",
+              "hash": "sha256:e44031520880e0eb"
+            },
+            {
+              "seq": 11,
+              "eventId": "evt_11",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_011",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:e44031520880e0eb",
+              "hash": "sha256:cfbe53bce31f3cb2"
+            },
+            {
+              "seq": 12,
+              "eventId": "evt_12",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_012",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (1 heart left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:cfbe53bce31f3cb2",
+              "hash": "sha256:d6374e3c8dd32a29"
+            },
+            {
+              "seq": 13,
+              "eventId": "evt_13",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_013",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l2_strict_2 REJECTED.",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:d6374e3c8dd32a29",
+              "hash": "sha256:59cfec5d5a398f4d"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario overlay.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3e34922f977f631a"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+              "refs": {
+                "mandateId": "mdt_l2_strict"
+              },
+              "prevHash": "sha256:3e34922f977f631a",
+              "hash": "sha256:6713ace1870d45ae"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:6713ace1870d45ae",
+              "hash": "sha256:94b8bb9f0fbdd809",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1"
+              },
+              "prevHash": "sha256:94b8bb9f0fbdd809",
+              "hash": "sha256:e99147805fee0c44",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:e99147805fee0c44",
+              "hash": "sha256:664fa9d19d165934",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:664fa9d19d165934",
+              "hash": "sha256:8774acd0bfe02fb7"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:8774acd0bfe02fb7",
+              "hash": "sha256:c202f59112678153"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_1 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:c202f59112678153",
+              "hash": "sha256:e3249b707a439b1b",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 9,
+              "eventId": "evt_9",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_009",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:e3249b707a439b1b",
+              "hash": "sha256:d357810f4a6f6cbe",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 10,
+              "eventId": "evt_10",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_010",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2"
+              },
+              "prevHash": "sha256:d357810f4a6f6cbe",
+              "hash": "sha256:e44031520880e0eb",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 11,
+              "eventId": "evt_11",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_011",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:e44031520880e0eb",
+              "hash": "sha256:cfbe53bce31f3cb2",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 12,
+              "eventId": "evt_12",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_012",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (1 heart left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:cfbe53bce31f3cb2",
+              "hash": "sha256:d6374e3c8dd32a29"
+            },
+            {
+              "seq": 13,
+              "eventId": "evt_13",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_013",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager rejected the request; order ord_l2_strict_2 REJECTED.",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:d6374e3c8dd32a29",
+              "hash": "sha256:59cfec5d5a398f4d"
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 13,
+            "headHash": "sha256:59cfec5d5a398f4d"
+          }
+        },
+        "approved,expired": {
+          "result": {
+            "kitchen": 50,
+            "wallet": 100,
+            "safety": 100,
+            "heartsLeft": 1,
+            "stars": 1,
+            "incident": null,
+            "receiptText": "You approved 120 l Valio Eila instead of Valio semi-skimmed, €162,00. A request expired before you answered; nothing was ordered for it. 120 l did not arrive on time.",
+            "logHeadHash": "sha256:11ce20bf27af72df",
+            "approvalsAsked": 2,
+            "totalCost": {
+              "cents": 16200,
+              "currency": "EUR"
+            },
+            "heartsUsed": 2
+          },
+          "log": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario overlay.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3e34922f977f631a"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+              "refs": {
+                "mandateId": "mdt_l2_strict"
+              },
+              "prevHash": "sha256:3e34922f977f631a",
+              "hash": "sha256:6713ace1870d45ae"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:6713ace1870d45ae",
+              "hash": "sha256:94b8bb9f0fbdd809"
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1"
+              },
+              "prevHash": "sha256:94b8bb9f0fbdd809",
+              "hash": "sha256:e99147805fee0c44"
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:e99147805fee0c44",
+              "hash": "sha256:664fa9d19d165934"
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:664fa9d19d165934",
+              "hash": "sha256:8774acd0bfe02fb7"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:8774acd0bfe02fb7",
+              "hash": "sha256:c202f59112678153"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_1 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:c202f59112678153",
+              "hash": "sha256:e3249b707a439b1b"
+            },
+            {
+              "seq": 9,
+              "eventId": "evt_9",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_009",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:e3249b707a439b1b",
+              "hash": "sha256:d357810f4a6f6cbe"
+            },
+            {
+              "seq": 10,
+              "eventId": "evt_10",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_010",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2"
+              },
+              "prevHash": "sha256:d357810f4a6f6cbe",
+              "hash": "sha256:e44031520880e0eb"
+            },
+            {
+              "seq": 11,
+              "eventId": "evt_11",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_011",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:e44031520880e0eb",
+              "hash": "sha256:cfbe53bce31f3cb2"
+            },
+            {
+              "seq": 12,
+              "eventId": "evt_12",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_012",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (1 heart left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:cfbe53bce31f3cb2",
+              "hash": "sha256:d6374e3c8dd32a29"
+            },
+            {
+              "seq": 13,
+              "eventId": "evt_13",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_013",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l2_strict_2 expired: no answer in time. Order ord_l2_strict_2 EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:d6374e3c8dd32a29",
+              "hash": "sha256:11ce20bf27af72df"
+            }
+          ],
+          "valioLog": [
+            {
+              "seq": 1,
+              "eventId": "evt_1",
+              "at": "2026-11-14T10:00:00+02:00",
+              "actor": "scenario",
+              "type": "SCENARIO_OVERLAY",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_001",
+              "light": null,
+              "reasons": [],
+              "summary": "Scenario overlay.",
+              "refs": {},
+              "prevHash": "sha256:0000000000000000",
+              "hash": "sha256:3e34922f977f631a"
+            },
+            {
+              "seq": 2,
+              "eventId": "evt_2",
+              "at": "2026-11-14T10:01:00+02:00",
+              "actor": "human",
+              "type": "MANDATE_SIGNED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_002",
+              "light": null,
+              "reasons": [],
+              "summary": "Mikko Laine signed mandate mdt_l2_strict.",
+              "refs": {
+                "mandateId": "mdt_l2_strict"
+              },
+              "prevHash": "sha256:3e34922f977f631a",
+              "hash": "sha256:6713ace1870d45ae"
+            },
+            {
+              "seq": 3,
+              "eventId": "evt_3",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_003",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:6713ace1870d45ae",
+              "hash": "sha256:94b8bb9f0fbdd809",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 4,
+              "eventId": "evt_4",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_004",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_1: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1"
+              },
+              "prevHash": "sha256:94b8bb9f0fbdd809",
+              "hash": "sha256:e99147805fee0c44",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 5,
+              "eventId": "evt_5",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_005",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_1 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:e99147805fee0c44",
+              "hash": "sha256:664fa9d19d165934",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 6,
+              "eventId": "evt_6",
+              "at": "2026-11-14T10:06:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_006",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (2 hearts left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:664fa9d19d165934",
+              "hash": "sha256:8774acd0bfe02fb7"
+            },
+            {
+              "seq": 7,
+              "eventId": "evt_7",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "human",
+              "type": "APPROVAL_DECIDED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_007",
+              "light": null,
+              "reasons": [],
+              "summary": "Manager approved plan pln_a.",
+              "refs": {
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:8774acd0bfe02fb7",
+              "hash": "sha256:c202f59112678153"
+            },
+            {
+              "seq": 8,
+              "eventId": "evt_8",
+              "at": "2026-11-14T10:07:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_008",
+              "light": "GREEN",
+              "reasons": [],
+              "summary": "Order ord_l2_strict_1 ORDERED → CONFIRMED: plan pln_a (464398).",
+              "refs": {
+                "quoteId": "qt_l2_strict_1",
+                "orderId": "ord_l2_strict_1",
+                "approvalId": "apr_l2_strict_1"
+              },
+              "prevHash": "sha256:c202f59112678153",
+              "hash": "sha256:e3249b707a439b1b",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 9,
+              "eventId": "evt_9",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "agent",
+              "type": "SEARCH",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_009",
+              "light": "RED",
+              "reasons": [
+                "SALES_BLOCKED"
+              ],
+              "summary": "Searched the catalog: 2 products, excluded 464201.",
+              "refs": {},
+              "prevHash": "sha256:e3249b707a439b1b",
+              "hash": "sha256:d357810f4a6f6cbe",
+              "disclosure": {
+                "returnedToAgent": [
+                  "catalog",
+                  "labels",
+                  "certificates",
+                  "categoryCarbon"
+                ],
+                "withheld": [
+                  "supplierContracts"
+                ]
+              }
+            },
+            {
+              "seq": 10,
+              "eventId": "evt_10",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "QUOTE_CREATED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_010",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Quote qt_l2_strict_2: 1 plan, best €162,00.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2"
+              },
+              "prevHash": "sha256:d357810f4a6f6cbe",
+              "hash": "sha256:e44031520880e0eb",
+              "disclosure": {
+                "returnedToAgent": [
+                  "netPrices",
+                  "availability",
+                  "closingTime",
+                  "quotes"
+                ],
+                "withheld": [
+                  "purchasePrices",
+                  "margins",
+                  "otherCustomers"
+                ]
+              }
+            },
+            {
+              "seq": 11,
+              "eventId": "evt_11",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "ORDER_PENDING_APPROVAL",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_011",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Order ord_l2_strict_2 needs approval: Valio Eila is a substitute, and your mandate allows no substitutes.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:e44031520880e0eb",
+              "hash": "sha256:cfbe53bce31f3cb2",
+              "disclosure": {
+                "returnedToAgent": [
+                  "orders"
+                ],
+                "withheld": []
+              }
+            },
+            {
+              "seq": 12,
+              "eventId": "evt_12",
+              "at": "2026-11-14T10:30:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_SHOWN",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_012",
+              "light": "YELLOW",
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval shown to manager (1 heart left).",
+              "refs": {
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:cfbe53bce31f3cb2",
+              "hash": "sha256:d6374e3c8dd32a29"
+            },
+            {
+              "seq": 13,
+              "eventId": "evt_13",
+              "at": "2026-11-14T10:31:00+02:00",
+              "actor": "gateway",
+              "type": "APPROVAL_EXPIRED",
+              "customerId": "456",
+              "agentId": "kitchenbuyer-ravintola-kivi",
+              "requestId": "req_013",
+              "light": null,
+              "reasons": [
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "summary": "Approval apr_l2_strict_2 expired: no answer in time. Order ord_l2_strict_2 EXPIRED.",
+              "refs": {
+                "quoteId": "qt_l2_strict_2",
+                "orderId": "ord_l2_strict_2",
+                "approvalId": "apr_l2_strict_2"
+              },
+              "prevHash": "sha256:d6374e3c8dd32a29",
+              "hash": "sha256:11ce20bf27af72df"
+            }
+          ],
+          "verify": {
+            "valid": true,
+            "events": 13,
+            "headHash": "sha256:11ce20bf27af72df"
+          }
+        }
+      },
+      "traps": {}
     },
     "balanced": {
       "mandate": {
@@ -497,54 +4357,54 @@
           "search": {
             "results": [
               {
-                "productId": "520101",
-                "name": "Edam cheese 1 kg block (mock)",
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.95,
+                "deliveryReliability": 1.0,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "520144",
-                "name": "Gouda cheese 1 kg block (mock)",
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.96,
+                "deliveryReliability": 1.0,
                 "excluded": null
               }
             ],
@@ -558,15 +4418,15 @@
             "createdAt": "2026-11-14T10:06:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Standing order: Edam cheese, delivery 1 of 2",
+              "description": "Standing order: semi-skimmed milk, delivery 1 of 2",
               "quantity": {
-                "amount": 40,
-                "unit": "kg"
+                "amount": 120,
+                "unit": "l"
               },
               "deadline": "2026-11-18T06:00:00+02:00",
               "candidateProductIds": [
-                "520101",
-                "520144"
+                "464201",
+                "464398"
               ]
             },
             "plans": [
@@ -574,26 +4434,26 @@
                 "planId": "pln_a",
                 "lines": [
                   {
-                    "productId": "520144",
+                    "productId": "464398",
                     "quantity": {
-                      "amount": 40,
-                      "unit": "kg"
+                      "amount": 120,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 40,
-                      "unit": "PCE"
+                      "amount": 120,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR",
-                      "per": "kg"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 49600,
+                      "cents": 16200,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-18",
@@ -601,12 +4461,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 49600,
+                  "cents": 16200,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 40,
-                  "unit": "kg"
+                  "amount": 120,
+                  "unit": "l"
                 },
                 "policy": {
                   "light": "BLUE",
@@ -614,7 +4474,7 @@
                     "SUBSTITUTION_ALLOWED"
                   ]
                 },
-                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00",
                 "score": {
                   "total": 0.8,
                   "onTime": 1.0,
@@ -628,7 +4488,7 @@
             ],
             "excludedProducts": [
               {
-                "productId": "520101",
+                "productId": "464201",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               }
@@ -645,7 +4505,7 @@
                 "at": "2026-11-14T10:06:00+02:00"
               }
             ],
-            "scenarioOverlay": false,
+            "scenarioOverlay": true,
             "signature": {
               "alg": "Ed25519",
               "keyId": "valio-aimo-2026-11",
@@ -661,26 +4521,26 @@
               "status": "ORDERED",
               "lines": [
                 {
-                  "productId": "520144",
+                  "productId": "464398",
                   "quantity": {
-                    "amount": 40,
-                    "unit": "kg"
+                    "amount": 120,
+                    "unit": "l"
                   },
                   "salesQuantity": {
-                    "amount": 40,
-                    "unit": "PCE"
+                    "amount": 120,
+                    "unit": "ST"
                   },
                   "unitPrice": {
-                    "cents": 1240,
+                    "cents": 135,
                     "currency": "EUR"
                   },
                   "comparisonPrice": {
-                    "cents": 1240,
+                    "cents": 135,
                     "currency": "EUR",
-                    "per": "kg"
+                    "per": "l"
                   },
                   "lineTotal": {
-                    "cents": 49600,
+                    "cents": 16200,
                     "currency": "EUR"
                   },
                   "availableDate": "2026-11-18",
@@ -688,7 +4548,7 @@
                 }
               ],
               "total": {
-                "cents": 49600,
+                "cents": 16200,
                 "currency": "EUR"
               },
               "createdAt": "2026-11-14T10:06:00+02:00"
@@ -700,54 +4560,54 @@
           "search": {
             "results": [
               {
-                "productId": "520101",
-                "name": "Edam cheese 1 kg block (mock)",
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.95,
+                "deliveryReliability": 1.0,
                 "excluded": {
                   "light": "RED",
                   "reason": "SALES_BLOCKED"
                 }
               },
               {
-                "productId": "520144",
-                "name": "Gouda cheese 1 kg block (mock)",
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
                 "brand": "Valio",
-                "category": "cheese",
-                "salesUnit": "PCE",
+                "category": "10400",
+                "salesUnit": "ST",
                 "packSize": {
                   "amount": 1,
-                  "unit": "kg"
+                  "unit": "l"
                 },
                 "labels": [],
                 "allergens": [
-                  "milk"
+                  "AM"
                 ],
                 "carbonCategory": {
-                  "category": "cheese",
+                  "category": "10400",
                   "kgCo2ePerKg": {
-                    "min": 8.0,
-                    "max": 13.0
+                    "min": 1.1,
+                    "max": 1.1
                   }
                 },
-                "deliveryReliability": 0.96,
+                "deliveryReliability": 1.0,
                 "excluded": null
               }
             ],
@@ -761,15 +4621,15 @@
             "createdAt": "2026-11-14T10:30:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Standing order: Edam cheese, delivery 2 of 2",
+              "description": "Standing order: semi-skimmed milk, delivery 2 of 2",
               "quantity": {
-                "amount": 40,
-                "unit": "kg"
+                "amount": 120,
+                "unit": "l"
               },
               "deadline": "2026-11-20T06:00:00+02:00",
               "candidateProductIds": [
-                "520101",
-                "520144"
+                "464201",
+                "464398"
               ]
             },
             "plans": [
@@ -777,26 +4637,26 @@
                 "planId": "pln_a",
                 "lines": [
                   {
-                    "productId": "520144",
+                    "productId": "464398",
                     "quantity": {
-                      "amount": 40,
-                      "unit": "kg"
+                      "amount": 120,
+                      "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 40,
-                      "unit": "PCE"
+                      "amount": 120,
+                      "unit": "ST"
                     },
                     "unitPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR"
                     },
                     "comparisonPrice": {
-                      "cents": 1240,
+                      "cents": 135,
                       "currency": "EUR",
-                      "per": "kg"
+                      "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 49600,
+                      "cents": 16200,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-20",
@@ -804,12 +4664,12 @@
                   }
                 ],
                 "total": {
-                  "cents": 49600,
+                  "cents": 16200,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 40,
-                  "unit": "kg"
+                  "amount": 120,
+                  "unit": "l"
                 },
                 "policy": {
                   "light": "BLUE",
@@ -817,7 +4677,7 @@
                     "SUBSTITUTION_ALLOWED"
                   ]
                 },
-                "summary": "40 kg Gouda instead of Edam, €496,00",
+                "summary": "120 l Valio Eila instead of Valio semi-skimmed, €162,00",
                 "score": {
                   "total": 0.8,
                   "onTime": 1.0,
@@ -831,7 +4691,7 @@
             ],
             "excludedProducts": [
               {
-                "productId": "520101",
+                "productId": "464201",
                 "light": "RED",
                 "reason": "SALES_BLOCKED"
               }
@@ -848,7 +4708,7 @@
                 "at": "2026-11-14T10:30:00+02:00"
               }
             ],
-            "scenarioOverlay": false,
+            "scenarioOverlay": true,
             "signature": {
               "alg": "Ed25519",
               "keyId": "valio-aimo-2026-11",
@@ -864,26 +4724,26 @@
               "status": "ORDERED",
               "lines": [
                 {
-                  "productId": "520144",
+                  "productId": "464398",
                   "quantity": {
-                    "amount": 40,
-                    "unit": "kg"
+                    "amount": 120,
+                    "unit": "l"
                   },
                   "salesQuantity": {
-                    "amount": 40,
-                    "unit": "PCE"
+                    "amount": 120,
+                    "unit": "ST"
                   },
                   "unitPrice": {
-                    "cents": 1240,
+                    "cents": 135,
                     "currency": "EUR"
                   },
                   "comparisonPrice": {
-                    "cents": 1240,
+                    "cents": 135,
                     "currency": "EUR",
-                    "per": "kg"
+                    "per": "l"
                   },
                   "lineTotal": {
-                    "cents": 49600,
+                    "cents": 16200,
                     "currency": "EUR"
                   },
                   "availableDate": "2026-11-20",
@@ -891,7 +4751,7 @@
                 }
               ],
               "total": {
-                "cents": 49600,
+                "cents": 16200,
                 "currency": "EUR"
               },
               "createdAt": "2026-11-14T10:30:00+02:00"
@@ -907,10 +4767,391 @@
         "heartsLeft": 3,
         "stars": 3,
         "incident": null,
-        "receiptText": "Edam was blocked from sale all week. Your agent switched both deliveries to Gouda in the same category (+€0,50/kg) and told you without asking.",
-        "logHeadHash": "sha256:cc259e5435f76acf",
-        "approvalsAsked": 0
-      }
+        "receiptText": "Valio semi-skimmed had no stock all week. Your agent switched both deliveries to Valio Eila in the same category (+€0,06/l) and told you without asking.",
+        "logHeadHash": "sha256:0a73de2d50a920ae",
+        "approvalsAsked": 0,
+        "totalCost": {
+          "cents": 32400,
+          "currency": "EUR"
+        },
+        "heartsUsed": 0
+      },
+      "decisions": {},
+      "log": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario adjustment: 464201 set to sales-blocked this week.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:d9e47ebda48634ce"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Mikko Laine signed mandate mdt_l2_balanced.",
+          "refs": {
+            "mandateId": "mdt_l2_balanced"
+          },
+          "prevHash": "sha256:d9e47ebda48634ce",
+          "hash": "sha256:1d412954e6f121ff"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 2 products, excluded 464201.",
+          "refs": {},
+          "prevHash": "sha256:1d412954e6f121ff",
+          "hash": "sha256:9da37085d6f77ea4"
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_004",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Quote qt_l2_balanced_1: 1 plan, best €162,00.",
+          "refs": {
+            "quoteId": "qt_l2_balanced_1"
+          },
+          "prevHash": "sha256:9da37085d6f77ea4",
+          "hash": "sha256:b99bab8c4d0b5f0d"
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_005",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Order ord_l2_balanced_1 ORDERED → CONFIRMED: plan pln_a (464398).",
+          "refs": {
+            "quoteId": "qt_l2_balanced_1",
+            "orderId": "ord_l2_balanced_1"
+          },
+          "prevHash": "sha256:b99bab8c4d0b5f0d",
+          "hash": "sha256:e507daf85254d46c"
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_006",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 2 products, excluded 464201.",
+          "refs": {},
+          "prevHash": "sha256:e507daf85254d46c",
+          "hash": "sha256:d50d51b3b6c4169f"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_007",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Quote qt_l2_balanced_2: 1 plan, best €162,00.",
+          "refs": {
+            "quoteId": "qt_l2_balanced_2"
+          },
+          "prevHash": "sha256:d50d51b3b6c4169f",
+          "hash": "sha256:52ca4ddc0369e58d"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_008",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Order ord_l2_balanced_2 ORDERED → CONFIRMED: plan pln_a (464398).",
+          "refs": {
+            "quoteId": "qt_l2_balanced_2",
+            "orderId": "ord_l2_balanced_2"
+          },
+          "prevHash": "sha256:52ca4ddc0369e58d",
+          "hash": "sha256:0a73de2d50a920ae"
+        }
+      ],
+      "valioLog": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario adjustment: 464201 set to sales-blocked this week.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:d9e47ebda48634ce"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Mikko Laine signed mandate mdt_l2_balanced.",
+          "refs": {
+            "mandateId": "mdt_l2_balanced"
+          },
+          "prevHash": "sha256:d9e47ebda48634ce",
+          "hash": "sha256:1d412954e6f121ff"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 2 products, excluded 464201.",
+          "refs": {},
+          "prevHash": "sha256:1d412954e6f121ff",
+          "hash": "sha256:9da37085d6f77ea4",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_004",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Quote qt_l2_balanced_1: 1 plan, best €162,00.",
+          "refs": {
+            "quoteId": "qt_l2_balanced_1"
+          },
+          "prevHash": "sha256:9da37085d6f77ea4",
+          "hash": "sha256:b99bab8c4d0b5f0d",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_005",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Order ord_l2_balanced_1 ORDERED → CONFIRMED: plan pln_a (464398).",
+          "refs": {
+            "quoteId": "qt_l2_balanced_1",
+            "orderId": "ord_l2_balanced_1"
+          },
+          "prevHash": "sha256:b99bab8c4d0b5f0d",
+          "hash": "sha256:e507daf85254d46c",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_006",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 2 products, excluded 464201.",
+          "refs": {},
+          "prevHash": "sha256:e507daf85254d46c",
+          "hash": "sha256:d50d51b3b6c4169f",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_007",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Quote qt_l2_balanced_2: 1 plan, best €162,00.",
+          "refs": {
+            "quoteId": "qt_l2_balanced_2"
+          },
+          "prevHash": "sha256:d50d51b3b6c4169f",
+          "hash": "sha256:52ca4ddc0369e58d",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:30:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "456",
+          "agentId": "kitchenbuyer-ravintola-kivi",
+          "requestId": "req_008",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Order ord_l2_balanced_2 ORDERED → CONFIRMED: plan pln_a (464398).",
+          "refs": {
+            "quoteId": "qt_l2_balanced_2",
+            "orderId": "ord_l2_balanced_2"
+          },
+          "prevHash": "sha256:52ca4ddc0369e58d",
+          "hash": "sha256:0a73de2d50a920ae",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        }
+      ],
+      "verify": {
+        "valid": true,
+        "events": 8,
+        "headHash": "sha256:0a73de2d50a920ae"
+      },
+      "demoPath": {},
+      "traps": {}
     }
   },
   "compare": {
@@ -923,9 +5164,14 @@
         "heartsLeft": 1,
         "stars": 3,
         "incident": null,
-        "receiptText": "Edam was blocked from sale all week. Your agent had to ask you before each delivery (Wednesday and Friday) to switch to Gouda; you approved both.",
-        "logHeadHash": "sha256:4c49ad6e469aaf84",
-        "approvalsAsked": 2
+        "receiptText": "Valio semi-skimmed had no stock all week. Your agent had to ask you before each delivery (Wednesday and Friday) to switch to Valio Eila; you approved both.",
+        "logHeadHash": "sha256:de91375ec34444ae",
+        "approvalsAsked": 2,
+        "totalCost": {
+          "cents": 32400,
+          "currency": "EUR"
+        },
+        "heartsUsed": 2
       },
       "balanced": {
         "kitchen": 100,
@@ -934,9 +5180,14 @@
         "heartsLeft": 3,
         "stars": 3,
         "incident": null,
-        "receiptText": "Edam was blocked from sale all week. Your agent switched both deliveries to Gouda in the same category (+€0,50/kg) and told you without asking.",
-        "logHeadHash": "sha256:cc259e5435f76acf",
-        "approvalsAsked": 0
+        "receiptText": "Valio semi-skimmed had no stock all week. Your agent switched both deliveries to Valio Eila in the same category (+€0,06/l) and told you without asking.",
+        "logHeadHash": "sha256:0a73de2d50a920ae",
+        "approvalsAsked": 0,
+        "totalCost": {
+          "cents": 32400,
+          "currency": "EUR"
+        },
+        "heartsUsed": 0
       }
     }
   }

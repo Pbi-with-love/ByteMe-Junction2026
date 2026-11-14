@@ -1,0 +1,40 @@
+{
+  "levelId": "level1",
+  "title": "The Weekly Order",
+  "customer": {"customerId": "123", "name": "Hotel Aurora (fictional)", "type": "hotel"},
+  "agentId": "kitchenbuyer-hotel-aurora",
+  "issuedBy": {"name": "Anna Virtanen", "role": "Kitchen manager"},
+  "brief": "1 000 l lactose-free semi-skimmed milk by Monday 06:00.",
+  "now": "2026-11-14T10:00:00+02:00",
+  "closingTime": "2026-11-14T14:00:00+02:00",
+  "clock": {"start": "10:00", "end": "14:00", "realSecondsPerGameMinute": 0.25},
+  "needs": [{
+    "description": "Lactose-free semi-skimmed milk for the hotel",
+    "quantity": {"amount": 1000, "unit": "l"},
+    "deadline": "2026-11-16T06:00:00+02:00",
+    "candidateProductIds": ["464306", "463335"],
+    "primaryProductId": "464306"
+  }],
+  "needsByPreset": {
+    "strict": [{
+      "description": "Lactose-free semi-skimmed milk for the hotel",
+      "quantity": {"amount": 1000, "unit": "l"},
+      "deadline": "2026-11-16T06:00:00+02:00",
+      "candidateProductIds": ["464306", "464401", "463335"],
+      "primaryProductId": "464306"
+    }]
+  },
+  "hiddenRequirements": {"excludeAllergens": ["AP"]},
+  "presets": {
+    "strict": {"mandate": {"agentId": "kitchenbuyer-hotel-aurora", "issuedBy": {"name": "Anna Virtanen", "role": "Kitchen manager"}, "limits": {"perOrderEur": 200, "perWeekEur": 3000}, "substitution": "none", "lateDelivery": "none", "hardConstraints": {"excludeAllergens": ["AP"], "requireLabels": []}, "priorities": ["on_time", "price", "sustainability"], "validUntil": "2026-12-31T23:59:59+02:00"}},
+    "balanced": {"mandate": {"agentId": "kitchenbuyer-hotel-aurora", "issuedBy": {"name": "Anna Virtanen", "role": "Kitchen manager"}, "limits": {"perOrderEur": 500, "perWeekEur": 3000}, "substitution": "same_category", "lateDelivery": "none", "hardConstraints": {"excludeAllergens": ["AP"], "requireLabels": []}, "priorities": ["on_time", "price", "sustainability"], "validUntil": "2026-12-31T23:59:59+02:00"}},
+    "loose": {"mandate": {"agentId": "kitchenbuyer-hotel-aurora", "issuedBy": {"name": "Anna Virtanen", "role": "Kitchen manager"}, "limits": {"perOrderEur": 2000, "perWeekEur": 3000}, "substitution": "any", "lateDelivery": "one_day", "hardConstraints": {"excludeAllergens": ["AP"], "requireLabels": []}, "priorities": ["price", "on_time", "sustainability"], "validUntil": "2026-12-31T23:59:59+02:00"}}
+  },
+  "humanDecisions": {"strict": ["approved", "rejected", "rejected"], "balanced": ["approved"], "loose": []},
+  "overlay": {"availability": {"2026-11-16": {"464306": {"salesBlock": false, "scheduleLines": [{"salesBlock": false, "availableAmount": 700, "availableDate": "2026-11-16", "salesUnit": "ST"}, {"salesBlock": false, "availableAmount": 300, "availableDate": "2026-11-17", "salesUnit": "ST"}]}}}},
+  "expected": {
+    "strict": {"approvalsAsked": 4, "heartsLeft": 0, "kitchen": 70, "stars": 1, "incident": false},
+    "balanced": {"approvalsAsked": 1, "heartsLeft": 2, "kitchen": 100, "stars": 3, "incident": false},
+    "loose": {"approvalsAsked": 0, "heartsLeft": 3, "kitchen": 70, "stars": 1, "incident": false}
+  }
+}
