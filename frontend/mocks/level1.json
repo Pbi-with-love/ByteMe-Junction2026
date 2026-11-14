@@ -60,7 +60,7 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €200 per order, with no substitutes and no late deliveries, never products containing AP."
+        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €200 per order, with no substitutes and no late deliveries, never products containing peanut (AP)."
       },
       "steps": [
         {
@@ -142,23 +142,21 @@
             "total": 3
           },
           "quote": {
-            "quoteId": "qt_l1_strict",
+            "quoteId": "qt_l1_strict_1",
             "customerId": "123",
             "mandateId": "mdt_l1_strict",
             "status": "QUOTED",
             "createdAt": "2026-11-14T10:05:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Lactose-free milk for the hotel",
+              "description": "Lactose-free milk for the hotel: the 700 l available by Monday",
               "quantity": {
-                "amount": 1000,
+                "amount": 700,
                 "unit": "l"
               },
               "deadline": "2026-11-16T06:00:00+02:00",
               "candidateProductIds": [
-                "464201",
-                "464398",
-                "463038"
+                "464201"
               ]
             },
             "plans": [
@@ -190,7 +188,194 @@
                     },
                     "availableDate": "2026-11-16",
                     "isSubstitute": false
-                  },
+                  }
+                ],
+                "total": {
+                  "cents": 90300,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 700,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT"
+                  ]
+                },
+                "summary": "700 l Valio semi-skimmed, Monday, €903,00",
+                "score": {
+                  "total": 0.8,
+                  "onTime": 1.0,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              }
+            ],
+            "excludedProducts": [],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l1_strict_1_p",
+                "at": "2026-11-14T10:05:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l1_strict_1_a",
+                "at": "2026-11-14T10:05:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 202,
+            "body": {
+              "orderId": "ord_l1_strict_1",
+              "status": "PENDING_APPROVAL",
+              "approvalId": "apr_l1_strict_1",
+              "reasons": [
+                "OVER_ORDER_LIMIT"
+              ]
+            }
+          },
+          "approval": {
+            "approvalId": "apr_l1_strict_1",
+            "orderId": "ord_l1_strict_1",
+            "quoteId": "qt_l1_strict_1",
+            "status": "OPEN",
+            "reasons": [
+              "OVER_ORDER_LIMIT"
+            ],
+            "reasonText": "Total €903,00 is above your €200,00 per-order limit.",
+            "options": [
+              {
+                "planId": "pln_a",
+                "tier": "best",
+                "recommended": true,
+                "summary": "700 l Valio semi-skimmed, Monday, €903,00"
+              }
+            ],
+            "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. I will order that first.",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "createdAt": "2026-11-14T10:06:00+02:00"
+          },
+          "approvalEvent": {
+            "approvalId": "apr_l1_strict_1",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "heartsLeft": 2
+          }
+        },
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "ST",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "l"
+                },
+                "labels": [],
+                "allergens": [
+                  "AM"
+                ],
+                "carbonCategory": {
+                  "category": "10400",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.1
+                  }
+                },
+                "deliveryReliability": 1.0,
+                "excluded": null
+              },
+              {
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "ST",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "l"
+                },
+                "labels": [],
+                "allergens": [
+                  "AM"
+                ],
+                "carbonCategory": {
+                  "category": "10400",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.1
+                  }
+                },
+                "deliveryReliability": 1.0,
+                "excluded": null
+              },
+              {
+                "productId": "463038",
+                "name": "Valio Eila semi-skimmed 10 l Novobox",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "KI",
+                "packSize": {
+                  "amount": 20,
+                  "unit": "l"
+                },
+                "labels": [],
+                "allergens": [
+                  "AM"
+                ],
+                "carbonCategory": {
+                  "category": "10400",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.1
+                  }
+                },
+                "deliveryReliability": null,
+                "excluded": null
+              }
+            ],
+            "total": 3
+          },
+          "quote": {
+            "quoteId": "qt_l1_strict_2",
+            "customerId": "123",
+            "mandateId": "mdt_l1_strict",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:07:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Top-up: the remaining 300 l lactose-free milk",
+              "quantity": {
+                "amount": 300,
+                "unit": "l"
+              },
+              "deadline": "2026-11-16T06:00:00+02:00",
+              "candidateProductIds": [
+                "464201",
+                "464398",
+                "463038"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_a",
+                "lines": [
                   {
                     "productId": "464398",
                     "quantity": {
@@ -219,26 +404,25 @@
                   }
                 ],
                 "total": {
-                  "cents": 165300,
+                  "cents": 75000,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 1000,
+                  "amount": 300,
                   "unit": "l"
                 },
                 "policy": {
                   "light": "YELLOW",
                   "reasons": [
                     "OVER_ORDER_LIMIT",
-                    "SUBSTITUTION_NOT_ALLOWED",
-                    "SPLIT_ORDER"
+                    "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00",
+                "summary": "300 l Valio Eila, Monday, €750,00",
                 "score": {
-                  "total": 0.734,
+                  "total": 0.655,
                   "onTime": 1.0,
-                  "price": 0.78,
+                  "price": 0.516,
                   "sustainability": 0.0,
                   "reliabilityPenalty": 0.0
                 },
@@ -251,11 +435,11 @@
                   {
                     "productId": "463038",
                     "quantity": {
-                      "amount": 1000,
+                      "amount": 300,
                       "unit": "l"
                     },
                     "salesQuantity": {
-                      "amount": 50,
+                      "amount": 15,
                       "unit": "KI"
                     },
                     "unitPrice": {
@@ -268,7 +452,7 @@
                       "per": "l"
                     },
                     "lineTotal": {
-                      "cents": 195000,
+                      "cents": 58500,
                       "currency": "EUR"
                     },
                     "availableDate": "2026-11-16",
@@ -276,11 +460,11 @@
                   }
                 ],
                 "total": {
-                  "cents": 195000,
+                  "cents": 58500,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 1000,
+                  "amount": 300,
                   "unit": "l"
                 },
                 "policy": {
@@ -290,13 +474,13 @@
                     "SUBSTITUTION_NOT_ALLOWED"
                   ]
                 },
-                "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00",
+                "summary": "300 l Valio Eila 10 l Novobox, Monday, €585,00",
                 "score": {
-                  "total": 0.699,
+                  "total": 0.649,
                   "onTime": 1.0,
                   "price": 0.662,
                   "sustainability": 0.0,
-                  "reliabilityPenalty": 0.0
+                  "reliabilityPenalty": 0.05
                 },
                 "tier": "better",
                 "recommended": false
@@ -304,32 +488,6 @@
               {
                 "planId": "pln_b",
                 "lines": [
-                  {
-                    "productId": "464201",
-                    "quantity": {
-                      "amount": 700,
-                      "unit": "l"
-                    },
-                    "salesQuantity": {
-                      "amount": 700,
-                      "unit": "ST"
-                    },
-                    "unitPrice": {
-                      "cents": 129,
-                      "currency": "EUR"
-                    },
-                    "comparisonPrice": {
-                      "cents": 129,
-                      "currency": "EUR",
-                      "per": "l"
-                    },
-                    "lineTotal": {
-                      "cents": 90300,
-                      "currency": "EUR"
-                    },
-                    "availableDate": "2026-11-16",
-                    "isSubstitute": false
-                  },
                   {
                     "productId": "464201",
                     "quantity": {
@@ -358,25 +516,24 @@
                   }
                 ],
                 "total": {
-                  "cents": 129000,
+                  "cents": 38700,
                   "currency": "EUR"
                 },
                 "onTime": {
-                  "amount": 700,
+                  "amount": 0,
                   "unit": "l"
                 },
                 "policy": {
                   "light": "YELLOW",
                   "reasons": [
                     "OVER_ORDER_LIMIT",
-                    "LATE_DELIVERY",
-                    "SPLIT_ORDER"
+                    "LATE_DELIVERY"
                   ]
                 },
-                "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00",
+                "summary": "300 l Valio semi-skimmed, Tuesday, €387,00",
                 "score": {
-                  "total": 0.65,
-                  "onTime": 0.7,
+                  "total": 0.3,
+                  "onTime": 0.0,
                   "price": 1.0,
                   "sustainability": 0.0,
                   "reliabilityPenalty": 0.0
@@ -389,13 +546,13 @@
             "evidence": [
               {
                 "source": "valio:/api/price",
-                "requestId": "req_qt_l1_strict_p",
-                "at": "2026-11-14T10:05:00+02:00"
+                "requestId": "req_qt_l1_strict_2_p",
+                "at": "2026-11-14T10:07:00+02:00"
               },
               {
                 "source": "valio:/api/availability",
-                "requestId": "req_qt_l1_strict_a",
-                "at": "2026-11-14T10:05:00+02:00"
+                "requestId": "req_qt_l1_strict_2_a",
+                "at": "2026-11-14T10:07:00+02:00"
               }
             ],
             "scenarioOverlay": false,
@@ -408,9 +565,9 @@
           "order": {
             "httpStatus": 202,
             "body": {
-              "orderId": "ord_l1_strict",
+              "orderId": "ord_l1_strict_2",
               "status": "PENDING_APPROVAL",
-              "approvalId": "apr_l1_strict",
+              "approvalId": "apr_l1_strict_2",
               "reasons": [
                 "OVER_ORDER_LIMIT",
                 "SUBSTITUTION_NOT_ALLOWED"
@@ -418,38 +575,538 @@
             }
           },
           "approval": {
-            "approvalId": "apr_l1_strict",
-            "orderId": "ord_l1_strict",
-            "quoteId": "qt_l1_strict",
+            "approvalId": "apr_l1_strict_2",
+            "orderId": "ord_l1_strict_2",
+            "quoteId": "qt_l1_strict_2",
             "status": "OPEN",
             "reasons": [
               "OVER_ORDER_LIMIT",
               "SUBSTITUTION_NOT_ALLOWED"
             ],
-            "reasonText": "Total €1 653,00 is above your €200,00 per-order limit.",
+            "reasonText": "Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
             "options": [
               {
                 "planId": "pln_a",
                 "tier": "best",
                 "recommended": true,
-                "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00"
+                "summary": "300 l Valio Eila, Monday, €750,00"
               },
               {
                 "planId": "pln_c",
                 "tier": "better",
                 "recommended": false,
-                "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00"
+                "summary": "300 l Valio Eila 10 l Novobox, Monday, €585,00"
               },
               {
                 "planId": "pln_b",
                 "tier": "good",
                 "recommended": false,
-                "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00"
+                "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
               }
             ],
-            "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. Topping up with 300 l of Valio Eila keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
-            "deadline": "2026-11-14T10:06:20+02:00",
-            "createdAt": "2026-11-14T10:06:00+02:00"
+            "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+            "deadline": "2026-11-14T10:08:20+02:00",
+            "createdAt": "2026-11-14T10:08:00+02:00"
+          },
+          "approvalEvent": {
+            "approvalId": "apr_l1_strict_2",
+            "deadline": "2026-11-14T10:08:20+02:00",
+            "heartsLeft": 1
+          }
+        },
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "ST",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "l"
+                },
+                "labels": [],
+                "allergens": [
+                  "AM"
+                ],
+                "carbonCategory": {
+                  "category": "10400",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.1
+                  }
+                },
+                "deliveryReliability": 1.0,
+                "excluded": null
+              },
+              {
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "ST",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "l"
+                },
+                "labels": [],
+                "allergens": [
+                  "AM"
+                ],
+                "carbonCategory": {
+                  "category": "10400",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.1
+                  }
+                },
+                "deliveryReliability": 1.0,
+                "excluded": null
+              },
+              {
+                "productId": "463038",
+                "name": "Valio Eila semi-skimmed 10 l Novobox",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "KI",
+                "packSize": {
+                  "amount": 20,
+                  "unit": "l"
+                },
+                "labels": [],
+                "allergens": [
+                  "AM"
+                ],
+                "carbonCategory": {
+                  "category": "10400",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.1
+                  }
+                },
+                "deliveryReliability": null,
+                "excluded": null
+              }
+            ],
+            "total": 3
+          },
+          "quote": {
+            "quoteId": "qt_l1_strict_3",
+            "customerId": "123",
+            "mandateId": "mdt_l1_strict",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:09:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Top-up: the remaining 300 l lactose-free milk",
+              "quantity": {
+                "amount": 300,
+                "unit": "l"
+              },
+              "deadline": "2026-11-16T06:00:00+02:00",
+              "candidateProductIds": [
+                "464201",
+                "464398",
+                "463038"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_a",
+                "lines": [
+                  {
+                    "productId": "464398",
+                    "quantity": {
+                      "amount": 300,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 300,
+                      "unit": "ST"
+                    },
+                    "unitPrice": {
+                      "cents": 250,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 250,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 75000,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 75000,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 300,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "SUBSTITUTION_NOT_ALLOWED"
+                  ]
+                },
+                "summary": "300 l Valio Eila, Monday, €750,00",
+                "score": {
+                  "total": 0.655,
+                  "onTime": 1.0,
+                  "price": 0.516,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              },
+              {
+                "planId": "pln_b",
+                "lines": [
+                  {
+                    "productId": "464201",
+                    "quantity": {
+                      "amount": 300,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 300,
+                      "unit": "ST"
+                    },
+                    "unitPrice": {
+                      "cents": 129,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 129,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 38700,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-17",
+                    "isSubstitute": false
+                  }
+                ],
+                "total": {
+                  "cents": 38700,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 0,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "LATE_DELIVERY"
+                  ]
+                },
+                "summary": "300 l Valio semi-skimmed, Tuesday, €387,00",
+                "score": {
+                  "total": 0.3,
+                  "onTime": 0.0,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "better",
+                "recommended": false
+              }
+            ],
+            "excludedProducts": [],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l1_strict_3_p",
+                "at": "2026-11-14T10:09:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l1_strict_3_a",
+                "at": "2026-11-14T10:09:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 202,
+            "body": {
+              "orderId": "ord_l1_strict_3",
+              "status": "PENDING_APPROVAL",
+              "approvalId": "apr_l1_strict_3",
+              "reasons": [
+                "OVER_ORDER_LIMIT",
+                "SUBSTITUTION_NOT_ALLOWED"
+              ]
+            }
+          },
+          "approval": {
+            "approvalId": "apr_l1_strict_3",
+            "orderId": "ord_l1_strict_3",
+            "quoteId": "qt_l1_strict_3",
+            "status": "OPEN",
+            "reasons": [
+              "OVER_ORDER_LIMIT",
+              "SUBSTITUTION_NOT_ALLOWED"
+            ],
+            "reasonText": "Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+            "options": [
+              {
+                "planId": "pln_a",
+                "tier": "best",
+                "recommended": true,
+                "summary": "300 l Valio Eila, Monday, €750,00"
+              },
+              {
+                "planId": "pln_b",
+                "tier": "better",
+                "recommended": false,
+                "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
+              }
+            ],
+            "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+            "deadline": "2026-11-14T10:10:20+02:00",
+            "createdAt": "2026-11-14T10:10:00+02:00"
+          },
+          "approvalEvent": {
+            "approvalId": "apr_l1_strict_3",
+            "deadline": "2026-11-14T10:10:20+02:00",
+            "heartsLeft": 0
+          }
+        },
+        {
+          "search": {
+            "results": [
+              {
+                "productId": "464201",
+                "name": "Valio semi-skimmed 1 l UHT",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "ST",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "l"
+                },
+                "labels": [],
+                "allergens": [
+                  "AM"
+                ],
+                "carbonCategory": {
+                  "category": "10400",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.1
+                  }
+                },
+                "deliveryReliability": 1.0,
+                "excluded": null
+              },
+              {
+                "productId": "464398",
+                "name": "Valio Eila semi-skimmed 1 l UHT",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "ST",
+                "packSize": {
+                  "amount": 1,
+                  "unit": "l"
+                },
+                "labels": [],
+                "allergens": [
+                  "AM"
+                ],
+                "carbonCategory": {
+                  "category": "10400",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.1
+                  }
+                },
+                "deliveryReliability": 1.0,
+                "excluded": null
+              },
+              {
+                "productId": "463038",
+                "name": "Valio Eila semi-skimmed 10 l Novobox",
+                "brand": "Valio",
+                "category": "10400",
+                "salesUnit": "KI",
+                "packSize": {
+                  "amount": 20,
+                  "unit": "l"
+                },
+                "labels": [],
+                "allergens": [
+                  "AM"
+                ],
+                "carbonCategory": {
+                  "category": "10400",
+                  "kgCo2ePerKg": {
+                    "min": 1.1,
+                    "max": 1.1
+                  }
+                },
+                "deliveryReliability": null,
+                "excluded": null
+              }
+            ],
+            "total": 3
+          },
+          "quote": {
+            "quoteId": "qt_l1_strict_4",
+            "customerId": "123",
+            "mandateId": "mdt_l1_strict",
+            "status": "QUOTED",
+            "createdAt": "2026-11-14T10:11:00+02:00",
+            "expiresAt": "2026-11-14T14:00:00+02:00",
+            "need": {
+              "description": "Top-up: the remaining 300 l lactose-free milk",
+              "quantity": {
+                "amount": 300,
+                "unit": "l"
+              },
+              "deadline": "2026-11-16T06:00:00+02:00",
+              "candidateProductIds": [
+                "464201",
+                "464398",
+                "463038"
+              ]
+            },
+            "plans": [
+              {
+                "planId": "pln_b",
+                "lines": [
+                  {
+                    "productId": "464201",
+                    "quantity": {
+                      "amount": 300,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 300,
+                      "unit": "ST"
+                    },
+                    "unitPrice": {
+                      "cents": 129,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 129,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 38700,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-17",
+                    "isSubstitute": false
+                  }
+                ],
+                "total": {
+                  "cents": 38700,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 0,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "LATE_DELIVERY"
+                  ]
+                },
+                "summary": "300 l Valio semi-skimmed, Tuesday, €387,00",
+                "score": {
+                  "total": 0.3,
+                  "onTime": 0.0,
+                  "price": 1.0,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.0
+                },
+                "tier": "best",
+                "recommended": true
+              }
+            ],
+            "excludedProducts": [],
+            "evidence": [
+              {
+                "source": "valio:/api/price",
+                "requestId": "req_qt_l1_strict_4_p",
+                "at": "2026-11-14T10:11:00+02:00"
+              },
+              {
+                "source": "valio:/api/availability",
+                "requestId": "req_qt_l1_strict_4_a",
+                "at": "2026-11-14T10:11:00+02:00"
+              }
+            ],
+            "scenarioOverlay": false,
+            "signature": {
+              "alg": "Ed25519",
+              "keyId": "valio-aimo-2026-11",
+              "value": "bW9jay1zaWduYXR1cmU="
+            }
+          },
+          "order": {
+            "httpStatus": 202,
+            "body": {
+              "orderId": "ord_l1_strict_4",
+              "status": "PENDING_APPROVAL",
+              "approvalId": "apr_l1_strict_4",
+              "reasons": [
+                "OVER_ORDER_LIMIT",
+                "LATE_DELIVERY"
+              ]
+            }
+          },
+          "approval": {
+            "approvalId": "apr_l1_strict_4",
+            "orderId": "ord_l1_strict_4",
+            "quoteId": "qt_l1_strict_4",
+            "status": "EXPIRED",
+            "reasons": [
+              "OVER_ORDER_LIMIT",
+              "LATE_DELIVERY",
+              "ATTENTION_EXHAUSTED"
+            ],
+            "reasonText": "You had no attention left, so this request expired before it reached you.",
+            "options": [
+              {
+                "planId": "pln_b",
+                "tier": "best",
+                "recommended": true,
+                "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
+              }
+            ],
+            "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+            "deadline": "2026-11-14T10:12:20+02:00",
+            "createdAt": "2026-11-14T10:12:00+02:00"
+          },
+          "approvalEvent": {
+            "approvalId": "apr_l1_strict_4",
+            "deadline": "2026-11-14T10:12:20+02:00",
+            "heartsLeft": 0
           }
         }
       ],
@@ -461,8 +1118,1469 @@
         "stars": 1,
         "incident": null,
         "receiptText": "Every plan broke your mandate (over €200, a substitute or a late delivery), so your agent had to ask you 4 times. After 3 hearts the last request expired and 300 l was never ordered.",
-        "logHeadHash": "sha256:fa49dc4829754d99",
-        "approvalsAsked": 4
+        "logHeadHash": "sha256:2991508342c7cf0d",
+        "approvalsAsked": 4,
+        "totalCost": {
+          "cents": 90300,
+          "currency": "EUR"
+        },
+        "heartsUsed": 3
+      },
+      "decisions": {
+        "apr_l1_strict_1": {
+          "approved": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_strict_1",
+              "orderId": "ord_l1_strict_1",
+              "quoteId": "qt_l1_strict_1",
+              "status": "APPROVED",
+              "reasons": [
+                "OVER_ORDER_LIMIT"
+              ],
+              "reasonText": "Total €903,00 is above your €200,00 per-order limit.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "700 l Valio semi-skimmed, Monday, €903,00"
+                }
+              ],
+              "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. I will order that first.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "approved",
+              "orderStatus": "CONFIRMED"
+            }
+          },
+          "rejected": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_strict_1",
+              "orderId": "ord_l1_strict_1",
+              "quoteId": "qt_l1_strict_1",
+              "status": "REJECTED",
+              "reasons": [
+                "OVER_ORDER_LIMIT"
+              ],
+              "reasonText": "Total €903,00 is above your €200,00 per-order limit.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "700 l Valio semi-skimmed, Monday, €903,00"
+                }
+              ],
+              "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. I will order that first.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "rejected",
+              "orderStatus": "REJECTED"
+            }
+          },
+          "alternative": {},
+          "expired": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_strict_1",
+              "orderId": "ord_l1_strict_1",
+              "quoteId": "qt_l1_strict_1",
+              "status": "EXPIRED",
+              "reasons": [
+                "OVER_ORDER_LIMIT"
+              ],
+              "reasonText": "Total €903,00 is above your €200,00 per-order limit.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "700 l Valio semi-skimmed, Monday, €903,00"
+                }
+              ],
+              "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. I will order that first.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "expired",
+              "orderStatus": "EXPIRED"
+            }
+          },
+          "conflict": {
+            "httpStatus": 409,
+            "body": {
+              "error": {
+                "code": "INVALID_STATE",
+                "message": "Approval apr_l1_strict_1 is already closed.",
+                "requestId": "req_apr_l1_strict_1_409",
+                "details": {
+                  "approvalId": "apr_l1_strict_1"
+                }
+              }
+            }
+          }
+        },
+        "apr_l1_strict_2": {
+          "approved": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_strict_2",
+              "orderId": "ord_l1_strict_2",
+              "quoteId": "qt_l1_strict_2",
+              "status": "APPROVED",
+              "reasons": [
+                "OVER_ORDER_LIMIT",
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 l Valio Eila, Monday, €750,00"
+                },
+                {
+                  "planId": "pln_c",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "300 l Valio Eila 10 l Novobox, Monday, €585,00"
+                },
+                {
+                  "planId": "pln_b",
+                  "tier": "good",
+                  "recommended": false,
+                  "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
+                }
+              ],
+              "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+              "deadline": "2026-11-14T10:08:20+02:00",
+              "createdAt": "2026-11-14T10:08:00+02:00",
+              "decision": "approved",
+              "orderStatus": "CONFIRMED"
+            }
+          },
+          "rejected": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_strict_2",
+              "orderId": "ord_l1_strict_2",
+              "quoteId": "qt_l1_strict_2",
+              "status": "REJECTED",
+              "reasons": [
+                "OVER_ORDER_LIMIT",
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 l Valio Eila, Monday, €750,00"
+                },
+                {
+                  "planId": "pln_c",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "300 l Valio Eila 10 l Novobox, Monday, €585,00"
+                },
+                {
+                  "planId": "pln_b",
+                  "tier": "good",
+                  "recommended": false,
+                  "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
+                }
+              ],
+              "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+              "deadline": "2026-11-14T10:08:20+02:00",
+              "createdAt": "2026-11-14T10:08:00+02:00",
+              "decision": "rejected",
+              "orderStatus": "REJECTED"
+            }
+          },
+          "alternative": {
+            "pln_c": {
+              "httpStatus": 200,
+              "body": {
+                "approvalId": "apr_l1_strict_2",
+                "orderId": "ord_l1_strict_2",
+                "quoteId": "qt_l1_strict_2",
+                "status": "APPROVED",
+                "reasons": [
+                  "OVER_ORDER_LIMIT",
+                  "SUBSTITUTION_NOT_ALLOWED"
+                ],
+                "reasonText": "Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+                "options": [
+                  {
+                    "planId": "pln_a",
+                    "tier": "best",
+                    "recommended": true,
+                    "summary": "300 l Valio Eila, Monday, €750,00"
+                  },
+                  {
+                    "planId": "pln_c",
+                    "tier": "better",
+                    "recommended": false,
+                    "summary": "300 l Valio Eila 10 l Novobox, Monday, €585,00"
+                  },
+                  {
+                    "planId": "pln_b",
+                    "tier": "good",
+                    "recommended": false,
+                    "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
+                  }
+                ],
+                "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+                "deadline": "2026-11-14T10:08:20+02:00",
+                "createdAt": "2026-11-14T10:08:00+02:00",
+                "decision": "alternative:pln_c",
+                "orderStatus": "CONFIRMED"
+              }
+            },
+            "pln_b": {
+              "httpStatus": 200,
+              "body": {
+                "approvalId": "apr_l1_strict_2",
+                "orderId": "ord_l1_strict_2",
+                "quoteId": "qt_l1_strict_2",
+                "status": "APPROVED",
+                "reasons": [
+                  "OVER_ORDER_LIMIT",
+                  "SUBSTITUTION_NOT_ALLOWED"
+                ],
+                "reasonText": "Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+                "options": [
+                  {
+                    "planId": "pln_a",
+                    "tier": "best",
+                    "recommended": true,
+                    "summary": "300 l Valio Eila, Monday, €750,00"
+                  },
+                  {
+                    "planId": "pln_c",
+                    "tier": "better",
+                    "recommended": false,
+                    "summary": "300 l Valio Eila 10 l Novobox, Monday, €585,00"
+                  },
+                  {
+                    "planId": "pln_b",
+                    "tier": "good",
+                    "recommended": false,
+                    "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
+                  }
+                ],
+                "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+                "deadline": "2026-11-14T10:08:20+02:00",
+                "createdAt": "2026-11-14T10:08:00+02:00",
+                "decision": "alternative:pln_b",
+                "orderStatus": "CONFIRMED"
+              }
+            }
+          },
+          "expired": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_strict_2",
+              "orderId": "ord_l1_strict_2",
+              "quoteId": "qt_l1_strict_2",
+              "status": "EXPIRED",
+              "reasons": [
+                "OVER_ORDER_LIMIT",
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 l Valio Eila, Monday, €750,00"
+                },
+                {
+                  "planId": "pln_c",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "300 l Valio Eila 10 l Novobox, Monday, €585,00"
+                },
+                {
+                  "planId": "pln_b",
+                  "tier": "good",
+                  "recommended": false,
+                  "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
+                }
+              ],
+              "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+              "deadline": "2026-11-14T10:08:20+02:00",
+              "createdAt": "2026-11-14T10:08:00+02:00",
+              "decision": "expired",
+              "orderStatus": "EXPIRED"
+            }
+          },
+          "conflict": {
+            "httpStatus": 409,
+            "body": {
+              "error": {
+                "code": "INVALID_STATE",
+                "message": "Approval apr_l1_strict_2 is already closed.",
+                "requestId": "req_apr_l1_strict_2_409",
+                "details": {
+                  "approvalId": "apr_l1_strict_2"
+                }
+              }
+            }
+          }
+        },
+        "apr_l1_strict_3": {
+          "approved": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_strict_3",
+              "orderId": "ord_l1_strict_3",
+              "quoteId": "qt_l1_strict_3",
+              "status": "APPROVED",
+              "reasons": [
+                "OVER_ORDER_LIMIT",
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 l Valio Eila, Monday, €750,00"
+                },
+                {
+                  "planId": "pln_b",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
+                }
+              ],
+              "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+              "deadline": "2026-11-14T10:10:20+02:00",
+              "createdAt": "2026-11-14T10:10:00+02:00",
+              "decision": "approved",
+              "orderStatus": "CONFIRMED"
+            }
+          },
+          "rejected": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_strict_3",
+              "orderId": "ord_l1_strict_3",
+              "quoteId": "qt_l1_strict_3",
+              "status": "REJECTED",
+              "reasons": [
+                "OVER_ORDER_LIMIT",
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 l Valio Eila, Monday, €750,00"
+                },
+                {
+                  "planId": "pln_b",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
+                }
+              ],
+              "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+              "deadline": "2026-11-14T10:10:20+02:00",
+              "createdAt": "2026-11-14T10:10:00+02:00",
+              "decision": "rejected",
+              "orderStatus": "REJECTED"
+            }
+          },
+          "alternative": {
+            "pln_b": {
+              "httpStatus": 200,
+              "body": {
+                "approvalId": "apr_l1_strict_3",
+                "orderId": "ord_l1_strict_3",
+                "quoteId": "qt_l1_strict_3",
+                "status": "APPROVED",
+                "reasons": [
+                  "OVER_ORDER_LIMIT",
+                  "SUBSTITUTION_NOT_ALLOWED"
+                ],
+                "reasonText": "Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+                "options": [
+                  {
+                    "planId": "pln_a",
+                    "tier": "best",
+                    "recommended": true,
+                    "summary": "300 l Valio Eila, Monday, €750,00"
+                  },
+                  {
+                    "planId": "pln_b",
+                    "tier": "better",
+                    "recommended": false,
+                    "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
+                  }
+                ],
+                "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+                "deadline": "2026-11-14T10:10:20+02:00",
+                "createdAt": "2026-11-14T10:10:00+02:00",
+                "decision": "alternative:pln_b",
+                "orderStatus": "CONFIRMED"
+              }
+            }
+          },
+          "expired": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_strict_3",
+              "orderId": "ord_l1_strict_3",
+              "quoteId": "qt_l1_strict_3",
+              "status": "EXPIRED",
+              "reasons": [
+                "OVER_ORDER_LIMIT",
+                "SUBSTITUTION_NOT_ALLOWED"
+              ],
+              "reasonText": "Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "300 l Valio Eila, Monday, €750,00"
+                },
+                {
+                  "planId": "pln_b",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "300 l Valio semi-skimmed, Tuesday, €387,00"
+                }
+              ],
+              "agentExplanation": "The remaining 300 l needs a substitute or a later date; your mandate allows neither.",
+              "deadline": "2026-11-14T10:10:20+02:00",
+              "createdAt": "2026-11-14T10:10:00+02:00",
+              "decision": "expired",
+              "orderStatus": "EXPIRED"
+            }
+          },
+          "conflict": {
+            "httpStatus": 409,
+            "body": {
+              "error": {
+                "code": "INVALID_STATE",
+                "message": "Approval apr_l1_strict_3 is already closed.",
+                "requestId": "req_apr_l1_strict_3_409",
+                "details": {
+                  "approvalId": "apr_l1_strict_3"
+                }
+              }
+            }
+          }
+        }
+      },
+      "log": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "gateway",
+          "type": "LEVEL_LOADED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Level 1 loaded (no overlay needed).",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:bcce100e1f3cd50c"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Anna Virtanen signed mandate mdt_l1_strict.",
+          "refs": {
+            "mandateId": "mdt_l1_strict"
+          },
+          "prevHash": "sha256:bcce100e1f3cd50c",
+          "hash": "sha256:25bbaa3346deccc8"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_003",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched the catalog: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:25bbaa3346deccc8",
+          "hash": "sha256:fee6453e8fc2108f"
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_004",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT"
+          ],
+          "summary": "Quote qt_l1_strict_1: 1 plan, best €903,00.",
+          "refs": {
+            "quoteId": "qt_l1_strict_1"
+          },
+          "prevHash": "sha256:fee6453e8fc2108f",
+          "hash": "sha256:f7f266c9059c0205"
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_005",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT"
+          ],
+          "summary": "Order ord_l1_strict_1 needs approval: Total €903,00 is above your €200,00 per-order limit.",
+          "refs": {
+            "quoteId": "qt_l1_strict_1",
+            "orderId": "ord_l1_strict_1",
+            "approvalId": "apr_l1_strict_1"
+          },
+          "prevHash": "sha256:f7f266c9059c0205",
+          "hash": "sha256:cbff402077d224df"
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l1_strict_1"
+          },
+          "prevHash": "sha256:cbff402077d224df",
+          "hash": "sha256:7779df3216283fdf"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_a.",
+          "refs": {
+            "approvalId": "apr_l1_strict_1"
+          },
+          "prevHash": "sha256:7779df3216283fdf",
+          "hash": "sha256:0b9b3d46332ae95f"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l1_strict_1 ORDERED → CONFIRMED: plan pln_a (464201).",
+          "refs": {
+            "quoteId": "qt_l1_strict_1",
+            "orderId": "ord_l1_strict_1",
+            "approvalId": "apr_l1_strict_1"
+          },
+          "prevHash": "sha256:0b9b3d46332ae95f",
+          "hash": "sha256:e74b22d2cb1f9efd"
+        },
+        {
+          "seq": 9,
+          "eventId": "evt_9",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_009",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched the catalog: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:e74b22d2cb1f9efd",
+          "hash": "sha256:6ca8c387d955aeba"
+        },
+        {
+          "seq": 10,
+          "eventId": "evt_10",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_010",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l1_strict_2: 3 plans, best €750,00.",
+          "refs": {
+            "quoteId": "qt_l1_strict_2"
+          },
+          "prevHash": "sha256:6ca8c387d955aeba",
+          "hash": "sha256:fa609b23d7003282"
+        },
+        {
+          "seq": 11,
+          "eventId": "evt_11",
+          "at": "2026-11-14T10:08:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_011",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l1_strict_2 needs approval: Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+          "refs": {
+            "quoteId": "qt_l1_strict_2",
+            "orderId": "ord_l1_strict_2",
+            "approvalId": "apr_l1_strict_2"
+          },
+          "prevHash": "sha256:fa609b23d7003282",
+          "hash": "sha256:b66e3e956913177e"
+        },
+        {
+          "seq": 12,
+          "eventId": "evt_12",
+          "at": "2026-11-14T10:08:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_012",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (1 heart left).",
+          "refs": {
+            "approvalId": "apr_l1_strict_2"
+          },
+          "prevHash": "sha256:b66e3e956913177e",
+          "hash": "sha256:ed2b7fa7fb3e8b68"
+        },
+        {
+          "seq": 13,
+          "eventId": "evt_13",
+          "at": "2026-11-14T10:09:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_013",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager rejected the request; order ord_l1_strict_2 REJECTED.",
+          "refs": {
+            "approvalId": "apr_l1_strict_2"
+          },
+          "prevHash": "sha256:ed2b7fa7fb3e8b68",
+          "hash": "sha256:f7a2c86e77f195cf"
+        },
+        {
+          "seq": 14,
+          "eventId": "evt_14",
+          "at": "2026-11-14T10:09:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_014",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched the catalog: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:f7a2c86e77f195cf",
+          "hash": "sha256:1de85f28e510513e"
+        },
+        {
+          "seq": 15,
+          "eventId": "evt_15",
+          "at": "2026-11-14T10:09:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_015",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l1_strict_3: 2 plans, best €750,00.",
+          "refs": {
+            "quoteId": "qt_l1_strict_3"
+          },
+          "prevHash": "sha256:1de85f28e510513e",
+          "hash": "sha256:ff0477c96a142a59"
+        },
+        {
+          "seq": 16,
+          "eventId": "evt_16",
+          "at": "2026-11-14T10:10:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_016",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l1_strict_3 needs approval: Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+          "refs": {
+            "quoteId": "qt_l1_strict_3",
+            "orderId": "ord_l1_strict_3",
+            "approvalId": "apr_l1_strict_3"
+          },
+          "prevHash": "sha256:ff0477c96a142a59",
+          "hash": "sha256:6d6ec6b6126bb22f"
+        },
+        {
+          "seq": 17,
+          "eventId": "evt_17",
+          "at": "2026-11-14T10:10:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_017",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (0 hearts left).",
+          "refs": {
+            "approvalId": "apr_l1_strict_3"
+          },
+          "prevHash": "sha256:6d6ec6b6126bb22f",
+          "hash": "sha256:f417d32b0c9580a3"
+        },
+        {
+          "seq": 18,
+          "eventId": "evt_18",
+          "at": "2026-11-14T10:11:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_018",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager rejected the request; order ord_l1_strict_3 REJECTED.",
+          "refs": {
+            "approvalId": "apr_l1_strict_3"
+          },
+          "prevHash": "sha256:f417d32b0c9580a3",
+          "hash": "sha256:cb58295c84a47807"
+        },
+        {
+          "seq": 19,
+          "eventId": "evt_19",
+          "at": "2026-11-14T10:11:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_019",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched the catalog: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:cb58295c84a47807",
+          "hash": "sha256:5e15bd73eb46f275"
+        },
+        {
+          "seq": 20,
+          "eventId": "evt_20",
+          "at": "2026-11-14T10:11:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_020",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "LATE_DELIVERY"
+          ],
+          "summary": "Quote qt_l1_strict_4: 1 plan, best €387,00.",
+          "refs": {
+            "quoteId": "qt_l1_strict_4"
+          },
+          "prevHash": "sha256:5e15bd73eb46f275",
+          "hash": "sha256:2bf95db8869c0639"
+        },
+        {
+          "seq": 21,
+          "eventId": "evt_21",
+          "at": "2026-11-14T10:12:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_021",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "LATE_DELIVERY"
+          ],
+          "summary": "Order ord_l1_strict_4 needs approval: Total €387,00 is above your €200,00 per-order limit. It arrives Tuesday, after your deadline.",
+          "refs": {
+            "quoteId": "qt_l1_strict_4",
+            "orderId": "ord_l1_strict_4",
+            "approvalId": "apr_l1_strict_4"
+          },
+          "prevHash": "sha256:2bf95db8869c0639",
+          "hash": "sha256:e79e9e2d3606b6cf"
+        },
+        {
+          "seq": 22,
+          "eventId": "evt_22",
+          "at": "2026-11-14T10:12:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_EXPIRED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_022",
+          "light": null,
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "LATE_DELIVERY",
+            "ATTENTION_EXHAUSTED"
+          ],
+          "summary": "Approval apr_l1_strict_4 expired unseen: no hearts left. Order ord_l1_strict_4 EXPIRED.",
+          "refs": {
+            "quoteId": "qt_l1_strict_4",
+            "orderId": "ord_l1_strict_4",
+            "approvalId": "apr_l1_strict_4"
+          },
+          "prevHash": "sha256:e79e9e2d3606b6cf",
+          "hash": "sha256:2991508342c7cf0d"
+        }
+      ],
+      "valioLog": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "gateway",
+          "type": "LEVEL_LOADED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Level 1 loaded (no overlay needed).",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:bcce100e1f3cd50c"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Anna Virtanen signed mandate mdt_l1_strict.",
+          "refs": {
+            "mandateId": "mdt_l1_strict"
+          },
+          "prevHash": "sha256:bcce100e1f3cd50c",
+          "hash": "sha256:25bbaa3346deccc8"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_003",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched the catalog: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:25bbaa3346deccc8",
+          "hash": "sha256:fee6453e8fc2108f",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_004",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT"
+          ],
+          "summary": "Quote qt_l1_strict_1: 1 plan, best €903,00.",
+          "refs": {
+            "quoteId": "qt_l1_strict_1"
+          },
+          "prevHash": "sha256:fee6453e8fc2108f",
+          "hash": "sha256:f7f266c9059c0205",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_005",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT"
+          ],
+          "summary": "Order ord_l1_strict_1 needs approval: Total €903,00 is above your €200,00 per-order limit.",
+          "refs": {
+            "quoteId": "qt_l1_strict_1",
+            "orderId": "ord_l1_strict_1",
+            "approvalId": "apr_l1_strict_1"
+          },
+          "prevHash": "sha256:f7f266c9059c0205",
+          "hash": "sha256:cbff402077d224df",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l1_strict_1"
+          },
+          "prevHash": "sha256:cbff402077d224df",
+          "hash": "sha256:7779df3216283fdf"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_a.",
+          "refs": {
+            "approvalId": "apr_l1_strict_1"
+          },
+          "prevHash": "sha256:7779df3216283fdf",
+          "hash": "sha256:0b9b3d46332ae95f"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l1_strict_1 ORDERED → CONFIRMED: plan pln_a (464201).",
+          "refs": {
+            "quoteId": "qt_l1_strict_1",
+            "orderId": "ord_l1_strict_1",
+            "approvalId": "apr_l1_strict_1"
+          },
+          "prevHash": "sha256:0b9b3d46332ae95f",
+          "hash": "sha256:e74b22d2cb1f9efd",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 9,
+          "eventId": "evt_9",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_009",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched the catalog: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:e74b22d2cb1f9efd",
+          "hash": "sha256:6ca8c387d955aeba",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 10,
+          "eventId": "evt_10",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_010",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l1_strict_2: 3 plans, best €750,00.",
+          "refs": {
+            "quoteId": "qt_l1_strict_2"
+          },
+          "prevHash": "sha256:6ca8c387d955aeba",
+          "hash": "sha256:fa609b23d7003282",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 11,
+          "eventId": "evt_11",
+          "at": "2026-11-14T10:08:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_011",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l1_strict_2 needs approval: Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+          "refs": {
+            "quoteId": "qt_l1_strict_2",
+            "orderId": "ord_l1_strict_2",
+            "approvalId": "apr_l1_strict_2"
+          },
+          "prevHash": "sha256:fa609b23d7003282",
+          "hash": "sha256:b66e3e956913177e",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 12,
+          "eventId": "evt_12",
+          "at": "2026-11-14T10:08:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_012",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (1 heart left).",
+          "refs": {
+            "approvalId": "apr_l1_strict_2"
+          },
+          "prevHash": "sha256:b66e3e956913177e",
+          "hash": "sha256:ed2b7fa7fb3e8b68"
+        },
+        {
+          "seq": 13,
+          "eventId": "evt_13",
+          "at": "2026-11-14T10:09:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_013",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager rejected the request; order ord_l1_strict_2 REJECTED.",
+          "refs": {
+            "approvalId": "apr_l1_strict_2"
+          },
+          "prevHash": "sha256:ed2b7fa7fb3e8b68",
+          "hash": "sha256:f7a2c86e77f195cf"
+        },
+        {
+          "seq": 14,
+          "eventId": "evt_14",
+          "at": "2026-11-14T10:09:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_014",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched the catalog: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:f7a2c86e77f195cf",
+          "hash": "sha256:1de85f28e510513e",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 15,
+          "eventId": "evt_15",
+          "at": "2026-11-14T10:09:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_015",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Quote qt_l1_strict_3: 2 plans, best €750,00.",
+          "refs": {
+            "quoteId": "qt_l1_strict_3"
+          },
+          "prevHash": "sha256:1de85f28e510513e",
+          "hash": "sha256:ff0477c96a142a59",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 16,
+          "eventId": "evt_16",
+          "at": "2026-11-14T10:10:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_016",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Order ord_l1_strict_3 needs approval: Total €750,00 is above your €200,00 per-order limit. It is a substitute, which your mandate does not allow.",
+          "refs": {
+            "quoteId": "qt_l1_strict_3",
+            "orderId": "ord_l1_strict_3",
+            "approvalId": "apr_l1_strict_3"
+          },
+          "prevHash": "sha256:ff0477c96a142a59",
+          "hash": "sha256:6d6ec6b6126bb22f",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 17,
+          "eventId": "evt_17",
+          "at": "2026-11-14T10:10:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_017",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SUBSTITUTION_NOT_ALLOWED"
+          ],
+          "summary": "Approval shown to manager (0 hearts left).",
+          "refs": {
+            "approvalId": "apr_l1_strict_3"
+          },
+          "prevHash": "sha256:6d6ec6b6126bb22f",
+          "hash": "sha256:f417d32b0c9580a3"
+        },
+        {
+          "seq": 18,
+          "eventId": "evt_18",
+          "at": "2026-11-14T10:11:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_018",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager rejected the request; order ord_l1_strict_3 REJECTED.",
+          "refs": {
+            "approvalId": "apr_l1_strict_3"
+          },
+          "prevHash": "sha256:f417d32b0c9580a3",
+          "hash": "sha256:cb58295c84a47807"
+        },
+        {
+          "seq": 19,
+          "eventId": "evt_19",
+          "at": "2026-11-14T10:11:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_019",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched the catalog: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:cb58295c84a47807",
+          "hash": "sha256:5e15bd73eb46f275",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 20,
+          "eventId": "evt_20",
+          "at": "2026-11-14T10:11:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_020",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "LATE_DELIVERY"
+          ],
+          "summary": "Quote qt_l1_strict_4: 1 plan, best €387,00.",
+          "refs": {
+            "quoteId": "qt_l1_strict_4"
+          },
+          "prevHash": "sha256:5e15bd73eb46f275",
+          "hash": "sha256:2bf95db8869c0639",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 21,
+          "eventId": "evt_21",
+          "at": "2026-11-14T10:12:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_021",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "LATE_DELIVERY"
+          ],
+          "summary": "Order ord_l1_strict_4 needs approval: Total €387,00 is above your €200,00 per-order limit. It arrives Tuesday, after your deadline.",
+          "refs": {
+            "quoteId": "qt_l1_strict_4",
+            "orderId": "ord_l1_strict_4",
+            "approvalId": "apr_l1_strict_4"
+          },
+          "prevHash": "sha256:2bf95db8869c0639",
+          "hash": "sha256:e79e9e2d3606b6cf",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 22,
+          "eventId": "evt_22",
+          "at": "2026-11-14T10:12:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_EXPIRED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_022",
+          "light": null,
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "LATE_DELIVERY",
+            "ATTENTION_EXHAUSTED"
+          ],
+          "summary": "Approval apr_l1_strict_4 expired unseen: no hearts left. Order ord_l1_strict_4 EXPIRED.",
+          "refs": {
+            "quoteId": "qt_l1_strict_4",
+            "orderId": "ord_l1_strict_4",
+            "approvalId": "apr_l1_strict_4"
+          },
+          "prevHash": "sha256:e79e9e2d3606b6cf",
+          "hash": "sha256:2991508342c7cf0d"
+        }
+      ],
+      "verify": {
+        "valid": true,
+        "events": 22,
+        "headHash": "sha256:2991508342c7cf0d"
       }
     },
     "balanced": {
@@ -499,7 +2617,7 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing AP."
+        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing peanut (AP)."
       },
       "steps": [
         {
@@ -685,62 +2803,6 @@
                 "recommended": true
               },
               {
-                "planId": "pln_c",
-                "lines": [
-                  {
-                    "productId": "463038",
-                    "quantity": {
-                      "amount": 1000,
-                      "unit": "l"
-                    },
-                    "salesQuantity": {
-                      "amount": 50,
-                      "unit": "KI"
-                    },
-                    "unitPrice": {
-                      "cents": 3900,
-                      "currency": "EUR"
-                    },
-                    "comparisonPrice": {
-                      "cents": 195,
-                      "currency": "EUR",
-                      "per": "l"
-                    },
-                    "lineTotal": {
-                      "cents": 195000,
-                      "currency": "EUR"
-                    },
-                    "availableDate": "2026-11-16",
-                    "isSubstitute": true
-                  }
-                ],
-                "total": {
-                  "cents": 195000,
-                  "currency": "EUR"
-                },
-                "onTime": {
-                  "amount": 1000,
-                  "unit": "l"
-                },
-                "policy": {
-                  "light": "YELLOW",
-                  "reasons": [
-                    "OVER_ORDER_LIMIT",
-                    "SUBSTITUTION_ALLOWED"
-                  ]
-                },
-                "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00",
-                "score": {
-                  "total": 0.699,
-                  "onTime": 1.0,
-                  "price": 0.662,
-                  "sustainability": 0.0,
-                  "reliabilityPenalty": 0.0
-                },
-                "tier": "better",
-                "recommended": false
-              },
-              {
                 "planId": "pln_b",
                 "lines": [
                   {
@@ -820,6 +2882,62 @@
                   "sustainability": 0.0,
                   "reliabilityPenalty": 0.0
                 },
+                "tier": "better",
+                "recommended": false
+              },
+              {
+                "planId": "pln_c",
+                "lines": [
+                  {
+                    "productId": "463038",
+                    "quantity": {
+                      "amount": 1000,
+                      "unit": "l"
+                    },
+                    "salesQuantity": {
+                      "amount": 50,
+                      "unit": "KI"
+                    },
+                    "unitPrice": {
+                      "cents": 3900,
+                      "currency": "EUR"
+                    },
+                    "comparisonPrice": {
+                      "cents": 195,
+                      "currency": "EUR",
+                      "per": "l"
+                    },
+                    "lineTotal": {
+                      "cents": 195000,
+                      "currency": "EUR"
+                    },
+                    "availableDate": "2026-11-16",
+                    "isSubstitute": true
+                  }
+                ],
+                "total": {
+                  "cents": 195000,
+                  "currency": "EUR"
+                },
+                "onTime": {
+                  "amount": 1000,
+                  "unit": "l"
+                },
+                "policy": {
+                  "light": "YELLOW",
+                  "reasons": [
+                    "OVER_ORDER_LIMIT",
+                    "SUBSTITUTION_ALLOWED"
+                  ]
+                },
+                "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00",
+                "score": {
+                  "total": 0.649,
+                  "onTime": 1.0,
+                  "price": 0.662,
+                  "sustainability": 0.0,
+                  "reliabilityPenalty": 0.05
+                },
                 "tier": "good",
                 "recommended": false
               }
@@ -872,21 +2990,26 @@
                 "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00"
               },
               {
-                "planId": "pln_c",
+                "planId": "pln_b",
                 "tier": "better",
                 "recommended": false,
-                "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00"
+                "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00"
               },
               {
-                "planId": "pln_b",
+                "planId": "pln_c",
                 "tier": "good",
                 "recommended": false,
-                "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00"
+                "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00"
               }
             ],
             "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. Topping up with 300 l of Valio Eila keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
             "deadline": "2026-11-14T10:06:20+02:00",
             "createdAt": "2026-11-14T10:06:00+02:00"
+          },
+          "approvalEvent": {
+            "approvalId": "apr_l1_balanced",
+            "deadline": "2026-11-14T10:06:20+02:00",
+            "heartsLeft": 2
           }
         }
       ],
@@ -898,16 +3021,230 @@
         "stars": 3,
         "incident": null,
         "receiptText": "Your agent bought 700 l of Valio semi-skimmed and 300 l of Valio Eila, all arriving Monday. You approved once because the total €1 653,00 was above your €500 limit.",
-        "logHeadHash": "sha256:958a4cf57431ee4f",
-        "approvalsAsked": 1
+        "logHeadHash": "sha256:418e3a6550834186",
+        "approvalsAsked": 1,
+        "totalCost": {
+          "cents": 165300,
+          "currency": "EUR"
+        },
+        "heartsUsed": 1
+      },
+      "decisions": {
+        "apr_l1_balanced": {
+          "approved": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_balanced",
+              "orderId": "ord_l1_balanced",
+              "quoteId": "qt_l1_balanced",
+              "status": "APPROVED",
+              "reasons": [
+                "OVER_ORDER_LIMIT"
+              ],
+              "reasonText": "Total €1 653,00 is above your €500,00 per-order limit.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00"
+                },
+                {
+                  "planId": "pln_b",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00"
+                },
+                {
+                  "planId": "pln_c",
+                  "tier": "good",
+                  "recommended": false,
+                  "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00"
+                }
+              ],
+              "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. Topping up with 300 l of Valio Eila keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "approved",
+              "orderStatus": "CONFIRMED"
+            }
+          },
+          "rejected": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_balanced",
+              "orderId": "ord_l1_balanced",
+              "quoteId": "qt_l1_balanced",
+              "status": "REJECTED",
+              "reasons": [
+                "OVER_ORDER_LIMIT"
+              ],
+              "reasonText": "Total €1 653,00 is above your €500,00 per-order limit.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00"
+                },
+                {
+                  "planId": "pln_b",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00"
+                },
+                {
+                  "planId": "pln_c",
+                  "tier": "good",
+                  "recommended": false,
+                  "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00"
+                }
+              ],
+              "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. Topping up with 300 l of Valio Eila keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "rejected",
+              "orderStatus": "REJECTED"
+            }
+          },
+          "alternative": {
+            "pln_b": {
+              "httpStatus": 200,
+              "body": {
+                "approvalId": "apr_l1_balanced",
+                "orderId": "ord_l1_balanced",
+                "quoteId": "qt_l1_balanced",
+                "status": "APPROVED",
+                "reasons": [
+                  "OVER_ORDER_LIMIT"
+                ],
+                "reasonText": "Total €1 653,00 is above your €500,00 per-order limit.",
+                "options": [
+                  {
+                    "planId": "pln_a",
+                    "tier": "best",
+                    "recommended": true,
+                    "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00"
+                  },
+                  {
+                    "planId": "pln_b",
+                    "tier": "better",
+                    "recommended": false,
+                    "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00"
+                  },
+                  {
+                    "planId": "pln_c",
+                    "tier": "good",
+                    "recommended": false,
+                    "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00"
+                  }
+                ],
+                "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. Topping up with 300 l of Valio Eila keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
+                "deadline": "2026-11-14T10:06:20+02:00",
+                "createdAt": "2026-11-14T10:06:00+02:00",
+                "decision": "alternative:pln_b",
+                "orderStatus": "CONFIRMED"
+              }
+            },
+            "pln_c": {
+              "httpStatus": 200,
+              "body": {
+                "approvalId": "apr_l1_balanced",
+                "orderId": "ord_l1_balanced",
+                "quoteId": "qt_l1_balanced",
+                "status": "APPROVED",
+                "reasons": [
+                  "OVER_ORDER_LIMIT"
+                ],
+                "reasonText": "Total €1 653,00 is above your €500,00 per-order limit.",
+                "options": [
+                  {
+                    "planId": "pln_a",
+                    "tier": "best",
+                    "recommended": true,
+                    "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00"
+                  },
+                  {
+                    "planId": "pln_b",
+                    "tier": "better",
+                    "recommended": false,
+                    "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00"
+                  },
+                  {
+                    "planId": "pln_c",
+                    "tier": "good",
+                    "recommended": false,
+                    "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00"
+                  }
+                ],
+                "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. Topping up with 300 l of Valio Eila keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
+                "deadline": "2026-11-14T10:06:20+02:00",
+                "createdAt": "2026-11-14T10:06:00+02:00",
+                "decision": "alternative:pln_c",
+                "orderStatus": "CONFIRMED"
+              }
+            }
+          },
+          "expired": {
+            "httpStatus": 200,
+            "body": {
+              "approvalId": "apr_l1_balanced",
+              "orderId": "ord_l1_balanced",
+              "quoteId": "qt_l1_balanced",
+              "status": "EXPIRED",
+              "reasons": [
+                "OVER_ORDER_LIMIT"
+              ],
+              "reasonText": "Total €1 653,00 is above your €500,00 per-order limit.",
+              "options": [
+                {
+                  "planId": "pln_a",
+                  "tier": "best",
+                  "recommended": true,
+                  "summary": "700 l Valio semi-skimmed + 300 l Valio Eila, all Monday, €1 653,00"
+                },
+                {
+                  "planId": "pln_b",
+                  "tier": "better",
+                  "recommended": false,
+                  "summary": "1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00"
+                },
+                {
+                  "planId": "pln_c",
+                  "tier": "good",
+                  "recommended": false,
+                  "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00"
+                }
+              ],
+              "agentExplanation": "Only 700 l of Valio semi-skimmed can arrive by Monday. Topping up with 300 l of Valio Eila keeps all 1 000 l on time but costs more; waiting for Valio means 300 l arrives Tuesday.",
+              "deadline": "2026-11-14T10:06:20+02:00",
+              "createdAt": "2026-11-14T10:06:00+02:00",
+              "decision": "expired",
+              "orderStatus": "EXPIRED"
+            }
+          },
+          "conflict": {
+            "httpStatus": 409,
+            "body": {
+              "error": {
+                "code": "INVALID_STATE",
+                "message": "Approval apr_l1_balanced is already closed.",
+                "requestId": "req_apr_l1_balanced_409",
+                "details": {
+                  "approvalId": "apr_l1_balanced"
+                }
+              }
+            }
+          }
+        }
       },
       "log": [
         {
           "seq": 1,
           "eventId": "evt_1",
           "at": "2026-11-14T10:00:00+02:00",
-          "actor": "scenario",
-          "type": "SCENARIO_OVERLAY",
+          "actor": "gateway",
+          "type": "LEVEL_LOADED",
           "customerId": "123",
           "agentId": "kitchenbuyer-hotel-aurora",
           "requestId": "req_001",
@@ -916,7 +3253,7 @@
           "summary": "Level 1 loaded (no overlay needed).",
           "refs": {},
           "prevHash": "sha256:0000000000000000",
-          "hash": "sha256:10f640e1199d1aeb"
+          "hash": "sha256:bcce100e1f3cd50c"
         },
         {
           "seq": 2,
@@ -933,13 +3270,13 @@
           "refs": {
             "mandateId": "mdt_l1_balanced"
           },
-          "prevHash": "sha256:10f640e1199d1aeb",
-          "hash": "sha256:d806998aa4e0e898"
+          "prevHash": "sha256:bcce100e1f3cd50c",
+          "hash": "sha256:75f31dc193bfecef"
         },
         {
           "seq": 3,
           "eventId": "evt_3",
-          "at": "2026-11-14T10:03:00+02:00",
+          "at": "2026-11-14T10:05:00+02:00",
           "actor": "agent",
           "type": "SEARCH",
           "customerId": "123",
@@ -947,10 +3284,10 @@
           "requestId": "req_003",
           "light": null,
           "reasons": [],
-          "summary": "Searched “lactose-free milk”: 3 products.",
+          "summary": "Searched the catalog: 3 products.",
           "refs": {},
-          "prevHash": "sha256:d806998aa4e0e898",
-          "hash": "sha256:335cd333965c83c0"
+          "prevHash": "sha256:75f31dc193bfecef",
+          "hash": "sha256:d4ee6f42eb71e0a3"
         },
         {
           "seq": 4,
@@ -971,8 +3308,8 @@
           "refs": {
             "quoteId": "qt_l1_balanced"
           },
-          "prevHash": "sha256:335cd333965c83c0",
-          "hash": "sha256:434e1e19df6d9cb6"
+          "prevHash": "sha256:d4ee6f42eb71e0a3",
+          "hash": "sha256:fb06e8a109d2d688"
         },
         {
           "seq": 5,
@@ -987,14 +3324,14 @@
           "reasons": [
             "OVER_ORDER_LIMIT"
           ],
-          "summary": "Order ord_l1_balanced needs approval: total above €500 limit.",
+          "summary": "Order ord_l1_balanced needs approval: Total €1 653,00 is above your €500,00 per-order limit.",
           "refs": {
             "quoteId": "qt_l1_balanced",
             "orderId": "ord_l1_balanced",
             "approvalId": "apr_l1_balanced"
           },
-          "prevHash": "sha256:434e1e19df6d9cb6",
-          "hash": "sha256:b41f6b11f8552bdf"
+          "prevHash": "sha256:fb06e8a109d2d688",
+          "hash": "sha256:c0a71e4f501aa35b"
         },
         {
           "seq": 6,
@@ -1013,8 +3350,8 @@
           "refs": {
             "approvalId": "apr_l1_balanced"
           },
-          "prevHash": "sha256:b41f6b11f8552bdf",
-          "hash": "sha256:c6072d0826de3d4f"
+          "prevHash": "sha256:c0a71e4f501aa35b",
+          "hash": "sha256:d2e91d3b72cc1b21"
         },
         {
           "seq": 7,
@@ -1031,8 +3368,8 @@
           "refs": {
             "approvalId": "apr_l1_balanced"
           },
-          "prevHash": "sha256:c6072d0826de3d4f",
-          "hash": "sha256:2e17e66e0ef1eac7"
+          "prevHash": "sha256:d2e91d3b72cc1b21",
+          "hash": "sha256:b58f1ccae52767c6"
         },
         {
           "seq": 8,
@@ -1045,14 +3382,211 @@
           "requestId": "req_008",
           "light": "GREEN",
           "reasons": [],
-          "summary": "Order ord_l1_balanced ORDERED → CONFIRMED.",
+          "summary": "Order ord_l1_balanced ORDERED → CONFIRMED: plan pln_a (464201, 464398).",
           "refs": {
-            "orderId": "ord_l1_balanced"
+            "quoteId": "qt_l1_balanced",
+            "orderId": "ord_l1_balanced",
+            "approvalId": "apr_l1_balanced"
           },
-          "prevHash": "sha256:2e17e66e0ef1eac7",
-          "hash": "sha256:802ec1cd4a618ec6"
+          "prevHash": "sha256:b58f1ccae52767c6",
+          "hash": "sha256:418e3a6550834186"
         }
-      ]
+      ],
+      "valioLog": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "gateway",
+          "type": "LEVEL_LOADED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Level 1 loaded (no overlay needed).",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:bcce100e1f3cd50c"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Anna Virtanen signed mandate mdt_l1_balanced.",
+          "refs": {
+            "mandateId": "mdt_l1_balanced"
+          },
+          "prevHash": "sha256:bcce100e1f3cd50c",
+          "hash": "sha256:75f31dc193bfecef"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_003",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched the catalog: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:75f31dc193bfecef",
+          "hash": "sha256:d4ee6f42eb71e0a3",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_004",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT",
+            "SPLIT_ORDER",
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Quote qt_l1_balanced: 3 plans, best €1 653,00.",
+          "refs": {
+            "quoteId": "qt_l1_balanced"
+          },
+          "prevHash": "sha256:d4ee6f42eb71e0a3",
+          "hash": "sha256:fb06e8a109d2d688",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_PENDING_APPROVAL",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_005",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT"
+          ],
+          "summary": "Order ord_l1_balanced needs approval: Total €1 653,00 is above your €500,00 per-order limit.",
+          "refs": {
+            "quoteId": "qt_l1_balanced",
+            "orderId": "ord_l1_balanced",
+            "approvalId": "apr_l1_balanced"
+          },
+          "prevHash": "sha256:fb06e8a109d2d688",
+          "hash": "sha256:c0a71e4f501aa35b",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        },
+        {
+          "seq": 6,
+          "eventId": "evt_6",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "APPROVAL_SHOWN",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_006",
+          "light": "YELLOW",
+          "reasons": [
+            "OVER_ORDER_LIMIT"
+          ],
+          "summary": "Approval shown to manager (2 hearts left).",
+          "refs": {
+            "approvalId": "apr_l1_balanced"
+          },
+          "prevHash": "sha256:c0a71e4f501aa35b",
+          "hash": "sha256:d2e91d3b72cc1b21"
+        },
+        {
+          "seq": 7,
+          "eventId": "evt_7",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "human",
+          "type": "APPROVAL_DECIDED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_007",
+          "light": null,
+          "reasons": [],
+          "summary": "Manager approved plan pln_a.",
+          "refs": {
+            "approvalId": "apr_l1_balanced"
+          },
+          "prevHash": "sha256:d2e91d3b72cc1b21",
+          "hash": "sha256:b58f1ccae52767c6"
+        },
+        {
+          "seq": 8,
+          "eventId": "evt_8",
+          "at": "2026-11-14T10:07:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_008",
+          "light": "GREEN",
+          "reasons": [],
+          "summary": "Order ord_l1_balanced ORDERED → CONFIRMED: plan pln_a (464201, 464398).",
+          "refs": {
+            "quoteId": "qt_l1_balanced",
+            "orderId": "ord_l1_balanced",
+            "approvalId": "apr_l1_balanced"
+          },
+          "prevHash": "sha256:b58f1ccae52767c6",
+          "hash": "sha256:418e3a6550834186",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        }
+      ],
+      "verify": {
+        "valid": true,
+        "events": 8,
+        "headHash": "sha256:418e3a6550834186"
+      }
     },
     "loose": {
       "mandate": {
@@ -1088,7 +3622,7 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €2000 per order, with any substitute and deliveries up to one day late, never products containing AP."
+        "summaryText": "Anna Virtanen authorises kitchenbuyer-hotel-aurora to order up to €2000 per order, with any substitute and deliveries up to one day late, never products containing peanut (AP)."
       },
       "steps": [
         {
@@ -1399,11 +3933,11 @@
                 },
                 "summary": "1 000 l Valio Eila 10 l Novobox, Monday (no reliability data), €1 950,00",
                 "score": {
-                  "total": 0.631,
+                  "total": 0.581,
                   "onTime": 1.0,
                   "price": 0.662,
                   "sustainability": 0.0,
-                  "reliabilityPenalty": 0.0
+                  "reliabilityPenalty": 0.05
                 },
                 "tier": "good",
                 "recommended": false
@@ -1508,9 +4042,792 @@
         "stars": 1,
         "incident": null,
         "receiptText": "Your agent did exactly what your mandate allowed: it picked the cheapest plan, 1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00. One day late was allowed, so it never asked you. Monday breakfast was 300 l short.",
-        "logHeadHash": "sha256:11681b1682fbbd64",
-        "approvalsAsked": 0
+        "logHeadHash": "sha256:e138c3e31a4ea3c8",
+        "approvalsAsked": 0,
+        "totalCost": {
+          "cents": 129000,
+          "currency": "EUR"
+        },
+        "heartsUsed": 0
+      },
+      "decisions": {},
+      "log": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "gateway",
+          "type": "LEVEL_LOADED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Level 1 loaded (no overlay needed).",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:bcce100e1f3cd50c"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Anna Virtanen signed mandate mdt_l1_loose.",
+          "refs": {
+            "mandateId": "mdt_l1_loose"
+          },
+          "prevHash": "sha256:bcce100e1f3cd50c",
+          "hash": "sha256:1e248955f6ad01c4"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_003",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched the catalog: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:1e248955f6ad01c4",
+          "hash": "sha256:0c8936b7641032a3"
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_004",
+          "light": "BLUE",
+          "reasons": [
+            "SPLIT_ORDER"
+          ],
+          "summary": "Quote qt_l1_loose: 3 plans, best €1 290,00.",
+          "refs": {
+            "quoteId": "qt_l1_loose"
+          },
+          "prevHash": "sha256:0c8936b7641032a3",
+          "hash": "sha256:215679764238804f"
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_005",
+          "light": "BLUE",
+          "reasons": [
+            "SPLIT_ORDER"
+          ],
+          "summary": "Order ord_l1_loose ORDERED → CONFIRMED: plan pln_b (464201).",
+          "refs": {
+            "quoteId": "qt_l1_loose",
+            "orderId": "ord_l1_loose"
+          },
+          "prevHash": "sha256:215679764238804f",
+          "hash": "sha256:e138c3e31a4ea3c8"
+        }
+      ],
+      "valioLog": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "gateway",
+          "type": "LEVEL_LOADED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Level 1 loaded (no overlay needed).",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:bcce100e1f3cd50c"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Anna Virtanen signed mandate mdt_l1_loose.",
+          "refs": {
+            "mandateId": "mdt_l1_loose"
+          },
+          "prevHash": "sha256:bcce100e1f3cd50c",
+          "hash": "sha256:1e248955f6ad01c4"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_003",
+          "light": null,
+          "reasons": [],
+          "summary": "Searched the catalog: 3 products.",
+          "refs": {},
+          "prevHash": "sha256:1e248955f6ad01c4",
+          "hash": "sha256:0c8936b7641032a3",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_004",
+          "light": "BLUE",
+          "reasons": [
+            "SPLIT_ORDER"
+          ],
+          "summary": "Quote qt_l1_loose: 3 plans, best €1 290,00.",
+          "refs": {
+            "quoteId": "qt_l1_loose"
+          },
+          "prevHash": "sha256:0c8936b7641032a3",
+          "hash": "sha256:215679764238804f",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "123",
+          "agentId": "kitchenbuyer-hotel-aurora",
+          "requestId": "req_005",
+          "light": "BLUE",
+          "reasons": [
+            "SPLIT_ORDER"
+          ],
+          "summary": "Order ord_l1_loose ORDERED → CONFIRMED: plan pln_b (464201).",
+          "refs": {
+            "quoteId": "qt_l1_loose",
+            "orderId": "ord_l1_loose"
+          },
+          "prevHash": "sha256:215679764238804f",
+          "hash": "sha256:e138c3e31a4ea3c8",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        }
+      ],
+      "verify": {
+        "valid": true,
+        "events": 5,
+        "headHash": "sha256:e138c3e31a4ea3c8"
       }
+    }
+  },
+  "tamperedDemo": {
+    "preset": "balanced",
+    "log": [
+      {
+        "seq": 1,
+        "eventId": "evt_1",
+        "at": "2026-11-14T10:00:00+02:00",
+        "actor": "gateway",
+        "type": "LEVEL_LOADED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_001",
+        "light": null,
+        "reasons": [],
+        "summary": "Level 1 loaded (no overlay needed).",
+        "refs": {},
+        "prevHash": "sha256:0000000000000000",
+        "hash": "sha256:bcce100e1f3cd50c"
+      },
+      {
+        "seq": 2,
+        "eventId": "evt_2",
+        "at": "2026-11-14T10:01:00+02:00",
+        "actor": "human",
+        "type": "MANDATE_SIGNED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_002",
+        "light": null,
+        "reasons": [],
+        "summary": "Anna Virtanen signed mandate mdt_l1_balanced.",
+        "refs": {
+          "mandateId": "mdt_l1_balanced"
+        },
+        "prevHash": "sha256:bcce100e1f3cd50c",
+        "hash": "sha256:75f31dc193bfecef"
+      },
+      {
+        "seq": 3,
+        "eventId": "evt_3",
+        "at": "2026-11-14T10:05:00+02:00",
+        "actor": "agent",
+        "type": "SEARCH",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_003",
+        "light": null,
+        "reasons": [],
+        "summary": "Searched the catalog: 3 products.",
+        "refs": {},
+        "prevHash": "sha256:75f31dc193bfecef",
+        "hash": "sha256:d4ee6f42eb71e0a3"
+      },
+      {
+        "seq": 4,
+        "eventId": "evt_4",
+        "at": "2026-11-14T10:05:00+02:00",
+        "actor": "gateway",
+        "type": "QUOTE_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_004",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT",
+          "SPLIT_ORDER",
+          "SUBSTITUTION_ALLOWED"
+        ],
+        "summary": "Quote qt_l1_balanced: 3 plans, best €1 653,00.",
+        "refs": {
+          "quoteId": "qt_l1_balanced"
+        },
+        "prevHash": "sha256:d4ee6f42eb71e0a3",
+        "hash": "sha256:fb06e8a109d2d688"
+      },
+      {
+        "seq": 5,
+        "eventId": "evt_5",
+        "at": "2026-11-14T10:06:00+02:00",
+        "actor": "gateway",
+        "type": "ORDER_PENDING_APPROVAL",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_005",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Order ord_l1_balanced needs approval: Total €1 653,00 is above your €500,00 per-order limit. (edited)",
+        "refs": {
+          "quoteId": "qt_l1_balanced",
+          "orderId": "ord_l1_balanced",
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:fb06e8a109d2d688",
+        "hash": "sha256:c0a71e4f501aa35b"
+      },
+      {
+        "seq": 6,
+        "eventId": "evt_6",
+        "at": "2026-11-14T10:06:00+02:00",
+        "actor": "gateway",
+        "type": "APPROVAL_SHOWN",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_006",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Approval shown to manager (2 hearts left).",
+        "refs": {
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:c0a71e4f501aa35b",
+        "hash": "sha256:d2e91d3b72cc1b21"
+      },
+      {
+        "seq": 7,
+        "eventId": "evt_7",
+        "at": "2026-11-14T10:07:00+02:00",
+        "actor": "human",
+        "type": "APPROVAL_DECIDED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_007",
+        "light": null,
+        "reasons": [],
+        "summary": "Manager approved plan pln_a.",
+        "refs": {
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:d2e91d3b72cc1b21",
+        "hash": "sha256:b58f1ccae52767c6"
+      },
+      {
+        "seq": 8,
+        "eventId": "evt_8",
+        "at": "2026-11-14T10:07:00+02:00",
+        "actor": "gateway",
+        "type": "ORDER_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_008",
+        "light": "GREEN",
+        "reasons": [],
+        "summary": "Order ord_l1_balanced ORDERED → CONFIRMED: plan pln_a (464201, 464398).",
+        "refs": {
+          "quoteId": "qt_l1_balanced",
+          "orderId": "ord_l1_balanced",
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:b58f1ccae52767c6",
+        "hash": "sha256:418e3a6550834186"
+      }
+    ],
+    "verify": {
+      "valid": false,
+      "brokenAtSeq": 5
+    }
+  },
+  "dataBoundaryDemo": {
+    "preset": "balanced",
+    "log": [
+      {
+        "seq": 1,
+        "eventId": "evt_1",
+        "at": "2026-11-14T10:00:00+02:00",
+        "actor": "gateway",
+        "type": "LEVEL_LOADED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_001",
+        "light": null,
+        "reasons": [],
+        "summary": "Level 1 loaded (no overlay needed).",
+        "refs": {},
+        "prevHash": "sha256:0000000000000000",
+        "hash": "sha256:bcce100e1f3cd50c"
+      },
+      {
+        "seq": 2,
+        "eventId": "evt_2",
+        "at": "2026-11-14T10:01:00+02:00",
+        "actor": "human",
+        "type": "MANDATE_SIGNED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_002",
+        "light": null,
+        "reasons": [],
+        "summary": "Anna Virtanen signed mandate mdt_l1_balanced.",
+        "refs": {
+          "mandateId": "mdt_l1_balanced"
+        },
+        "prevHash": "sha256:bcce100e1f3cd50c",
+        "hash": "sha256:75f31dc193bfecef"
+      },
+      {
+        "seq": 3,
+        "eventId": "evt_3",
+        "at": "2026-11-14T10:05:00+02:00",
+        "actor": "agent",
+        "type": "SEARCH",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_003",
+        "light": null,
+        "reasons": [],
+        "summary": "Searched the catalog: 3 products.",
+        "refs": {},
+        "prevHash": "sha256:75f31dc193bfecef",
+        "hash": "sha256:d4ee6f42eb71e0a3"
+      },
+      {
+        "seq": 4,
+        "eventId": "evt_4",
+        "at": "2026-11-14T10:05:00+02:00",
+        "actor": "gateway",
+        "type": "DATA_BOUNDARY_BLOCKED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_004",
+        "light": "RED",
+        "reasons": [
+          "DATA_BOUNDARY"
+        ],
+        "summary": "Agent asked for purchase prices; refused.",
+        "refs": {},
+        "prevHash": "sha256:d4ee6f42eb71e0a3",
+        "hash": "sha256:5df39116783f9032"
+      },
+      {
+        "seq": 5,
+        "eventId": "evt_5",
+        "at": "2026-11-14T10:05:00+02:00",
+        "actor": "gateway",
+        "type": "QUOTE_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_005",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT",
+          "SPLIT_ORDER",
+          "SUBSTITUTION_ALLOWED"
+        ],
+        "summary": "Quote qt_l1_balanced: 3 plans, best €1 653,00.",
+        "refs": {
+          "quoteId": "qt_l1_balanced"
+        },
+        "prevHash": "sha256:5df39116783f9032",
+        "hash": "sha256:804064452ba5c9aa"
+      },
+      {
+        "seq": 6,
+        "eventId": "evt_6",
+        "at": "2026-11-14T10:06:00+02:00",
+        "actor": "gateway",
+        "type": "ORDER_PENDING_APPROVAL",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_006",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Order ord_l1_balanced needs approval: Total €1 653,00 is above your €500,00 per-order limit.",
+        "refs": {
+          "quoteId": "qt_l1_balanced",
+          "orderId": "ord_l1_balanced",
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:804064452ba5c9aa",
+        "hash": "sha256:b125a196914688ad"
+      },
+      {
+        "seq": 7,
+        "eventId": "evt_7",
+        "at": "2026-11-14T10:06:00+02:00",
+        "actor": "gateway",
+        "type": "APPROVAL_SHOWN",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_007",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Approval shown to manager (2 hearts left).",
+        "refs": {
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:b125a196914688ad",
+        "hash": "sha256:6629a7a050d2183c"
+      },
+      {
+        "seq": 8,
+        "eventId": "evt_8",
+        "at": "2026-11-14T10:07:00+02:00",
+        "actor": "human",
+        "type": "APPROVAL_DECIDED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_008",
+        "light": null,
+        "reasons": [],
+        "summary": "Manager approved plan pln_a.",
+        "refs": {
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:6629a7a050d2183c",
+        "hash": "sha256:6efaa7b0b88aaf05"
+      },
+      {
+        "seq": 9,
+        "eventId": "evt_9",
+        "at": "2026-11-14T10:07:00+02:00",
+        "actor": "gateway",
+        "type": "ORDER_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_009",
+        "light": "GREEN",
+        "reasons": [],
+        "summary": "Order ord_l1_balanced ORDERED → CONFIRMED: plan pln_a (464201, 464398).",
+        "refs": {
+          "quoteId": "qt_l1_balanced",
+          "orderId": "ord_l1_balanced",
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:6efaa7b0b88aaf05",
+        "hash": "sha256:c16f7d859c85b8d3"
+      }
+    ],
+    "valioLog": [
+      {
+        "seq": 1,
+        "eventId": "evt_1",
+        "at": "2026-11-14T10:00:00+02:00",
+        "actor": "gateway",
+        "type": "LEVEL_LOADED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_001",
+        "light": null,
+        "reasons": [],
+        "summary": "Level 1 loaded (no overlay needed).",
+        "refs": {},
+        "prevHash": "sha256:0000000000000000",
+        "hash": "sha256:bcce100e1f3cd50c"
+      },
+      {
+        "seq": 2,
+        "eventId": "evt_2",
+        "at": "2026-11-14T10:01:00+02:00",
+        "actor": "human",
+        "type": "MANDATE_SIGNED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_002",
+        "light": null,
+        "reasons": [],
+        "summary": "Anna Virtanen signed mandate mdt_l1_balanced.",
+        "refs": {
+          "mandateId": "mdt_l1_balanced"
+        },
+        "prevHash": "sha256:bcce100e1f3cd50c",
+        "hash": "sha256:75f31dc193bfecef"
+      },
+      {
+        "seq": 3,
+        "eventId": "evt_3",
+        "at": "2026-11-14T10:05:00+02:00",
+        "actor": "agent",
+        "type": "SEARCH",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_003",
+        "light": null,
+        "reasons": [],
+        "summary": "Searched the catalog: 3 products.",
+        "refs": {},
+        "prevHash": "sha256:75f31dc193bfecef",
+        "hash": "sha256:d4ee6f42eb71e0a3",
+        "disclosure": {
+          "returnedToAgent": [
+            "catalog",
+            "labels",
+            "certificates",
+            "categoryCarbon"
+          ],
+          "withheld": [
+            "supplierContracts"
+          ]
+        }
+      },
+      {
+        "seq": 4,
+        "eventId": "evt_4",
+        "at": "2026-11-14T10:05:00+02:00",
+        "actor": "gateway",
+        "type": "DATA_BOUNDARY_BLOCKED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_004",
+        "light": "RED",
+        "reasons": [
+          "DATA_BOUNDARY"
+        ],
+        "summary": "Agent asked for purchase prices; refused.",
+        "refs": {},
+        "prevHash": "sha256:d4ee6f42eb71e0a3",
+        "hash": "sha256:5df39116783f9032",
+        "disclosure": {
+          "returnedToAgent": [],
+          "withheld": [
+            "purchasePrices",
+            "margins"
+          ]
+        }
+      },
+      {
+        "seq": 5,
+        "eventId": "evt_5",
+        "at": "2026-11-14T10:05:00+02:00",
+        "actor": "gateway",
+        "type": "QUOTE_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_005",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT",
+          "SPLIT_ORDER",
+          "SUBSTITUTION_ALLOWED"
+        ],
+        "summary": "Quote qt_l1_balanced: 3 plans, best €1 653,00.",
+        "refs": {
+          "quoteId": "qt_l1_balanced"
+        },
+        "prevHash": "sha256:5df39116783f9032",
+        "hash": "sha256:804064452ba5c9aa",
+        "disclosure": {
+          "returnedToAgent": [
+            "netPrices",
+            "availability",
+            "closingTime",
+            "quotes"
+          ],
+          "withheld": [
+            "purchasePrices",
+            "margins",
+            "otherCustomers"
+          ]
+        }
+      },
+      {
+        "seq": 6,
+        "eventId": "evt_6",
+        "at": "2026-11-14T10:06:00+02:00",
+        "actor": "gateway",
+        "type": "ORDER_PENDING_APPROVAL",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_006",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Order ord_l1_balanced needs approval: Total €1 653,00 is above your €500,00 per-order limit.",
+        "refs": {
+          "quoteId": "qt_l1_balanced",
+          "orderId": "ord_l1_balanced",
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:804064452ba5c9aa",
+        "hash": "sha256:b125a196914688ad",
+        "disclosure": {
+          "returnedToAgent": [
+            "orders"
+          ],
+          "withheld": []
+        }
+      },
+      {
+        "seq": 7,
+        "eventId": "evt_7",
+        "at": "2026-11-14T10:06:00+02:00",
+        "actor": "gateway",
+        "type": "APPROVAL_SHOWN",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_007",
+        "light": "YELLOW",
+        "reasons": [
+          "OVER_ORDER_LIMIT"
+        ],
+        "summary": "Approval shown to manager (2 hearts left).",
+        "refs": {
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:b125a196914688ad",
+        "hash": "sha256:6629a7a050d2183c"
+      },
+      {
+        "seq": 8,
+        "eventId": "evt_8",
+        "at": "2026-11-14T10:07:00+02:00",
+        "actor": "human",
+        "type": "APPROVAL_DECIDED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_008",
+        "light": null,
+        "reasons": [],
+        "summary": "Manager approved plan pln_a.",
+        "refs": {
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:6629a7a050d2183c",
+        "hash": "sha256:6efaa7b0b88aaf05"
+      },
+      {
+        "seq": 9,
+        "eventId": "evt_9",
+        "at": "2026-11-14T10:07:00+02:00",
+        "actor": "gateway",
+        "type": "ORDER_CREATED",
+        "customerId": "123",
+        "agentId": "kitchenbuyer-hotel-aurora",
+        "requestId": "req_009",
+        "light": "GREEN",
+        "reasons": [],
+        "summary": "Order ord_l1_balanced ORDERED → CONFIRMED: plan pln_a (464201, 464398).",
+        "refs": {
+          "quoteId": "qt_l1_balanced",
+          "orderId": "ord_l1_balanced",
+          "approvalId": "apr_l1_balanced"
+        },
+        "prevHash": "sha256:6efaa7b0b88aaf05",
+        "hash": "sha256:c16f7d859c85b8d3",
+        "disclosure": {
+          "returnedToAgent": [
+            "orders"
+          ],
+          "withheld": []
+        }
+      }
+    ],
+    "verify": {
+      "valid": true,
+      "events": 9,
+      "headHash": "sha256:c16f7d859c85b8d3"
     }
   },
   "compare": {
@@ -1524,8 +4841,13 @@
         "stars": 1,
         "incident": null,
         "receiptText": "Every plan broke your mandate (over €200, a substitute or a late delivery), so your agent had to ask you 4 times. After 3 hearts the last request expired and 300 l was never ordered.",
-        "logHeadHash": "sha256:fa49dc4829754d99",
-        "approvalsAsked": 4
+        "logHeadHash": "sha256:2991508342c7cf0d",
+        "approvalsAsked": 4,
+        "totalCost": {
+          "cents": 90300,
+          "currency": "EUR"
+        },
+        "heartsUsed": 3
       },
       "balanced": {
         "kitchen": 100,
@@ -1535,8 +4857,13 @@
         "stars": 3,
         "incident": null,
         "receiptText": "Your agent bought 700 l of Valio semi-skimmed and 300 l of Valio Eila, all arriving Monday. You approved once because the total €1 653,00 was above your €500 limit.",
-        "logHeadHash": "sha256:958a4cf57431ee4f",
-        "approvalsAsked": 1
+        "logHeadHash": "sha256:418e3a6550834186",
+        "approvalsAsked": 1,
+        "totalCost": {
+          "cents": 165300,
+          "currency": "EUR"
+        },
+        "heartsUsed": 1
       },
       "loose": {
         "kitchen": 70,
@@ -1546,8 +4873,13 @@
         "stars": 1,
         "incident": null,
         "receiptText": "Your agent did exactly what your mandate allowed: it picked the cheapest plan, 1 000 l Valio semi-skimmed: 700 l Monday + 300 l Tuesday, €1 290,00. One day late was allowed, so it never asked you. Monday breakfast was 300 l short.",
-        "logHeadHash": "sha256:11681b1682fbbd64",
-        "approvalsAsked": 0
+        "logHeadHash": "sha256:e138c3e31a4ea3c8",
+        "approvalsAsked": 0,
+        "totalCost": {
+          "cents": 129000,
+          "currency": "EUR"
+        },
+        "heartsUsed": 0
       }
     }
   }

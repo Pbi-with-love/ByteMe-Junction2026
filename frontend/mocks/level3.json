@@ -10,7 +10,7 @@
         "name": "Koivu School kitchen (fictional)",
         "type": "school"
       },
-      "brief": "300 egg-free buns by Thursday 06:00. Usual bun unavailable.",
+      "brief": "300 buns by Thursday 06:00 for a pupil with an egg allergy. Usual bun unavailable.",
       "deadline": "2026-11-19T06:00:00+02:00",
       "closingTime": "2026-11-14T14:00:00+02:00"
     },
@@ -24,6 +24,11 @@
       "human": "mock-human-token",
       "agent": "mock-agent-token"
     }
+  },
+  "hiddenRequirements": {
+    "excludeAllergens": [
+      "AE"
+    ]
   },
   "presets": {
     "allergen_on": {
@@ -60,7 +65,7 @@
           "keyId": "valio-aimo-2026-11",
           "value": "bW9jay1zaWduYXR1cmU="
         },
-        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing AE."
+        "summaryText": "Liisa Korhonen authorises kitchenbuyer-koivu-school to order up to €500 per order, with substitutes in the same category and no late deliveries, never products containing egg (AE)."
       },
       "steps": [
         {
@@ -158,7 +163,7 @@
             "createdAt": "2026-11-14T10:05:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Egg-free buns for school dessert (usual product unavailable)",
+              "description": "Buns for school dessert (usual product unavailable)",
               "quantity": {
                 "amount": 300,
                 "unit": "pcs"
@@ -217,11 +222,11 @@
                 },
                 "summary": "300 oat buns (egg-free), Thursday, €330,00",
                 "score": {
-                  "total": 0.8,
+                  "total": 0.75,
                   "onTime": 1.0,
                   "price": 1.0,
                   "sustainability": 0.0,
-                  "reliabilityPenalty": 0.0
+                  "reliabilityPenalty": 0.05
                 },
                 "tier": "best",
                 "recommended": true
@@ -251,7 +256,7 @@
                 "at": "2026-11-14T10:05:00+02:00"
               }
             ],
-            "scenarioOverlay": false,
+            "scenarioOverlay": true,
             "signature": {
               "alg": "Ed25519",
               "keyId": "valio-aimo-2026-11",
@@ -311,8 +316,241 @@
         "stars": 3,
         "incident": null,
         "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent bought 300 egg-free oat buns instead.",
-        "logHeadHash": "sha256:445f4d38308fac33",
-        "approvalsAsked": 0
+        "logHeadHash": "sha256:85bc3360469ba320",
+        "approvalsAsked": 0,
+        "totalCost": {
+          "cents": 33000,
+          "currency": "EUR"
+        },
+        "heartsUsed": 0
+      },
+      "decisions": {},
+      "log": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:b93fc76c2b33e638"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+          "refs": {
+            "mandateId": "mdt_l3_allergen_on"
+          },
+          "prevHash": "sha256:b93fc76c2b33e638",
+          "hash": "sha256:4f385f2b305ef633"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED",
+            "ALLERGEN_EXCLUDED"
+          ],
+          "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+          "refs": {},
+          "prevHash": "sha256:4f385f2b305ef633",
+          "hash": "sha256:f46074c41e56a687"
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_004",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on"
+          },
+          "prevHash": "sha256:f46074c41e56a687",
+          "hash": "sha256:a2e55d8d5c7390a8"
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_005",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (990002).",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on",
+            "orderId": "ord_l3_allergen_on"
+          },
+          "prevHash": "sha256:a2e55d8d5c7390a8",
+          "hash": "sha256:85bc3360469ba320"
+        }
+      ],
+      "valioLog": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:b93fc76c2b33e638"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_on.",
+          "refs": {
+            "mandateId": "mdt_l3_allergen_on"
+          },
+          "prevHash": "sha256:b93fc76c2b33e638",
+          "hash": "sha256:4f385f2b305ef633"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED",
+            "ALLERGEN_EXCLUDED"
+          ],
+          "summary": "Searched the catalog: 3 products, excluded 990001, 463989.",
+          "refs": {},
+          "prevHash": "sha256:4f385f2b305ef633",
+          "hash": "sha256:f46074c41e56a687",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_004",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Quote qt_l3_allergen_on: 1 plan, best €330,00.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on"
+          },
+          "prevHash": "sha256:f46074c41e56a687",
+          "hash": "sha256:a2e55d8d5c7390a8",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_005",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Order ord_l3_allergen_on ORDERED → CONFIRMED: plan pln_safe (990002).",
+          "refs": {
+            "quoteId": "qt_l3_allergen_on",
+            "orderId": "ord_l3_allergen_on"
+          },
+          "prevHash": "sha256:a2e55d8d5c7390a8",
+          "hash": "sha256:85bc3360469ba320",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        }
+      ],
+      "verify": {
+        "valid": true,
+        "events": 5,
+        "headHash": "sha256:85bc3360469ba320"
       }
     },
     "allergen_off": {
@@ -442,7 +680,7 @@
             "createdAt": "2026-11-14T10:05:00+02:00",
             "expiresAt": "2026-11-14T14:00:00+02:00",
             "need": {
-              "description": "Egg-free buns for school dessert (usual product unavailable)",
+              "description": "Buns for school dessert (usual product unavailable)",
               "quantity": {
                 "amount": 300,
                 "unit": "pcs"
@@ -501,11 +739,11 @@
                 },
                 "summary": "300 shrove buns, Thursday, €240,00",
                 "score": {
-                  "total": 0.8,
+                  "total": 0.75,
                   "onTime": 1.0,
                   "price": 1.0,
                   "sustainability": 0.0,
-                  "reliabilityPenalty": 0.0
+                  "reliabilityPenalty": 0.05
                 },
                 "tier": "best",
                 "recommended": true
@@ -556,11 +794,11 @@
                 },
                 "summary": "300 oat buns (egg-free), Thursday, €330,00",
                 "score": {
-                  "total": 0.663,
+                  "total": 0.613,
                   "onTime": 1.0,
                   "price": 0.727,
                   "sustainability": 0.0,
-                  "reliabilityPenalty": 0.0
+                  "reliabilityPenalty": 0.05
                 },
                 "tier": "better",
                 "recommended": false
@@ -585,7 +823,7 @@
                 "at": "2026-11-14T10:05:00+02:00"
               }
             ],
-            "scenarioOverlay": false,
+            "scenarioOverlay": true,
             "signature": {
               "alg": "Ed25519",
               "keyId": "valio-aimo-2026-11",
@@ -649,8 +887,239 @@
           "reason": "Contains egg (AE)"
         },
         "receiptText": "Your agent bought 300 shrove buns because they were cheapest. They contain egg, and nothing stopped it: the allergen rule was off.",
-        "logHeadHash": "sha256:7ab870e835d0dbc6",
-        "approvalsAsked": 0
+        "logHeadHash": "sha256:57c4350da1db8256",
+        "approvalsAsked": 0,
+        "totalCost": {
+          "cents": 24000,
+          "currency": "EUR"
+        },
+        "heartsUsed": 0
+      },
+      "decisions": {},
+      "log": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:b93fc76c2b33e638"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+          "refs": {
+            "mandateId": "mdt_l3_allergen_off"
+          },
+          "prevHash": "sha256:b93fc76c2b33e638",
+          "hash": "sha256:c0f8057fd564ff0b"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 3 products, excluded 990001.",
+          "refs": {},
+          "prevHash": "sha256:c0f8057fd564ff0b",
+          "hash": "sha256:94f2d28a6a920ea4"
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_004",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off"
+          },
+          "prevHash": "sha256:94f2d28a6a920ea4",
+          "hash": "sha256:6e8edcaf63540acd"
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_005",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (463989).",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off",
+            "orderId": "ord_l3_allergen_off"
+          },
+          "prevHash": "sha256:6e8edcaf63540acd",
+          "hash": "sha256:57c4350da1db8256"
+        }
+      ],
+      "valioLog": [
+        {
+          "seq": 1,
+          "eventId": "evt_1",
+          "at": "2026-11-14T10:00:00+02:00",
+          "actor": "scenario",
+          "type": "SCENARIO_OVERLAY",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_001",
+          "light": null,
+          "reasons": [],
+          "summary": "Scenario adjustment: usual bun 990001 set to sales-blocked.",
+          "refs": {},
+          "prevHash": "sha256:0000000000000000",
+          "hash": "sha256:b93fc76c2b33e638"
+        },
+        {
+          "seq": 2,
+          "eventId": "evt_2",
+          "at": "2026-11-14T10:01:00+02:00",
+          "actor": "human",
+          "type": "MANDATE_SIGNED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_002",
+          "light": null,
+          "reasons": [],
+          "summary": "Liisa Korhonen signed mandate mdt_l3_allergen_off.",
+          "refs": {
+            "mandateId": "mdt_l3_allergen_off"
+          },
+          "prevHash": "sha256:b93fc76c2b33e638",
+          "hash": "sha256:c0f8057fd564ff0b"
+        },
+        {
+          "seq": 3,
+          "eventId": "evt_3",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "agent",
+          "type": "SEARCH",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_003",
+          "light": "RED",
+          "reasons": [
+            "SALES_BLOCKED"
+          ],
+          "summary": "Searched the catalog: 3 products, excluded 990001.",
+          "refs": {},
+          "prevHash": "sha256:c0f8057fd564ff0b",
+          "hash": "sha256:94f2d28a6a920ea4",
+          "disclosure": {
+            "returnedToAgent": [
+              "catalog",
+              "labels",
+              "certificates",
+              "categoryCarbon"
+            ],
+            "withheld": [
+              "supplierContracts"
+            ]
+          }
+        },
+        {
+          "seq": 4,
+          "eventId": "evt_4",
+          "at": "2026-11-14T10:05:00+02:00",
+          "actor": "gateway",
+          "type": "QUOTE_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_004",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Quote qt_l3_allergen_off: 2 plans, best €240,00.",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off"
+          },
+          "prevHash": "sha256:94f2d28a6a920ea4",
+          "hash": "sha256:6e8edcaf63540acd",
+          "disclosure": {
+            "returnedToAgent": [
+              "netPrices",
+              "availability",
+              "closingTime",
+              "quotes"
+            ],
+            "withheld": [
+              "purchasePrices",
+              "margins",
+              "otherCustomers"
+            ]
+          }
+        },
+        {
+          "seq": 5,
+          "eventId": "evt_5",
+          "at": "2026-11-14T10:06:00+02:00",
+          "actor": "gateway",
+          "type": "ORDER_CREATED",
+          "customerId": "789",
+          "agentId": "kitchenbuyer-koivu-school",
+          "requestId": "req_005",
+          "light": "BLUE",
+          "reasons": [
+            "SUBSTITUTION_ALLOWED"
+          ],
+          "summary": "Order ord_l3_allergen_off ORDERED → CONFIRMED: plan pln_nut (463989).",
+          "refs": {
+            "quoteId": "qt_l3_allergen_off",
+            "orderId": "ord_l3_allergen_off"
+          },
+          "prevHash": "sha256:6e8edcaf63540acd",
+          "hash": "sha256:57c4350da1db8256",
+          "disclosure": {
+            "returnedToAgent": [
+              "orders"
+            ],
+            "withheld": []
+          }
+        }
+      ],
+      "verify": {
+        "valid": true,
+        "events": 5,
+        "headHash": "sha256:57c4350da1db8256"
       }
     }
   },
@@ -665,8 +1134,13 @@
         "stars": 3,
         "incident": null,
         "receiptText": "The cheapest bun contains egg, so the gateway blocked it. Your agent bought 300 egg-free oat buns instead.",
-        "logHeadHash": "sha256:445f4d38308fac33",
-        "approvalsAsked": 0
+        "logHeadHash": "sha256:85bc3360469ba320",
+        "approvalsAsked": 0,
+        "totalCost": {
+          "cents": 33000,
+          "currency": "EUR"
+        },
+        "heartsUsed": 0
       },
       "allergen_off": {
         "kitchen": 100,
@@ -680,8 +1154,13 @@
           "reason": "Contains egg (AE)"
         },
         "receiptText": "Your agent bought 300 shrove buns because they were cheapest. They contain egg, and nothing stopped it: the allergen rule was off.",
-        "logHeadHash": "sha256:7ab870e835d0dbc6",
-        "approvalsAsked": 0
+        "logHeadHash": "sha256:57c4350da1db8256",
+        "approvalsAsked": 0,
+        "totalCost": {
+          "cents": 24000,
+          "currency": "EUR"
+        },
+        "heartsUsed": 0
       }
     }
   }
