@@ -35,7 +35,7 @@ export class GatewayError extends Error {
 
 export function createGatewayClient(env: Record<string, string | undefined>, mode = gatewayMode(env)): GatewayClient {
   if (mode === 'replay') return new ReplayGatewayClient({ tamperLog: env.VITE_REPLAY_TAMPER === '1', dataBoundaryDemo: env.VITE_REPLAY_PROBE === '1' });
-  return new HttpGatewayClient(env.VITE_GATEWAY_URL ?? 'http://localhost:8000', env.VITE_UPSTREAM_MODE ?? 'replay');
+  return new HttpGatewayClient(env.VITE_GATEWAY_URL ?? 'http://127.0.0.1:8000', env.VITE_UPSTREAM_MODE ?? 'replay');
 }
 
 export function gatewayMode(env: Record<string, string | undefined>): 'replay' | 'live' {

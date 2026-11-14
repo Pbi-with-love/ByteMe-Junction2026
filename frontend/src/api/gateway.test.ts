@@ -17,7 +17,7 @@ describe('createGatewayClient', () => {
 
   it('selects live HTTP with the configured or default URL and rejects unknown modes', () => {
     expect(createGatewayClient({ VITE_GATEWAY_MODE: 'live' }))
-      .toEqual(new HttpGatewayClient('http://localhost:8000'));
+      .toEqual(new HttpGatewayClient('http://127.0.0.1:8000'));
     expect(createGatewayClient({ VITE_GATEWAY_MODE: 'live', VITE_GATEWAY_URL: 'http://gw.test' }))
       .toEqual(new HttpGatewayClient('http://gw.test'));
     expect(() => createGatewayClient({ VITE_GATEWAY_MODE: 'other' })).toThrow();

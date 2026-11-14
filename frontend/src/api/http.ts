@@ -16,43 +16,66 @@ export class HttpGatewayClient implements GatewayClient {
   private readonly cursors = new Map<string, number>();
   private readonly activities = new Map<string, AgentActivity>();
 
-  constructor(private readonly baseUrl: string, private readonly upstreamMode = 'replay', private readonly pollIntervalMs = 500) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly upstreamMode = 'replay',
+    private readonly pollIntervalMs = 500,
+    private readonly requestTimeoutMs = 15_000,
+  ) {}
 
-  private async request<T>(path: string, schema: ZodType<T>, init: RequestInit = {}, includeHumanToken = true): Promise<T> {
-    let response: Response;
+  private async request<T>(path: string, schema: ZodType<T>, init: RequestInit = {}, includeHumanToken = true, timeoutMs = this.requestTimeoutMs): Promise<T> {
+    const controller = new AbortController();
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_resolve, reject) => {
+      timeoutId = setTimeout(() => {
+        controller.abort();
+        const seconds = timeoutMs / 1_000;
+        reject(new GatewayError('NETWORK_ERROR', `The gateway at ${this.baseUrl} did not respond in ${seconds} seconds. Start the backend or set VITE_GATEWAY_MODE=replay.`));
+      }, timeoutMs);
+    });
+    const operation = (async () => {
+      let response: Response;
+      try {
+        response = await fetch(`${this.baseUrl}${path}`, {
+          ...init,
+          signal: controller.signal,
+          headers: {
+            ...(includeHumanToken && this.token ? { Authorization: `Bearer ${this.token}` } : {}),
+            ...init.headers,
+          },
+        });
+      } catch {
+        throw new GatewayError('NETWORK_ERROR', `Cannot reach the gateway at ${this.baseUrl}. Start the backend or set VITE_GATEWAY_MODE=replay.`);
+      }
+
+      let body: unknown;
+      try {
+        body = await response.json();
+      } catch {
+        body = undefined;
+      }
+
+      if (!response.ok) {
+        const envelope = ErrorEnvelopeSchema.safeParse(body);
+        if (!envelope.success) throw new GatewayError('HTTP_ERROR', 'HTTP error', response.status);
+        const error = envelope.data.error;
+        throw new GatewayError(error.code, error.message, response.status, error.requestId, error.details);
+      }
+
+      const parsed = schema.safeParse(body);
+      if (!parsed.success) throw new GatewayError('INVALID_RESPONSE', 'Invalid response', response.status);
+      return parsed.data;
+    })();
+
     try {
-      response = await fetch(`${this.baseUrl}${path}`, {
-        ...init,
-        headers: {
-          ...(includeHumanToken && this.token ? { Authorization: `Bearer ${this.token}` } : {}),
-          ...init.headers,
-        },
-      });
-    } catch {
-      throw new GatewayError('NETWORK_ERROR', `Cannot reach the gateway at ${this.baseUrl}. Start the backend or set VITE_GATEWAY_MODE=replay.`);
+      return await Promise.race([operation, timeout]);
+    } finally {
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
     }
-
-    let body: unknown;
-    try {
-      body = await response.json();
-    } catch {
-      body = undefined;
-    }
-
-    if (!response.ok) {
-      const envelope = ErrorEnvelopeSchema.safeParse(body);
-      if (!envelope.success) throw new GatewayError('HTTP_ERROR', 'HTTP error', response.status);
-      const error = envelope.data.error;
-      throw new GatewayError(error.code, error.message, response.status, error.requestId, error.details);
-    }
-
-    const parsed = schema.safeParse(body);
-    if (!parsed.success) throw new GatewayError('INVALID_RESPONSE', 'Invalid response', response.status);
-    return parsed.data;
   }
 
   discovery(): Promise<Discovery> {
-    return this.request('/.well-known/agent-commerce.json', DiscoverySchema);
+    return this.request('/.well-known/agent-commerce.json', DiscoverySchema, {}, true, 5_000);
   }
 
   async startLevel(levelId: string, preset: string): Promise<GameStart> {

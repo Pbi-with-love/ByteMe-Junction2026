@@ -139,4 +139,40 @@ describe('HttpGatewayClient', () => {
     await expect(client.discovery()).rejects.toMatchObject({ code: 'INVALID_RESPONSE' });
     // nextStep requires a started session and is covered by the live polling tests.
   });
+
+  it('times out discovery after five seconds with the gateway URL and startup hint', async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal('fetch', vi.fn(() => new Promise<Response>(() => {})));
+    const discoveryRequest = new HttpGatewayClient('http://127.0.0.1:8000').discovery();
+    const rejection = expect(discoveryRequest).rejects.toMatchObject({
+      code: 'NETWORK_ERROR',
+      message: 'The gateway at http://127.0.0.1:8000 did not respond in 5 seconds. Start the backend or set VITE_GATEWAY_MODE=replay.',
+    });
+
+    await vi.advanceTimersByTimeAsync(5_000);
+    await rejection;
+  });
+
+  it('does not time out a fast request', async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response(discovery.response)));
+
+    await expect(new HttpGatewayClient('http://gw.test').discovery()).resolves.toEqual(discovery.response);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('uses the 15-second constructor default for ordinary requests', async () => {
+    vi.useFakeTimers();
+    const fetchMock = vi.fn<typeof fetch>(() => new Promise<Response>(() => {}));
+    vi.stubGlobal('fetch', fetchMock);
+    const request = new HttpGatewayClient('http://gw.test').compare('level1');
+    const rejection = expect(request).rejects.toMatchObject({
+      code: 'NETWORK_ERROR',
+      message: 'The gateway at http://gw.test did not respond in 15 seconds. Start the backend or set VITE_GATEWAY_MODE=replay.',
+    });
+
+    await vi.advanceTimersByTimeAsync(15_000);
+    await rejection;
+    expect(fetchMock.mock.calls[0]?.[1]?.signal?.aborted).toBe(true);
+  });
 });
