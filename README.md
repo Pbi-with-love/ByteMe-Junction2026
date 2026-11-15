@@ -40,24 +40,39 @@ flowchart LR
   L --> T
 ```
 
-| Game scene | What it demonstrates in the challenge |
+The three levels are concrete policy scenarios, not separate game logic. Each one
+shows a real purchasing process and the gateway capability it represents:
+
+| Game scenario and process | What it proves for the Valio challenge |
 |---|---|
-| The manager sets budget, allergen and substitution rules | A signed, customer-scoped mandate |
-| The robot searches for ingredients and compares plans | Catalog, customer price, availability and deterministic planning |
-| The phone asks for a decision | Human approval when the agent exceeds its authority |
-| The gateway blocks an unsafe option | Fail-closed policy enforcement; RED cannot be approved |
-| The timeline and receipt explain the result | Hash-chained auditability and an explicit data boundary |
+| **Level 1 — The Weekly Order.** A hotel needs 1,000 l of lactose-free milk by Monday. The manager sets a budget and delivery rules; the agent searches the catalog, checks customer-specific price and availability, builds split plans, and requests approval when the best plan exceeds the mandate. | Product, price and availability lookup; deterministic planning; signed quotes; weekly and per-order policy limits; human approval; order creation. |
+| **Level 2 — The Stock-out.** A restaurant's chosen cheese becomes unavailable. The agent searches for a compatible substitute, checks its category, labels, delivery and price, then either orders within the substitution mandate or pauses for a human decision. | Safe substitution; mandate enforcement; exception handling; BLUE versus YELLOW decisions; the same order API under changing availability. |
+| **Level 3 — Allergy Emergency.** A school kitchen needs a product without a prohibited allergen. The cheapest candidate contains that allergen, so the policy engine marks it RED and removes it from the approval path; only a verified safe option can continue. | Fail-closed safety controls; allergen and label verification; blocked orders that cannot be overridden by an agent or hurried human. |
 
-The three levels are concrete policy scenarios, not separate game logic:
+Across all three levels, the process is the same:
 
-- **Level 1 — The Weekly Order:** partial availability, split plans, budget limits
-  and approval.
-- **Level 2 — The Stock-out:** substitution rules and mandate boundaries.
-- **Level 3 — Allergy Emergency:** allergen exclusion and an unapprovable RED decision.
+```mermaid
+flowchart LR
+  A[Kitchen need] --> B[Manager sets mandate]
+  B --> C[Agent searches Valio data]
+  C --> D[Price + availability evidence]
+  D --> E[Plans and trade-offs]
+  E --> F[Gateway policy decision]
+  F -->|GREEN / BLUE| G[Signed quote and order]
+  F -->|YELLOW| H[Human approval]
+  F -->|RED| I[Blocked with reason]
+  G --> J[Audit receipt]
+  H --> J
+  I --> J
+```
 
 The game makes the gateway visible; it does not replace it. The same API, policy
 engine, quote lifecycle, approval flow and audit log serve the game and any
-external buyer agent.
+external buyer agent. The result is a more trustworthy AI decision: the agent
+gets the product information required to make the purchase—such as price,
+availability, labels and delivery evidence—but not unrelated purchase prices,
+margins or other customers' data. Good guardrails make AI decisions more
+trustable by limiting both what the agent may do and what information it needs.
 
 ---
 
